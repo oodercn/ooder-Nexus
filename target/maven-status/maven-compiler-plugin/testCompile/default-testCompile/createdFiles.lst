@@ -1,0 +1,11 @@
+net\ooder\nexus\controller\AnnotationTest.class
+net\ooder\nexus\controller\ContextTest.class
+net\ooder\nexus\controller\BasicTest.class
+net\ooder\nexus\controller\StorageControllerTest.class
+net\ooder\nexus\controller\SimpleContextTest.class
+net\ooder\nexus\controller\SimpleRouteControllerTest.class
+net\ooder\nexus\controller\BasicContextTest.class
+net\ooder\nexus\controller\PersonalControllerTest.class
+net\ooder\nexus\controller\SimpleTest.class
+net\ooder\nexus\controller\SystemMonitorControllerTest.class
+net\ooder\nexus\controller\ManualContextTest.class
