@@ -6046,3 +6046,143 @@ Identify and stop the process that's listening on port 8081 or configure this ap
 2026-02-09 23:39:31.478  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7600017ms
 2026-02-09 23:40:01.478  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7630017ms
 2026-02-09 23:40:31.469  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7660008ms
+2026-02-09 23:41:01.469  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7690008ms
+2026-02-09 23:41:31.470  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7720009ms
+2026-02-09 23:42:01.478  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7750017ms
+2026-02-09 23:42:31.465  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7780004ms
+2026-02-09 23:43:01.465  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7810004ms
+2026-02-09 23:43:05.873  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Enabling mock mode
+2026-02-09 23:43:05.874  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.openwrt.service.OpenWrtService   : Switching to MOCK mode
+2026-02-09 23:43:09.186  INFO 7636 --- [http-nio-8081-exec-1] n.o.n.i.o.controller.OpenWrtController   : Disabling mock mode
+2026-02-09 23:43:09.187  INFO 7636 --- [http-nio-8081-exec-1] n.o.n.i.openwrt.service.OpenWrtService   : Switching to REAL mode
+2026-02-09 23:43:12.021  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.controller.OpenWrtController   : Enabling mock mode
+2026-02-09 23:43:12.022  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.openwrt.service.OpenWrtService   : Switching to MOCK mode
+2026-02-09 23:43:19.776  INFO 7636 --- [http-nio-8081-exec-1] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: basic
+2026-02-09 23:43:19.781  INFO 7636 --- [http-nio-8081-exec-1] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: basic
+2026-02-09 23:43:19.789  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dns
+2026-02-09 23:43:19.791  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: dns
+2026-02-09 23:43:19.817  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dhcp
+2026-02-09 23:43:19.818  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: dhcp
+2026-02-09 23:43:19.827  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: wifi
+2026-02-09 23:43:19.828  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: wifi
+2026-02-09 23:43:25.786  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.controller.OpenWrtController   : Getting IP addresses - type: null, status: null
+2026-02-09 23:43:25.790  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting IP addresses: type=null, status=null
+2026-02-09 23:43:31.469  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7840008ms
+2026-02-09 23:44:01.477  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7870016ms
+2026-02-09 23:44:31.470  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7900009ms
+2026-02-09 23:44:49.294  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: basic
+2026-02-09 23:44:49.297  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: basic
+2026-02-09 23:44:49.311  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dns
+2026-02-09 23:44:49.312  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: dns
+2026-02-09 23:44:49.341  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dhcp
+2026-02-09 23:44:49.342  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: dhcp
+2026-02-09 23:44:49.350  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: wifi
+2026-02-09 23:44:49.351  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: wifi
+2026-02-09 23:44:55.340  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.controller.OpenWrtController   : Getting IP addresses - type: null, status: null
+2026-02-09 23:44:55.343  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting IP addresses: type=null, status=null
+2026-02-09 23:44:57.654  INFO 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.controller.OpenWrtController   : Getting IP blacklist
+2026-02-09 23:44:57.655  INFO 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting IP blacklist
+2026-02-09 23:45:00.684  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.controller.OpenWrtController   : Getting config file: network
+2026-02-09 23:45:00.685  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting config file: network
+2026-02-09 23:45:01.465  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7930004ms
+2026-02-09 23:45:04.296  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Getting system status
+2026-02-09 23:45:04.298  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting system status
+2026-02-09 23:45:04.297  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.controller.OpenWrtController   : Getting version info
+2026-02-09 23:45:04.305  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting version info
+2026-02-09 23:45:13.877  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.controller.OpenWrtController   : Disabling mock mode
+2026-02-09 23:45:13.877  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.openwrt.service.OpenWrtService   : Switching to REAL mode
+2026-02-09 23:45:31.475  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7960014ms
+2026-02-09 23:46:01.473  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 7990012ms
+2026-02-09 23:46:24.494  INFO 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: basic
+2026-02-09 23:46:24.495  INFO 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: basic
+2026-02-09 23:46:24.495  WARN 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 0ms
+2026-02-09 23:46:24.502  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dns
+2026-02-09 23:46:24.502  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: dns
+2026-02-09 23:46:24.503  WARN 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 1ms
+2026-02-09 23:46:24.508  INFO 7636 --- [http-nio-8081-exec-8] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dhcp
+2026-02-09 23:46:24.508  INFO 7636 --- [http-nio-8081-exec-8] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: dhcp
+2026-02-09 23:46:24.508  WARN 7636 --- [http-nio-8081-exec-8] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 0ms
+2026-02-09 23:46:24.512  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: wifi
+2026-02-09 23:46:24.512  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: wifi
+2026-02-09 23:46:24.513  WARN 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 1ms
+2026-02-09 23:46:26.382  INFO 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.controller.OpenWrtController   : Getting IP addresses - type: null, status: null
+2026-02-09 23:46:26.383  INFO 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting IP addresses: type=null, status=null
+2026-02-09 23:46:28.604  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.controller.OpenWrtController   : Getting IP blacklist
+2026-02-09 23:46:28.605  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting IP blacklist
+2026-02-09 23:46:28.605  WARN 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getIPBlacklist failed in 0ms
+2026-02-09 23:46:31.474  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 8020013ms
+2026-02-09 23:46:33.219  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.controller.OpenWrtController   : Getting system status
+2026-02-09 23:46:33.219  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Getting version info
+2026-02-09 23:46:33.220  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting system status from OpenWrt router: null
+2026-02-09 23:46:33.220  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting version information
+2026-02-09 23:46:39.711  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: basic
+2026-02-09 23:46:39.714  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: basic
+2026-02-09 23:46:39.715  WARN 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 1ms
+2026-02-09 23:46:39.748  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dns
+2026-02-09 23:46:39.748  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: dns
+2026-02-09 23:46:39.749  WARN 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 1ms
+2026-02-09 23:46:39.767  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dhcp
+2026-02-09 23:46:39.767  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: dhcp
+2026-02-09 23:46:39.768  WARN 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 1ms
+2026-02-09 23:46:39.777  INFO 7636 --- [http-nio-8081-exec-8] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: wifi
+2026-02-09 23:46:39.777  INFO 7636 --- [http-nio-8081-exec-8] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: wifi
+2026-02-09 23:46:39.778  WARN 7636 --- [http-nio-8081-exec-8] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 1ms
+2026-02-09 23:46:41.208  INFO 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.controller.OpenWrtController   : Getting IP addresses - type: null, status: null
+2026-02-09 23:46:41.208  INFO 7636 --- [http-nio-8081-exec-10] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting IP addresses: type=null, status=null
+2026-02-09 23:46:44.635  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.controller.OpenWrtController   : Getting IP addresses - type: null, status: null
+2026-02-09 23:46:44.637  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting IP addresses: type=null, status=null
+2026-02-09 23:46:47.435  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: basic
+2026-02-09 23:46:47.441  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: basic
+2026-02-09 23:46:47.442  WARN 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 1ms
+2026-02-09 23:46:47.448  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dns
+2026-02-09 23:46:47.449  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: dns
+2026-02-09 23:46:47.453  WARN 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 4ms
+2026-02-09 23:46:47.484  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dhcp
+2026-02-09 23:46:47.485  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: dhcp
+2026-02-09 23:46:47.485  WARN 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 0ms
+2026-02-09 23:46:47.495  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: wifi
+2026-02-09 23:46:47.496  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting network setting: wifi
+2026-02-09 23:46:47.496  WARN 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getNetworkSetting failed in 0ms
+2026-02-09 23:46:50.737  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Getting IP blacklist
+2026-02-09 23:46:50.740  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting IP blacklist
+2026-02-09 23:46:50.740  WARN 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getIPBlacklist failed in 0ms
+2026-02-09 23:46:55.521  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.controller.OpenWrtController   : Getting IP blacklist
+2026-02-09 23:46:55.523  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting IP blacklist
+2026-02-09 23:46:55.523  WARN 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.bridge.OpenWrtBridgeMonitor    : Operation getIPBlacklist failed in 0ms
+2026-02-09 23:46:58.725  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.controller.OpenWrtController   : Getting IP addresses - type: null, status: null
+2026-02-09 23:46:58.729  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting IP addresses: type=null, status=null
+2026-02-09 23:47:01.472  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 8050011ms
+2026-02-09 23:47:01.832  INFO 7636 --- [http-nio-8081-exec-1] n.o.n.i.o.controller.OpenWrtController   : Getting IP addresses - type: dynamic, status: null
+2026-02-09 23:47:01.833  INFO 7636 --- [http-nio-8081-exec-1] n.o.n.i.o.bridge.DefaultOpenWrtBridge    : Getting IP addresses: type=dynamic, status=null
+2026-02-09 23:47:14.222  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Enabling mock mode
+2026-02-09 23:47:14.222  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.openwrt.service.OpenWrtService   : Switching to MOCK mode
+2026-02-09 23:47:18.273  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: basic
+2026-02-09 23:47:18.273  INFO 7636 --- [http-nio-8081-exec-4] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: basic
+2026-02-09 23:47:18.282  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dns
+2026-02-09 23:47:18.282  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: dns
+2026-02-09 23:47:18.287  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dhcp
+2026-02-09 23:47:18.287  INFO 7636 --- [http-nio-8081-exec-2] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: dhcp
+2026-02-09 23:47:18.318  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: wifi
+2026-02-09 23:47:18.320  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: wifi
+2026-02-09 23:47:24.458  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.controller.OpenWrtController   : Getting IP addresses - type: null, status: null
+2026-02-09 23:47:24.471  INFO 7636 --- [http-nio-8081-exec-6] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting IP addresses: type=null, status=null
+2026-02-09 23:47:31.471  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 8080010ms
+2026-02-09 23:47:47.345  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Getting IP blacklist
+2026-02-09 23:47:47.350  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting IP blacklist
+2026-02-09 23:48:00.353  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.controller.OpenWrtController   : Getting IP blacklist
+2026-02-09 23:48:00.354  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting IP blacklist
+2026-02-09 23:48:01.471  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 8110010ms
+2026-02-09 23:48:09.544  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: basic
+2026-02-09 23:48:09.548  INFO 7636 --- [http-nio-8081-exec-7] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: basic
+2026-02-09 23:48:09.575  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dns
+2026-02-09 23:48:09.578  INFO 7636 --- [http-nio-8081-exec-5] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: dns
+2026-02-09 23:48:09.586  INFO 7636 --- [http-nio-8081-exec-8] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: dhcp
+2026-02-09 23:48:09.586  INFO 7636 --- [http-nio-8081-exec-8] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: dhcp
+2026-02-09 23:48:09.607  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.controller.OpenWrtController   : Getting network setting: wifi
+2026-02-09 23:48:09.609  INFO 7636 --- [http-nio-8081-exec-9] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting network setting: wifi
+2026-02-09 23:48:15.791  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.controller.OpenWrtController   : Getting config file: network
+2026-02-09 23:48:15.792  INFO 7636 --- [http-nio-8081-exec-3] n.o.n.i.o.service.OpenWrtMockService     : [MOCK] Getting config file: network
+2026-02-09 23:48:31.475  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 8140014ms
+2026-02-09 23:49:01.471  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 8170010ms
+2026-02-09 23:49:31.477  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 8200016ms
+2026-02-09 23:50:01.474  WARN 7636 --- [mcp-network-monitor] n.o.n.core.skill.impl.NexusSkillImpl     : Network timeout detected: No packets received for 8230013ms

@@ -3,144 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b07497de-22d9-47f3-8513-a8f32e3ab2aa" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/logs/ooder-sdk.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/ooder-sdk.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/NexusApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/NexusApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/config/AppConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/console/ConsoleController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/BatchApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/BatchApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/CommandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/CommandController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/ConfigController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/DeviceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/DeviceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/EndAgentController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/McpAgentController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/McpAgentManagementController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/NetworkConfigController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/NetworkDeviceController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/NetworkLinkController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/NetworkMonitorController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/PersonalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/PersonalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/RouteController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/StorageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/StorageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/SystemConfigController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/SystemMonitorController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/controller/SystemStatusController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/management/NexusManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/management/impl/NexusManagerImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/manager/SkillManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/AdvancedConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/AllConfigsResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/BasicConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/ConfigChange.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/ConfigHistoryItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/ConfigHistoryItemsResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/ConfigItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/ConfigResetResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/ConfigStatsResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/ConfigsResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/EndConfigResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/NetworkConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/NexusConfigResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/RouteConfigResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/ServiceConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/SystemConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/config/TerminalConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/device/Device.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/device/DeviceControlResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/device/DeviceDetailResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/device/DeviceListResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/device/DeviceLogsResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/device/DeviceOperationLog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/device/DeviceTypesResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/endagent/EndAgentDeleteResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/endagent/EndAgentDetailResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/endagent/EndAgentDiscoverResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/endagent/EndAgentDiscoveryStatusResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/endagent/EndAgentListResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/endagent/EndAgentStatsResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/mcp/Capability.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/mcp/LogEntry.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/mcp/LogExportResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/mcp/ProtocolHandlerData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/mcp/TestCommandResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/EndAgent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/EndAgentDeleteResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/EndAgentDetailResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/EndAgentDiscoverResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/EndAgentDiscoveryStatusResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/EndAgentListResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/EndAgentStatsResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/IPAddress.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/IPBlacklist.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/NetworkDevice.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/NetworkSetting.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/network/NetworkStatusData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/protocol/CommandHeader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/protocol/CommandPacket.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/protocol/CommandResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/protocol/CommandSignature.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/protocol/ProtocolStats.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/protocol/ProtocolStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/security/PermissionsData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/security/SecurityLog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/security/SecurityLogsResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/security/SecurityStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/security/UserInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/CommandStatsData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/HealthCheckResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/HealthCheckSchedule.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/HealthReport.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/ResourceUsage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/ServiceCheckResult.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/ServiceStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/SystemHealthData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/SystemInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/SystemLoadData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/model/system/VersionInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/module/network/service/impl/NetworkServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/module/network/service/impl/NetworkServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/module/system/service/impl/SystemServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/module/system/service/impl/SystemServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/protocol/ProtocolAdapterInitializer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/protocol/ProtocolHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/protocol/ProtocolHub.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/protocol/ProtocolHubImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/protocol/adapter/AbstractProtocolAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/protocol/adapter/EndProtocolAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/protocol/adapter/McpProtocolAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/protocol/adapter/RouteProtocolAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/service/INexusService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/service/INexusService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/service/MockNexusService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/service/MockNexusService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/service/RealNexusService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/service/RealNexusService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/skill/NexusSkill.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/skill/impl/NexusSkillImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/FileInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/FileLink.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/FileObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/FileVersion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/FileView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/Folder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/LocalFile.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/LocalFileObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/LocalFileVersion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/LocalFolder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/ooder/nexus/storage/vfs/LocalVFSManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/css/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/css/dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/css/mcpagent/common.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/css/mcpagent/common.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/css/modules/layout/_layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/css/modules/layout/_layout.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/js/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/js/common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/js/menu-loader.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/js/menu-loader.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/js/skill-market.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/js/skill-market.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/menu-config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/menu-config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/pages/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/pages/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/pages/home/security-status.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/pages/home/security-status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/pages/lan/bandwidth-monitor.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/pages/lan/bandwidth-monitor.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/pages/lan/network-settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/pages/lan/network-settings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/pages/lan/network-status.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/pages/lan/network-status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/pages/llm-integration/skill-market.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/pages/llm-integration/skill-market.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/console/pages/personal/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/console/pages/personal/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/ooder/nexus/protocol/ProtocolHubTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/ooder/nexus/protocol/ProtocolHubTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -317,8 +179,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="833" />
-    <option name="y" value="297" />
+    <option name="x" value="832" />
+    <option name="y" value="296" />
     <option name="width" value="2185" />
     <option name="height" value="985" />
   </component>
@@ -652,7 +514,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="667" y="238" width="1748" height="788" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.10611303" side_tool="true" visible="true" weight="0.5264706" />
