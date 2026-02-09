@@ -42,6 +42,9 @@ body {
     border-right: 1px solid var(--ooder-border);
     padding: 24px;
     box-shadow: var(--ooder-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 .sidebar h2 {
@@ -60,6 +63,8 @@ body {
 
 .nav-menu {
     list-style: none;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .nav-menu li {
@@ -810,6 +815,27 @@ tr:hover {
     background-color: var(--ooder-light);
     border-radius: var(--ooder-radius);
     min-height: 200px;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--ooder-background);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--ooder-border);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--ooder-secondary);
 }
 
 /* 响应式设计 */

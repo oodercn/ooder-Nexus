@@ -1,0 +1,41 @@
+2026-02-09 14:14:01.043  INFO 18396 --- [main] net.ooder.nexus.NexusSpringApplication   : Starting NexusSpringApplication using Java 1.8.0_131 on wenzhangnuc with PID 18396 (E:\github\ooder-Nexus\target\independent-nexus-2.0.jar started by Administrator in E:\github\ooder-Nexus)
+2026-02-09 14:14:01.056  INFO 18396 --- [main] net.ooder.nexus.NexusSpringApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-02-09 14:14:04.814  INFO 18396 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2026-02-09 14:14:04.835  INFO 18396 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-09 14:14:04.837  INFO 18396 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.63]
+2026-02-09 14:14:05.042  INFO 18396 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-02-09 14:14:05.043  INFO 18396 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3854 ms
+2026-02-09 14:14:05.306  INFO 18396 --- [main] n.o.s.s.container.SimpleIOCContainer     : Registered instance: net.ooder.sdk.AgentSDK -> net.ooder.sdk.AgentSDK
+2026-02-09 14:14:05.309  INFO 18396 --- [main] n.o.s.s.container.SimpleIOCContainer     : Registered named instance: agentSDK -> net.ooder.sdk.AgentSDK
+2026-02-09 14:14:05.329  INFO 18396 --- [main] n.ooder.nexus.skill.impl.NexusSkillImpl  : Initializing Nexus Skill
+2026-02-09 14:14:05.332  INFO 18396 --- [main] n.o.n.management.impl.NexusManagerImpl   : Initializing Nexus Manager
+2026-02-09 14:14:05.332  INFO 18396 --- [main] n.o.n.management.impl.NexusManagerImpl   : Nexus Manager initialized successfully
+2026-02-09 14:14:05.334  INFO 18396 --- [main] n.ooder.nexus.skill.impl.NexusSkillImpl  : Nexus Skill initialized successfully
+2026-02-09 14:14:05.377  INFO 18396 --- [main] n.o.nexus.service.NexusServiceFactory    : Initializing NexusServiceFactory
+2026-02-09 14:14:05.445  INFO 18396 --- [main] n.o.n.management.impl.NexusManagerImpl   : Initializing Nexus Manager
+2026-02-09 14:14:05.445  INFO 18396 --- [main] n.o.n.management.impl.NexusManagerImpl   : Nexus Manager initialized successfully
+2026-02-09 14:14:05.448  INFO 18396 --- [main] n.o.nexus.service.NexusServiceFactory    : Registering services in factory
+2026-02-09 14:14:05.449  INFO 18396 --- [main] n.o.nexus.service.NexusServiceFactory    : Current service type: MOCK
+2026-02-09 14:14:05.452  INFO 18396 --- [main] n.o.nexus.service.NexusServiceFactory    : Service switch enabled: true
+2026-02-09 14:14:05.453  INFO 18396 --- [main] n.o.nexus.service.NexusServiceFactory    : NexusServiceFactory initialized successfully
+2026-02-09 14:14:05.477  INFO 18396 --- [main] n.o.n.c.LogManagementController          : Log file created: E:\github\ooder-Nexus\logs\system.log
+2026-02-09 14:14:05.480  INFO 18396 --- [main] n.o.n.c.LogManagementController          : Log file created: E:\github\ooder-Nexus\logs\error.log
+2026-02-09 14:14:05.481  INFO 18396 --- [main] n.o.n.c.LogManagementController          : Log file created: E:\github\ooder-Nexus\logs\audit.log
+2026-02-09 14:14:05.485  INFO 18396 --- [main] n.o.n.c.LogManagementController          : Generated 500 sample log entries
+2026-02-09 14:14:05.497  INFO 18396 --- [main] n.o.n.c.NetworkConfigController          : NetworkConfigController initialized
+2026-02-09 14:14:05.574  INFO 18396 --- [main] n.o.n.controller.SystemConfigController  : Config file not found, using default config
+2026-02-09 14:14:05.577  INFO 18396 --- [main] n.o.n.controller.SystemStatusController  : SystemStatusController initialized
+2026-02-09 14:14:07.672  INFO 18396 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2026-02-09 14:14:07.695  INFO 18396 --- [main] net.ooder.nexus.NexusSpringApplication   : Started NexusSpringApplication in 7.789 seconds (JVM running for 9.333)
+2026-02-09 14:15:15.344  INFO 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network status changed: OK -> TIMEOUT
+2026-02-09 14:15:15.345  WARN 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network timeout detected: No packets received for 70014ms
+2026-02-09 14:15:45.358  WARN 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network timeout detected: No packets received for 100029ms
+2026-02-09 14:16:15.348  WARN 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network timeout detected: No packets received for 130019ms
+2026-02-09 14:16:29.395  INFO 18396 --- [http-nio-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-02-09 14:16:29.408  INFO 18396 --- [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-02-09 14:16:29.422  INFO 18396 --- [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2026-02-09 14:16:45.341  WARN 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network timeout detected: No packets received for 160012ms
+2026-02-09 14:17:15.340  WARN 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network timeout detected: No packets received for 190011ms
+2026-02-09 14:17:45.344  WARN 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network timeout detected: No packets received for 220015ms
+2026-02-09 14:18:15.345  WARN 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network timeout detected: No packets received for 250016ms
+2026-02-09 14:18:45.339  WARN 18396 --- [mcp-network-monitor] n.ooder.nexus.skill.impl.NexusSkillImpl  : Network timeout detected: No packets received for 280010ms
