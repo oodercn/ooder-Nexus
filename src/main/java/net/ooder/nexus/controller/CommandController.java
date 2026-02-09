@@ -1,11 +1,10 @@
 package net.ooder.nexus.controller;
 
+import net.ooder.nexus.core.skill.NexusSkill;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import net.ooder.nexus.skill.NexusSkill;
-import net.ooder.nexus.skill.impl.NexusSkillImpl;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

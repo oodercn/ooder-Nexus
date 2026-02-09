@@ -1,6 +1,6 @@
 package net.ooder.nexus.controller;
 
-import net.ooder.nexus.storage.vfs.*;
+import net.ooder.nexus.core.storage.vfs.*;
 import net.ooder.nexus.model.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

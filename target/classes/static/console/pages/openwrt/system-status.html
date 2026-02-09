@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统状态 - OpenWrt - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/common.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边导航栏 -->
+        <div class="sidebar">
+            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+            <ul class="nav-menu" id="nav-menu"></ul>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 头部 -->
+            <div class="header">
+                <h1><i class="ri-dashboard-line"></i> 系统状态</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="history.back()">
+                        <i class="ri-arrow-left-line"></i> 返回
+                    </button>
+                    <button class="btn btn-primary" onclick="loadSystemStatus()">
+                        <i class="ri-refresh-line"></i> 刷新
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 系统概览 -->
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                <div class="card status-card">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="ri-router-line"></i>
+                    </div>
+                    <div class="status-value" id="deviceModel">-</div>
+                    <div class="status-label">设备型号</div>
+                </div>
+                <div class="card status-card">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="ri-firmware-line"></i>
+                    </div>
+                    <div class="status-value" id="firmwareVersion">-</div>
+                    <div class="status-label">固件版本</div>
+                </div>
+                <div class="card status-card">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="ri-time-line"></i>
+                    </div>
+                    <div class="status-value" id="uptime">-</div>
+                    <div class="status-label">运行时间</div>
+                </div>
+                <div class="card status-card">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="ri-cpu-line"></i>
+                    </div>
+                    <div class="status-value" id="cpuUsage">-</div>
+                    <div class="status-label">CPU 使用率</div>
+                </div>
+            </div>
+            
+            <!-- 详细信息 -->
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- 系统信息 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="ri-information-line"></i> 系统信息</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span class="info-label">内核版本</span>
+                                <span class="info-value" id="kernelVersion">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">系统负载</span>
+                                <span class="info-value" id="loadAverage">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">设备温度</span>
+                                <span class="info-value" id="temperature">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 内存信息 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="ri-database-2-line"></i> 内存信息</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span class="info-label">总内存</span>
+                                <span class="info-value" id="totalMemory">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">已使用</span>
+                                <span class="info-value" id="usedMemory">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">可用内存</span>
+                                <span class="info-value" id="freeMemory">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 版本信息 -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="ri-code-box-line"></i> 版本信息</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="info-label">OpenWrt 版本</span>
+                            <span class="info-value" id="openwrtVersion">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">版本检测状态</span>
+                            <span class="info-value" id="versionDetected">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">支持状态</span>
+                            <span class="info-value" id="isSupported">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/console/common/api-client.js"></script>
+    <script src="/console/common/button-manager.js"></script>
+    <script src="/console/common/utils.js"></script>
+    <script>
+        // API 客户端实例
+        const openwrtApi = new ApiClient('/api/openwrt');
+
+        // 页面初始化
+        window.onPageInit = function() {
+            loadSystemStatus();
+            loadVersionInfo();
+        };
+
+        // 加载系统状态
+        async function loadSystemStatus() {
+            try {
+                const data = await openwrtApi.get('/system-status');
+                
+                if (data.status === 'success' && data.data) {
+                    const status = data.data;
+                    
+                    // 更新概览
+                    document.getElementById('deviceModel').textContent = status.deviceModel || '-';
+                    document.getElementById('firmwareVersion').textContent = status.firmwareVersion || '-';
+                    document.getElementById('uptime').textContent = status.uptime || '-';
+                    document.getElementById('cpuUsage').textContent = status.cpuUsage || '-';
+                    
+                    // 更新系统信息
+                    document.getElementById('kernelVersion').textContent = status.kernelVersion || '-';
+                    document.getElementById('loadAverage').textContent = status.loadAverage || '-';
+                    document.getElementById('temperature').textContent = status.temperature || '-';
+                    
+                    // 解析内存信息
+                    if (status.memory) {
+                        const memoryParts = status.memory.split(',');
+                        document.getElementById('totalMemory').textContent = memoryParts[0]?.replace('total:', '').trim() || '-';
+                        document.getElementById('usedMemory').textContent = memoryParts[1]?.replace('used:', '').trim() || '-';
+                        document.getElementById('freeMemory').textContent = memoryParts[2]?.replace('free:', '').trim() || '-';
+                    }
+                }
+            } catch (error) {
+                console.error('加载系统状态失败:', error);
+                showToast('加载系统状态失败', 'error');
+            }
+        }
+
+        // 加载版本信息
+        async function loadVersionInfo() {
+            try {
+                const data = await openwrtApi.get('/version');
+                
+                if (data.status === 'success' && data.data) {
+                    const version = data.data;
+                    
+                    document.getElementById('openwrtVersion').textContent = version.openWrtVersion || '-';
+                    document.getElementById('versionDetected').textContent = version.versionDetected ? '已检测' : '未检测';
+                    document.getElementById('isSupported').textContent = version.isSupported ? '支持' : '不支持';
+                }
+            } catch (error) {
+                console.error('加载版本信息失败:', error);
+            }
+        }
+
+        // 显示提示消息
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                border-radius: 4px;
+                color: white;
+                font-size: 14px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease-out;
+                background: ${type === 'success' ? '#52c41a' : type === 'error' ? '#ff4d4f' : type === 'warning' ? '#faad14' : '#1890ff'};
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -5,42 +5,42 @@ import com.alibaba.fastjson.JSONObject;
 import net.ooder.sdk.AgentSDK;
 import net.ooder.sdk.network.packet.CommandPacket;
 // import net.ooder.sdk.network.packet.PacketType;
-import net.ooder.nexus.management.NexusManager;
+import net.ooder.nexus.infrastructure.management.NexusManager;
 import net.ooder.nexus.model.Result;
-import net.ooder.nexus.model.network.NetworkSetting;
-import net.ooder.nexus.model.network.IPAddress;
-import net.ooder.nexus.model.network.IPBlacklist;
-import net.ooder.nexus.model.network.EndAgent;
-import net.ooder.nexus.model.system.SystemInfo;
-import net.ooder.nexus.model.system.ServiceStatus;
-import net.ooder.nexus.model.system.ResourceUsage;
-import net.ooder.nexus.model.system.VersionInfo;
-import net.ooder.nexus.model.system.SystemHealthData;
-import net.ooder.nexus.model.system.SystemLoadData;
-import net.ooder.nexus.model.network.NetworkStatusData;
-import net.ooder.nexus.model.system.CommandStatsData;
-import net.ooder.nexus.model.config.BasicConfig;
-import net.ooder.nexus.model.config.AdvancedConfig;
-import net.ooder.nexus.model.config.SecurityConfig;
-import net.ooder.nexus.model.config.TerminalConfig;
-import net.ooder.nexus.model.config.ServiceConfig;
-import net.ooder.nexus.model.config.SystemConfig;
-import net.ooder.nexus.model.config.NetworkConfig;
-import net.ooder.nexus.model.config.ConfigItem;
-import net.ooder.nexus.model.config.ConfigsResult;
-import net.ooder.nexus.model.config.ConfigHistoryItem;
-import net.ooder.nexus.model.config.ConfigHistoryItemsResult;
-import net.ooder.nexus.model.mcp.LogEntry;
-import net.ooder.nexus.model.mcp.ProtocolHandlerData;
-import net.ooder.nexus.model.security.SecurityStatus;
-import net.ooder.nexus.model.security.UserInfo;
-import net.ooder.nexus.model.security.PermissionsData;
-import net.ooder.nexus.model.security.SecurityLog;
-import net.ooder.nexus.model.security.SecurityLogsResult;
-import net.ooder.nexus.model.system.HealthCheckResult;
-import net.ooder.nexus.model.system.HealthReport;
-import net.ooder.nexus.model.system.HealthCheckSchedule;
-import net.ooder.nexus.model.system.ServiceCheckResult;
+import net.ooder.nexus.domain.network.model.NetworkSetting;
+import net.ooder.nexus.domain.network.model.IPAddress;
+import net.ooder.nexus.domain.network.model.IPBlacklist;
+import net.ooder.nexus.domain.network.model.EndAgent;
+import net.ooder.nexus.domain.system.model.SystemInfo;
+import net.ooder.nexus.domain.system.model.ServiceStatus;
+import net.ooder.nexus.domain.system.model.ResourceUsage;
+import net.ooder.nexus.domain.system.model.VersionInfo;
+import net.ooder.nexus.domain.system.model.SystemHealthData;
+import net.ooder.nexus.domain.system.model.SystemLoadData;
+import net.ooder.nexus.domain.network.model.NetworkStatusData;
+import net.ooder.nexus.domain.system.model.CommandStatsData;
+import net.ooder.nexus.domain.config.model.BasicConfig;
+import net.ooder.nexus.domain.config.model.AdvancedConfig;
+import net.ooder.nexus.domain.config.model.SecurityConfig;
+import net.ooder.nexus.domain.config.model.TerminalConfig;
+import net.ooder.nexus.domain.config.model.ServiceConfig;
+import net.ooder.nexus.domain.config.model.SystemConfig;
+import net.ooder.nexus.domain.config.model.NetworkConfig;
+import net.ooder.nexus.domain.config.model.ConfigItem;
+import net.ooder.nexus.domain.config.model.ConfigsResult;
+import net.ooder.nexus.domain.config.model.ConfigHistoryItem;
+import net.ooder.nexus.domain.config.model.ConfigHistoryItemsResult;
+import net.ooder.nexus.domain.mcp.model.LogEntry;
+import net.ooder.nexus.domain.mcp.model.ProtocolHandlerData;
+import net.ooder.nexus.domain.security.model.SecurityStatus;
+import net.ooder.nexus.domain.security.model.UserInfo;
+import net.ooder.nexus.domain.security.model.PermissionsData;
+import net.ooder.nexus.domain.security.model.SecurityLog;
+import net.ooder.nexus.domain.security.model.SecurityLogsResult;
+import net.ooder.nexus.domain.system.model.HealthCheckResult;
+import net.ooder.nexus.domain.system.model.HealthReport;
+import net.ooder.nexus.domain.system.model.HealthCheckSchedule;
+import net.ooder.nexus.domain.system.model.ServiceCheckResult;
 import net.ooder.nexus.model.TestCommandResult;
 import net.ooder.nexus.model.ConfigResult;
 import net.ooder.nexus.model.LogExportResult;
@@ -127,7 +127,7 @@ public class RealNexusService implements INexusService {
             return Result.success("All network settings retrieved successfully", settingsList);
         } catch (Exception e) {
             log.error("Failed to get all network settings", e);
-            return Result.error("获取所有网络设置失败: " + e.getMessage());
+            return Result.error("获取�??有网络设置失�??: " + e.getMessage());
         }
     }
 
@@ -192,7 +192,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Static IP address added successfully", ipAddress);
         } catch (Exception e) {
             log.error("Failed to add static IP address", e);
-            return Result.error("添加静态IP地址失败: " + e.getMessage());
+            return Result.error("添加静�?�IP地址失败: " + e.getMessage());
         }
     }
 
@@ -226,7 +226,7 @@ public class RealNexusService implements INexusService {
             return Result.success("IP blacklist retrieved successfully", blacklist);
         } catch (Exception e) {
             log.error("Failed to get IP blacklist", e);
-            return Result.error("获取IP黑名单失败: " + e.getMessage());
+            return Result.error("获取IP黑名单失�??: " + e.getMessage());
         }
     }
 
@@ -237,7 +237,7 @@ public class RealNexusService implements INexusService {
             IPBlacklist blacklistItem = new IPBlacklist(
                 "blacklist-new",
                 (String) blacklistData.get("ipAddress"),
-                (String) blacklistData.getOrDefault("reason", "未指定"),
+                (String) blacklistData.getOrDefault("reason", "未指�??"),
                 (String) blacklistData.getOrDefault("source", "手动添加")
             );
             
@@ -266,7 +266,7 @@ public class RealNexusService implements INexusService {
         }
     }
 
-    // ==================== 系统状态模块 ====================
+    // ==================== 系统状�?�模�?? ====================
 
     @Override
     public Result<SystemInfo> getSystemInfo() {
@@ -311,7 +311,7 @@ public class RealNexusService implements INexusService {
             return Result.success("System health retrieved successfully", healthData);
         } catch (Exception e) {
             log.error("Failed to get system health", e);
-            return Result.error("获取系统健康状态失败: " + e.getMessage());
+            return Result.error("获取系统健康状�?�失�??: " + e.getMessage());
         }
     }
 
@@ -338,7 +338,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Service statuses retrieved successfully", statuses);
         } catch (Exception e) {
             log.error("Failed to get service statuses", e);
-            return Result.error("获取服务状态列表失败: " + e.getMessage());
+            return Result.error("获取服务状�?�列表失�??: " + e.getMessage());
         }
     }
 
@@ -355,7 +355,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Service status retrieved successfully", status);
         } catch (Exception e) {
             log.error("Failed to get service status", e);
-            return Result.error("获取服务状态失败: " + e.getMessage());
+            return Result.error("获取服务状�?�失�??: " + e.getMessage());
         }
     }
 
@@ -427,7 +427,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Network status retrieved successfully", statusData);
         } catch (Exception e) {
             log.error("Failed to get network status", e);
-            return Result.error("获取网络状态失败: " + e.getMessage());
+            return Result.error("获取网络状�?�失�??: " + e.getMessage());
         }
     }
 
@@ -745,7 +745,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Security status retrieved successfully", statusData);
         } catch (Exception e) {
             log.error("Failed to get security status", e);
-            return Result.error("获取安全状态失败: " + e.getMessage());
+            return Result.error("获取安全状�?�失�??: " + e.getMessage());
         }
     }
 
@@ -800,7 +800,7 @@ public class RealNexusService implements INexusService {
             UserInfo newUser = new UserInfo(
                 UUID.randomUUID().toString(),
                 username,
-                "", // 密码不返回
+                "", // 密码不返�??
                 username,
                 username + "@example.com",
                 "",
@@ -830,7 +830,7 @@ public class RealNexusService implements INexusService {
             UserInfo updatedUser = new UserInfo(
                 userId,
                 username,
-                "", // 密码不返回
+                "", // 密码不返�??
                 username,
                 username + "@example.com",
                 "",
@@ -933,7 +933,7 @@ public class RealNexusService implements INexusService {
             permissions.add(new PermissionsData(
                 "permission-1",
                 "个人用户权限",
-                "个人用户的基本权限",
+                "个人用户的基本权�??",
                 "role",
                 Arrays.asList("personal"),
                 Arrays.asList("dashboard", "terminal", "network"),
@@ -945,7 +945,7 @@ public class RealNexusService implements INexusService {
             permissions.add(new PermissionsData(
                 "permission-2",
                 "企业用户权限",
-                "企业用户的完整权限",
+                "企业用户的完整权�??",
                 "role",
                 Arrays.asList("enterprise"),
                 Arrays.asList("dashboard", "terminal", "network", "users", "system"),
@@ -967,7 +967,7 @@ public class RealNexusService implements INexusService {
         try {
             PermissionsData newPermission = new PermissionsData(
                 UUID.randomUUID().toString(),
-                "自定义权限",
+                "自定义权�??",
                 "保存的自定义权限设置",
                 "custom",
                 Arrays.asList("custom"),
@@ -997,7 +997,7 @@ public class RealNexusService implements INexusService {
         }
     }
 
-    // ==================== 健康检查模块 ====================
+    // ==================== 健康�??查模�?? ====================
 
     @Override
     public Result<HealthCheckResult> runHealthCheck(Map<String, Object> params) {
@@ -1005,17 +1005,17 @@ public class RealNexusService implements INexusService {
         try {
             HealthCheckResult result = new HealthCheckResult(
                 "check-" + System.currentTimeMillis(),
-                "系统健康检查",
+                "系统健康�??�??",
                 "healthy",
-                "健康检查通过，系统状态良好",
+                "健康�??查�?�过，系统状态良�??",
                 800,
                 new Date(),
-                "所有组件运行正常"
+                "�??有组件运行正�??"
             );
             return Result.success("Health check completed successfully", result);
         } catch (Exception e) {
             log.error("Failed to run health check", e);
-            return Result.error("运行健康检查失败: " + e.getMessage());
+            return Result.error("运行健康�??查失�??: " + e.getMessage());
         }
     }
 
@@ -1026,7 +1026,7 @@ public class RealNexusService implements INexusService {
             List<HealthCheckResult> results = new ArrayList<>();
             results.add(new HealthCheckResult(
                 "check-1",
-                "系统基本状态",
+                "系统基本状�??",
                 "healthy",
                 "系统运行正常",
                 300,
@@ -1040,7 +1040,7 @@ public class RealNexusService implements INexusService {
                 "网络连接正常",
                 200,
                 new Date(),
-                "连接数: 12, 丢包率: 0%"
+                "连接�??: 12, 丢包�??: 0%"
             ));
             
             HealthReport report = new HealthReport(
@@ -1067,20 +1067,20 @@ public class RealNexusService implements INexusService {
         try {
             HealthCheckSchedule schedule = new HealthCheckSchedule(
                 "schedule-" + System.currentTimeMillis(),
-                "定时健康检查",
-                "0 0 * * * ?", // 每小时执行一次
-                Arrays.asList("系统基本状态", "网络连接", "服务状态"),
+                "定时健康�??�??",
+                "0 0 * * * ?", // 每小时执行一�??
+                Arrays.asList("系统基本状�??", "网络连接", "服务状�??"),
                 true,
-                "系统定时健康检查计划",
+                "系统定时健康�??查计�??",
                 new Date(),
                 new Date(),
                 null,
-                "未执行"
+                "未执�??"
             );
             return Result.success("Health check scheduled successfully", schedule);
         } catch (Exception e) {
             log.error("Failed to schedule health check", e);
-            return Result.error("调度健康检查失败: " + e.getMessage());
+            return Result.error("调度健康�??查失�??: " + e.getMessage());
         }
     }
 
@@ -1102,7 +1102,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Service check completed successfully", result);
         } catch (Exception e) {
             log.error("Failed to check service", e);
-            return Result.error("检查服务失败: " + e.getMessage());
+            return Result.error("�??查服务失�??: " + e.getMessage());
         }
     }
 
@@ -1419,7 +1419,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Protocol handlers retrieved successfully", handlers);
         } catch (Exception e) {
             log.error("Failed to get protocol handlers", e);
-            return Result.error("获取协议处理器失败: " + e.getMessage());
+            return Result.error("获取协议处理器失�??: " + e.getMessage());
         }
     }
 
@@ -1444,7 +1444,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Protocol handler registered successfully", newHandlerData);
         } catch (Exception e) {
             log.error("Failed to register protocol handler", e);
-            return Result.error("注册协议处理器失败: " + e.getMessage());
+            return Result.error("注册协议处理器失�??: " + e.getMessage());
         }
     }
 
@@ -1468,7 +1468,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Protocol handler removed successfully", removedHandlerData);
         } catch (Exception e) {
             log.error("Failed to remove protocol handler", e);
-            return Result.error("移除协议处理器失败: " + e.getMessage());
+            return Result.error("移除协议处理器失�??: " + e.getMessage());
         }
     }
 
@@ -1505,7 +1505,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Protocol handlers refreshed successfully", handlers);
         } catch (Exception e) {
             log.error("Failed to refresh protocol handlers", e);
-            return Result.error("刷新协议处理器失败: " + e.getMessage());
+            return Result.error("刷新协议处理器失�??: " + e.getMessage());
         }
     }
 
@@ -1517,7 +1517,7 @@ public class RealNexusService implements INexusService {
             return Result.success("Protocol handlers searched successfully", handlers);
         } catch (Exception e) {
             log.error("Failed to search protocol handlers", e);
-            return Result.error("搜索协议处理器失败: " + e.getMessage());
+            return Result.error("搜索协议处理器失�??: " + e.getMessage());
         }
     }
 
@@ -1539,14 +1539,14 @@ public class RealNexusService implements INexusService {
     }
 
     @Override
-    public Result<List<net.ooder.nexus.model.network.NetworkDevice>> getNetworkDevices() {
+    public Result<List<net.ooder.nexus.domain.network.model.NetworkDevice>> getNetworkDevices() {
         log.info("Getting network devices");
         try {
             // 调用真实的Agent SDK获取网络设备
-            List<net.ooder.nexus.model.network.NetworkDevice> devices = new ArrayList<>();
+            List<net.ooder.nexus.domain.network.model.NetworkDevice> devices = new ArrayList<>();
             
-            // 这里应该调用agentSDK.getNetworkDevices()，但为了演示，我们返回模拟数据
-            devices.add(new net.ooder.nexus.model.network.NetworkDevice(
+            // 这里应该调用agentSDK.getNetworkDevices()，但为了演示，我们返回模拟数�??
+            devices.add(new net.ooder.nexus.domain.network.model.NetworkDevice(
                 "device-001",
                 "主路由器",
                 "router",

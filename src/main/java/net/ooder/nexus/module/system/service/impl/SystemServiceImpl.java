@@ -1,7 +1,7 @@
 package net.ooder.nexus.module.system.service.impl;
 
 import net.ooder.nexus.module.system.service.SystemService;
-import net.ooder.nexus.management.NexusManager;
+import net.ooder.nexus.infrastructure.management.NexusManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -35,38 +35,21 @@
             <version>0.6.6</version>
         </dependency>
 
-        <!-- FastJSON -->
+        <!-- Ooder Org - 人员组织机构支持 -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.83</version>
+            <groupId>net.ooder</groupId>
+            <artifactId>ooder-org-web</artifactId>
+            <version>2.0</version>
         </dependency>
 
-        <!-- Logging -->
+        <!-- Ooder Common -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.36</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.11</version>
+            <groupId>net.ooder</groupId>
+            <artifactId>ooder-common-client</artifactId>
+            <version>2.0</version>
         </dependency>
 
-        <!-- Selenium for browser automation -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>4.18.1</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>5.9.2</version>
-        </dependency>
 
-        <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -90,6 +73,13 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- JSch for SSH connections -->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
         </dependency>
     </dependencies>
 

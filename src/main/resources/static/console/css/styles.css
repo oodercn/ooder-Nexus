@@ -44,11 +44,14 @@ body {
     box-shadow: var(--ooder-shadow);
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    height: 100vh;
+    overflow: hidden;
 }
 
+/* 侧边栏标题固定 */
 .sidebar h2 {
-    margin-bottom: 32px;
+    flex-shrink: 0;
+    margin-bottom: 24px;
     font-size: 18px;
     font-weight: 600;
     color: var(--ooder-primary);
@@ -57,14 +60,42 @@ body {
     gap: 8px;
 }
 
-.sidebar h2::after {
-    content: "OoderAgent";
-}
-
+/* 导航菜单区域可滚动 */
 .nav-menu {
     list-style: none;
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
+    margin-right: -8px;
+    padding-right: 8px;
+}
+
+/* 自定义滚动条样式 - 暗色主题 */
+.nav-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.nav-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nav-menu::-webkit-scrollbar-thumb {
+    background: var(--ooder-border);
+    border-radius: 2px;
+}
+
+.nav-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--ooder-secondary);
+}
+
+/* Firefox 滚动条样式 */
+.nav-menu {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ooder-border) transparent;
+}
+
+.sidebar h2::after {
+    content: "OoderAgent";
 }
 
 .nav-menu li {

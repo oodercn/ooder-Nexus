@@ -1,8 +1,8 @@
 package net.ooder.nexus.module.network.service.impl;
 
 import net.ooder.nexus.module.network.service.NetworkService;
-import net.ooder.nexus.skill.NexusSkill;
-import net.ooder.nexus.skill.impl.NexusSkillImpl;
+import net.ooder.nexus.core.skill.NexusSkill;
+import net.ooder.nexus.core.skill.impl.NexusSkillImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

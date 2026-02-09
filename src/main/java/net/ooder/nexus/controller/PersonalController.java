@@ -1,6 +1,6 @@
 package net.ooder.nexus.controller;
 
-import net.ooder.nexus.manager.SkillManager;
+import net.ooder.nexus.infrastructure.management.SkillManager;
 import net.ooder.nexus.model.ApiResponse;
 import net.ooder.nexus.model.Skill;
 import net.ooder.nexus.model.SkillContext;
@@ -67,7 +67,7 @@ public class PersonalController {
             return ResponseEntity.ok(ApiResponse.success(stats));
         } catch (Exception e) {
             return ResponseEntity.status(500)
-                    .body(ApiResponse.error(500, "获取个人仪表盘统计数据失败: " + e.getMessage()));
+                    .body(ApiResponse.error(500, "获取个人仪表盘统计数据失�?: " + e.getMessage()));
         }
     }
 
@@ -84,7 +84,7 @@ public class PersonalController {
             return ResponseEntity.ok(ApiResponse.success(true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "发布技能失败: " + e.getMessage()));
+                    .body(ApiResponse.error(500, "发布�?能失�?: " + e.getMessage()));
         }
     }
 
@@ -96,7 +96,7 @@ public class PersonalController {
             return ResponseEntity.ok(ApiResponse.success(true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "更新技能失败: " + e.getMessage()));
+                    .body(ApiResponse.error(500, "更新�?能失�?: " + e.getMessage()));
         }
     }
 
@@ -107,7 +107,7 @@ public class PersonalController {
             return ResponseEntity.ok(ApiResponse.success(true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "删除技能失败: " + e.getMessage()));
+                    .body(ApiResponse.error(500, "删除�?能失�?: " + e.getMessage()));
         }
     }
 
@@ -133,7 +133,7 @@ public class PersonalController {
             executionResults.put(executionId, result);
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "执行技能失败: " + e.getMessage()));
+                    .body(ApiResponse.error(500, "执行�?能失�?: " + e.getMessage()));
         }
     }
 
@@ -173,7 +173,7 @@ public class PersonalController {
         SkillResult result = executionResults.get(executionId);
         if (result == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponse.error(404, "执行结果不存在"));
+                    .body(ApiResponse.error(404, "执行结果不存�?"));
         }
         return ResponseEntity.ok(ApiResponse.success(result));
     }
@@ -238,7 +238,7 @@ public class PersonalController {
             return ResponseEntity.ok(ApiResponse.success(true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "分享技能失败: " + e.getMessage()));
+                    .body(ApiResponse.error(500, "分享�?能失�?: " + e.getMessage()));
         }
     }
 
@@ -322,26 +322,26 @@ public class PersonalController {
         List<Map<String, Object>> quickStart = new ArrayList<>();
         Map<String, Object> step1 = new HashMap<>();
         step1.put("id", "1");
-        step1.put("title", "发布技能");
-        step1.put("content", "在我的技能页面，点击发布技能按钮，填写技能信息并上传技能代码");
+        step1.put("title", "发布�?�?");
+        step1.put("content", "在我的技能页面，点击发布�?能按钮，填写�?能信息并上传�?能代�?");
         quickStart.add(step1);
 
         Map<String, Object> step2 = new HashMap<>();
         step2.put("id", "2");
-        step2.put("title", "执行技能");
-        step2.put("content", "在我的技能页面，选择要执行的技能，填写执行参数并点击执行按钮");
+        step2.put("title", "执行�?�?");
+        step2.put("content", "在我的技能页面，选择要执行的�?能，填写执行参数并点击执行按�?");
         quickStart.add(step2);
 
         Map<String, Object> step3 = new HashMap<>();
         step3.put("id", "3");
-        step3.put("title", "分享技能");
-        step3.put("content", "在我的技能页面，选择要分享的技能，点击分享按钮，填写分享目标");
+        step3.put("title", "分享�?�?");
+        step3.put("content", "在我的技能页面，选择要分享的�?能，点击分享按钮，填写分享目�?");
         quickStart.add(step3);
 
         Map<String, Object> step4 = new HashMap<>();
         step4.put("id", "4");
         step4.put("title", "管理群组");
-        step4.put("content", "在我的群组页面，创建或加入群组，管理群组技能");
+        step4.put("content", "在我的群组页面，创建或加入群组，管理群组�?�?");
         quickStart.add(step4);
 
         helpContent.put("quickStart", quickStart);
@@ -349,20 +349,20 @@ public class PersonalController {
         List<Map<String, Object>> faq = new ArrayList<>();
         Map<String, Object> question1 = new HashMap<>();
         question1.put("id", "1");
-        question1.put("question", "如何发布技能？");
-        question1.put("answer", "在我的技能页面，点击发布技能按钮，填写技能信息并上传技能代码");
+        question1.put("question", "如何发布�?能？");
+        question1.put("answer", "在我的技能页面，点击发布�?能按钮，填写�?能信息并上传�?能代�?");
         faq.add(question1);
 
         Map<String, Object> question2 = new HashMap<>();
         question2.put("id", "2");
-        question2.put("question", "如何执行技能？");
-        question2.put("answer", "在我的技能页面，选择要执行的技能，填写执行参数并点击执行按钮");
+        question2.put("question", "如何执行�?能？");
+        question2.put("answer", "在我的技能页面，选择要执行的�?能，填写执行参数并点击执行按�?");
         faq.add(question2);
 
         Map<String, Object> question3 = new HashMap<>();
         question3.put("id", "3");
-        question3.put("question", "如何分享技能？");
-        question3.put("answer", "在我的技能页面，选择要分享的技能，点击分享按钮，填写分享目标");
+        question3.put("question", "如何分享�?能？");
+        question3.put("answer", "在我的技能页面，选择要分享的�?能，点击分享按钮，填写分享目�?");
         faq.add(question3);
 
         helpContent.put("faq", faq);
@@ -382,12 +382,12 @@ public class PersonalController {
         systemInfo.put("database", "JSON Storage");
 
         List<String> features = new ArrayList<>();
-        features.add("技能发布与管理");
-        features.add("技能执行与监控");
-        features.add("技能分享与协作");
+        features.add("�?能发布与管理");
+        features.add("�?能执行与监控");
+        features.add("�?能分享与协作");
         features.add("群组管理");
         features.add("个人身份管理");
-        features.add("系统监控与管理");
+        features.add("系统监控与管�?");
         systemInfo.put("features", features);
 
         Map<String, String> contact = new HashMap<>();

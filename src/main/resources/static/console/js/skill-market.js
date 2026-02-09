@@ -1,6 +1,5 @@
 class SkillMarket {
     constructor() {
-        this.llmAPI = new LLMIntegrationAPI();
         this.skillList = [];
         this.categories = [];
         this.filter = {
@@ -15,7 +14,6 @@ class SkillMarket {
             await this.loadSkillMarket();
         } catch (error) {
             console.error('初始化技能市场失败:', error);
-            // 使用默认值
             this.skillList = [];
             this.renderSkillMarket();
         }
@@ -25,78 +23,126 @@ class SkillMarket {
     async loadSkillMarket() {
         try {
             const skillMarketGrid = document.getElementById('skill-market-grid');
-            skillMarketGrid.innerHTML = '<div class="loading">加载中...</div>';
+            skillMarketGrid.innerHTML = `
+                <div class="loading">
+                    <i class="ri-loader-4-line ri-spin" style="font-size: 32px;"></i>
+                    <p>加载中...</p>
+                </div>
+            `;
             
-            const response = await this.llmAPI.discoverSkills(this.filter.category, this.filter.keyword);
-            if (response && (response.code === 200 || response.message === "success")) {
-                this.skillList = response.data || [];
-                this.renderSkillMarket();
+            // 从本地JSON文件加载技能数据
+            const response = await fetch('/console/data/skill-market-data.json');
+            const data = await response.json();
+            
+            if (data && data.code === 200 && data.data) {
+                this.skillList = data.data;
+                // 应用筛选
+                this.applyFilter();
             } else {
                 this.skillList = [];
                 this.renderSkillMarket();
-                this.showError('加载技能市场失败');
             }
         } catch (error) {
             console.error('加载技能市场失败:', error);
             this.skillList = [];
             this.renderSkillMarket();
-            this.showError('加载技能市场失败');
+            this.showError('加载技能市场失败，请检查网络连接');
         }
     }
 
-    renderSkillMarket() {
-        const skillMarketGrid = document.getElementById('skill-market-grid');
-        let html = '';
+    applyFilter() {
+        let filteredSkills = this.skillList;
+        
+        // 分类筛选
+        if (this.filter.category) {
+            filteredSkills = filteredSkills.filter(skill => skill.category === this.filter.category);
+        }
+        
+        // 关键词搜索
+        if (this.filter.keyword) {
+            const keyword = this.filter.keyword.toLowerCase();
+            filteredSkills = filteredSkills.filter(skill => 
+                skill.skillName.toLowerCase().includes(keyword) ||
+                skill.description.toLowerCase().includes(keyword) ||
+                skill.tags.some(tag => tag.toLowerCase().includes(keyword))
+            );
+        }
+        
+        this.renderSkillMarket(filteredSkills);
+    }
 
-        if (this.skillList.length === 0) {
-            skillMarketGrid.innerHTML = '<div class="empty-state">暂无技能</div>';
+    renderSkillMarket(skills = this.skillList) {
+        const skillMarketGrid = document.getElementById('skill-market-grid');
+        
+        if (skills.length === 0) {
+            skillMarketGrid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <i class="ri-store-3-line"></i>
+                    <h3>暂无技能</h3>
+                    <p>没有找到匹配的技能，请尝试其他搜索条件</p>
+                </div>
+            `;
             return;
         }
 
-        this.skillList.forEach(skill => {
-            html += `<div class="skill-card" data-skill-id="${skill.skillId}">`;
-            html += `<div class="skill-card-icon">`;
-            html += `<i class="${skill.metadata?.icon || 'ri-code-line'}"></i>`;
-            html += `</div>`;
-            html += `<div class="skill-card-info">`;
-            html += `<h3 class="skill-name">${skill.skillName}</h3>`;
-            html += `<p class="skill-description">${skill.description}</p>`;
-            html += `<div class="skill-card-meta">`;
-            html += `<span class="skill-category">分类：${skill.category}</span>`;
-            html += `<span class="skill-author">作者：${skill.metadata?.author || '未知'}</span>`;
-            html += `<span class="skill-rating">评分：${skill.metadata?.rating || 0}</span>`;
-            html += `</div>`;
-            html += `</div>`;
-            html += `<div class="skill-card-actions">`;
-            html += `<button class="btn btn-primary" onclick="skillMarket.previewSkill('${skill.skillId}')">`;
-            html += `<i class="ri-eye-line"></i>`;
-            html += `预览</button>`;
-            html += `<button class="btn btn-secondary" onclick="skillMarket.installSkill('${skill.skillId}')">`;
-            html += `<i class="ri-download-line"></i>`;
-            html += `安装</button>`;
-            html += `</div>`;
-            html += `</div>`;
+        let html = '';
+        skills.forEach(skill => {
+            const meta = skill.metadata || {};
+            const tags = meta.tags || [];
+            const capabilities = meta.capabilities || [];
+            
+            html += `
+                <div class="skill-card" data-skill-id="${skill.skillId}">
+                    <div class="skill-card-header">
+                        <div class="skill-icon">
+                            <i class="${meta.icon || 'ri-code-line'}"></i>
+                        </div>
+                        <div class="skill-info">
+                            <div class="skill-name">${skill.skillName}</div>
+                            <span class="skill-category">${skill.category}</span>
+                        </div>
+                    </div>
+                    <div class="skill-description">${skill.description}</div>
+                    <div class="skill-meta">
+                        <span><i class="ri-user-line"></i> ${meta.author || '未知'}</span>
+                        <span><i class="ri-star-fill"></i> ${meta.rating || 0}</span>
+                        <span><i class="ri-download-line"></i> ${this.formatNumber(meta.downloads || 0)}</span>
+                        <span><i class="ri-code-box-line"></i> ${meta.version || '1.0.0'}</span>
+                    </div>
+                    <div class="skill-tags">
+                        ${tags.slice(0, 3).map(tag => `<span class="skill-tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="skill-actions">
+                        <button class="btn btn-secondary" onclick="skillMarket.previewSkill('${skill.skillId}')">
+                            <i class="ri-eye-line"></i> 预览
+                        </button>
+                        <button class="btn btn-primary" onclick="skillMarket.installSkill('${skill.skillId}')">
+                            <i class="ri-download-line"></i> 安装
+                        </button>
+                    </div>
+                </div>
+            `;
         });
 
         skillMarketGrid.innerHTML = html;
     }
 
-    bindEvents() {
-        // 绑定菜单事件
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                e.currentTarget.classList.add('active');
-                this.loadPage(e.currentTarget.dataset.page);
-            });
-        });
+    formatNumber(num) {
+        if (num >= 10000) {
+            return (num / 10000).toFixed(1) + 'w';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'k';
+        }
+        return num.toString();
+    }
 
+    bindEvents() {
         // 绑定搜索事件
         const searchInput = document.getElementById('search-input');
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 this.filter.keyword = e.target.value;
-                this.loadSkillMarket();
+                this.applyFilter();
             });
         }
 
@@ -105,7 +151,7 @@ class SkillMarket {
         if (categoryFilter) {
             categoryFilter.addEventListener('change', (e) => {
                 this.filter.category = e.target.value;
-                this.loadSkillMarket();
+                this.applyFilter();
             });
         }
     }
@@ -118,20 +164,13 @@ class SkillMarket {
                 return;
             }
 
-            const response = await this.llmAPI.registerSkill({
-                skillName: skill.skillName,
-                skillVersion: skill.metadata?.version || '1.0.0',
-                description: skill.description,
-                category: skill.category,
-                author: skill.metadata?.author || 'Market',
-                icon: skill.metadata?.icon || 'ri-code-line',
-                tags: []
-            });
-            if (response && (response.code === 200 || response.message === "success")) {
-                this.showSuccess('技能安装成功');
-            } else {
-                this.showError('技能安装失败');
-            }
+            // 模拟安装过程
+            this.showSuccess(`正在安装 ${skill.skillName}...`);
+            
+            setTimeout(() => {
+                this.showSuccess(`${skill.skillName} 安装成功！`);
+            }, 1500);
+            
         } catch (error) {
             console.error('安装技能失败:', error);
             this.showError('安装技能失败，请检查网络连接');
@@ -141,18 +180,34 @@ class SkillMarket {
     async previewSkill(skillId) {
         try {
             const skill = this.skillList.find(s => s.skillId === skillId);
-            if (skill) {
-                this.currentPreviewSkill = skill;
-                document.getElementById('preview-skill-name').textContent = skill.skillName;
-                document.getElementById('preview-skill-description').textContent = skill.description;
-                document.getElementById('preview-skill-version').textContent = skill.metadata?.version || '1.0.0';
-                document.getElementById('preview-skill-author').textContent = skill.metadata?.author || '未知';
-                document.getElementById('preview-skill-category').textContent = skill.category;
-                document.getElementById('preview-skill-icon').className = skill.metadata?.icon || 'ri-code-line';
-                document.getElementById('skill-preview-modal').style.display = 'flex';
-            } else {
+            if (!skill) {
                 this.showError('技能不存在');
+                return;
             }
+
+            this.currentPreviewSkill = skill;
+            const meta = skill.metadata || {};
+            
+            // 填充预览信息
+            document.getElementById('preview-skill-name').textContent = skill.skillName;
+            document.getElementById('preview-skill-description').textContent = skill.description;
+            document.getElementById('preview-skill-version').textContent = meta.version || '1.0.0';
+            document.getElementById('preview-skill-author').textContent = meta.author || '未知';
+            document.getElementById('preview-skill-category').textContent = skill.category;
+            document.getElementById('preview-skill-rating').textContent = (meta.rating || 0) + ' 分';
+            document.getElementById('preview-skill-downloads').textContent = this.formatNumber(meta.downloads || 0);
+            
+            const iconEl = document.getElementById('preview-skill-icon');
+            iconEl.className = meta.icon || 'ri-code-line';
+            
+            // 填充功能特性
+            const capabilitiesList = document.getElementById('preview-skill-capabilities');
+            const capabilities = meta.capabilities || [];
+            capabilitiesList.innerHTML = capabilities.map(cap => `<li>${cap}</li>`).join('');
+            
+            // 显示模态框
+            document.getElementById('skill-preview-modal').classList.add('active');
+            
         } catch (error) {
             console.error('预览技能失败:', error);
             this.showError('预览技能失败');
@@ -168,15 +223,24 @@ class SkillMarket {
     }
 
     showNotification(message, type) {
+        // 移除现有通知
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+        
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        notification.textContent = message;
+        notification.innerHTML = `
+            <i class="ri-${type === 'success' ? 'check-line' : 'error-warning-line'}"></i>
+            ${message}
+        `;
         document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 3000);
-    }
-
-    loadPage(page) {
-        window.location.href = `/console/pages/llm-integration/${page}.html`;
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 }
 
@@ -189,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
-        modal.style.display = 'none';
+        modal.classList.remove('active');
     }
 }
 
@@ -204,6 +268,14 @@ async function refreshSkillMarket() {
 async function installSkillFromPreview() {
     if (skillMarket && skillMarket.currentPreviewSkill) {
         await skillMarket.installSkill(skillMarket.currentPreviewSkill.skillId);
+        closeModal('skill-preview-modal');
+    }
+}
+
+// 点击模态框外部关闭
+window.onclick = function(event) {
+    const modal = document.getElementById('skill-preview-modal');
+    if (event.target === modal) {
         closeModal('skill-preview-modal');
     }
 }

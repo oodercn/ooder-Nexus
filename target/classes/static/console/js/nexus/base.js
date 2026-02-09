@@ -104,25 +104,61 @@
 
         /**
          * 初始化主题切换
+         * 使用统一的 cookie 存储 (nexus_theme)
          */
         initThemeToggle() {
             const themeToggleBtn = document.querySelector('.theme-toggle-btn');
             if (themeToggleBtn) {
                 themeToggleBtn.addEventListener('click', () => {
                     document.body.classList.toggle('light-theme');
+                    document.documentElement.classList.toggle('light-theme');
                     const isLightTheme = document.body.classList.contains('light-theme');
-                    themeToggleBtn.innerHTML = isLightTheme 
-                        ? '<i class="ri-moon-line"></i> 深色模式' 
+                    themeToggleBtn.innerHTML = isLightTheme
+                        ? '<i class="ri-moon-line"></i> 深色模式'
                         : '<i class="ri-sun-line"></i> 浅色模式';
-                    localStorage.setItem('theme', isLightTheme ? 'light' : 'dark');
+                    // 使用统一的 cookie key
+                    this.setCookie('nexus_theme', isLightTheme ? 'light' : 'dark', 365);
                 });
 
-                const savedTheme = localStorage.getItem('theme');
+                const savedTheme = this.getCookie('nexus_theme');
                 if (savedTheme === 'light') {
                     document.body.classList.add('light-theme');
+                    document.documentElement.classList.add('light-theme');
                     themeToggleBtn.innerHTML = '<i class="ri-moon-line"></i> 深色模式';
                 }
             }
+        }
+
+        /**
+         * 获取 Cookie 值
+         * @param {string} name - Cookie 名称
+         * @returns {string|null} Cookie 值
+         */
+        getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        /**
+         * 设置 Cookie
+         * @param {string} name - Cookie 名称
+         * @param {string} value - Cookie 值
+         * @param {number} days - 过期天数
+         */
+        setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
         }
     }
 

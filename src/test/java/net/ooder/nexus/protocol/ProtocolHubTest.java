@@ -1,6 +1,7 @@
 package net.ooder.nexus.protocol;
 
-import net.ooder.nexus.model.protocol.*;
+import net.ooder.nexus.core.protocol.*;
+import net.ooder.nexus.core.protocol.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;

@@ -64,9 +64,48 @@
     padding: 24px;
     box-shadow: var(--nexus-shadow);
     transition: all 0.3s ease;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
     height: 100vh;
+    overflow: hidden;
     box-sizing: border-box;
+}
+
+.nexus-sidebar h2 {
+    flex-shrink: 0;
+    margin-bottom: 24px;
+}
+
+.nexus-sidebar .nav-menu {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-right: -8px;
+    padding-right: 8px;
+}
+
+/* 自定义滚动条样式 - 暗色主题 */
+.nexus-sidebar .nav-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.nexus-sidebar .nav-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nexus-sidebar .nav-menu::-webkit-scrollbar-thumb {
+    background: var(--nexus-border);
+    border-radius: 2px;
+}
+
+.nexus-sidebar .nav-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--nexus-secondary);
+}
+
+/* Firefox 滚动条样式 */
+.nexus-sidebar .nav-menu {
+    scrollbar-width: thin;
+    scrollbar-color: var(--nexus-border) transparent;
 }
 
 .nexus-main-content {

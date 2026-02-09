@@ -1,17 +1,17 @@
 package net.ooder.nexus.config;
 
+import net.ooder.nexus.core.skill.NexusSkill;
+import net.ooder.nexus.core.skill.impl.NexusSkillImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import net.ooder.sdk.agent.model.AgentConfig;
 import net.ooder.sdk.AgentSDK;
-import net.ooder.nexus.skill.NexusSkill;
-import net.ooder.nexus.skill.impl.NexusSkillImpl;
-import net.ooder.nexus.management.NexusManager;
-import net.ooder.nexus.management.impl.NexusManagerImpl;
+import net.ooder.nexus.infrastructure.management.NexusManager;
+import net.ooder.nexus.infrastructure.management.NexusManagerImpl;
 
 /**
- * 应用配置类
+ * 应用配置�?
  */
 @Configuration
 public class AppConfig {

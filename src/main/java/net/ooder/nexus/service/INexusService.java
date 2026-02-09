@@ -1,38 +1,38 @@
 package net.ooder.nexus.service;
 
 import net.ooder.nexus.model.Result;
-import net.ooder.nexus.model.network.NetworkSetting;
-import net.ooder.nexus.model.network.IPAddress;
-import net.ooder.nexus.model.network.IPBlacklist;
-import net.ooder.nexus.model.system.SystemInfo;
-import net.ooder.nexus.model.system.ServiceStatus;
-import net.ooder.nexus.model.system.ResourceUsage;
-import net.ooder.nexus.model.system.VersionInfo;
-import net.ooder.nexus.model.system.SystemHealthData;
-import net.ooder.nexus.model.system.SystemLoadData;
-import net.ooder.nexus.model.network.NetworkStatusData;
-import net.ooder.nexus.model.system.CommandStatsData;
-import net.ooder.nexus.model.config.BasicConfig;
-import net.ooder.nexus.model.config.AdvancedConfig;
-import net.ooder.nexus.model.config.SecurityConfig;
-import net.ooder.nexus.model.config.TerminalConfig;
-import net.ooder.nexus.model.config.ServiceConfig;
-import net.ooder.nexus.model.config.SystemConfig;
-import net.ooder.nexus.model.config.NetworkConfig;
-import net.ooder.nexus.model.config.ConfigsResult;
-import net.ooder.nexus.model.config.ConfigHistoryItemsResult;
-import net.ooder.nexus.model.network.EndAgent;
-import net.ooder.nexus.model.mcp.LogEntry;
-import net.ooder.nexus.model.security.SecurityStatus;
-import net.ooder.nexus.model.security.UserInfo;
-import net.ooder.nexus.model.security.PermissionsData;
-import net.ooder.nexus.model.security.SecurityLogsResult;
-import net.ooder.nexus.model.mcp.Capability;
-import net.ooder.nexus.model.mcp.ProtocolHandlerData;
-import net.ooder.nexus.model.system.HealthCheckResult;
-import net.ooder.nexus.model.system.HealthReport;
-import net.ooder.nexus.model.system.HealthCheckSchedule;
-import net.ooder.nexus.model.system.ServiceCheckResult;
+import net.ooder.nexus.domain.network.model.NetworkSetting;
+import net.ooder.nexus.domain.network.model.IPAddress;
+import net.ooder.nexus.domain.network.model.IPBlacklist;
+import net.ooder.nexus.domain.system.model.SystemInfo;
+import net.ooder.nexus.domain.system.model.ServiceStatus;
+import net.ooder.nexus.domain.system.model.ResourceUsage;
+import net.ooder.nexus.domain.system.model.VersionInfo;
+import net.ooder.nexus.domain.system.model.SystemHealthData;
+import net.ooder.nexus.domain.system.model.SystemLoadData;
+import net.ooder.nexus.domain.network.model.NetworkStatusData;
+import net.ooder.nexus.domain.system.model.CommandStatsData;
+import net.ooder.nexus.domain.config.model.BasicConfig;
+import net.ooder.nexus.domain.config.model.AdvancedConfig;
+import net.ooder.nexus.domain.config.model.SecurityConfig;
+import net.ooder.nexus.domain.config.model.TerminalConfig;
+import net.ooder.nexus.domain.config.model.ServiceConfig;
+import net.ooder.nexus.domain.config.model.SystemConfig;
+import net.ooder.nexus.domain.config.model.NetworkConfig;
+import net.ooder.nexus.domain.config.model.ConfigsResult;
+import net.ooder.nexus.domain.config.model.ConfigHistoryItemsResult;
+import net.ooder.nexus.domain.network.model.EndAgent;
+import net.ooder.nexus.domain.mcp.model.LogEntry;
+import net.ooder.nexus.domain.security.model.SecurityStatus;
+import net.ooder.nexus.domain.security.model.UserInfo;
+import net.ooder.nexus.domain.security.model.PermissionsData;
+import net.ooder.nexus.domain.security.model.SecurityLogsResult;
+import net.ooder.nexus.domain.mcp.model.Capability;
+import net.ooder.nexus.domain.mcp.model.ProtocolHandlerData;
+import net.ooder.nexus.domain.system.model.HealthCheckResult;
+import net.ooder.nexus.domain.system.model.HealthReport;
+import net.ooder.nexus.domain.system.model.HealthCheckSchedule;
+import net.ooder.nexus.domain.system.model.ServiceCheckResult;
 import net.ooder.nexus.model.TestCommandResult;
 import net.ooder.nexus.model.ConfigResult;
 import net.ooder.nexus.model.LogExportResult;
@@ -48,29 +48,29 @@ import java.util.Map;
 /**
  * Nexus Service 接口定义
  * 
- * 本接口定义了 Nexus 的所有功能接口，支持两种实现方式：
- * 1. Mock Service：使用模拟数据，用于开发和测试
- * 2. Real Service：调用真实的 ooderAgent 0.6.5 接口，用于生产环境
+ * 本接口定义了 Nexus 的所有功能接口，支持两种实现方式�?
+ * 1. Mock Service：使用模拟数据，用于�?发和测试
+ * 2. Real Service：调用真实的 ooderAgent 0.6.5 接口，用于生产环�?
  * 
- * 配置说明：
- * - Service 实现方式通过配置文件或环境变量控制
+ * 配置说明�?
+ * - Service 实现方式通过配置文件或环境变量控�?
  * - 默认使用 Mock Service，方便开发和测试
- * - 生产环境建议使用 Real Service，确保数据准确性
- * - 支持动态切换 Service 实现方式，无需重启应用
+ * - 生产环境建议使用 Real Service，确保数据准确�??
+ * - 支持动�?�切�? Service 实现方式，无�?重启应用
  * 
  * @version 1.0.0
  */
 public interface INexusService {
 
     /**
-     * 初始化 Service
+     * 初始�? Service
      * @param config 配置参数
      */
     void initialize(Map<String, Object> config);
 
     /**
      * 获取 Service 类型
-     * @return Service 类型：'mock' | 'real'
+     * @return Service 类型�?'mock' | 'real'
      */
     String getServiceType();
 
@@ -90,8 +90,8 @@ public interface INexusService {
     Result<NetworkSetting> getNetworkSetting(String settingType);
 
     /**
-     * 获取所有网络设置
-     * @return 所有网络设置
+     * 获取�?有网络设�?
+     * @return �?有网络设�?
      */
     Result<List<NetworkSetting>> getAllNetworkSettings();
 
@@ -106,13 +106,13 @@ public interface INexusService {
     /**
      * 获取 IP 地址列表
      * @param type IP 类型
-     * @param status IP 状态
+     * @param status IP 状�??
      * @return IP 地址列表
      */
     Result<List<IPAddress>> getIPAddresses(String type, String status);
 
     /**
-     * 添加静态 IP 地址
+     * 添加静�?? IP 地址
      * @param ipData IP 数据
      * @return 添加结果
      */
@@ -126,26 +126,26 @@ public interface INexusService {
     Result<IPAddress> deleteIPAddress(String ipId);
 
     /**
-     * 获取 IP 黑名单
-     * @return IP 黑名单
+     * 获取 IP 黑名�?
+     * @return IP 黑名�?
      */
     Result<List<IPBlacklist>> getIPBlacklist();
 
     /**
      * 添加 IP 到黑名单
-     * @param blacklistData 黑名单数据
+     * @param blacklistData 黑名单数�?
      * @return 添加结果
      */
     Result<IPBlacklist> addIPToBlacklist(Map<String, Object> blacklistData);
 
     /**
      * 从黑名单移除 IP
-     * @param blacklistId 黑名单 ID
+     * @param blacklistId 黑名�? ID
      * @return 移除结果
      */
     Result<IPBlacklist> removeIPFromBlacklist(String blacklistId);
 
-    // ==================== 系统状态模块 ====================
+    // ==================== 系统状�?�模�? ====================
 
     /**
      * 获取系统基本信息
@@ -154,21 +154,21 @@ public interface INexusService {
     Result<SystemInfo> getSystemInfo();
 
     /**
-     * 获取系统健康状态
-     * @return 系统健康状态
+     * 获取系统健康状�??
+     * @return 系统健康状�??
      */
     Result<SystemHealthData> getSystemHealth();
 
     /**
-     * 获取服务状态列表
-     * @return 服务状态列表
+     * 获取服务状�?�列�?
+     * @return 服务状�?�列�?
      */
     Result<List<ServiceStatus>> getServiceStatuses();
 
     /**
-     * 获取服务状态详情
+     * 获取服务状�?�详�?
      * @param serviceId 服务 ID
-     * @return 服务状态详情
+     * @return 服务状�?�详�?
      */
     Result<ServiceStatus> getServiceStatus(String serviceId);
 
@@ -194,8 +194,8 @@ public interface INexusService {
     // ==================== Nexus 核心模块 ====================
 
     /**
-     * 获取网络状态
-     * @return 网络状态
+     * 获取网络状�??
+     * @return 网络状�??
      */
     Result<NetworkStatusData> getNetworkStatus();
 
@@ -296,8 +296,8 @@ public interface INexusService {
     // ==================== 安全管理模块 ====================
 
     /**
-     * 获取安全状态
-     * @return 安全状态
+     * 获取安全状�??
+     * @return 安全状�??
      */
     Result<SecurityStatus> getSecurityStatus();
 
@@ -362,12 +362,12 @@ public interface INexusService {
      */
     Result<SecurityLogsResult> getSecurityLogs();
 
-    // ==================== 健康检查模块 ====================
+    // ==================== 健康�?查模�? ====================
 
     /**
-     * 运行健康检查
-     * @param params 检查参数
-     * @return 检查结果
+     * 运行健康�?�?
+     * @param params �?查参�?
+     * @return �?查结�?
      */
     Result<HealthCheckResult> runHealthCheck(Map<String, Object> params);
 
@@ -378,16 +378,16 @@ public interface INexusService {
     Result<HealthReport> exportHealthReport();
 
     /**
-     * 设置定时健康检查
+     * 设置定时健康�?�?
      * @param params 定时参数
      * @return 设置结果
      */
     Result<HealthCheckSchedule> scheduleHealthCheck(Map<String, Object> params);
 
     /**
-     * 检查服务状态
+     * �?查服务状�?
      * @param serviceName 服务名称
-     * @return 服务状态
+     * @return 服务状�??
      */
     Result<ServiceCheckResult> checkService(String serviceName);
 
@@ -509,21 +509,21 @@ public interface INexusService {
     // ==================== 协议管理模块 ====================
 
     /**
-     * 获取协议处理器列表
+     * 获取协议处理器列�?
      * @param params 查询参数
-     * @return 协议处理器列表
+     * @return 协议处理器列�?
      */
     Result<List<ProtocolHandlerData>> getProtocolHandlers(Map<String, Object> params);
 
     /**
-     * 注册协议处理器
-     * @param handlerData 处理器数据
+     * 注册协议处理�?
+     * @param handlerData 处理器数�?
      * @return 注册结果
      */
     Result<ProtocolHandlerData> registerProtocolHandler(Map<String, Object> handlerData);
 
     /**
-     * 移除协议处理器
+     * 移除协议处理�?
      * @param commandType 命令类型
      * @return 移除结果
      */
@@ -537,13 +537,13 @@ public interface INexusService {
     Result<ProtocolHandlerData> handleProtocolCommand(Map<String, Object> commandData);
 
     /**
-     * 刷新协议处理器列表
+     * 刷新协议处理器列�?
      * @return 刷新结果
      */
     Result<List<ProtocolHandlerData>> refreshProtocolHandlers();
 
     /**
-     * 搜索协议处理器
+     * 搜索协议处理�?
      * @param params 搜索参数
      * @return 搜索结果
      */
@@ -553,13 +553,13 @@ public interface INexusService {
 
     /**
      * 格式化时间戳
-     * @param timestamp 时间戳
+     * @param timestamp 时间�?
      * @return 格式化后的时间字符串
      */
     String formatTimestamp(long timestamp);
 
     /**
-     * 格式化数字
+     * 格式化数�?
      * @param number 数字
      * @return 格式化后的数字字符串
      */
@@ -576,5 +576,5 @@ public interface INexusService {
      * 获取网络设备列表
      * @return 网络设备列表
      */
-    Result<List<net.ooder.nexus.model.network.NetworkDevice>> getNetworkDevices();
+    Result<List<net.ooder.nexus.domain.network.model.NetworkDevice>> getNetworkDevices();
 }

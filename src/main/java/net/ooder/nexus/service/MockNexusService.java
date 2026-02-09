@@ -1,40 +1,40 @@
 package net.ooder.nexus.service;
 
 import net.ooder.nexus.model.Result;
-import net.ooder.nexus.model.network.NetworkSetting;
-import net.ooder.nexus.model.network.IPAddress;
-import net.ooder.nexus.model.network.IPBlacklist;
-import net.ooder.nexus.model.system.SystemInfo;
-import net.ooder.nexus.model.system.ServiceStatus;
-import net.ooder.nexus.model.system.ResourceUsage;
-import net.ooder.nexus.model.network.EndAgent;
-import net.ooder.nexus.model.mcp.LogEntry;
-import net.ooder.nexus.model.mcp.ProtocolHandlerData;
-import net.ooder.nexus.model.system.VersionInfo;
-import net.ooder.nexus.model.system.SystemHealthData;
-import net.ooder.nexus.model.system.SystemLoadData;
-import net.ooder.nexus.model.network.NetworkStatusData;
-import net.ooder.nexus.model.system.CommandStatsData;
-import net.ooder.nexus.model.config.BasicConfig;
-import net.ooder.nexus.model.config.AdvancedConfig;
-import net.ooder.nexus.model.config.SecurityConfig;
-import net.ooder.nexus.model.config.TerminalConfig;
-import net.ooder.nexus.model.config.ServiceConfig;
-import net.ooder.nexus.model.config.SystemConfig;
-import net.ooder.nexus.model.config.NetworkConfig;
-import net.ooder.nexus.model.config.ConfigItem;
-import net.ooder.nexus.model.config.ConfigsResult;
-import net.ooder.nexus.model.config.ConfigHistoryItem;
-import net.ooder.nexus.model.config.ConfigHistoryItemsResult;
-import net.ooder.nexus.model.security.SecurityStatus;
-import net.ooder.nexus.model.security.UserInfo;
-import net.ooder.nexus.model.security.PermissionsData;
-import net.ooder.nexus.model.security.SecurityLog;
-import net.ooder.nexus.model.security.SecurityLogsResult;
-import net.ooder.nexus.model.system.HealthCheckResult;
-import net.ooder.nexus.model.system.HealthReport;
-import net.ooder.nexus.model.system.HealthCheckSchedule;
-import net.ooder.nexus.model.system.ServiceCheckResult;
+import net.ooder.nexus.domain.network.model.NetworkSetting;
+import net.ooder.nexus.domain.network.model.IPAddress;
+import net.ooder.nexus.domain.network.model.IPBlacklist;
+import net.ooder.nexus.domain.system.model.SystemInfo;
+import net.ooder.nexus.domain.system.model.ServiceStatus;
+import net.ooder.nexus.domain.system.model.ResourceUsage;
+import net.ooder.nexus.domain.network.model.EndAgent;
+import net.ooder.nexus.domain.mcp.model.LogEntry;
+import net.ooder.nexus.domain.mcp.model.ProtocolHandlerData;
+import net.ooder.nexus.domain.system.model.VersionInfo;
+import net.ooder.nexus.domain.system.model.SystemHealthData;
+import net.ooder.nexus.domain.system.model.SystemLoadData;
+import net.ooder.nexus.domain.network.model.NetworkStatusData;
+import net.ooder.nexus.domain.system.model.CommandStatsData;
+import net.ooder.nexus.domain.config.model.BasicConfig;
+import net.ooder.nexus.domain.config.model.AdvancedConfig;
+import net.ooder.nexus.domain.config.model.SecurityConfig;
+import net.ooder.nexus.domain.config.model.TerminalConfig;
+import net.ooder.nexus.domain.config.model.ServiceConfig;
+import net.ooder.nexus.domain.config.model.SystemConfig;
+import net.ooder.nexus.domain.config.model.NetworkConfig;
+import net.ooder.nexus.domain.config.model.ConfigItem;
+import net.ooder.nexus.domain.config.model.ConfigsResult;
+import net.ooder.nexus.domain.config.model.ConfigHistoryItem;
+import net.ooder.nexus.domain.config.model.ConfigHistoryItemsResult;
+import net.ooder.nexus.domain.security.model.SecurityStatus;
+import net.ooder.nexus.domain.security.model.UserInfo;
+import net.ooder.nexus.domain.security.model.PermissionsData;
+import net.ooder.nexus.domain.security.model.SecurityLog;
+import net.ooder.nexus.domain.security.model.SecurityLogsResult;
+import net.ooder.nexus.domain.system.model.HealthCheckResult;
+import net.ooder.nexus.domain.system.model.HealthReport;
+import net.ooder.nexus.domain.system.model.HealthCheckSchedule;
+import net.ooder.nexus.domain.system.model.ServiceCheckResult;
 import net.ooder.nexus.model.TestCommandResult;
 import net.ooder.nexus.model.ConfigResult;
 import net.ooder.nexus.model.LogExportResult;
@@ -57,12 +57,12 @@ import java.util.stream.Collectors;
 /**
  * Nexus Mock Service 实现
  * 
- * 本类实现了 INexusService 接口，使用模拟数据，用于开发和测试。
+ * 本类实现�? INexusService 接口，使用模拟数据，用于�?发和测试�?
  * 
- * 配置说明：
+ * 配置说明�?
  * - Mock Service 使用 Controller 中的测试数据
- * - 所有操作都返回成功的响应，不进行实际的 API 调用
- * - 适用于开发、测试和演示环境
+ * - �?有操作都返回成功的响应，不进行实际的 API 调用
+ * - 适用于开发�?�测试和演示环境
  * 
  * @version 1.0.0
  */
@@ -80,7 +80,7 @@ public class MockNexusService implements INexusService {
     private final List<IPAddress> ipAddresses = new ArrayList<>();
     private final List<IPBlacklist> ipBlacklist = new ArrayList<>();
 
-    // ==================== 系统状态模块 ====================
+    // ==================== 系统状�?�模�? ====================
 
     private final Map<String, Object> systemInfo = new ConcurrentHashMap<>();
     private final Map<String, ServiceStatus> serviceStatuses = new ConcurrentHashMap<>();
@@ -109,7 +109,7 @@ public class MockNexusService implements INexusService {
     private final List<SecurityLog> securityLogs = new ArrayList<>();
     private final List<PermissionsData> permissionsDataList = new ArrayList<>();
 
-    // ==================== 健康检查模块 ====================
+    // ==================== 健康�?查模�? ====================
 
     private final Map<String, Object> healthData = new ConcurrentHashMap<>();
 
@@ -176,11 +176,11 @@ public class MockNexusService implements INexusService {
         ));
         
         networkSettings.put("dns", new NetworkSetting(
-            "dns", "DNS配置", "network", "enabled", "DNS服务器配置"
+            "dns", "DNS配置", "network", "enabled", "DNS服务器配�?"
         ));
         
         networkSettings.put("dhcp", new NetworkSetting(
-            "dhcp", "DHCP配置", "network", "enabled", "DHCP服务器配置"
+            "dhcp", "DHCP配置", "network", "enabled", "DHCP服务器配�?"
         ));
         
         networkSettings.put("wifi", new NetworkSetting(
@@ -195,12 +195,12 @@ public class MockNexusService implements INexusService {
         ));
         
         ipAddresses.add(new IPAddress(
-            "ip-2", "192.168.1.2", "static", "online", "交换机", 
+            "ip-2", "192.168.1.2", "static", "online", "交换�?", 
             "AA:BB:CC:DD:EE:02", "switch", "永久"
         ));
         
         ipAddresses.add(new IPAddress(
-            "ip-3", "192.168.1.3", "static", "online", "AP接入点", 
+            "ip-3", "192.168.1.3", "static", "online", "AP接入�?", 
             "AA:BB:CC:DD:EE:03", "access_point", "永久"
         ));
         
@@ -210,7 +210,7 @@ public class MockNexusService implements INexusService {
         ));
         
         ipAddresses.add(new IPAddress(
-            "ip-101", "192.168.1.101", "dynamic", "offline", "笔记本电脑", 
+            "ip-101", "192.168.1.101", "dynamic", "offline", "笔记本电�?", 
             "AA:BB:CC:DD:EE:06", "client", "24小时"
         ));
     }
@@ -221,7 +221,7 @@ public class MockNexusService implements INexusService {
         ));
         
         ipBlacklist.add(new IPBlacklist(
-            "blacklist-2", "10.0.0.1", "未授权访问", "自动检测"
+            "blacklist-2", "10.0.0.1", "未授权访�?", "自动�?�?"
         ));
     }
 
@@ -242,7 +242,7 @@ public class MockNexusService implements INexusService {
             "api",
             "API服务",
             "running",
-            "正常运行中"
+            "正常运行�?"
         ));
 
         serviceStatuses.put("network", new ServiceStatus(
@@ -256,7 +256,7 @@ public class MockNexusService implements INexusService {
             "security",
             "安全服务",
             "running",
-            "安全防护已启用"
+            "安全防护已启�?"
         ));
 
         serviceStatuses.put("command", new ServiceStatus(
@@ -275,28 +275,28 @@ public class MockNexusService implements INexusService {
 
         resourceUsage.put("cpu", new ResourceUsage(
             "cpu",
-            "CPU使用率",
+            "CPU使用�?",
             "percentage",
             25.5
         ));
 
         resourceUsage.put("memory", new ResourceUsage(
             "memory",
-            "内存使用率",
+            "内存使用�?",
             "percentage",
             62.3
         ));
 
         resourceUsage.put("disk", new ResourceUsage(
             "disk",
-            "磁盘使用率",
+            "磁盘使用�?",
             "percentage",
             45.8
         ));
 
         resourceUsage.put("network", new ResourceUsage(
             "network",
-            "网络带宽使用率",
+            "网络带宽使用�?",
             "percentage",
             15.7
         ));
@@ -344,13 +344,13 @@ public class MockNexusService implements INexusService {
 
         endAgents.add(new EndAgent(
             "endagent-003",
-            "摄像头1",
+            "摄像�?1",
             "camera",
             "inactive",
             "192.168.1.102",
             "",
             "1.0.0",
-            "网络摄像头",
+            "网络摄像�?",
             System.currentTimeMillis(),
             System.currentTimeMillis()
         ));
@@ -436,7 +436,7 @@ public class MockNexusService implements INexusService {
 
         logs.add(new LogEntry(
             "ERROR",
-            "网络连接失败: 无法连接到终端 endagent-003",
+            "网络连接失败: 无法连接到终�? endagent-003",
             "network"
         ));
 
@@ -448,7 +448,7 @@ public class MockNexusService implements INexusService {
 
         logs.add(new LogEntry(
             "INFO",
-            "系统状态检查完成: 所有服务正常运行",
+            "系统状�?�检查完�?: �?有服务正常运�?",
             "system"
         ));
     }
@@ -459,7 +459,7 @@ public class MockNexusService implements INexusService {
         // 初始化安全状态实体Bean
         securityStatus = new SecurityStatus(
             "安全",
-            "系统安全状态良好",
+            "系统安全状�?�良�?",
             5,
             2,
             true,
@@ -509,15 +509,15 @@ public class MockNexusService implements INexusService {
             sdf.format(new Date(System.currentTimeMillis() - 259200000))
         ));
 
-        permissions.put("personal", Arrays.asList("查看仪表盘", "管理终端", "查看网络状态"));
-        permissions.put("home", Arrays.asList("查看仪表盘", "管理终端", "查看网络状态", "管理网络设置"));
-        permissions.put("enterprise", Arrays.asList("查看仪表盘", "管理终端", "查看网络状态", "管理网络设置", "管理用户", "修改系统配置", "查看系统日志"));
+        permissions.put("personal", Arrays.asList("查看仪表�?", "管理终端", "查看网络状�??"));
+        permissions.put("home", Arrays.asList("查看仪表�?", "管理终端", "查看网络状�??", "管理网络设置"));
+        permissions.put("enterprise", Arrays.asList("查看仪表�?", "管理终端", "查看网络状�??", "管理网络设置", "管理用户", "修改系统配置", "查看系统日志"));
 
         // 初始化权限数据实体Bean列表
         permissionsDataList.add(new PermissionsData(
             "permission-1",
             "个人用户权限",
-            "个人用户的基本权限",
+            "个人用户的基本权�?",
             "role",
             Arrays.asList("personal"),
             Arrays.asList("dashboard", "terminal", "network"),
@@ -530,7 +530,7 @@ public class MockNexusService implements INexusService {
         permissionsDataList.add(new PermissionsData(
             "permission-2",
             "家庭用户权限",
-            "家庭用户的权限",
+            "家庭用户的权�?",
             "role",
             Arrays.asList("home"),
             Arrays.asList("dashboard", "terminal", "network", "network_settings"),
@@ -543,7 +543,7 @@ public class MockNexusService implements INexusService {
         permissionsDataList.add(new PermissionsData(
             "permission-3",
             "企业用户权限",
-            "企业用户的完整权限",
+            "企业用户的完整权�?",
             "role",
             Arrays.asList("enterprise"),
             Arrays.asList("dashboard", "terminal", "network", "network_settings", "users", "system_config", "logs"),
@@ -580,7 +580,7 @@ public class MockNexusService implements INexusService {
         
         Map<String, Object> overall = new HashMap<>();
         overall.put("status", "healthy");
-        overall.put("message", "系统运行正常，所有组件状态良好");
+        overall.put("message", "系统运行正常，所有组件状态良�?");
         overall.put("score", 98);
         overall.put("lastCheck", sdf.format(new Date()));
         overall.put("duration", 1.2);
@@ -622,7 +622,7 @@ public class MockNexusService implements INexusService {
         Map<String, Object> component4 = new HashMap<>();
         component4.put("name", "存储服务");
         component4.put("status", "healthy");
-        component4.put("message", "存储状态正常");
+        component4.put("message", "存储状�?�正�?");
         Map<String, Object> metrics4 = new HashMap<>();
         metrics4.put("freeSpace", 85);
         metrics4.put("filesystem", "正常");
@@ -679,25 +679,25 @@ public class MockNexusService implements INexusService {
         Map<String, Object> log1 = new HashMap<>();
         log1.put("timestamp", sdf.format(new Date(System.currentTimeMillis() - 300000)));
         log1.put("level", "INFO");
-        log1.put("message", "健康检查完成: 系统状态良好");
+        log1.put("message", "健康�?查完�?: 系统状�?�良�?");
         logs.add(log1);
         
         Map<String, Object> log2 = new HashMap<>();
         log2.put("timestamp", sdf.format(new Date(System.currentTimeMillis() - 600000)));
         log2.put("level", "INFO");
-        log2.put("message", "网络检查完成: 所有连接正常");
+        log2.put("message", "网络�?查完�?: �?有连接正�?");
         logs.add(log2);
         
         Map<String, Object> log3 = new HashMap<>();
         log3.put("timestamp", sdf.format(new Date(System.currentTimeMillis() - 900000)));
         log3.put("level", "WARNING");
-        log3.put("message", "终端代理检查: 1个终端离线");
+        log3.put("message", "终端代理�?�?: 1个终端离�?");
         logs.add(log3);
         
         Map<String, Object> log4 = new HashMap<>();
         log4.put("timestamp", sdf.format(new Date(System.currentTimeMillis() - 1200000)));
         log4.put("level", "INFO");
-        log4.put("message", "服务检查完成: 所有服务运行正常");
+        log4.put("message", "服务�?查完�?: �?有服务运行正�?");
         logs.add(log4);
         
         healthData.put("logs", logs);
@@ -722,7 +722,7 @@ public class MockNexusService implements INexusService {
             sdf.format(new Date(System.currentTimeMillis() - 3600000)),
             "admin",
             "修改",
-            "更新网络配置：UDP端口从8080改为8081"
+            "更新网络配置：UDP端口�?8080改为8081"
         ));
 
         configHistoryList.add(new ConfigHistory(
@@ -737,8 +737,8 @@ public class MockNexusService implements INexusService {
             3,
             sdf.format(new Date(System.currentTimeMillis() - 86400000)),
             "system",
-            "初始化",
-            "系统首次启动，加载默认配置"
+            "初始�?",
+            "系统首次启动，加载默认配�?"
         ));
     }
 
@@ -748,7 +748,7 @@ public class MockNexusService implements INexusService {
         
         protocolHandlers.add(new ProtocolHandler(
             "MCP_REGISTER",
-            "注册命令处理器",
+            "注册命令处理�?",
             "处理MCP Agent注册命令",
             timestamp,
             "active"
@@ -756,7 +756,7 @@ public class MockNexusService implements INexusService {
 
         protocolHandlers.add(new ProtocolHandler(
             "MCP_DEREGISTER",
-            "注销命令处理器",
+            "注销命令处理�?",
             "处理MCP Agent注销命令",
             timestamp,
             "active"
@@ -764,7 +764,7 @@ public class MockNexusService implements INexusService {
 
         protocolHandlers.add(new ProtocolHandler(
             "MCP_HEARTBEAT",
-            "心跳命令处理器",
+            "心跳命令处理�?",
             "处理MCP Agent心跳命令",
             timestamp,
             "active"
@@ -772,15 +772,15 @@ public class MockNexusService implements INexusService {
 
         protocolHandlers.add(new ProtocolHandler(
             "MCP_STATUS",
-            "状态命令处理器",
-            "处理MCP Agent状态命令",
+            "状�?�命令处理器",
+            "处理MCP Agent状�?�命�?",
             timestamp,
             "active"
         ));
 
         protocolHandlers.add(new ProtocolHandler(
             "MCP_DISCOVER",
-            "发现命令处理器",
+            "发现命令处理�?",
             "处理MCP Agent发现命令",
             timestamp,
             "active"
@@ -945,7 +945,7 @@ public class MockNexusService implements INexusService {
         
         try {
             String ip = (String) blacklistData.get("ipAddress");
-            String reason = (String) blacklistData.getOrDefault("reason", "未指定");
+            String reason = (String) blacklistData.getOrDefault("reason", "未指�?");
             String source = (String) blacklistData.getOrDefault("source", "手动添加");
             
             boolean ipExists = ipBlacklist.stream()
@@ -994,7 +994,7 @@ public class MockNexusService implements INexusService {
         }
     }
 
-    // ==================== 系统状态模块实现 ====================
+    // ==================== 系统状�?�模块实�? ====================
 
     @Override
     public Result<SystemInfo> getSystemInfo() {
@@ -1428,7 +1428,7 @@ public class MockNexusService implements INexusService {
         log.info("[MockMcpAgentService] Reset config requested");
         
         try {
-            // 重新初始化配置
+            // 重新初始化配�?
             initializeMcpAgentCore();
             
             ConfigResult resultData = new ConfigResult();
@@ -1482,16 +1482,16 @@ public class MockNexusService implements INexusService {
                 UserInfo userInfo = new UserInfo(
                     String.valueOf(user.getId()),
                     user.getUsername(),
-                    "", // 密码不返回
-                    user.getUsername(), // 显示名称使用用户名
+                    "", // 密码不返�?
+                    user.getUsername(), // 显示名称使用用户�?
                     user.getUsername() + "@example.com", // 邮箱
                     "", // 电话
                     user.getRole(),
                     user.getStatus(),
                     "active".equals(user.getStatus()),
-                    System.currentTimeMillis(), // 最后登录时间
+                    System.currentTimeMillis(), // �?后登录时�?
                     System.currentTimeMillis(), // 创建时间
-                    System.currentTimeMillis() // 最后更新时间
+                    System.currentTimeMillis() // �?后更新时�?
                 );
                 userList.add(userInfo);
             }
@@ -1525,16 +1525,16 @@ public class MockNexusService implements INexusService {
             UserInfo userInfo = new UserInfo(
                 String.valueOf(newUser.getId()),
                 newUser.getUsername(),
-                "", // 密码不返回
-                newUser.getUsername(), // 显示名称使用用户名
+                "", // 密码不返�?
+                newUser.getUsername(), // 显示名称使用用户�?
                 newUser.getUsername() + "@example.com", // 邮箱
                 "", // 电话
                 newUser.getRole(),
                 newUser.getStatus(),
                 "active".equals(newUser.getStatus()),
-                System.currentTimeMillis(), // 最后登录时间
+                System.currentTimeMillis(), // �?后登录时�?
                 System.currentTimeMillis(), // 创建时间
-                System.currentTimeMillis() // 最后更新时间
+                System.currentTimeMillis() // �?后更新时�?
             );
             
             return Result.success("User added successfully", userInfo);
@@ -1565,16 +1565,16 @@ public class MockNexusService implements INexusService {
             UserInfo userInfo = new UserInfo(
                 String.valueOf(user.getId()),
                 user.getUsername(),
-                "", // 密码不返回
-                user.getUsername(), // 显示名称使用用户名
+                "", // 密码不返�?
+                user.getUsername(), // 显示名称使用用户�?
                 user.getUsername() + "@example.com", // 邮箱
                 "", // 电话
                 user.getRole(),
                 user.getStatus(),
                 "active".equals(user.getStatus()),
-                System.currentTimeMillis(), // 最后登录时间
+                System.currentTimeMillis(), // �?后登录时�?
                 System.currentTimeMillis(), // 创建时间
-                System.currentTimeMillis() // 最后更新时间
+                System.currentTimeMillis() // �?后更新时�?
             );
             
             return Result.success("User edited successfully", userInfo);
@@ -1603,16 +1603,16 @@ public class MockNexusService implements INexusService {
             UserInfo userInfo = new UserInfo(
                 String.valueOf(userToDelete.getId()),
                 userToDelete.getUsername(),
-                "", // 密码不返回
-                userToDelete.getUsername(), // 显示名称使用用户名
+                "", // 密码不返�?
+                userToDelete.getUsername(), // 显示名称使用用户�?
                 userToDelete.getUsername() + "@example.com", // 邮箱
                 "", // 电话
                 userToDelete.getRole(),
                 userToDelete.getStatus(),
                 "active".equals(userToDelete.getStatus()),
-                System.currentTimeMillis(), // 最后登录时间
+                System.currentTimeMillis(), // �?后登录时�?
                 System.currentTimeMillis(), // 创建时间
-                System.currentTimeMillis() // 最后更新时间
+                System.currentTimeMillis() // �?后更新时�?
             );
             
             return Result.success("User deleted successfully", userInfo);
@@ -1641,16 +1641,16 @@ public class MockNexusService implements INexusService {
             UserInfo userInfo = new UserInfo(
                 String.valueOf(user.getId()),
                 user.getUsername(),
-                "", // 密码不返回
-                user.getUsername(), // 显示名称使用用户名
+                "", // 密码不返�?
+                user.getUsername(), // 显示名称使用用户�?
                 user.getUsername() + "@example.com", // 邮箱
                 "", // 电话
                 user.getRole(),
                 user.getStatus(),
                 "active".equals(user.getStatus()),
-                System.currentTimeMillis(), // 最后登录时间
+                System.currentTimeMillis(), // �?后登录时�?
                 System.currentTimeMillis(), // 创建时间
-                System.currentTimeMillis() // 最后更新时间
+                System.currentTimeMillis() // �?后更新时�?
             );
             
             return Result.success("User enabled successfully", userInfo);
@@ -1679,16 +1679,16 @@ public class MockNexusService implements INexusService {
             UserInfo userInfo = new UserInfo(
                 String.valueOf(user.getId()),
                 user.getUsername(),
-                "", // 密码不返回
-                user.getUsername(), // 显示名称使用用户名
+                "", // 密码不返�?
+                user.getUsername(), // 显示名称使用用户�?
                 user.getUsername() + "@example.com", // 邮箱
                 "", // 电话
                 user.getRole(),
                 user.getStatus(),
                 "active".equals(user.getStatus()),
-                System.currentTimeMillis(), // 最后登录时间
+                System.currentTimeMillis(), // �?后登录时�?
                 System.currentTimeMillis(), // 创建时间
-                System.currentTimeMillis() // 最后更新时间
+                System.currentTimeMillis() // �?后更新时�?
             );
             
             return Result.success("User disabled successfully", userInfo);
@@ -1726,7 +1726,7 @@ public class MockNexusService implements INexusService {
             // 创建新的权限数据实体Bean
             PermissionsData newPermissionData = new PermissionsData(
                 "permission-" + (permissionsDataList.size() + 1),
-                "自定义权限",
+                "自定义权�?",
                 "保存的自定义权限设置",
                 "custom",
                 Arrays.asList("custom"),
@@ -1751,9 +1751,9 @@ public class MockNexusService implements INexusService {
         log.info("[MockMcpAgentService] Get security logs requested");
         
         try {
-            List<net.ooder.nexus.model.security.SecurityLog> logList = new ArrayList<>();
+            List<net.ooder.nexus.domain.security.model.SecurityLog> logList = new ArrayList<>();
             for (SecurityLog log : securityLogs) {
-                logList.add(new net.ooder.nexus.model.security.SecurityLog(log.timestamp, log.event, log.user, log.ip));
+                logList.add(new net.ooder.nexus.domain.security.model.SecurityLog(log.timestamp, log.event, log.user, log.ip));
             }
             
             SecurityLogsResult result = new SecurityLogsResult(logList, logList.size());
@@ -1764,7 +1764,7 @@ public class MockNexusService implements INexusService {
         }
     }
 
-    // ==================== 健康检查模块实现 ====================
+    // ==================== 健康�?查模块实�? ====================
 
     @Override
     public Result<HealthCheckResult> runHealthCheck(Map<String, Object> params) {
@@ -1773,12 +1773,12 @@ public class MockNexusService implements INexusService {
         try {
             HealthCheckResult result = new HealthCheckResult(
                 "check-" + System.currentTimeMillis(),
-                "系统健康检查",
+                "系统健康�?�?",
                 "healthy",
-                "系统运行正常，所有组件状态良好",
+                "系统运行正常，所有组件状态良�?",
                 1200,
                 new Date(),
-                "CPU使用率: 12%, 内存使用率: 25%, 磁盘使用率: 15%, 网络使用率: 10%"
+                "CPU使用�?: 12%, 内存使用�?: 25%, 磁盘使用�?: 15%, 网络使用�?: 10%"
             );
             return Result.success("Health check completed successfully", result);
         } catch (Exception e) {
@@ -1800,7 +1800,7 @@ public class MockNexusService implements INexusService {
                 "核心服务运行正常",
                 500,
                 new Date(),
-                "CPU使用率: 12%, 内存使用率: 25%"
+                "CPU使用�?: 12%, 内存使用�?: 25%"
             ));
             results.add(new HealthCheckResult(
                 "check-2",
@@ -1809,7 +1809,7 @@ public class MockNexusService implements INexusService {
                 "网络连接正常",
                 300,
                 new Date(),
-                "连接数: 12, 丢包率: 0%"
+                "连接�?: 12, 丢包�?: 0%"
             ));
             results.add(new HealthCheckResult(
                 "check-3",
@@ -1818,7 +1818,7 @@ public class MockNexusService implements INexusService {
                 "部分终端离线",
                 400,
                 new Date(),
-                "活跃终端: 5, 总终端: 6, 离线终端: 1"
+                "活跃终端: 5, 总终�?: 6, 离线终端: 1"
             ));
             
             HealthReport report = new HealthReport(
@@ -1830,7 +1830,7 @@ public class MockNexusService implements INexusService {
                 2,
                 1,
                 1200,
-                "系统整体状态良好，存在1个警告"
+                "系统整体状�?�良好，存在1个警�?"
             );
             return Result.success("Health report exported successfully", report);
         } catch (Exception e) {
@@ -1846,15 +1846,15 @@ public class MockNexusService implements INexusService {
         try {
             HealthCheckSchedule schedule = new HealthCheckSchedule(
                 "schedule-" + System.currentTimeMillis(),
-                "定时健康检查",
-                "0 0 * * * ?", // 每小时执行一次
+                "定时健康�?�?",
+                "0 0 * * * ?", // 每小时执行一�?
                 Arrays.asList("MCP Agent核心", "网络服务", "终端代理"),
                 true,
-                "系统定时健康检查计划",
+                "系统定时健康�?查计�?",
                 new Date(),
                 new Date(),
                 null,
-                "未执行"
+                "未执�?"
             );
             return Result.success("Health check scheduled successfully", schedule);
         } catch (Exception e) {
@@ -2559,7 +2559,7 @@ public class MockNexusService implements INexusService {
         return resourceUsage.get("cpu").getValue();
     }
 
-    // ==================== 内部辅助类 ====================
+    // ==================== 内部辅助�? ====================
 
     private static class User {
         private int id;
@@ -2678,14 +2678,14 @@ public class MockNexusService implements INexusService {
     }
 
     @Override
-    public Result<List<net.ooder.nexus.model.network.NetworkDevice>> getNetworkDevices() {
+    public Result<List<net.ooder.nexus.domain.network.model.NetworkDevice>> getNetworkDevices() {
         log.info("[MockNexusService] Get network devices requested");
         
         try {
             // 模拟网络设备数据
-            List<net.ooder.nexus.model.network.NetworkDevice> devices = new ArrayList<>();
+            List<net.ooder.nexus.domain.network.model.NetworkDevice> devices = new ArrayList<>();
             
-            devices.add(new net.ooder.nexus.model.network.NetworkDevice(
+            devices.add(new net.ooder.nexus.domain.network.model.NetworkDevice(
                 "device-001",
                 "主路由器",
                 "router",
@@ -2698,9 +2698,9 @@ public class MockNexusService implements INexusService {
                 System.currentTimeMillis()
             ));
             
-            devices.add(new net.ooder.nexus.model.network.NetworkDevice(
+            devices.add(new net.ooder.nexus.domain.network.model.NetworkDevice(
                 "device-002",
-                "交换机",
+                "交换�?",
                 "switch",
                 "192.168.1.2",
                 "AA:BB:CC:DD:EE:02",
@@ -2711,9 +2711,9 @@ public class MockNexusService implements INexusService {
                 System.currentTimeMillis()
             ));
             
-            devices.add(new net.ooder.nexus.model.network.NetworkDevice(
+            devices.add(new net.ooder.nexus.domain.network.model.NetworkDevice(
                 "device-003",
-                "AP接入点",
+                "AP接入�?",
                 "access_point",
                 "192.168.1.3",
                 "AA:BB:CC:DD:EE:03",

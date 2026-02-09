@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import net.ooder.nexus.model.Result;
-import net.ooder.nexus.model.device.Device;
-import net.ooder.nexus.model.device.DeviceOperationLog;
-import net.ooder.nexus.model.device.DeviceListResult;
-import net.ooder.nexus.model.device.DeviceDetailResult;
-import net.ooder.nexus.model.device.DeviceControlResult;
-import net.ooder.nexus.model.device.DeviceLogsResult;
-import net.ooder.nexus.model.device.DeviceTypesResult;
+import net.ooder.nexus.domain.end.model.Device;
+import net.ooder.nexus.domain.end.model.DeviceOperationLog;
+import net.ooder.nexus.domain.end.model.DeviceListResult;
+import net.ooder.nexus.domain.end.model.DeviceDetailResult;
+import net.ooder.nexus.domain.end.model.DeviceControlResult;
+import net.ooder.nexus.domain.end.model.DeviceLogsResult;
+import net.ooder.nexus.domain.end.model.DeviceTypesResult;
 import net.ooder.nexus.service.INexusService;
 import net.ooder.nexus.service.NexusServiceFactory;
 
@@ -37,7 +37,7 @@ public class DeviceController {
     // 设备操作日志
     private final List<DeviceOperationLog> operationLogs = new ArrayList<>();
     
-    // 初始化默认设备
+    // 初始化默认设�?
     public DeviceController() {
         initializeDefaultDevices();
     }
@@ -106,7 +106,7 @@ public class DeviceController {
                     .filter(device -> (location == null || device.getLocation().equals(location)))
                     .collect(Collectors.toList());
             
-            // 转换为响应格式
+            // 转换为响应格�?
             List<Map<String, Object>> deviceList = new ArrayList<>();
             for (Device device : filteredDevices) {
                 Map<String, Object> summary = new HashMap<>();
@@ -257,7 +257,7 @@ public class DeviceController {
                     .limit(limit)
                     .collect(Collectors.toList());
             
-            // 转换为响应格式
+            // 转换为响应格�?
             List<Map<String, Object>> logList = new ArrayList<>();
             for (DeviceOperationLog log : pagedLogs) {
                 logList.add(log.toMap());
@@ -287,7 +287,7 @@ public class DeviceController {
                     .distinct()
                     .collect(Collectors.toList());
             
-            // 统计每种类型的设备数量
+            // 统计每种类型的设备数�?
             Map<String, Long> typeCounts = new HashMap<>();
             for (String type : types) {
                 typeCounts.put(type, devices.values().stream().filter(d -> type.equals(d.getType())).count());

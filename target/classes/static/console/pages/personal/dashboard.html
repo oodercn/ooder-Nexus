@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个人仪表盘 - Nexus</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/llm-integration.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <script src="/console/js/theme-manager.js"></script>
     <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/common.js"></script>
     <script src="/console/js/personal-api.js"></script>
 </head>
 <body>
@@ -205,8 +206,8 @@
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
     <script>
-        window.onload = function() {
-            initMenu();
+        window.onPageInit = function() {
+            // 页面初始化完成
         };
     </script>
 </body>

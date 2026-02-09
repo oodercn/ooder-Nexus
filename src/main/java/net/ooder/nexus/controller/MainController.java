@@ -1,7 +1,7 @@
 package net.ooder.nexus.controller;
 
 import net.ooder.nexus.service.NexusService;
-import net.ooder.nexus.console.ConsoleController;
+import net.ooder.nexus.adapter.inbound.console.ConsoleController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -34,7 +34,7 @@ public class MainController {
         nexusService.resetConfig();
     }
     
-    // 控制台相关功能
+    // 控制台相关功�?
     public void initializeConsole() {
         System.out.println("Initializing console...");
         if (consoleController != null) {

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>命令执行 - OpenWrt - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/common.js"></script>
+    <style>
+        .terminal-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            padding: 15px;
+            border-radius: 4px;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .terminal-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .terminal-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+        .command-history {
+            margin-top: 20px;
+        }
+        .command-history-item {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .command-history-item:hover {
+            background: var(--nexus-hover);
+        }
+        .command-history-item i {
+            color: var(--nexus-primary);
+        }
+        .output-success {
+            color: #52c41a;
+        }
+        .output-error {
+            color: #ff4d4f;
+        }
+        .output-info {
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边导航栏 -->
+        <div class="sidebar">
+            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+            <ul class="nav-menu" id="nav-menu"></ul>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 头部 -->
+            <div class="header">
+                <h1><i class="ri-terminal-line"></i> 命令执行</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="history.back()">
+                        <i class="ri-arrow-left-line"></i> 返回
+                    </button>
+                    <button class="btn btn-danger" onclick="clearOutput()">
+                        <i class="ri-delete-bin-line"></i> 清空输出
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 命令执行区域 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="ri-terminal-box-line"></i> 终端</h2>
+                    <span id="connectionStatus" class="badge badge-secondary">未连接</span>
+                </div>
+                <div class="card-body">
+                    <div id="terminalOutput" class="terminal-output">欢迎使用 OpenWrt 命令执行终端
+请输入命令并点击执行按钮...
+</div>
+                    <div class="terminal-input-group">
+                        <input type="text" id="commandInput" class="terminal-input" placeholder="输入命令，例如：ifconfig" onkeypress="handleKeyPress(event)">
+                        <button class="btn btn-primary" onclick="executeCommand()">
+                            <i class="ri-send-plane-line"></i> 执行
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 常用命令 -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="ri-history-line"></i> 常用命令</h2>
+                </div>
+                <div class="card-body">
+                    <div class="command-history" id="commandHistory">
+                        <div class="command-history-item" onclick="setCommand('ifconfig')">
+                            <i class="ri-terminal-line"></i>
+                            <span>ifconfig - 查看网络接口</span>
+                        </div>
+                        <div class="command-history-item" onclick="setCommand('cat /proc/cpuinfo')">
+                            <i class="ri-terminal-line"></i>
+                            <span>cat /proc/cpuinfo - 查看 CPU 信息</span>
+                        </div>
+                        <div class="command-history-item" onclick="setCommand('cat /proc/meminfo')">
+                            <i class="ri-terminal-line"></i>
+                            <span>cat /proc/meminfo - 查看内存信息</span>
+                        </div>
+                        <div class="command-history-item" onclick="setCommand('df -h')">
+                            <i class="ri-terminal-line"></i>
+                            <span>df -h - 查看磁盘空间</span>
+                        </div>
+                        <div class="command-history-item" onclick="setCommand('ps')">
+                            <i class="ri-terminal-line"></i>
+                            <span>ps - 查看进程</span>
+                        </div>
+                        <div class="command-history-item" onclick="setCommand('uptime')">
+                            <i class="ri-terminal-line"></i>
+                            <span>uptime - 查看运行时间</span>
+                        </div>
+                        <div class="command-history-item" onclick="setCommand('logread')">
+                            <i class="ri-terminal-line"></i>
+                            <span>logread - 查看系统日志</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/console/common/api-client.js"></script>
+    <script src="/console/common/button-manager.js"></script>
+    <script src="/console/common/utils.js"></script>
+    <script>
+        // API 客户端实例
+        const openwrtApi = new ApiClient('/api/openwrt');
+
+        // 页面初始化
+        window.onPageInit = function() {
+            checkConnectionStatus();
+        };
+
+        // 检查连接状态
+        async function checkConnectionStatus() {
+            try {
+                const data = await openwrtApi.get('/status');
+                const statusBadge = document.getElementById('connectionStatus');
+                
+                if (data.connected) {
+                    statusBadge.textContent = '已连接';
+                    statusBadge.className = 'badge badge-success';
+                } else {
+                    statusBadge.textContent = '未连接';
+                    statusBadge.className = 'badge badge-secondary';
+                }
+            } catch (error) {
+                console.error('检查连接状态失败:', error);
+                document.getElementById('connectionStatus').textContent = '未连接';
+            }
+        }
+
+        // 处理回车键
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                executeCommand();
+            }
+        }
+
+        // 设置命令
+        function setCommand(command) {
+            document.getElementById('commandInput').value = command;
+            document.getElementById('commandInput').focus();
+        }
+
+        // 执行命令
+        async function executeCommand() {
+            const commandInput = document.getElementById('commandInput');
+            const command = commandInput.value.trim();
+            
+            if (!command) {
+                showToast('请输入命令', 'warning');
+                return;
+            }
+
+            const outputDiv = document.getElementById('terminalOutput');
+            
+            // 添加命令到输出
+            outputDiv.innerHTML += `\n\n$ ${command}\n`;
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+
+            try {
+                const data = await openwrtApi.post('/execute', { command: command });
+                
+                if (data.status === 'success' && data.data) {
+                    const result = data.data;
+                    if (result.success) {
+                        outputDiv.innerHTML += `<span class="output-success">${escapeHtml(result.stdout || '命令执行成功')}</span>`;
+                    } else {
+                        outputDiv.innerHTML += `<span class="output-error">${escapeHtml(result.stderr || '命令执行失败')}</span>`;
+                    }
+                } else {
+                    outputDiv.innerHTML += `<span class="output-error">错误: ${data.message || '执行失败'}</span>`;
+                }
+            } catch (error) {
+                console.error('执行命令失败:', error);
+                outputDiv.innerHTML += `<span class="output-error">错误: ${error.message || '网络请求失败'}</span>`;
+            }
+
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+            commandInput.value = '';
+        }
+
+        // 清空输出
+        function clearOutput() {
+            document.getElementById('terminalOutput').innerHTML = '欢迎使用 OpenWrt 命令执行终端\n请输入命令并点击执行按钮...\n';
+        }
+
+        // HTML 转义
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // 显示提示消息
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                border-radius: 4px;
+                color: white;
+                font-size: 14px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease-out;
+                background: ${type === 'success' ? '#52c41a' : type === 'error' ? '#ff4d4f' : type === 'warning' ? '#faad14' : '#1890ff'};
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

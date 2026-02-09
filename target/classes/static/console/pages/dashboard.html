@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>仪表盘 - Nexus Console</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/dashboard.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/common.js"></script>
 </head>
 <body>
     <div class="container">
@@ -137,16 +139,12 @@
         </div>
     </div>
     
-    <!-- 公共JS模块 -->
-    <script src="/console/js/menu-loader.js"></script>
-    <script src="/console/common/api-client.js"></script>
-    <script src="/console/common/list-manager.js"></script>
-    <script src="/console/common/form-manager.js"></script>
-    <script src="/console/common/utils.js"></script>
+    <!-- 页面特定脚本 -->
     <script src="/console/js/dashboard.js"></script>
     <script>
-        window.onload = function() {
-            initMenu();
+        window.onPageInit = function() {
+            // 页面特定的初始化代码
+            console.log('Dashboard 页面初始化完成');
         };
     </script>
 </body>

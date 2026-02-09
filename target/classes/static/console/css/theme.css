@@ -1,0 +1,437 @@
+/**
+ * 统一主题样式
+ * 所有页面必须使用此文件的CSS变量
+ */
+
+/* ========== 基础主题变量 ========== */
+:root {
+    /* 主色调 */
+    --nexus-primary: #3b82f6;
+    --nexus-secondary: #94a3b8;
+    --nexus-success: #22c55e;
+    --nexus-warning: #f59e0b;
+    --nexus-danger: #ef4444;
+    
+    /* 深色主题（默认） */
+    --nexus-light: #0f0f0f;
+    --nexus-dark: #ffffff;
+    --nexus-border: #2a2a2a;
+    --nexus-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    --nexus-radius: 8px;
+    --nexus-spacing: 16px;
+    --nexus-background: #000000;
+    --nexus-card-bg: #121212;
+    --nexus-sidebar-bg: #121212;
+    --nexus-input-bg: #1a1a1a;
+    --nexus-text: #ffffff;
+    
+    /* 兼容旧变量名 */
+    --ooder-primary: var(--nexus-primary);
+    --ooder-secondary: var(--nexus-secondary);
+    --ooder-success: var(--nexus-success);
+    --ooder-warning: var(--nexus-warning);
+    --ooder-danger: var(--nexus-danger);
+    --ooder-light: var(--nexus-light);
+    --ooder-dark: var(--nexus-dark);
+    --ooder-border: var(--nexus-border);
+    --ooder-shadow: var(--nexus-shadow);
+    --ooder-radius: var(--nexus-radius);
+    --ooder-spacing: var(--nexus-spacing);
+    --ooder-background: var(--nexus-background);
+    --ooder-card-bg: var(--nexus-card-bg);
+    --ooder-text: var(--nexus-text);
+}
+
+/* ========== 浅色主题 ========== */
+.light-theme {
+    --nexus-primary: #3b82f6;
+    --nexus-secondary: #64748b;
+    --nexus-success: #22c55e;
+    --nexus-warning: #f59e0b;
+    --nexus-danger: #ef4444;
+    --nexus-light: #f8fafc;
+    --nexus-dark: #1e293b;
+    --nexus-border: #e2e8f0;
+    --nexus-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    --nexus-background: #ffffff;
+    --nexus-card-bg: #f1f5f9;
+    --nexus-sidebar-bg: #f8fafc;
+    --nexus-input-bg: #f8fafc;
+    --nexus-text: #1e293b;
+    
+    /* 兼容旧变量名 */
+    --ooder-primary: var(--nexus-primary);
+    --ooder-secondary: var(--nexus-secondary);
+    --ooder-success: var(--nexus-success);
+    --ooder-warning: var(--nexus-warning);
+    --ooder-danger: var(--nexus-danger);
+    --ooder-light: var(--nexus-light);
+    --ooder-dark: var(--nexus-dark);
+    --ooder-border: var(--nexus-border);
+    --ooder-shadow: var(--nexus-shadow);
+    --ooder-background: var(--nexus-background);
+    --ooder-card-bg: var(--nexus-card-bg);
+    --ooder-text: var(--nexus-text);
+}
+
+/* ========== 基础样式 ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--nexus-background);
+    color: var(--nexus-dark);
+    line-height: 1.5;
+    transition: all 0.3s ease;
+}
+
+/* ========== 布局样式 ========== */
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: var(--nexus-background);
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    width: 260px;
+    background-color: var(--nexus-sidebar-bg);
+    border-right: 1px solid var(--nexus-border);
+    padding: 24px;
+    box-shadow: var(--nexus-shadow);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar h2 {
+    flex-shrink: 0;
+    margin-bottom: 24px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--nexus-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 导航菜单 */
+.nav-menu {
+    list-style: none;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-right: -8px;
+    padding-right: 8px;
+}
+
+/* 自定义滚动条样式 */
+.nav-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.nav-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nav-menu::-webkit-scrollbar-thumb {
+    background: var(--nexus-border);
+    border-radius: 2px;
+}
+
+.nav-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--nexus-secondary);
+}
+
+/* Firefox 滚动条样式 */
+.nav-menu {
+    scrollbar-width: thin;
+    scrollbar-color: var(--nexus-border) transparent;
+}
+
+/* 菜单项 */
+.nav-menu li {
+    margin-bottom: 4px;
+}
+
+.nav-menu a {
+    color: var(--nexus-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--nexus-radius);
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-menu a:hover {
+    background-color: var(--nexus-light);
+    color: var(--nexus-primary);
+}
+
+.nav-menu a.active {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--nexus-primary);
+    font-weight: 600;
+}
+
+/* 二级菜单 */
+.nav-menu .submenu {
+    list-style: none;
+    margin-left: 16px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    display: none;
+}
+
+.nav-menu .submenu li {
+    margin-bottom: 2px;
+}
+
+.nav-menu .submenu a {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-left: 2px solid var(--nexus-border);
+}
+
+/* 三级菜单 */
+.nav-menu .submenu .submenu {
+    margin-left: 32px;
+}
+
+.nav-menu .submenu .submenu a {
+    padding: 8px 16px;
+    font-size: 12px;
+    border-left: 2px solid var(--nexus-secondary);
+}
+
+/* 展开/折叠图标 */
+.nav-menu .toggle-icon {
+    margin-left: auto;
+    transition: transform 0.2s ease;
+}
+
+.nav-menu .toggle-icon.collapsed {
+    transform: rotate(-90deg);
+}
+
+/* 菜单分隔线 */
+.nav-menu .menu-divider {
+    height: 1px;
+    background-color: var(--nexus-border);
+    margin: 16px 0;
+}
+
+/* 主内容区 */
+.main-content {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+    background-color: var(--nexus-background);
+    transition: all 0.3s ease;
+}
+
+/* 页面头部 */
+.header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--nexus-border);
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--nexus-dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header .subtitle {
+    color: var(--nexus-secondary);
+    font-size: 14px;
+}
+
+/* ========== 按钮样式 ========== */
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--nexus-radius);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--nexus-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+}
+
+.btn-secondary {
+    background: var(--nexus-card-bg);
+    color: var(--nexus-text);
+    border: 1px solid var(--nexus-border);
+}
+
+.btn-secondary:hover {
+    background: var(--nexus-light);
+}
+
+/* 主题切换按钮 */
+.theme-toggle-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* ========== 卡片样式 ========== */
+.card {
+    background-color: var(--nexus-card-bg);
+    padding: 24px;
+    border-radius: var(--nexus-radius);
+    box-shadow: var(--nexus-shadow);
+    border: 1px solid var(--nexus-border);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* ========== 表单样式 ========== */
+input, select, textarea {
+    background-color: var(--nexus-input-bg);
+    border: 1px solid var(--nexus-border);
+    color: var(--nexus-dark);
+    padding: 8px 12px;
+    border-radius: var(--nexus-radius);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--nexus-primary);
+}
+
+/* ========== 表格样式 ========== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--nexus-border);
+}
+
+th {
+    font-weight: 600;
+    color: var(--nexus-secondary);
+}
+
+/* ========== 主题切换按钮样式 ========== */
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--nexus-card-bg);
+    border: 1px solid var(--nexus-border);
+    border-radius: var(--nexus-radius);
+    color: var(--nexus-dark);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--nexus-light);
+    transform: translateY(-1px);
+}
+
+.theme-toggle-btn i {
+    font-size: 16px;
+}
+
+/* 头部主题切换按钮 */
+.header-theme-toggle {
+    margin-left: auto;
+}
+
+/* 内容头部样式 - 支持 .content-header 和 .header */
+.content-header,
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--nexus-border);
+}
+
+.content-header h1,
+.header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--nexus-dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.content-actions,
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* ========== 响应式布局 ========== */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+        padding: 16px;
+    }
+    
+    .main-content {
+        padding: 16px;
+    }
+    
+    .header h1,
+    .content-header h1 {
+        font-size: 20px;
+    }
+
+    .content-header,
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .header-theme-toggle {
+        margin-left: 0;
+    }
+}

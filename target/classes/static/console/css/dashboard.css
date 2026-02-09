@@ -66,11 +66,16 @@ body {
     padding: 24px;
     box-shadow: var(--nexus-shadow);
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .dashboard-sidebar h2,
 .sidebar h2 {
-    margin-bottom: 32px;
+    flex-shrink: 0;
+    margin-bottom: 24px;
     font-size: 18px;
     font-weight: 600;
     color: var(--nexus-primary);
@@ -87,6 +92,40 @@ body {
 .dashboard-nav-menu,
 .nav-menu {
     list-style: none;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-right: -8px;
+    padding-right: 8px;
+}
+
+/* 自定义滚动条样式 - 暗色主题 */
+.nav-menu::-webkit-scrollbar,
+.dashboard-nav-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.nav-menu::-webkit-scrollbar-track,
+.dashboard-nav-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nav-menu::-webkit-scrollbar-thumb,
+.dashboard-nav-menu::-webkit-scrollbar-thumb {
+    background: var(--nexus-border);
+    border-radius: 2px;
+}
+
+.nav-menu::-webkit-scrollbar-thumb:hover,
+.dashboard-nav-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--nexus-secondary);
+}
+
+/* Firefox 滚动条样式 */
+.nav-menu,
+.dashboard-nav-menu {
+    scrollbar-width: thin;
+    scrollbar-color: var(--nexus-border) transparent;
 }
 
 .dashboard-nav-menu li,

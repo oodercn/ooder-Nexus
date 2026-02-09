@@ -1,12 +1,14 @@
 /**
  * 统一菜单加载脚本
  * 处理菜单配置加载、角色过滤、路径构建和菜单渲染
+ * 支持菜单状态记忆功能（使用 localStorage）
  */
 
 class MenuLoader {
     constructor() {
         this.menuConfig = null;
         this.currentRole = this.getCurrentRole();
+        this.expandedMenus = this.loadExpandedMenus();
     }
 
     /**
@@ -14,6 +16,57 @@ class MenuLoader {
      */
     getCurrentRole() {
         return localStorage.getItem('currentRole') || 'home';
+    }
+
+    /**
+     * 加载已展开的菜单状态
+     */
+    loadExpandedMenus() {
+        try {
+            const saved = localStorage.getItem('expandedMenus');
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    /**
+     * 保存展开的菜单状态
+     */
+    saveExpandedMenus() {
+        try {
+            localStorage.setItem('expandedMenus', JSON.stringify(this.expandedMenus));
+        } catch (e) {
+            console.warn('保存菜单状态失败:', e);
+        }
+    }
+
+    /**
+     * 添加展开的菜单ID
+     */
+    addExpandedMenu(menuId) {
+        if (!this.expandedMenus.includes(menuId)) {
+            this.expandedMenus.push(menuId);
+            this.saveExpandedMenus();
+        }
+    }
+
+    /**
+     * 移除展开的菜单ID
+     */
+    removeExpandedMenu(menuId) {
+        const index = this.expandedMenus.indexOf(menuId);
+        if (index > -1) {
+            this.expandedMenus.splice(index, 1);
+            this.saveExpandedMenus();
+        }
+    }
+
+    /**
+     * 检查菜单是否已展开
+     */
+    isMenuExpanded(menuId) {
+        return this.expandedMenus.includes(menuId);
     }
 
     /**
@@ -81,10 +134,38 @@ class MenuLoader {
     }
 
     /**
+     * 查找当前页面对应的菜单路径
+     */
+    findCurrentMenuPath(items, currentPath, path = []) {
+        for (const item of items) {
+            const newPath = [...path, item.id];
+            
+            // 检查当前项是否是当前页面
+            if (item.url) {
+                const itemPath = this.buildUrl(item.url);
+                if (currentPath.includes(item.url) || itemPath === currentPath) {
+                    return newPath;
+                }
+            }
+            
+            // 递归检查子菜单
+            if (item.children && item.children.length > 0) {
+                const childPath = this.findCurrentMenuPath(item.children, currentPath, newPath);
+                if (childPath) {
+                    return childPath;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * 创建菜单项
      */
-    createMenuItem(menuItem) {
+    createMenuItem(menuItem, parentPath = []) {
         const li = document.createElement('li');
+        const currentPath = window.location.pathname;
+        const isCurrentPage = menuItem.url && (currentPath.includes(menuItem.url) || this.buildUrl(menuItem.url) === currentPath);
         
         if (menuItem.children && menuItem.children.length > 0) {
             // 有子菜单的菜单项
@@ -96,6 +177,10 @@ class MenuLoader {
                 <span class="toggle-icon">›</span>
             `;
             
+            // 检查是否应该展开（从localStorage或当前页面路径）
+            const shouldExpand = this.isMenuExpanded(menuItem.id) || 
+                                (isCurrentPage && !this.expandedMenus.includes(menuItem.id));
+            
             // 处理点击事件
             a.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -104,55 +189,39 @@ class MenuLoader {
                 const submenu = a.nextElementSibling;
                 
                 if (submenu) {
-                    // 只关闭同级的其他子菜单
-                    const parentLi = a.closest('li');
-                    const siblingLis = parentLi.parentElement.children;
-                    
-                    // 遍历同级菜单项
-                    for (let sibling of siblingLis) {
-                        if (sibling !== parentLi && sibling.querySelector('.submenu')) {
-                            const siblingSubmenu = sibling.querySelector('.submenu');
-                            const siblingToggleIcon = sibling.querySelector('.toggle-icon');
-                            if (siblingSubmenu) {
-                                siblingSubmenu.style.display = 'none';
-                            }
-                            if (siblingToggleIcon) {
-                                siblingToggleIcon.classList.remove('collapsed');
-                            }
-                        }
-                    }
-                    
                     // 切换当前子菜单
                     if (submenu.style.display === 'block') {
                         submenu.style.display = 'none';
+                        toggleIcon.classList.remove('collapsed');
+                        this.removeExpandedMenu(menuItem.id);
                     } else {
                         submenu.style.display = 'block';
+                        toggleIcon.classList.add('collapsed');
+                        this.addExpandedMenu(menuItem.id);
                     }
-                    toggleIcon.classList.toggle('collapsed');
                 }
             });
-            
-            // 为子菜单添加点击事件处理，防止冒泡到父菜单
-            if (menuItem.children && menuItem.children.length > 0) {
-                const submenu = a.nextElementSibling;
-                if (submenu) {
-                    submenu.addEventListener('click', (e) => {
-                        // 阻止事件冒泡到父菜单
-                        e.stopPropagation();
-                    });
-                }
-            }
             
             li.appendChild(a);
             
             // 创建子菜单
             const submenu = document.createElement('ul');
             submenu.className = 'submenu';
+            submenu.style.display = shouldExpand ? 'block' : 'none';
+            
+            if (shouldExpand) {
+                const toggleIcon = a.querySelector('.toggle-icon');
+                if (toggleIcon) {
+                    toggleIcon.classList.add('collapsed');
+                }
+                // 确保父菜单也在展开列表中
+                this.addExpandedMenu(menuItem.id);
+            }
             
             menuItem.children.forEach(childItem => {
                 // 只显示已实现的子功能
                 if (childItem.status === 'implemented') {
-                    const childLi = this.createMenuItem(childItem);
+                    const childLi = this.createMenuItem(childItem, [...parentPath, menuItem.id]);
                     submenu.appendChild(childLi);
                 }
             });
@@ -162,7 +231,7 @@ class MenuLoader {
                 li.appendChild(submenu);
             }
         } else {
-            // 无子菜单的菜单项
+            // 无子菜单的菜单项（叶子节点）
             const a = document.createElement('a');
             if (menuItem.url) {
                 a.href = this.buildUrl(menuItem.url);
@@ -176,18 +245,37 @@ class MenuLoader {
             `;
             
             // 标记当前页面为活跃状态
-            if (menuItem.url) {
-                const currentPath = window.location.pathname;
-                const menuPath = this.buildUrl(menuItem.url);
-                if (currentPath.includes(menuItem.url)) {
-                    a.classList.add('active');
-                }
+            if (isCurrentPage) {
+                a.classList.add('active');
             }
+            
+            // 阻止点击事件冒泡，防止父菜单收回
+            a.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
             
             li.appendChild(a);
         }
         
         return li;
+    }
+
+    /**
+     * 根据当前页面自动展开相关菜单
+     */
+    autoExpandCurrentMenu() {
+        const currentPath = window.location.pathname;
+        if (!this.menuConfig || !this.menuConfig.menu) return;
+        
+        // 查找当前页面对应的菜单路径
+        const menuPath = this.findCurrentMenuPath(this.menuConfig.menu, currentPath);
+        
+        if (menuPath && menuPath.length > 0) {
+            // 展开路径上的所有父菜单
+            menuPath.forEach(menuId => {
+                this.addExpandedMenu(menuId);
+            });
+        }
     }
 
     /**
@@ -206,6 +294,9 @@ class MenuLoader {
             this.renderDefaultMenu(navMenu);
             return;
         }
+        
+        // 根据当前页面自动展开相关菜单
+        this.autoExpandCurrentMenu();
         
         // 过滤菜单，只显示当前角色可见的项
         const filteredMenu = this.filterMenuItems(this.menuConfig.menu);

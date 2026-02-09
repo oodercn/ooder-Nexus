@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenWrt 路由器管理 - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/common.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边导航栏 -->
+        <div class="sidebar">
+            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+            <ul class="nav-menu" id="nav-menu"></ul>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 头部 -->
+            <div class="header">
+                <h1><i class="ri-router-line"></i> OpenWrt 路由器管理</h1>
+                <div class="header-actions">
+                    <button id="mockToggleBtn" class="btn btn-secondary" onclick="toggleMockMode()">
+                        <i class="ri-bug-line"></i> 模拟模式
+                    </button>
+                    <button class="theme-toggle-btn btn btn-secondary">
+                        <i class="ri-sun-line"></i> 浅色模式
+                    </button>
+                    <button id="refresh-btn" class="btn btn-primary" onclick="refreshData()">
+                        <i class="ri-refresh-line"></i> 刷新数据
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 连接状态卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="ri-router-line"></i> 路由器连接状态</h2>
+                    <span id="connectionStatus" class="status-badge status-offline">未连接</span>
+                </div>
+                <div id="routerInfo" style="display: none;">
+                    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 15px;">
+                        <div class="info-item">
+                            <span class="info-label">设备地址</span>
+                            <span id="routerHost" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">固件版本</span>
+                            <span id="firmwareVersion" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">运行时间</span>
+                            <span id="uptime" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">设备型号</span>
+                            <span id="deviceModel" class="info-value">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons" style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button id="connectBtn" class="btn btn-primary" onclick="showConnectModal()">
+                        <i class="ri-link"></i> 连接路由器
+                    </button>
+                    <button id="disconnectBtn" class="btn btn-danger" onclick="disconnectRouter()" style="display: none;">
+                        <i class="ri-unlink"></i> 断开连接
+                    </button>
+                    <button id="rebootBtn" class="btn btn-warning" onclick="rebootRouter()" style="display: none;">
+                        <i class="ri-restart-line"></i> 重启路由器
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 快捷操作 -->
+            <h3 style="margin: 30px 0 15px; color: var(--ooder-text);">快捷操作</h3>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div class="card status-card" onclick="navigateTo('network-settings')" style="cursor: pointer;">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="ri-wifi-settings-line"></i>
+                    </div>
+                    <div class="status-value">网络设置</div>
+                    <div class="status-label">配置网络参数</div>
+                </div>
+                <div class="card status-card" onclick="navigateTo('ip-management')" style="cursor: pointer;">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="ri-ip-line"></i>
+                    </div>
+                    <div class="status-value">IP 管理</div>
+                    <div class="status-label">管理 IP 地址</div>
+                </div>
+                <div class="card status-card" onclick="navigateTo('blacklist')" style="cursor: pointer;">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="ri-shield-cross-line"></i>
+                    </div>
+                    <div class="status-value">黑名单</div>
+                    <div class="status-label">管理访问控制</div>
+                </div>
+                <div class="card status-card" onclick="navigateTo('config-files')" style="cursor: pointer;">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="ri-file-settings-line"></i>
+                    </div>
+                    <div class="status-value">配置文件</div>
+                    <div class="status-label">编辑配置文件</div>
+                </div>
+                <div class="card status-card" onclick="navigateTo('system-status')" style="cursor: pointer;">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <i class="ri-dashboard-line"></i>
+                    </div>
+                    <div class="status-value">系统状态</div>
+                    <div class="status-label">查看系统信息</div>
+                </div>
+                <div class="card status-card" onclick="navigateTo('command')" style="cursor: pointer;">
+                    <div class="status-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                        <i class="ri-terminal-line"></i>
+                    </div>
+                    <div class="status-value">命令执行</div>
+                    <div class="status-label">执行系统命令</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 连接模态框 -->
+    <div id="connectModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">连接 OpenWrt 路由器</h3>
+                <button class="modal-close" onclick="hideConnectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">路由器地址</label>
+                    <input type="text" id="hostInput" class="form-input" placeholder="192.168.1.1" value="192.168.1.1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">用户名</label>
+                    <input type="text" id="usernameInput" class="form-input" placeholder="root" value="root">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">密码</label>
+                    <input type="password" id="passwordInput" class="form-input" placeholder="密码">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideConnectModal()">取消</button>
+                <button class="btn btn-primary" onclick="connectRouter()">连接</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // OpenWrt API 封装
+        const openwrtApi = {
+            baseUrl: '/api/openwrt',
+            async get(endpoint) {
+                const response = await fetch(`${this.baseUrl}${endpoint}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            },
+            async post(endpoint, data = {}) {
+                const response = await fetch(`${this.baseUrl}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            }
+        };
+
+        // 页面自定义初始化
+        window.onPageInit = function() {
+            checkConnectionStatus();
+            checkMockStatus();
+        };
+
+        // 检查连接状态
+        async function checkConnectionStatus() {
+            try {
+                const data = await openwrtApi.get('/status');
+                if (data.connected) {
+                    updateConnectionUI(true);
+                    loadSystemStatus();
+                } else {
+                    updateConnectionUI(false);
+                }
+            } catch (error) {
+                console.error('检查连接状态失败:', error);
+                updateConnectionUI(false);
+            }
+        }
+
+        // 检查 Mock 状态
+        async function checkMockStatus() {
+            try {
+                const data = await openwrtApi.get('/mock/status');
+                updateMockStatusUI(data.mockEnabled);
+            } catch (error) {
+                console.error('检查 Mock 状态失败:', error);
+            }
+        }
+
+        // 更新连接状态 UI
+        function updateConnectionUI(connected) {
+            const statusBadge = document.getElementById('connectionStatus');
+            const routerInfo = document.getElementById('routerInfo');
+            const connectBtn = document.getElementById('connectBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            const rebootBtn = document.getElementById('rebootBtn');
+
+            if (connected) {
+                statusBadge.textContent = '已连接';
+                statusBadge.className = 'status-badge status-online';
+                routerInfo.style.display = 'block';
+                connectBtn.style.display = 'none';
+                disconnectBtn.style.display = 'inline-flex';
+                rebootBtn.style.display = 'inline-flex';
+            } else {
+                statusBadge.textContent = '未连接';
+                statusBadge.className = 'status-badge status-offline';
+                routerInfo.style.display = 'none';
+                connectBtn.style.display = 'inline-flex';
+                disconnectBtn.style.display = 'none';
+                rebootBtn.style.display = 'none';
+            }
+        }
+
+        // 更新 Mock 状态 UI
+        function updateMockStatusUI(enabled) {
+            const statusBadge = document.getElementById('connectionStatus');
+            const mockBtn = document.getElementById('mockToggleBtn');
+
+            if (enabled) {
+                mockBtn.innerHTML = '<i class="ri-bug-line"></i> 模拟模式 (开)';
+                mockBtn.style.background = '#fa8c16';
+                mockBtn.style.color = 'white';
+                if (statusBadge.textContent === '未连接') {
+                    statusBadge.textContent = '模拟模式';
+                    statusBadge.className = 'status-badge';
+                    statusBadge.style.background = '#fff7e6';
+                    statusBadge.style.color = '#fa8c16';
+                }
+            } else {
+                mockBtn.innerHTML = '<i class="ri-bug-line"></i> 模拟模式';
+                mockBtn.style.background = '';
+                mockBtn.style.color = '';
+            }
+        }
+
+        // 显示连接模态框
+        function showConnectModal() {
+            document.getElementById('connectModal').style.display = 'flex';
+        }
+
+        // 隐藏连接模态框
+        function hideConnectModal() {
+            document.getElementById('connectModal').style.display = 'none';
+        }
+
+        // 连接路由器
+        async function connectRouter() {
+            const host = document.getElementById('hostInput').value;
+            const username = document.getElementById('usernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            try {
+                const data = await openwrtApi.post('/connect', { host, username, password });
+
+                if (data.connected) {
+                    hideConnectModal();
+                    updateConnectionUI(true);
+                    loadSystemStatus();
+                    showToast('连接成功', 'success');
+                } else {
+                    showToast('连接失败: ' + data.message, 'error');
+                }
+            } catch (error) {
+                console.error('连接路由器失败:', error);
+                showToast('连接失败', 'error');
+            }
+        }
+
+        // 断开连接
+        async function disconnectRouter() {
+            try {
+                await openwrtApi.post('/disconnect');
+                updateConnectionUI(false);
+                showToast('已断开连接', 'success');
+            } catch (error) {
+                console.error('断开连接失败:', error);
+                showToast('断开连接失败', 'error');
+            }
+        }
+
+        // 重启路由器
+        async function rebootRouter() {
+            if (!confirm('确定要重启路由器吗？这将导致短暂断网。')) {
+                return;
+            }
+
+            try {
+                const data = await openwrtApi.post('/reboot');
+
+                if (data.status === 'success') {
+                    showToast('重启命令已发送，请等待路由器重启', 'success');
+                    setTimeout(() => {
+                        updateConnectionUI(false);
+                    }, 5000);
+                } else {
+                    showToast('重启失败: ' + data.message, 'error');
+                }
+            } catch (error) {
+                console.error('重启路由器失败:', error);
+                showToast('重启失败', 'error');
+            }
+        }
+
+        // 切换 Mock 模式
+        async function toggleMockMode() {
+            try {
+                const statusData = await openwrtApi.get('/mock/status');
+                const newMode = !statusData.mockEnabled;
+                const endpoint = newMode ? '/mock/enable' : '/mock/disable';
+
+                const data = await openwrtApi.post(endpoint);
+
+                if (data.status === 'success') {
+                    updateMockStatusUI(newMode);
+                    showToast(newMode ? '已切换到模拟模式' : '已切换到真实模式', 'success');
+                    checkConnectionStatus();
+                }
+            } catch (error) {
+                console.error('切换 Mock 模式失败:', error);
+                showToast('切换失败', 'error');
+            }
+        }
+
+        // 加载系统状态
+        async function loadSystemStatus() {
+            try {
+                const data = await openwrtApi.get('/system-status');
+
+                if (data.status === 'success' && data.data) {
+                    const status = data.data;
+                    document.getElementById('firmwareVersion').textContent = status.firmwareVersion || '-';
+                    document.getElementById('uptime').textContent = status.uptime || '-';
+                    document.getElementById('deviceModel').textContent = status.deviceModel || '-';
+                }
+
+                // 获取版本信息
+                const versionData = await openwrtApi.get('/version');
+
+                if (versionData.status === 'success' && versionData.data) {
+                    document.getElementById('routerHost').textContent = versionData.data.deviceInfo || '-';
+                }
+            } catch (error) {
+                console.error('加载系统状态失败:', error);
+            }
+        }
+
+        // 刷新数据
+        function refreshData() {
+            checkConnectionStatus();
+            if (document.getElementById('connectionStatus').textContent === '已连接') {
+                loadSystemStatus();
+            }
+            showToast('数据已刷新', 'success');
+        }
+
+        // 页面导航
+        function navigateTo(page) {
+            const pages = {
+                'network-settings': 'network-settings.html',
+                'ip-management': 'ip-management.html',
+                'blacklist': 'blacklist.html',
+                'config-files': 'config-files.html',
+                'system-status': 'system-status.html',
+                'command': 'command.html'
+            };
+
+            if (pages[page]) {
+                window.location.href = pages[page];
+            }
+        }
+
+        // 切换主题 - 使用统一的 cookie 存储
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            document.documentElement.classList.toggle('light-theme');
+            const isLightTheme = document.body.classList.contains('light-theme');
+            // 使用统一的 cookie key: nexus_theme
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
+            document.cookie = 'nexus_theme=' + (isLightTheme ? 'light' : 'dark') + '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
+        }
+
+        // 显示提示消息
+        function showToast(message, type = 'info') {
+            if (typeof showMessage === 'function') {
+                showMessage(message, type);
+            } else {
+                // 简单的 toast 实现
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 12px 24px;
+                    border-radius: 4px;
+                    color: white;
+                    font-size: 14px;
+                    z-index: 9999;
+                    animation: slideIn 0.3s ease-out;
+                    background: ${type === 'success' ? '#52c41a' : type === 'error' ? '#ff4d4f' : '#1890ff'};
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.animation = 'slideOut 0.3s ease-in';
+                    setTimeout(() => document.body.removeChild(toast), 300);
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
