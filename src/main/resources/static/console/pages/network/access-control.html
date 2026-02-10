@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黑名单管理 - OpenWrt - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <title>黑名单管�?- OpenWrt - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航栏 -->
+        <!-- 侧边导航�?-->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -22,14 +22,13 @@
         <div class="main-content">
             <!-- 头部 -->
             <div class="header">
-                <h1><i class="ri-shield-cross-line"></i> 黑名单管理</h1>
+                <h1><i class="ri-shield-cross-line"></i> 黑名单管�?/h1>
                 <div class="header-actions">
                     <button class="btn btn-secondary" onclick="history.back()">
                         <i class="ri-arrow-left-line"></i> 返回
                     </button>
                     <button class="btn btn-primary" onclick="showAddBlacklistModal()">
-                        <i class="ri-add-line"></i> 添加黑名单
-                    </button>
+                        <i class="ri-add-line"></i> 添加黑名�?                    </button>
                 </div>
             </div>
             
@@ -40,21 +39,21 @@
                         <i class="ri-shield-cross-line"></i>
                     </div>
                     <div class="status-value" id="blacklistCount">0</div>
-                    <div class="status-label">黑名单数量</div>
+                    <div class="status-label">黑名单数�?/div>
                 </div>
                 <div class="card status-card">
                     <div class="status-icon" style="background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);">
                         <i class="ri-shield-check-line"></i>
                     </div>
                     <div class="status-value" id="enabledCount">0</div>
-                    <div class="status-label">已启用</div>
+                    <div class="status-label">已启�?/div>
                 </div>
             </div>
             
-            <!-- 黑名单列表 -->
+            <!-- 黑名单列�?-->
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="ri-list-check"></i> 黑名单列表</h2>
+                    <h2 class="card-title"><i class="ri-list-check"></i> 黑名单列�?/h2>
                     <button class="btn btn-secondary" onclick="loadBlacklist()">
                         <i class="ri-refresh-line"></i> 刷新
                     </button>
@@ -67,13 +66,13 @@
                                     <th>IP 地址</th>
                                     <th>名称</th>
                                     <th>来源</th>
-                                    <th>状态</th>
+                                    <th>状�?/th>
                                     <th>创建时间</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody id="blacklistTableBody">
-                                <!-- 动态生成 -->
+                                <!-- 动态生�?-->
                             </tbody>
                         </table>
                     </div>
@@ -86,7 +85,7 @@
     <div id="addBlacklistModal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 400px;">
             <div class="modal-header">
-                <h3 class="modal-title">添加黑名单</h3>
+                <h3 class="modal-title">添加黑名�?/h3>
                 <button class="modal-close" onclick="hideAddBlacklistModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -96,7 +95,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">名称</label>
-                    <input type="text" id="blacklistName" class="form-input" placeholder="例如：可疑设备">
+                    <input type="text" id="blacklistName" class="form-input" placeholder="例如：可疑设�?>
                 </div>
             </div>
             <div class="modal-footer">
@@ -110,16 +109,13 @@
     <script src="/console/common/button-manager.js"></script>
     <script src="/console/common/utils.js"></script>
     <script>
-        // API 客户端实例
-        const openwrtApi = new ApiClient('/api/openwrt');
+        // API 客户端实�?        const openwrtApi = new ApiClient('/api/openwrt');
 
-        // 页面初始化
-        window.onPageInit = function() {
+        // 页面初始�?        window.onPageInit = function() {
             loadBlacklist();
         };
 
-        // 加载黑名单列表
-        async function loadBlacklist() {
+        // 加载黑名单列�?        async function loadBlacklist() {
             try {
                 const data = await openwrtApi.get('/blacklist');
 
@@ -128,18 +124,17 @@
                     updateStats(data.data || []);
                 }
             } catch (error) {
-                console.error('加载黑名单失败:', error);
-                showToast('加载黑名单失败', 'error');
+                console.error('加载黑名单失�?', error);
+                showToast('加载黑名单失�?, 'error');
             }
         }
 
-        // 渲染黑名单表格
-        function renderBlacklistTable(blacklist) {
+        // 渲染黑名单表�?        function renderBlacklistTable(blacklist) {
             const tbody = document.getElementById('blacklistTableBody');
             tbody.innerHTML = '';
 
             if (!blacklist || blacklist.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">暂无黑名单</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">暂无黑名�?/td></tr>';
                 return;
             }
 
@@ -151,7 +146,7 @@
                     <td>${item.source || '*'}</td>
                     <td>
                         <span class="badge ${item.enabled ? 'badge-success' : 'badge-secondary'}">
-                            ${item.enabled ? '已启用' : '已禁用'}
+                            ${item.enabled ? '已启�? : '已禁�?}
                         </span>
                     </td>
                     <td>${formatDate(item.created)}</td>
@@ -171,8 +166,7 @@
             document.getElementById('enabledCount').textContent = blacklist.filter(item => item.enabled).length;
         }
 
-        // 格式化日期
-        function formatDate(timestamp) {
+        // 格式化日�?        function formatDate(timestamp) {
             if (!timestamp) return '-';
             const date = new Date(timestamp);
             return date.toLocaleString('zh-CN');
@@ -190,13 +184,12 @@
             document.getElementById('blacklistName').value = '';
         }
 
-        // 添加黑名单
-        async function addBlacklist() {
+        // 添加黑名�?        async function addBlacklist() {
             const ip = document.getElementById('blacklistIp').value;
             const name = document.getElementById('blacklistName').value;
 
             if (!ip) {
-                showToast('请填写 IP 地址', 'warning');
+                showToast('请填�?IP 地址', 'warning');
                 return;
             }
 
@@ -207,21 +200,20 @@
                 });
 
                 if (data.status === 'success') {
-                    showToast('黑名单添加成功', 'success');
+                    showToast('黑名单添加成�?, 'success');
                     hideAddBlacklistModal();
                     loadBlacklist();
                 } else {
                     showToast('添加失败: ' + data.message, 'error');
                 }
             } catch (error) {
-                console.error('添加黑名单失败:', error);
+                console.error('添加黑名单失�?', error);
                 showToast('添加失败', 'error');
             }
         }
 
-        // 移除黑名单
-        async function removeBlacklist(id) {
-            if (!confirm('确定要移除此黑名单吗？')) {
+        // 移除黑名�?        async function removeBlacklist(id) {
+            if (!confirm('确定要移除此黑名单吗�?)) {
                 return;
             }
 
@@ -235,7 +227,7 @@
                     showToast('移除失败: ' + data.message, 'error');
                 }
             } catch (error) {
-                console.error('移除黑名单失败:', error);
+                console.error('移除黑名单失�?', error);
                 showToast('移除失败', 'error');
             }
         }

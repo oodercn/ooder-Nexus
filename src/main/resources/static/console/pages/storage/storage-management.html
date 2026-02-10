@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>存储管理 - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/llm-integration.css">
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common/ApiClient.js"></script>
     <script src="/console/js/storage-api.js"></script>
     <script src="/console/common/modal-manager.js"></script>
@@ -41,7 +41,7 @@
                         <div class="storage-info">
                             <h3>存储空间</h3>
                             <p class="storage-value" id="total-space">0 GB</p>
-                            <p class="storage-label">总空间</p>
+                            <p class="storage-label">总空�?/p>
                         </div>
                     </div>
                     <div class="storage-card">
@@ -64,7 +64,7 @@
                 
                 <div class="file-browser">
                     <div class="file-browser-header">
-                        <h2>文件浏览器</h2>
+                        <h2>文件浏览�?/h2>
                         <div class="file-browser-actions">
                             <button class="btn btn-primary" onclick="showUploadModal()">
                                 <i class="ri-upload-line"></i>
@@ -72,26 +72,25 @@
                             </button>
                             <button class="btn btn-secondary" onclick="showCreateFolderModal()">
                                 <i class="ri-folder-add-line"></i>
-                                新建文件夹
-                            </button>
+                                新建文件�?                            </button>
                         </div>
                     </div>
                     <div class="file-browser-content" id="file-browser-content">
-                        <div class="loading">加载中...</div>
+                        <div class="loading">加载�?..</div>
                     </div>
                 </div>
                 
                 <div class="shared-files">
                     <h2>我的分享</h2>
                     <div class="shared-files-list" id="shared-files-list">
-                        <div class="loading">加载中...</div>
+                        <div class="loading">加载�?..</div>
                     </div>
                 </div>
                 
                 <div class="received-files">
-                    <h2>收到的分享</h2>
+                    <h2>收到的分�?/h2>
                     <div class="received-files-list" id="received-files-list">
-                        <div class="loading">加载中...</div>
+                        <div class="loading">加载�?..</div>
                     </div>
                 </div>
             </div>
@@ -107,9 +106,9 @@
             <div class="modal-body">
                 <form id="upload-form">
                     <div class="form-group">
-                        <label class="form-label">选择文件夹</label>
+                        <label class="form-label">选择文件�?/label>
                         <select id="upload-folder" name="folderId" class="form-select">
-                            <option value="">根目录</option>
+                            <option value="">根目�?/option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -132,7 +131,7 @@
     <div class="modal" id="create-folder-modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>新建文件夹</h3>
+                <h3>新建文件�?/h3>
                 <button class="modal-close" onclick="closeModal('create-folder-modal')">&times;</button>
             </div>
             <div class="modal-body">
@@ -140,16 +139,16 @@
                     <div class="form-group">
                         <label class="form-label">父文件夹</label>
                         <select id="parent-folder" name="parentFolderId" class="form-select">
-                            <option value="">根目录</option>
+                            <option value="">根目�?/option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">文件夹名称</label>
+                        <label class="form-label">文件夹名�?/label>
                         <input type="text" id="folder-name" name="folderName" class="form-input" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">描述</label>
-                        <textarea id="folder-description" name="description" class="form-input" placeholder="文件夹描述"></textarea>
+                        <textarea id="folder-description" name="description" class="form-input" placeholder="文件夹描�?></textarea>
                     </div>
                 </form>
             </div>
@@ -177,7 +176,7 @@
                         <label class="form-label">目标类型</label>
                         <select id="share-target-type" name="targetType" class="form-select">
                             <option value="user">用户</option>
-                            <option value="group">组</option>
+                            <option value="group">�?/option>
                         </select>
                     </div>
                     <div class="form-group">

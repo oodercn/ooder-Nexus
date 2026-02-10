@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>执行管理 - Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -18,8 +18,7 @@
                 <h1>执行管理</h1>
                 <div class="header-actions">
                     <button class="btn btn-primary" onclick="showExecuteModal()">
-                        <i class="ri-play-line"></i> 执行技能
-                    </button>
+                        <i class="ri-play-line"></i> 执行技�?                    </button>
                 </div>
             </header>
             <div class="content">
@@ -30,7 +29,7 @@
                 
                 <div class="tab-content" id="history-tab">
                     <div class="execution-list" id="execution-list">
-                        <div class="loading">加载中...</div>
+                        <div class="loading">加载�?..</div>
                     </div>
                 </div>
                 
@@ -46,20 +45,20 @@
     <div class="modal" id="execute-modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>执行技能</h3>
+                <h3>执行技�?/h3>
                 <button class="modal-close" onclick="closeModal('execute-modal')">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="execute-form">
                     <div class="form-group">
-                        <label>选择技能</label>
+                        <label>选择技�?/label>
                         <select id="skill-select" class="form-control">
-                            <option value="">请选择技能</option>
+                            <option value="">请选择技�?/option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>执行参数</label>
-                        <textarea id="skill-parameters" class="form-control" rows="5" placeholder="输入JSON格式的参数"></textarea>
+                        <textarea id="skill-parameters" class="form-control" rows="5" placeholder="输入JSON格式的参�?></textarea>
                     </div>
                 </form>
             </div>
@@ -141,7 +140,7 @@
                 
                 if (result.status === 'success') {
                     const skillSelect = document.getElementById('skill-select');
-                    skillSelect.innerHTML = '<option value="">请选择技能</option>';
+                    skillSelect.innerHTML = '<option value="">请选择技�?/option>';
                     result.data.forEach(skill => {
                         const option = document.createElement('option');
                         option.value = skill.id;
@@ -150,7 +149,7 @@
                     });
                 }
             } catch (error) {
-                console.error('加载技能列表错误:', error);
+                console.error('加载技能列表错�?', error);
             }
         }
 
@@ -175,7 +174,7 @@
             const parametersText = document.getElementById('skill-parameters').value;
             
             if (!skillId) {
-                showError('请选择技能');
+                showError('请选择技�?);
                 return;
             }
             
@@ -210,14 +209,14 @@
                 
                 if (result.status === 'success') {
                     closeModal('execute-modal');
-                    showSuccess('技能执行成功');
+                    showSuccess('技能执行成�?);
                     loadExecutionHistory();
                 } else {
-                    showError('技能执行失败');
+                    showError('技能执行失�?);
                 }
             } catch (error) {
-                console.error('执行技能错误:', error);
-                showError('技能执行失败');
+                console.error('执行技能错�?', error);
+                showError('技能执行失�?);
             }
         }
 
@@ -252,7 +251,7 @@
             resultDiv.innerHTML = `
                 <div class="result-info">
                     <h4>执行结果</h4>
-                    <p><strong>状态:</strong> ${result.status}</p>
+                    <p><strong>状�?</strong> ${result.status}</p>
                     <p><strong>输出:</strong></p>
                     <pre>${JSON.stringify(result.output, null, 2)}</pre>
                     ${result.error ? `<p><strong>错误:</strong> ${result.error}</p>` : ''}

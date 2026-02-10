@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的技能 - Nexus SkillCenter</title>
+    <title>我的技�?- Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,16 +15,15 @@
         </aside>
         <main class="main-content">
             <header class="header">
-                <h1>我的技能</h1>
+                <h1>我的技�?/h1>
                 <div class="header-actions">
                     <button class="btn btn-primary" onclick="showPublishModal()">
-                        <i class="ri-add-line"></i> 发布技能
-                    </button>
+                        <i class="ri-add-line"></i> 发布技�?                    </button>
                 </div>
             </header>
             <div class="content">
                 <div class="skill-list" id="skill-list">
-                    <div class="loading">加载中...</div>
+                    <div class="loading">加载�?..</div>
                 </div>
             </div>
         </main>
@@ -33,32 +32,32 @@
     <div class="modal" id="publish-modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>发布技能</h3>
+                <h3>发布技�?/h3>
                 <button class="modal-close" onclick="closeModal('publish-modal')">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="publish-form">
                     <div class="form-group">
-                        <label>技能名称</label>
+                        <label>技能名�?/label>
                         <input type="text" id="skill-name" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>技能描述</label>
+                        <label>技能描�?/label>
                         <textarea id="skill-description" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>技能分类</label>
+                        <label>技能分�?/label>
                         <select id="skill-category" class="form-control">
                             <option value="text-processing">文本处理</option>
-                            <option value="development">开发工具</option>
+                            <option value="development">开发工�?/option>
                             <option value="deployment">部署工具</option>
                             <option value="media">媒体处理</option>
                             <option value="storage">存储管理</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>技能代码</label>
-                        <textarea id="skill-code" class="form-control" rows="10" placeholder="输入技能代码"></textarea>
+                        <label>技能代�?/label>
+                        <textarea id="skill-code" class="form-control" rows="10" placeholder="输入技能代�?></textarea>
                     </div>
                 </form>
             </div>
@@ -92,11 +91,11 @@
                 if (result.status === 'success') {
                     renderSkillList(result.data);
                 } else {
-                    showError('加载技能列表失败');
+                    showError('加载技能列表失�?);
                 }
             } catch (error) {
-                console.error('加载技能列表错误:', error);
-                showError('加载技能列表失败');
+                console.error('加载技能列表错�?', error);
+                showError('加载技能列表失�?);
             }
         }
 
@@ -129,7 +128,7 @@
         function getCategoryName(category) {
             const categoryMap = {
                 'text-processing': '文本处理',
-                'development': '开发工具',
+                'development': '开发工�?,
                 'deployment': '部署工具',
                 'media': '媒体处理',
                 'storage': '存储管理'
@@ -182,14 +181,14 @@
                 
                 if (result.status === 'success') {
                     closeModal('publish-modal');
-                    showSuccess('技能发布成功');
+                    showSuccess('技能发布成�?);
                     loadSkills();
                 } else {
-                    showError('技能发布失败');
+                    showError('技能发布失�?);
                 }
             } catch (error) {
-                console.error('发布技能错误:', error);
-                showError('技能发布失败');
+                console.error('发布技能错�?', error);
+                showError('技能发布失�?);
             }
         }
 
@@ -198,7 +197,7 @@
         }
 
         async function deleteSkill(skillId) {
-            if (!confirm('确定要删除此技能吗？')) {
+            if (!confirm('确定要删除此技能吗�?)) {
                 return;
             }
             
@@ -218,14 +217,14 @@
                 }
                 
                 if (result.status === 'success') {
-                    showSuccess('技能删除成功');
+                    showSuccess('技能删除成�?);
                     loadSkills();
                 } else {
-                    showError('技能删除失败');
+                    showError('技能删除失�?);
                 }
             } catch (error) {
-                console.error('删除技能错误:', error);
-                showError('技能删除失败');
+                console.error('删除技能错�?', error);
+                showError('技能删除失�?);
             }
         }
 

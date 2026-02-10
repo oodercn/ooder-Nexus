@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>协议管理 - Nexus - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <link rel="stylesheet" href="/console/css/mcpagent/common.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
 </head>
 <body class="nexus-page">
     <div class="nexus-container">
-        <!-- 侧边导航栏 -->
+        <!-- 侧边导航�?-->
         <div class="nexus-sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -34,14 +34,13 @@
                 </div>
             </div>
 
-            <!-- 协议操作区 -->
+            <!-- 协议操作�?-->
             <section class="nexus-operation-section">
                 <div class="nexus-section-header">
                     <h3>协议操作</h3>
                     <button class="nexus-btn nexus-btn-primary" onclick="showAddProtocolModal()">
                         <i class="ri-add-circle-line"></i>
-                        注册协议处理器
-                    </button>
+                        注册协议处理�?                    </button>
                 </div>
                 <div class="nexus-operation-card">
                     <div class="nexus-form-group">
@@ -49,26 +48,26 @@
                         <input type="text" id="commandType" placeholder="输入命令类型">
                     </div>
                     <div class="nexus-form-group">
-                        <label for="handlerName">处理器名称</label>
-                        <input type="text" id="handlerName" placeholder="输入处理器名称">
+                        <label for="handlerName">处理器名�?/label>
+                        <input type="text" id="handlerName" placeholder="输入处理器名�?>
                     </div>
                     <div class="nexus-form-group">
-                        <label for="handlerDescription">处理器描述</label>
-                        <textarea id="handlerDescription" placeholder="输入处理器描述"></textarea>
+                        <label for="handlerDescription">处理器描�?/label>
+                        <textarea id="handlerDescription" placeholder="输入处理器描�?></textarea>
                     </div>
                     <div class="nexus-operation-buttons">
-                        <button class="nexus-btn nexus-btn-primary" onclick="registerProtocolHandler()">注册处理器</button>
-                        <button class="nexus-btn nexus-btn-secondary" onclick="removeProtocolHandler()">移除处理器</button>
+                        <button class="nexus-btn nexus-btn-primary" onclick="registerProtocolHandler()">注册处理�?/button>
+                        <button class="nexus-btn nexus-btn-secondary" onclick="removeProtocolHandler()">移除处理�?/button>
                         <button class="nexus-btn nexus-btn-secondary" onclick="handleProtocolCommand()">处理命令</button>
                         <button class="nexus-btn nexus-btn-secondary" onclick="refreshProtocolHandlers()">刷新列表</button>
                     </div>
                 </div>
             </section>
 
-            <!-- 协议处理器列表 -->
+            <!-- 协议处理器列�?-->
             <section class="nexus-operation-section">
                 <div class="nexus-section-header">
-                    <h3>协议处理器列表</h3>
+                    <h3>协议处理器列�?/h3>
                     <div class="search-box">
                         <input type="text" id="protocolSearch" placeholder="搜索命令类型...">
                         <button class="nexus-btn nexus-btn-secondary" onclick="searchProtocolHandlers()"><i class="ri-search-line"></i></button>
@@ -79,15 +78,15 @@
                         <thead>
                             <tr>
                                 <th>命令类型</th>
-                                <th>处理器名称</th>
-                                <th>处理器描述</th>
+                                <th>处理器名�?/th>
+                                <th>处理器描�?/th>
                                 <th>注册时间</th>
-                                <th>状态</th>
+                                <th>状�?/th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody id="protocolTableBody">
-                            <!-- 协议处理器数据将通过JS动态填充 -->
+                            <!-- 协议处理器数据将通过JS动态填�?-->
                         </tbody>
                     </table>
                 </div>
@@ -101,7 +100,7 @@
                 <div class="nexus-card">
                     <div class="nexus-form-group">
                         <label for="commandData">命令数据 (JSON)</label>
-                        <textarea id="commandData" placeholder='输入命令数据，例如: {"agentId": "test-agent", "data": {}}'></textarea>
+                        <textarea id="commandData" placeholder='输入命令数据，例�? {"agentId": "test-agent", "data": {}}'></textarea>
                     </div>
                     <div class="nexus-operation-buttons">
                         <button class="nexus-btn nexus-btn-primary" onclick="handleProtocolCommand()">处理命令</button>
@@ -116,7 +115,7 @@
                     <h3>处理结果</h3>
                 </div>
                 <div class="nexus-card">
-                    <pre id="processingResult">处理命令以查看结果...</pre>
+                    <pre id="processingResult">处理命令以查看结�?..</pre>
                 </div>
             </section>
         </div>
@@ -131,17 +130,14 @@
     <script src="/console/js/nexus/common.js"></script>
     <script>
         window.onPageInit = function() {
-            // 初始化页面
-            nexusCommon.initPage('protocol-management', loadProtocolHandlers);
+            // 初始化页�?            nexusCommon.initPage('protocol-management', loadProtocolHandlers);
         };
 
-        // 协议处理器数据
-        let protocolHandlers = [];
+        // 协议处理器数�?        let protocolHandlers = [];
 
         async function loadProtocolHandlers() {
             try {
-                // 从后台API获取协议处理器列表
-                const response = await fetch('/api/command/queue');
+                // 从后台API获取协议处理器列�?                const response = await fetch('/api/command/queue');
                 const result = await response.json();
 
                 if (result.code === 200 && result.data) {
@@ -155,19 +151,17 @@
                         status: cmd.status === 'pending' ? 'active' : 'inactive'
                     }));
                     
-                    // 如果没有数据，使用默认数据
-                    if (protocolHandlers.length === 0) {
+                    // 如果没有数据，使用默认数�?                    if (protocolHandlers.length === 0) {
                         protocolHandlers = getDefaultProtocolHandlers();
                     }
                     
                     renderProtocolHandlers();
                 } else {
-                    // API失败时使用默认数据
-                    protocolHandlers = getDefaultProtocolHandlers();
+                    // API失败时使用默认数�?                    protocolHandlers = getDefaultProtocolHandlers();
                     renderProtocolHandlers();
                 }
             } catch (error) {
-                console.error('加载协议处理器列表失败:', error);
+                console.error('加载协议处理器列表失�?', error);
                 // 使用默认数据
                 protocolHandlers = getDefaultProtocolHandlers();
                 renderProtocolHandlers();
@@ -175,26 +169,25 @@
             }
         }
         
-        // 获取默认协议处理器
-        function getDefaultProtocolHandlers() {
+        // 获取默认协议处理�?        function getDefaultProtocolHandlers() {
             return [
                 {
                     commandType: "MCP_REGISTER",
-                    name: "注册命令处理器",
+                    name: "注册命令处理�?,
                     description: "处理Nexus注册命令",
                     registeredTime: new Date().toISOString(),
                     status: "active"
                 },
                 {
                     commandType: "MCP_DEREGISTER",
-                    name: "注销命令处理器",
+                    name: "注销命令处理�?,
                     description: "处理Nexus注销命令",
                     registeredTime: new Date().toISOString(),
                     status: "active"
                 },
                 {
                     commandType: "MCP_HEARTBEAT",
-                    name: "心跳命令处理器",
+                    name: "心跳命令处理�?,
                     description: "处理Nexus心跳命令",
                     registeredTime: new Date().toISOString(),
                     status: "active"
@@ -202,7 +195,7 @@
                 {
                     commandType: "MCP_STATUS",
                     name: "状态命令处理器",
-                    description: "处理Nexus状态命令",
+                    description: "处理Nexus状态命�?,
                     registeredTime: new Date().toISOString(),
                     status: "active"
                 }
@@ -237,25 +230,25 @@
                 const handlerDescription = document.getElementById('handlerDescription').value;
 
                 if (!commandType) {
-                    nexusCommon.showMessage('请输入命令类型', 'warning');
+                    nexusCommon.showMessage('请输入命令类�?, 'warning');
                     return;
                 }
 
                 // 检查命令类型是否已存在
                 const existingHandler = protocolHandlers.find(h => h.commandType === commandType);
                 if (existingHandler) {
-                    nexusCommon.showMessage('命令类型已存在', 'warning');
+                    nexusCommon.showMessage('命令类型已存�?, 'warning');
                     return;
                 }
 
                 // 模拟API请求
                 const mockResponse = {
                     status: 'success',
-                    message: '协议处理器注册成功',
+                    message: '协议处理器注册成�?,
                     data: {
                         commandType: commandType,
                         name: handlerName || commandType,
-                        description: handlerDescription || '无描述',
+                        description: handlerDescription || '无描�?,
                         registeredTime: new Date().toISOString(),
                         status: 'active'
                     },
@@ -272,15 +265,15 @@
                     nexusCommon.handleApiSuccess(validatedResponse);
                 }
             } catch (error) {
-                console.error('注册协议处理器失败:', error);
-                nexusCommon.handleApiError(error, '注册协议处理器失败');
+                console.error('注册协议处理器失�?', error);
+                nexusCommon.handleApiError(error, '注册协议处理器失�?);
             }
         }
 
         function removeProtocolHandler() {
             const commandType = document.getElementById('commandType').value;
             if (!commandType) {
-                nexusCommon.showMessage('请输入命令类型', 'warning');
+                nexusCommon.showMessage('请输入命令类�?, 'warning');
                 return;
             }
             removeProtocolHandlerByType(commandType);
@@ -297,7 +290,7 @@
                 // 模拟API请求
                 const mockResponse = {
                     status: 'success',
-                    message: '协议处理器移除成功',
+                    message: '协议处理器移除成�?,
                     timestamp: new Date().getTime()
                 };
 
@@ -310,8 +303,8 @@
                     nexusCommon.handleApiSuccess(validatedResponse);
                 }
             } catch (error) {
-                console.error('移除协议处理器失败:', error);
-                nexusCommon.handleApiError(error, '移除协议处理器失败');
+                console.error('移除协议处理器失�?', error);
+                nexusCommon.handleApiError(error, '移除协议处理器失�?);
             }
         }
 
@@ -321,7 +314,7 @@
                 const commandData = document.getElementById('commandData').value;
 
                 if (!commandType) {
-                    nexusCommon.showMessage('请输入命令类型', 'warning');
+                    nexusCommon.showMessage('请输入命令类�?, 'warning');
                     return;
                 }
 
@@ -384,8 +377,8 @@
                 await loadProtocolHandlers();
                 nexusCommon.showMessage('协议处理器列表已刷新', 'success');
             } catch (error) {
-                console.error('刷新协议处理器列表失败:', error);
-                nexusCommon.handleApiError(error, '刷新协议处理器列表失败');
+                console.error('刷新协议处理器列表失�?', error);
+                nexusCommon.handleApiError(error, '刷新协议处理器列表失�?);
             }
         }
 
@@ -416,8 +409,8 @@
                     tbody.appendChild(row);
                 });
             } catch (error) {
-                console.error('搜索协议处理器失败:', error);
-                nexusCommon.handleApiError(error, '搜索协议处理器失败');
+                console.error('搜索协议处理器失�?', error);
+                nexusCommon.handleApiError(error, '搜索协议处理器失�?);
             }
         }
 
@@ -433,7 +426,7 @@
 
         function showAddProtocolModal() {
             // 这里可以实现模态框逻辑
-            nexusCommon.showMessage('注册协议处理器功能', 'info');
+            nexusCommon.showMessage('注册协议处理器功�?, 'info');
         }
     </script>
 </body>

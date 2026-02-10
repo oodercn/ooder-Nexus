@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网络状态 - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <title>网络状�?- Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
         .status-indicator {
@@ -48,19 +48,19 @@
         </div>
         <div class="main-content">
             <div class="header">
-                <h1><i class="ri-signal-line"></i> 网络状态</h1>
+                <h1><i class="ri-signal-line"></i> 网络状�?/h1>
                 <div class="subtitle">监控局域网网络状态和连接情况</div>
             </div>
             <div id="page-content">
                 <div class="grid">
                     <div class="card">
-                        <h3>网络状态</h3>
+                        <h3>网络状�?/h3>
                         <div style="display: flex; align-items: center; gap: 16px;">
                             <div class="status-indicator status-online">
                                 <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--nexus-success);"></span>
                                 在线
                             </div>
-                            <span style="font-size: 14px; color: var(--nexus-text-secondary);">所有设备正常连接</span>
+                            <span style="font-size: 14px; color: var(--nexus-text-secondary);">所有设备正常连�?/span>
                         </div>
                     </div>
                     <div class="card">
@@ -84,14 +84,14 @@
                                 <p style="font-size: 24px; font-weight: 600; color: var(--nexus-text-primary);">12ms</p>
                             </div>
                             <div style="flex: 1;">
-                                <p style="font-size: 14px; color: var(--nexus-text-secondary); margin-bottom: 8px;">丢包率</p>
+                                <p style="font-size: 14px; color: var(--nexus-text-secondary); margin-bottom: 8px;">丢包�?/p>
                                 <p style="font-size: 24px; font-weight: 600; color: var(--nexus-success);">0%</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="section">
-                    <h2>网络设备状态</h2>
+                    <h2>网络设备状�?/h2>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -99,7 +99,7 @@
                                     <th>设备名称</th>
                                     <th>IP 地址</th>
                                     <th>MAC 地址</th>
-                                    <th>状态</th>
+                                    <th>状�?/th>
                                     <th>信号强度</th>
                                     <th>操作</th>
                                 </tr>
@@ -121,7 +121,7 @@
                                     <td><button class="btn btn-sm btn-secondary">详情</button></td>
                                 </tr>
                                 <tr>
-                                    <td>笔记本电脑</td>
+                                    <td>笔记本电�?/td>
                                     <td>192.168.1.101</td>
                                     <td>AA:BB:CC:DD:EE:01</td>
                                     <td><div class="status-indicator status-online"><span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--nexus-success);"></span>在线</div></td>
@@ -135,7 +135,7 @@
                                     <td><button class="btn btn-sm btn-secondary">详情</button></td>
                                 </tr>
                                 <tr>
-                                    <td>打印机</td>
+                                    <td>打印�?/td>
                                     <td>192.168.1.30</td>
                                     <td>22:33:44:55:66:77</td>
                                     <td><div class="status-indicator status-offline"><span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--nexus-danger);"></span>离线</div></td>
@@ -158,7 +158,7 @@
                     </div>
                     <div class="alert alert-info" id="diagnostic-result">
                         <h4 style="margin-bottom: 12px;">诊断结果</h4>
-                        <p>点击 "运行诊断" 按钮开始网络诊断</p>
+                        <p>点击 "运行诊断" 按钮开始网络诊�?/p>
                     </div>
                 </div>
             </div>
@@ -167,7 +167,7 @@
     <script>
         function runDiagnostic() {
             const result = document.getElementById('diagnostic-result');
-            result.innerHTML = '<h4 style="margin-bottom: 12px;">诊断结果</h4><p>正在运行网络诊断，请稍候...</p>';
+            result.innerHTML = '<h4 style="margin-bottom: 12px;">诊断结果</h4><p>正在运行网络诊断，请稍�?..</p>';
             setTimeout(() => {
                 result.innerHTML = `
                     <h4 style="margin-bottom: 12px;">诊断结果</h4>
@@ -176,12 +176,12 @@
                         <li>DNS 解析: <span style="color: var(--nexus-success);">正常</span></li>
                         <li>设备连接: <span style="color: var(--nexus-success);">12/15 设备在线</span></li>
                     </ul>
-                    <p style="color: var(--nexus-text-secondary);">网络状态良好，所有设备正常运行。</p>
+                    <p style="color: var(--nexus-text-secondary);">网络状态良好，所有设备正常运行�?/p>
                 `;
             }, 2000);
         }
         function clearResults() {
-            document.getElementById('diagnostic-result').innerHTML = '<h4 style="margin-bottom: 12px;">诊断结果</h4><p>点击 "运行诊断" 按钮开始网络诊断</p>';
+            document.getElementById('diagnostic-result').innerHTML = '<h4 style="margin-bottom: 12px;">诊断结果</h4><p>点击 "运行诊断" 按钮开始网络诊�?/p>';
         }
         window.onPageInit = function() {};
     </script>

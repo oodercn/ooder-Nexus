@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>系统状态 - OpenWrt - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <title>系统状�?- OpenWrt - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航栏 -->
+        <!-- 侧边导航�?-->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -22,7 +22,7 @@
         <div class="main-content">
             <!-- 头部 -->
             <div class="header">
-                <h1><i class="ri-dashboard-line"></i> 系统状态</h1>
+                <h1><i class="ri-dashboard-line"></i> 系统状�?/h1>
                 <div class="header-actions">
                     <button class="btn btn-secondary" onclick="history.back()">
                         <i class="ri-arrow-left-line"></i> 返回
@@ -61,7 +61,7 @@
                         <i class="ri-cpu-line"></i>
                     </div>
                     <div class="status-value" id="cpuUsage">-</div>
-                    <div class="status-label">CPU 使用率</div>
+                    <div class="status-label">CPU 使用�?/div>
                 </div>
             </div>
             
@@ -98,11 +98,11 @@
                     <div class="card-body">
                         <div class="info-list">
                             <div class="info-item">
-                                <span class="info-label">总内存</span>
+                                <span class="info-label">总内�?/span>
                                 <span class="info-value" id="totalMemory">-</span>
                             </div>
                             <div class="info-item">
-                                <span class="info-label">已使用</span>
+                                <span class="info-label">已使�?/span>
                                 <span class="info-value" id="usedMemory">-</span>
                             </div>
                             <div class="info-item">
@@ -126,11 +126,11 @@
                             <span class="info-value" id="openwrtVersion">-</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">版本检测状态</span>
+                            <span class="info-label">版本检测状�?/span>
                             <span class="info-value" id="versionDetected">-</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">支持状态</span>
+                            <span class="info-label">支持状�?/span>
                             <span class="info-value" id="isSupported">-</span>
                         </div>
                     </div>
@@ -143,17 +143,14 @@
     <script src="/console/common/button-manager.js"></script>
     <script src="/console/common/utils.js"></script>
     <script>
-        // API 客户端实例
-        const openwrtApi = new ApiClient('/api/openwrt');
+        // API 客户端实�?        const openwrtApi = new ApiClient('/api/openwrt');
 
-        // 页面初始化
-        window.onPageInit = function() {
+        // 页面初始�?        window.onPageInit = function() {
             loadSystemStatus();
             loadVersionInfo();
         };
 
-        // 加载系统状态
-        async function loadSystemStatus() {
+        // 加载系统状�?        async function loadSystemStatus() {
             try {
                 const data = await openwrtApi.get('/system-status');
                 
@@ -180,8 +177,8 @@
                     }
                 }
             } catch (error) {
-                console.error('加载系统状态失败:', error);
-                showToast('加载系统状态失败', 'error');
+                console.error('加载系统状态失�?', error);
+                showToast('加载系统状态失�?, 'error');
             }
         }
 
@@ -194,8 +191,8 @@
                     const version = data.data;
                     
                     document.getElementById('openwrtVersion').textContent = version.openWrtVersion || '-';
-                    document.getElementById('versionDetected').textContent = version.versionDetected ? '已检测' : '未检测';
-                    document.getElementById('isSupported').textContent = version.isSupported ? '支持' : '不支持';
+                    document.getElementById('versionDetected').textContent = version.versionDetected ? '已检�? : '未检�?;
+                    document.getElementById('isSupported').textContent = version.isSupported ? '支持' : '不支�?;
                 }
             } catch (error) {
                 console.error('加载版本信息失败:', error);

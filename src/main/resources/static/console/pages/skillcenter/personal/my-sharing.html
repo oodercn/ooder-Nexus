@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技能分享 - Nexus SkillCenter</title>
+    <title>技能分�?- Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,28 +15,27 @@
         </aside>
         <main class="main-content">
             <header class="header">
-                <h1>技能分享</h1>
+                <h1>技能分�?/h1>
                 <div class="header-actions">
                     <button class="btn btn-primary" onclick="showShareModal()">
-                        <i class="ri-share-line"></i> 分享技能
-                    </button>
+                        <i class="ri-share-line"></i> 分享技�?                    </button>
                 </div>
             </header>
             <div class="content">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('shared')">已分享</button>
-                    <button class="tab-btn" onclick="switchTab('received')">已接收</button>
+                    <button class="tab-btn active" onclick="switchTab('shared')">已分�?/button>
+                    <button class="tab-btn" onclick="switchTab('received')">已接�?/button>
                 </div>
                 
                 <div class="tab-content" id="shared-tab">
                     <div class="share-list" id="shared-list">
-                        <div class="loading">加载中...</div>
+                        <div class="loading">加载�?..</div>
                     </div>
                 </div>
                 
                 <div class="tab-content" id="received-tab" style="display: none;">
                     <div class="share-list" id="received-list">
-                        <div class="loading">加载中...</div>
+                        <div class="loading">加载�?..</div>
                     </div>
                 </div>
             </div>
@@ -46,15 +45,15 @@
     <div class="modal" id="share-modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>分享技能</h3>
+                <h3>分享技�?/h3>
                 <button class="modal-close" onclick="closeModal('share-modal')">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="share-form">
                     <div class="form-group">
-                        <label>选择技能</label>
+                        <label>选择技�?/label>
                         <select id="skill-select" class="form-control">
-                            <option value="">请选择技能</option>
+                            <option value="">请选择技�?/option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -102,11 +101,11 @@
                 if (result.status === 'success') {
                     renderSharedList(result.data);
                 } else {
-                    showError('加载已分享技能列表失败');
+                    showError('加载已分享技能列表失�?);
                 }
             } catch (error) {
-                console.error('加载已分享技能列表错误:', error);
-                showError('加载已分享技能列表失败');
+                console.error('加载已分享技能列表错�?', error);
+                showError('加载已分享技能列表失�?);
             }
         }
 
@@ -127,11 +126,11 @@
                 if (result.status === 'success') {
                     renderReceivedList(result.data);
                 } else {
-                    showError('加载已接收技能列表失败');
+                    showError('加载已接收技能列表失�?);
                 }
             } catch (error) {
-                console.error('加载已接收技能列表错误:', error);
-                showError('加载已接收技能列表失败');
+                console.error('加载已接收技能列表错�?', error);
+                showError('加载已接收技能列表失�?);
             }
         }
 
@@ -144,8 +143,8 @@
                 skillItem.className = 'share-item';
                 skillItem.innerHTML = `
                     <div class="share-info">
-                        <h3>${skill.skillName || '未知技能'}</h3>
-                        <p>分享给: ${skill.target || '未知目标'}</p>
+                        <h3>${skill.skillName || '未知技�?}</h3>
+                        <p>分享�? ${skill.target || '未知目标'}</p>
                         <span class="share-time">${formatTime(skill.sharedAt)}</span>
                     </div>
                     <div class="share-actions">
@@ -197,7 +196,7 @@
 
                 if (result.status === 'success') {
                     const skillSelect = document.getElementById('skill-select');
-                    skillSelect.innerHTML = '<option value="">请选择技能</option>';
+                    skillSelect.innerHTML = '<option value="">请选择技�?/option>';
                     result.data.forEach(skill => {
                         const option = document.createElement('option');
                         option.value = skill.id;
@@ -206,7 +205,7 @@
                     });
                 }
             } catch (error) {
-                console.error('加载技能列表错误:', error);
+                console.error('加载技能列表错�?', error);
             }
         }
 
@@ -232,7 +231,7 @@
             const targetId = document.getElementById('target-id').value;
 
             if (!skillId || !targetId) {
-                showError('请填写完整信息');
+                showError('请填写完整信�?);
                 return;
             }
 
@@ -261,19 +260,19 @@
 
                 if (result.status === 'success') {
                     closeModal('share-modal');
-                    showSuccess('技能分享成功');
+                    showSuccess('技能分享成�?);
                     loadSharedSkills();
                 } else {
-                    showError('技能分享失败');
+                    showError('技能分享失�?);
                 }
             } catch (error) {
-                console.error('分享技能错误:', error);
-                showError('技能分享失败');
+                console.error('分享技能错�?', error);
+                showError('技能分享失�?);
             }
         }
 
         async function cancelShare(shareId) {
-            if (!confirm('确定要取消分享此技能吗？')) {
+            if (!confirm('确定要取消分享此技能吗�?)) {
                 return;
             }
 
@@ -321,14 +320,14 @@
                 }
 
                 if (result.status === 'success') {
-                    showSuccess('技能已添加到我的技能');
+                    showSuccess('技能已添加到我的技�?);
                     loadReceivedSkills();
                 } else {
-                    showError('接受技能失败');
+                    showError('接受技能失�?);
                 }
             } catch (error) {
-                console.error('接受技能错误:', error);
-                showError('接受技能失败');
+                console.error('接受技能错�?', error);
+                showError('接受技能失�?);
             }
         }
 

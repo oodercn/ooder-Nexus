@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网络设置 - OpenWrt - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航栏 -->
+        <!-- 侧边导航�?-->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -28,8 +28,7 @@
                         <i class="ri-arrow-left-line"></i> 返回
                     </button>
                     <button class="btn btn-primary" onclick="saveAllSettings()">
-                        <i class="ri-save-line"></i> 保存所有设置
-                    </button>
+                        <i class="ri-save-line"></i> 保存所有设�?                    </button>
                 </div>
             </div>
             
@@ -60,7 +59,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">NTP 服务器</label>
+                            <label class="form-label">NTP 服务�?/label>
                             <input type="text" id="ntpServer" class="form-input" placeholder="pool.ntp.org">
                         </div>
                     </div>
@@ -75,7 +74,7 @@
                 <div class="card-body">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label class="form-label">主 DNS</label>
+                            <label class="form-label">�?DNS</label>
                             <input type="text" id="primaryDns" class="form-input" placeholder="8.8.8.8">
                         </div>
                         <div class="form-group">
@@ -116,7 +115,7 @@
                             <input type="text" id="endIp" class="form-input" placeholder="192.168.1.200">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">租约时间 (秒)</label>
+                            <label class="form-label">租约时间 (�?</label>
                             <input type="number" id="leaseTime" class="form-input" placeholder="86400">
                         </div>
                         <div class="form-group">
@@ -186,11 +185,9 @@
     <script src="/console/common/button-manager.js"></script>
     <script src="/console/common/utils.js"></script>
     <script>
-        // API 客户端实例
-        const openwrtApi = new ApiClient('/api/openwrt');
+        // API 客户端实�?        const openwrtApi = new ApiClient('/api/openwrt');
 
-        // 页面初始化
-        window.onPageInit = function() {
+        // 页面初始�?        window.onPageInit = function() {
             loadSettings();
         };
 
@@ -246,8 +243,7 @@
             }
         }
 
-        // 保存所有设置
-        async function saveAllSettings() {
+        // 保存所有设�?        async function saveAllSettings() {
             try {
                 // 保存基本设置
                 await openwrtApi.put('/settings/basic', {

@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus仪表盘 - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <title>Nexus仪表�?- Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <link rel="stylesheet" href="/console/css/mcpagent/common.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
 </head>
 <body class="nexus-page">
     <div class="nexus-container">
-        <!-- 侧边导航栏 -->
+        <!-- 侧边导航�?-->
         <div class="nexus-sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -23,25 +23,25 @@
         <div class="nexus-main-content">
             <div class="nexus-header">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h1><i class="ri-dashboard-line"></i> Nexus仪表盘</h1>
+                    <h1><i class="ri-dashboard-line"></i> Nexus仪表�?/h1>
                     <button class="theme-toggle-btn nexus-btn nexus-btn-secondary" style="padding: 8px 16px; font-size: 14px;">
                         <i class="ri-sun-line"></i> 浅色模式
                     </button>
                 </div>
                 <div class="subtitle">
                     <span class="badge nexus-badge">Nexus</span>
-                    <span>监控和管理Nexus系统状态</span>
+                    <span>监控和管理Nexus系统状�?/span>
                 </div>
             </div>
 
-            <!-- 状态概览 -->
+            <!-- 状态概�?-->
             <section class="nexus-status-overview">
                 <div class="nexus-status-card">
                     <div class="nexus-status-icon">
                         <i class="ri-router-wireless-line"></i>
                     </div>
                     <div class="nexus-status-info">
-                        <h3>终端代理数</h3>
+                        <h3>终端代理�?/h3>
                         <p class="nexus-status-value" id="endAgentCount">0</p>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                         <i class="ri-link-line"></i>
                     </div>
                     <div class="nexus-status-info">
-                        <h3>网络链路数</h3>
+                        <h3>网络链路�?/h3>
                         <p class="nexus-status-value" id="linkCount">0</p>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                         <i class="ri-network-line"></i>
                     </div>
                     <div class="nexus-status-info">
-                        <h3>网络状态</h3>
+                        <h3>网络状�?/h3>
                         <p class="nexus-status-value" id="networkStatus">正常</p>
                     </div>
                 </div>
@@ -68,16 +68,16 @@
                         <i class="ri-command-line"></i>
                     </div>
                     <div class="nexus-status-info">
-                        <h3>命令执行数</h3>
+                        <h3>命令执行�?/h3>
                         <p class="nexus-status-value" id="commandCount">0</p>
                     </div>
                 </div>
             </section>
 
-            <!-- 网络状态 -->
+            <!-- 网络状�?-->
             <section class="nexus-operation-section">
                 <div class="nexus-section-header">
-                    <h3>网络状态</h3>
+                    <h3>网络状�?/h3>
                     <button class="nexus-btn nexus-btn-secondary" onclick="refreshNetworkStatus()">
                         <i class="ri-refresh-line"></i>
                         刷新
@@ -87,19 +87,19 @@
                     <div class="nexus-stats-card">
                         <h4>网络统计</h4>
                         <div class="nexus-stat-item">
-                            <span class="nexus-stat-label">数据包发送</span>
+                            <span class="nexus-stat-label">数据包发�?/span>
                             <span class="nexus-stat-value" id="packetsSent">0</span>
                         </div>
                         <div class="nexus-stat-item">
-                            <span class="nexus-stat-label">数据包接收</span>
+                            <span class="nexus-stat-label">数据包接�?/span>
                             <span class="nexus-stat-value" id="packetsReceived">0</span>
                         </div>
                         <div class="nexus-stat-item">
-                            <span class="nexus-stat-label">数据包失败</span>
+                            <span class="nexus-stat-label">数据包失�?/span>
                             <span class="nexus-stat-value" id="packetsFailed">0</span>
                         </div>
                         <div class="nexus-stat-item">
-                            <span class="nexus-stat-label">网络状态</span>
+                            <span class="nexus-stat-label">网络状�?/span>
                             <span class="nexus-stat-value" id="networkStatusText">正常</span>
                         </div>
                     </div>
@@ -149,8 +149,7 @@
     <script src="/console/js/nexus/common.js"></script>
     <script>
         window.onPageInit = function() {
-            // 初始化页面
-            nexusCommon.initPage('dashboard', loadDashboardData);
+            // 初始化页�?            nexusCommon.initPage('dashboard', loadDashboardData);
         };
 
         async function loadDashboardData() {
@@ -182,8 +181,7 @@
                     }
                 }
 
-                // 解析健康状态
-                if (healthRes) {
+                // 解析健康状�?                if (healthRes) {
                     const healthResult = await healthRes.json();
                     if (healthResult.code === 200 && healthResult.data) {
                         healthData = healthResult.data;
@@ -205,8 +203,8 @@
                 document.getElementById('timeoutCommands').textContent = commandData.timeout || 0;
 
             } catch (error) {
-                console.error('加载仪表盘数据失败:', error);
-                nexusCommon.showMessage('加载仪表盘数据失败', 'error');
+                console.error('加载仪表盘数据失�?', error);
+                nexusCommon.showMessage('加载仪表盘数据失�?, 'error');
             }
         }
 
@@ -217,7 +215,7 @@
 
         function refreshCommandStats() {
             loadDashboardData();
-            nexusCommon.showMessage('命令统计已刷新', 'success');
+            nexusCommon.showMessage('命令统计已刷�?, 'success');
         }
     </script>
 </body>

@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网络概览 - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航栏 -->
+        <!-- 侧边导航�?-->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -39,7 +39,7 @@
                 </div>
             </div>
             
-            <!-- 设备状态概览 -->
+            <!-- 设备状态概�?-->
             <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
                 <div class="card status-card">
                     <div class="status-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
@@ -70,15 +70,15 @@
                         <i class="ri-shield-check-line"></i>
                     </div>
                     <div class="status-value" id="securityStatus">正常</div>
-                    <div class="status-label">安全状态</div>
+                    <div class="status-label">安全状�?/div>
                 </div>
             </div>
             
-            <!-- 连接状态卡片 -->
+            <!-- 连接状态卡�?-->
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="ri-router-line"></i> 设备连接状态</h2>
-                    <span id="connectionStatus" class="status-badge status-online">已连接</span>
+                    <h2 class="card-title"><i class="ri-router-line"></i> 设备连接状�?/h2>
+                    <span id="connectionStatus" class="status-badge status-online">已连�?/span>
                 </div>
                 <div id="deviceInfo">
                     <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 15px;">
@@ -92,7 +92,7 @@
                         </div>
                         <div class="info-item">
                             <span class="info-label">运行时间</span>
-                            <span id="uptime" class="info-value">15天 3小时</span>
+                            <span id="uptime" class="info-value">15�?3小时</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">设备型号</span>
@@ -124,13 +124,13 @@
                 <div class="network-topology" style="height: 300px;">
                     <div class="topology-diagram" style="height: 100%;">
                         <svg width="100%" height="100%" viewBox="0 0 800 250">
-                            <!-- 路由器 -->
+                            <!-- 路由�?-->
                             <circle cx="400" cy="50" r="30" fill="var(--nexus-primary)" stroke="var(--nexus-dark)" stroke-width="2" />
-                            <text x="400" y="55" text-anchor="middle" fill="white" font-size="14" font-weight="600">路由器</text>
+                            <text x="400" y="55" text-anchor="middle" fill="white" font-size="14" font-weight="600">路由�?/text>
                             
-                            <!-- 交换机 -->
+                            <!-- 交换�?-->
                             <rect x="300" y="120" width="200" height="40" rx="5" fill="var(--nexus-secondary)" stroke="var(--nexus-dark)" stroke-width="2" />
-                            <text x="400" y="145" text-anchor="middle" fill="white" font-size="14" font-weight="600">交换机</text>
+                            <text x="400" y="145" text-anchor="middle" fill="white" font-size="14" font-weight="600">交换�?/text>
                             
                             <!-- 设备1 -->
                             <rect x="150" y="200" width="100" height="30" rx="5" fill="var(--nexus-success)" stroke="var(--nexus-dark)" stroke-width="2" />
@@ -142,13 +142,13 @@
                             
                             <!-- 设备3 -->
                             <rect x="450" y="200" width="100" height="30" rx="5" fill="var(--nexus-warning)" stroke="var(--nexus-dark)" stroke-width="2" />
-                            <text x="500" y="220" text-anchor="middle" fill="white" font-size="12">打印机</text>
+                            <text x="500" y="220" text-anchor="middle" fill="white" font-size="12">打印�?/text>
                             
                             <!-- 设备4 -->
                             <rect x="600" y="200" width="100" height="30" rx="5" fill="var(--nexus-danger)" stroke="var(--nexus-dark)" stroke-width="2" />
                             <text x="650" y="220" text-anchor="middle" fill="white" font-size="12">NAS</text>
                             
-                            <!-- 连接线 -->
+                            <!-- 连接�?-->
                             <line x1="400" y1="80" x2="400" y2="120" stroke="var(--nexus-dark)" stroke-width="2" />
                             <line x1="300" y1="160" x2="200" y2="200" stroke="var(--nexus-dark)" stroke-width="2" />
                             <line x1="350" y1="160" x2="350" y2="200" stroke="var(--nexus-dark)" stroke-width="2" />
@@ -230,7 +230,7 @@
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <i class="ri-exchange-line" style="font-size: 24px; color: var(--nexus-secondary);"></i>
                             <div>
-                                <div style="font-weight: 600;">核心交换机</div>
+                                <div style="font-weight: 600;">核心交换�?/div>
                                 <div style="font-size: 12px; color: var(--nexus-secondary);">192.168.1.2</div>
                             </div>
                         </div>
@@ -262,7 +262,7 @@
                     <input type="text" id="hostInput" class="form-input" placeholder="192.168.1.1" value="192.168.1.1">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">用户名</label>
+                    <label class="form-label">用户�?/label>
                     <input type="text" id="usernameInput" class="form-input" placeholder="root" value="root">
                 </div>
                 <div class="form-group">
@@ -272,8 +272,8 @@
                 <div class="form-group">
                     <label class="form-label">设备类型</label>
                     <select id="deviceTypeInput" class="form-select">
-                        <option value="openwrt">OpenWrt 路由器</option>
-                        <option value="switch">交换机</option>
+                        <option value="openwrt">OpenWrt 路由�?/option>
+                        <option value="switch">交换�?/option>
                         <option value="ap">无线AP</option>
                         <option value="other">其他设备</option>
                     </select>
@@ -290,8 +290,7 @@
         let currentDeviceId = 'router1';
         let isMockMode = false;
         
-        // 页面初始化
-        async function init() {
+        // 页面初始�?        async function init() {
             await loadDeviceStats();
         }
         
@@ -319,16 +318,14 @@
                 const statsResult = await statsResponse.json();
                 
                 if (statsResult.code === 200 && statsResult.data) {
-                    // 可以在这里更新更多统计信息
-                    console.log('命令统计:', statsResult.data);
+                    // 可以在这里更新更多统计信�?                    console.log('命令统计:', statsResult.data);
                 }
             } catch (error) {
                 console.error('加载统计数据失败:', error);
             }
         }
         
-        // 更新设备选择器
-        function updateDeviceSelector(devices) {
+        // 更新设备选择�?        function updateDeviceSelector(devices) {
             const deviceList = document.getElementById('deviceList');
             if (!deviceList || devices.length === 0) return;
             
@@ -362,13 +359,11 @@
             return iconMap[type] || 'device-line';
         }
 
-        // 显示设备选择器
-        function showDeviceSelector() {
+        // 显示设备选择�?        function showDeviceSelector() {
             document.getElementById('deviceSelectorModal').style.display = 'flex';
         }
 
-        // 隐藏设备选择器
-        function hideDeviceSelector() {
+        // 隐藏设备选择�?        function hideDeviceSelector() {
             document.getElementById('deviceSelectorModal').style.display = 'none';
         }
 
@@ -377,7 +372,7 @@
             currentDeviceId = deviceId;
             const deviceNames = {
                 'router1': '主路由器',
-                'switch1': '核心交换机',
+                'switch1': '核心交换�?,
                 'ap1': '无线AP'
             };
             document.getElementById('currentDevice').textContent = deviceNames[deviceId] || deviceId;
@@ -404,18 +399,18 @@
             
             // 模拟连接
             setTimeout(() => {
-                document.getElementById('connectionStatus').textContent = '已连接';
+                document.getElementById('connectionStatus').textContent = '已连�?;
                 document.getElementById('connectionStatus').className = 'status-badge status-online';
                 document.getElementById('deviceHost').textContent = host;
                 hideConnectModal();
-                alert('设备连接成功！');
+                alert('设备连接成功�?);
             }, 1000);
         }
 
         // 断开设备连接
         function disconnectDevice() {
             if (confirm('确定要断开设备连接吗？')) {
-                document.getElementById('connectionStatus').textContent = '未连接';
+                document.getElementById('connectionStatus').textContent = '未连�?;
                 document.getElementById('connectionStatus').className = 'status-badge status-offline';
                 alert('设备已断开连接');
             }
@@ -423,19 +418,19 @@
 
         // 重启设备
         function rebootDevice() {
-            if (confirm('确定要重启设备吗？')) {
-                alert('设备重启命令已发送');
+            if (confirm('确定要重启设备吗�?)) {
+                alert('设备重启命令已发�?);
             }
         }
 
         // 刷新数据
         function refreshData() {
             const btn = document.getElementById('refresh-btn');
-            btn.innerHTML = '<i class="ri-refresh-line ri-spin"></i> 刷新中...';
+            btn.innerHTML = '<i class="ri-refresh-line ri-spin"></i> 刷新�?..';
             
             setTimeout(() => {
                 btn.innerHTML = '<i class="ri-refresh-line"></i> 刷新数据';
-                alert('数据已刷新');
+                alert('数据已刷�?);
             }, 1000);
         }
 
@@ -462,8 +457,7 @@
             window.location.href = '/console/pages/nexus/network-topology.html';
         }
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        // 初始�?        document.addEventListener('DOMContentLoaded', function() {
             init();
         });
     </script>

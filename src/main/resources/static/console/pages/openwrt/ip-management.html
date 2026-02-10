@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP 地址管理 - OpenWrt - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航栏 -->
+        <!-- 侧边导航�?-->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -28,7 +28,7 @@
                         <i class="ri-arrow-left-line"></i> 返回
                     </button>
                     <button class="btn btn-primary" onclick="showAddIPModal()">
-                        <i class="ri-add-line"></i> 添加静态 IP
+                        <i class="ri-add-line"></i> 添加静�?IP
                     </button>
                 </div>
             </div>
@@ -54,14 +54,14 @@
                         <i class="ri-lock-line"></i>
                     </div>
                     <div class="status-value" id="staticIPs">0</div>
-                    <div class="status-label">静态 IP</div>
+                    <div class="status-label">静�?IP</div>
                 </div>
                 <div class="card status-card">
                     <div class="status-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
                         <i class="ri-exchange-line"></i>
                     </div>
                     <div class="status-value" id="dynamicIPs">0</div>
-                    <div class="status-label">动态 IP</div>
+                    <div class="status-label">动�?IP</div>
                 </div>
             </div>
             
@@ -72,11 +72,11 @@
                     <div style="display: flex; gap: 10px;">
                         <select id="filterType" class="form-input" style="width: 120px;" onchange="loadIPAddresses()">
                             <option value="">全部类型</option>
-                            <option value="static">静态 IP</option>
-                            <option value="dynamic">动态 IP</option>
+                            <option value="static">静�?IP</option>
+                            <option value="dynamic">动�?IP</option>
                         </select>
                         <select id="filterStatus" class="form-input" style="width: 120px;" onchange="loadIPAddresses()">
-                            <option value="">全部状态</option>
+                            <option value="">全部状�?/option>
                             <option value="online">在线</option>
                             <option value="offline">离线</option>
                         </select>
@@ -94,12 +94,12 @@
                                     <th>IP 地址</th>
                                     <th>MAC 地址</th>
                                     <th>类型</th>
-                                    <th>状态</th>
+                                    <th>状�?/th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody id="ipTableBody">
-                                <!-- 动态生成 -->
+                                <!-- 动态生�?-->
                             </tbody>
                         </table>
                     </div>
@@ -108,17 +108,17 @@
         </div>
     </div>
 
-    <!-- 添加静态 IP 模态框 -->
+    <!-- 添加静�?IP 模态框 -->
     <div id="addIPModal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 400px;">
             <div class="modal-header">
-                <h3 class="modal-title">添加静态 IP</h3>
+                <h3 class="modal-title">添加静�?IP</h3>
                 <button class="modal-close" onclick="hideAddIPModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">设备名称</label>
-                    <input type="text" id="deviceName" class="form-input" placeholder="例如：客厅电视">
+                    <input type="text" id="deviceName" class="form-input" placeholder="例如：客厅电�?>
                 </div>
                 <div class="form-group">
                     <label class="form-label">IP 地址</label>
@@ -140,11 +140,9 @@
     <script src="/console/common/button-manager.js"></script>
     <script src="/console/common/utils.js"></script>
     <script>
-        // API 客户端实例
-        const openwrtApi = new ApiClient('/api/openwrt');
+        // API 客户端实�?        const openwrtApi = new ApiClient('/api/openwrt');
 
-        // 页面初始化
-        window.onPageInit = function() {
+        // 页面初始�?        window.onPageInit = function() {
             loadIPAddresses();
         };
 
@@ -188,7 +186,7 @@
                     <td>${ip.mac || '-'}</td>
                     <td>
                         <span class="badge ${ip.type === 'static' ? 'badge-primary' : 'badge-secondary'}">
-                            ${ip.type === 'static' ? '静态' : '动态'}
+                            ${ip.type === 'static' ? '静�? : '动�?}
                         </span>
                     </td>
                     <td>
@@ -230,14 +228,14 @@
             document.getElementById('macAddress').value = '';
         }
 
-        // 添加静态 IP
+        // 添加静�?IP
         async function addStaticIP() {
             const name = document.getElementById('deviceName').value;
             const ip = document.getElementById('ipAddress').value;
             const mac = document.getElementById('macAddress').value;
 
             if (!name || !ip || !mac) {
-                showToast('请填写完整信息', 'warning');
+                showToast('请填写完整信�?, 'warning');
                 return;
             }
 
@@ -249,21 +247,21 @@
                 });
 
                 if (data.status === 'success') {
-                    showToast('静态 IP 添加成功', 'success');
+                    showToast('静�?IP 添加成功', 'success');
                     hideAddIPModal();
                     loadIPAddresses();
                 } else {
                     showToast('添加失败: ' + data.message, 'error');
                 }
             } catch (error) {
-                console.error('添加静态 IP 失败:', error);
+                console.error('添加静�?IP 失败:', error);
                 showToast('添加失败', 'error');
             }
         }
 
         // 删除 IP
         async function deleteIP(ipId) {
-            if (!confirm('确定要删除此静态 IP 吗？')) {
+            if (!confirm('确定要删除此静�?IP 吗？')) {
                 return;
             }
 

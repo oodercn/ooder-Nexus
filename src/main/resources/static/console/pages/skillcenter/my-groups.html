@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的群组 - Nexus SkillCenter</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
         .groups-container {
@@ -339,7 +339,7 @@
                     <div class="empty-state" style="grid-column: 1 / -1;">
                         <i class="ri-team-line"></i>
                         <h3>暂无群组</h3>
-                        <p>点击"创建群组"按钮创建您的第一个群组</p>
+                        <p>点击"创建群组"按钮创建您的第一个群�?/p>
                     </div>
                 </div>
             </div>
@@ -356,7 +356,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">群组名称</label>
-                    <input type="text" id="create-group-name" class="form-control" placeholder="请输入群组名称">
+                    <input type="text" id="create-group-name" class="form-control" placeholder="请输入群组名�?>
                 </div>
                 <div class="form-group">
                     <label class="form-label">群组描述</label>
@@ -381,12 +381,12 @@
                 <div class="form-group">
                     <label class="form-label">添加成员</label>
                     <div style="display: flex; gap: 8px;">
-                        <input type="text" id="new-member-name" class="form-control" placeholder="用户名">
+                        <input type="text" id="new-member-name" class="form-control" placeholder="用户�?>
                         <button class="btn btn-primary" onclick="addMember()">添加</button>
                     </div>
                 </div>
                 <div class="member-list" id="member-list">
-                    <!-- 成员列表将动态加载 -->
+                    <!-- 成员列表将动态加�?-->
                 </div>
             </div>
             <div class="modal-footer">
@@ -424,7 +424,7 @@
                     <div class="empty-state" style="grid-column: 1 / -1;">
                         <i class="ri-team-line"></i>
                         <h3>暂无群组</h3>
-                        <p>点击"创建群组"按钮创建您的第一个群组</p>
+                        <p>点击"创建群组"按钮创建您的第一个群�?/p>
                     </div>
                 `;
                 return;
@@ -456,8 +456,7 @@
                             </button>
                         ` : `
                             <button class="btn btn-secondary" onclick="leaveGroup('${group.id}')">
-                                <i class="ri-logout-box-line"></i> 退出
-                            </button>
+                                <i class="ri-logout-box-line"></i> 退�?                            </button>
                         `}
                     </div>
                 </div>
@@ -490,7 +489,7 @@
             const description = document.getElementById('create-group-desc').value.trim();
             
             if (!name) {
-                showNotification('请输入群组名称', 'error');
+                showNotification('请输入群组名�?, 'error');
                 return;
             }
             
@@ -504,7 +503,7 @@
                 const data = await response.json();
                 
                 if (data.code === 200) {
-                    showNotification('群组创建成功！', 'success');
+                    showNotification('群组创建成功�?, 'success');
                     closeModal('create-modal');
                     document.getElementById('create-group-name').value = '';
                     document.getElementById('create-group-desc').value = '';
@@ -514,7 +513,7 @@
                 }
             } catch (error) {
                 console.error('创建群组失败:', error);
-                showNotification('创建失败，请检查网络连接', 'error');
+                showNotification('创建失败，请检查网络连�?, 'error');
             }
         }
 
@@ -532,7 +531,7 @@
                             <div class="member-avatar">${member.username.charAt(0).toUpperCase()}</div>
                             <div class="member-info">
                                 <div class="member-name">${member.username}</div>
-                                <div class="member-role">${member.role === 'admin' ? '管理员' : '成员'}</div>
+                                <div class="member-role">${member.role === 'admin' ? '管理�? : '成员'}</div>
                             </div>
                             ${member.role !== 'admin' ? `
                                 <button class="btn btn-sm btn-danger" onclick="removeMember('${member.id}')">
@@ -572,7 +571,7 @@
                 const data = await response.json();
                 
                 if (data.code === 200) {
-                    showNotification('成员添加成功！', 'success');
+                    showNotification('成员添加成功�?, 'success');
                     document.getElementById('new-member-name').value = '';
                     showMembers(currentGroupId);
                     loadGroups();
@@ -581,7 +580,7 @@
                 }
             } catch (error) {
                 console.error('添加成员失败:', error);
-                showNotification('添加失败，请检查网络连接', 'error');
+                showNotification('添加失败，请检查网络连�?, 'error');
             }
         }
 
@@ -597,7 +596,7 @@
                 const data = await response.json();
                 
                 if (data.code === 200) {
-                    showNotification('成员已移除', 'success');
+                    showNotification('成员已移�?, 'success');
                     showMembers(currentGroupId);
                     loadGroups();
                 } else {
@@ -605,13 +604,13 @@
                 }
             } catch (error) {
                 console.error('移除成员失败:', error);
-                showNotification('操作失败，请检查网络连接', 'error');
+                showNotification('操作失败，请检查网络连�?, 'error');
             }
         }
 
         // 删除群组
         async function deleteGroup(groupId) {
-            if (!confirm('确定要删除该群组吗？此操作不可恢复。')) return;
+            if (!confirm('确定要删除该群组吗？此操作不可恢复�?)) return;
             
             try {
                 const response = await fetch(`/api/skillcenter/groups/${groupId}`, {
@@ -621,19 +620,18 @@
                 const data = await response.json();
                 
                 if (data.code === 200) {
-                    showNotification('群组已删除', 'success');
+                    showNotification('群组已删�?, 'success');
                     loadGroups();
                 } else {
                     showNotification(data.message || '删除失败', 'error');
                 }
             } catch (error) {
                 console.error('删除群组失败:', error);
-                showNotification('删除失败，请检查网络连接', 'error');
+                showNotification('删除失败，请检查网络连�?, 'error');
             }
         }
 
-        // 退出群组
-        async function leaveGroup(groupId) {
+        // 退出群�?        async function leaveGroup(groupId) {
             if (!confirm('确定要退出该群组吗？')) return;
             showNotification('功能开发中...', 'success');
         }
@@ -651,8 +649,7 @@
             setTimeout(() => notification.remove(), 3000);
         }
 
-        // 页面初始化
-        window.onPageInit = function() {
+        // 页面初始�?        window.onPageInit = function() {
             loadGroups();
         };
 

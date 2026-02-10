@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>带宽监控 - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
         .bandwidth-chart {
@@ -166,7 +166,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航栏 -->
+        <!-- 侧边导航�?-->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -176,7 +176,7 @@
         <div class="main-content">
             <div class="header">
                 <h1><i class="ri-equalizer-line"></i> 带宽监控</h1>
-                <div class="subtitle">监控局域网带宽使用情况和流量分析</div>
+                <div class="subtitle">监控局域网带宽使用情况和流量分�?/div>
             </div>
 
             <!-- 页面内容区域 -->
@@ -212,21 +212,21 @@
                     </div>
 
                     <div class="card">
-                        <h3>带宽峰值</h3>
+                        <h3>带宽峰�?/h3>
                         <div style="display: flex; gap: 16px;">
                             <div style="flex: 1;">
-                                <p style="font-size: 14px; color: var(--nexus-text-secondary); margin-bottom: 8px;">最高上传</p>
+                                <p style="font-size: 14px; color: var(--nexus-text-secondary); margin-bottom: 8px;">最高上�?/p>
                                 <p style="font-size: 24px; font-weight: 600; color: var(--nexus-primary);">5.2 MB/s</p>
                             </div>
                             <div style="flex: 1;">
-                                <p style="font-size: 14px; color: var(--nexus-text-secondary); margin-bottom: 8px;">最高下载</p>
+                                <p style="font-size: 14px; color: var(--nexus-text-secondary); margin-bottom: 8px;">最高下�?/p>
                                 <p style="font-size: 24px; font-weight: 600; color: var(--nexus-success);">25.6 MB/s</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 带宽趋势图 -->
+                <!-- 带宽趋势�?-->
                 <div class="section">
                     <h2>带宽使用趋势</h2>
 
@@ -236,8 +236,8 @@
                             <div class="chart-controls">
                                 <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">1小时</button>
                                 <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">24小时</button>
-                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">7天</button>
-                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">30天</button>
+                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">7�?/button>
+                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">30�?/button>
                             </div>
                         </div>
                         <div class="chart-body">
@@ -283,8 +283,8 @@
                                     <th>IP 地址</th>
                                     <th>上传速度</th>
                                     <th>下载速度</th>
-                                    <th>总流量</th>
-                                    <th>使用百分比</th>
+                                    <th>总流�?/th>
+                                    <th>使用百分�?/th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -306,7 +306,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>笔记本电脑</td>
+                                    <td>笔记本电�?/td>
                                     <td>192.168.1.101</td>
                                     <td>0.8 MB/s</td>
                                     <td>4.6 MB/s</td>
@@ -360,11 +360,11 @@
                     <div class="form-row">
                         <div>
                             <label class="form-label">每日流量限制 (GB)</label>
-                            <input type="number" class="form-input" placeholder="请输入每日流量限制" value="50">
+                            <input type="number" class="form-input" placeholder="请输入每日流量限�? value="50">
                         </div>
                         <div>
                             <label class="form-label">每月流量限制 (GB)</label>
-                            <input type="number" class="form-input" placeholder="请输入每月流量限制" value="1500">
+                            <input type="number" class="form-input" placeholder="请输入每月流量限�? value="1500">
                         </div>
                     </div>
 
@@ -379,12 +379,12 @@
 
     <script>
         function saveBandwidthSettings() {
-            alert('带宽限制设置保存成功！');
+            alert('带宽限制设置保存成功�?);
         }
 
         function resetBandwidthSettings() {
-            if (confirm('确定要重置带宽限制设置吗？')) {
-                alert('带宽限制设置已重置为默认值');
+            if (confirm('确定要重置带宽限制设置吗�?)) {
+                alert('带宽限制设置已重置为默认�?);
             }
         }
 
