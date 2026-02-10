@@ -119,8 +119,14 @@ function createMenuItem(menuItem) {
             const submenu = this.nextElementSibling;
             
             if (submenu) {
-                submenu.classList.toggle('hidden');
-                toggleIcon.classList.toggle('collapsed');
+                // 使用 style.display 与 menu-loader.js 保持一致
+                if (submenu.style.display === 'block') {
+                    submenu.style.display = 'none';
+                    toggleIcon.classList.remove('collapsed');
+                } else {
+                    submenu.style.display = 'block';
+                    toggleIcon.classList.add('collapsed');
+                }
             }
         });
         
@@ -318,12 +324,17 @@ function updateDashboardData(healthData, systemData, networkData) {
 
 async function loadAgentData() {
     try {
+        // 检查 agentListManager 是否存在
+        if (!agentListManager) {
+            console.warn('agentListManager 未初始化');
+            return;
+        }
         await agentListManager.load();
-        const agentData = agentListManager.getCurrentPageData();
+        const agentData = agentListManager.data || [];
         console.log('Agent data:', agentData);
     } catch (error) {
-        console.error('加载Agent数据失败:', error);
-        throw error;
+        console.warn('加载Agent数据失败:', error);
+        // 不抛出错误，避免影响其他功能
     }
 }
 

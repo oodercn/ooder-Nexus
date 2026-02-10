@@ -1,26 +1,26 @@
-﻿/**
- * Nexus SDK 统一入口文件
+/**
+ * Nexus SDK ͳһ����ļ�
  * 
- * 本文件是 Nexus SDK 的统一入口，导出所有 SDK 相关的模块。
+ * ���ļ��� Nexus SDK ��ͳһ��ڣ��������� SDK ��ص�ģ�顣
  * 
- * 使用方式：
- * 1. 在 HTML 中引入本文件：
+ * ʹ�÷�ʽ��
+ * 1. �� HTML �����뱾�ļ���
  *    <script src="../../js/nexus/sdk/NexusSDK.js"></script>
- * 2. 在页面中使用 SDK：
+ * 2. ��ҳ����ʹ�� SDK��
  *    const sdk = NexusSDKFactory.createSDK();
  *    const result = await sdk.getDashboardData();
  * 
- * 配置说明：
- * - SDK 实现方式通过配置文件或环境变量控制
- * - 默认使用 Mock SDK，方便开发和测试
- * - 生产环境建议使用 Real SDK，确保数据准确性
- * - 支持动态切换 SDK 实现方式，无需重启应用
+ * ����˵����
+ * - SDK ʵ�ַ�ʽͨ�������ļ��򻷾���������
+ * - Ĭ��ʹ�� Mock SDK�����㿪���Ͳ���
+ * - ������������ʹ�� Real SDK��ȷ������׼ȷ��
+ * - ֧�ֶ�̬�л� SDK ʵ�ַ�ʽ����������Ӧ��
  * 
- * SDK 切换方式：
- * 1. 使用配置类切换：
+ * SDK �л���ʽ��
+ * 1. ʹ���������л���
  *    NexusSDKConfig.switchSDKType('real');
  *    NexusSDKFactory.resetSDK();
- * 2. 使用工厂类切换：
+ * 2. ʹ�ù������л���
  *    NexusSDKFactory.switchToRealSDK();
  * 
  * @module NexusSDK
@@ -28,8 +28,8 @@
  */
 
 /**
- * 导出 SDK 配置和工厂
- * 供外部使用
+ * ���� SDK ���ú͹���
+ * ���ⲿʹ��
  */
 const NexusSDKConfig = window.NexusSDKConfig || class NexusSDKConfig {
     static SDK_TYPE = {
@@ -238,24 +238,24 @@ const NexusSDKFactory = window.NexusSDKFactory || class NexusSDKFactory {
 };
 
 /**
- * 导出 SDK 模块
+ * ���� SDK ģ��
  */
 window.NexusSDKConfig = NexusSDKConfig;
 window.NexusSDKFactory = NexusSDKFactory;
 
 /**
- * 创建全局 SDK 实例
- * 供页面直接使用
+ * ����ȫ�� SDK ʵ��
+ * ��ҳ��ֱ��ʹ��
  */
 window.nexusSDK = NexusSDKFactory.getCurrentSDK();
 
 /**
- * 导出 SDK 信息
+ * ���� SDK ��Ϣ
  */
 window.NexusSDKInfo = {
     version: '1.0.0',
     name: 'Nexus SDK',
-    description: 'Nexus SDK for ooderAgent 0.6.5',
+    description: 'Nexus SDK for ooderAgent 0.6.6',
     config: NexusSDKFactory.getSDKInfo()
 };
 
