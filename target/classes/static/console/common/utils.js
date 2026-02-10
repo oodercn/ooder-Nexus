@@ -2,6 +2,17 @@
  * 工具函数
  * 通用的工具函数集合
  */
+
+// 防止重复声明
+if (window.utils) {
+    console.log('utils 已存在，跳过重复加载');
+    // 如果已存在，直接返回已有的 utils
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = window.utils;
+    }
+    return;
+}
+
 const utils = {
     /**
      * 格式化时间戳

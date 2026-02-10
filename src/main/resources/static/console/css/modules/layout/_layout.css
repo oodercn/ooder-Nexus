@@ -9,7 +9,7 @@
 /* 侧边栏样式 - Ooder-Rad 风格 */
 .sidebar {
     width: 260px;
-    background-color: #121212;
+    background-color: var(--ooder-sidebar-bg);
     border-right: 1px solid var(--ooder-border);
     padding: 24px;
     box-shadow: var(--ooder-shadow);

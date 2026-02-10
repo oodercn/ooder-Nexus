@@ -1,7 +1,12 @@
 let buttonManager;
 
-// 工具函数对象
-const utils = {
+// 工具函数对象 - 使用 window.utils 避免重复声明
+if (!window.utils) {
+    window.utils = {};
+}
+
+// 扩展 utils 对象
+Object.assign(window.utils, {
     getStatusText: function(status, mapping) {
         if (mapping && mapping[status]) {
             return mapping[status];
@@ -61,7 +66,7 @@ const utils = {
             window.themeManager.toggleTheme();
         }
     }
-};
+});
 
 function init() {
     buttonManager = new ButtonManager();

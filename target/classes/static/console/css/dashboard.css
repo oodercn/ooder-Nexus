@@ -1,40 +1,7 @@
-:root {
-    /* 深色主题 */
-    --nexus-primary: #3b82f6;
-    --nexus-secondary: #94a3b8;
-    --nexus-success: #22c55e;
-    --nexus-warning: #f59e0b;
-    --nexus-danger: #ef4444;
-    --nexus-light: #0f0f0f;
-    --nexus-dark: #ffffff;
-    --nexus-border: #2a2a2a;
-    --nexus-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    --nexus-radius: 8px;
-    --nexus-spacing: 16px;
-    --nexus-background: #000000;
-    --nexus-card-bg: #121212;
-    --nexus-sidebar-bg: #121212;
-    --nexus-input-bg: #1a1a1a;
-}
-
-.light-theme {
-    /* 浅色主题 */
-    --nexus-primary: #3b82f6;
-    --nexus-secondary: #64748b;
-    --nexus-success: #22c55e;
-    --nexus-warning: #f59e0b;
-    --nexus-danger: #ef4444;
-    --nexus-light: #f8fafc;
-    --nexus-dark: #1e293b;
-    --nexus-border: #e2e8f0;
-    --nexus-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    --nexus-radius: 8px;
-    --nexus-spacing: 16px;
-    --nexus-background: #ffffff;
-    --nexus-card-bg: #f1f5f9;
-    --nexus-sidebar-bg: #f8fafc;
-    --nexus-input-bg: #f8fafc;
-}
+/* 
+ * dashboard.css - 仪表盘页面样式
+ * 注意：所有CSS变量继承自theme.css，不要在这里重新定义:root变量
+ */
 
 * {
     margin: 0;

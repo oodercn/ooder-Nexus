@@ -21,9 +21,19 @@ ooder:
     timeout: 60000
   skill:
     base-package: "net.ooder.nexus.skill"
+
+# Mock 模式开关配置
+# 设置为 true 启用模拟数据模式（无需真实设备即可测试功能）
+# 设置为 false 启用真实设备模式（需要连接真实的 OpenWrt 路由器）
+mock:
+  enabled: false
+
 mcpagent:
   service:
-    type: "MOCK"
+    # 服务类型：MOCK（模拟模式）或 REAL（真实模式）
+    # 当 mock.enabled=true 时，自动使用 MOCK 模式
+    # 当 mock.enabled=false 时，自动使用 REAL 模式
+    type: "REAL"
     switch:
       enabled: true
       require-auth: false

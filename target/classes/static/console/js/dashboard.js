@@ -1,5 +1,4 @@
 let currentPage = 'dashboard';
-let menuConfig = null;
 let agentListManager = null;
 
 // 工具函数对象
@@ -42,7 +41,6 @@ const utils = {
 
 function init() {
     updateTimestamp();
-    loadMenuConfig();
     initListManagers();
     loadDashboard();
     setInterval(updateTimestamp, 60000);
@@ -61,134 +59,6 @@ function initListManagers() {
         onError: function(error) {
             console.error('Error loading agent data:', error);
             utils.showNotification('加载Agent数据失败', 'error');
-        }
-    });
-}
-
-async function loadMenuConfig() {
-    try {
-        let response = await fetch('../menu-config.json');
-        if (!response.ok) {
-            response = await fetch('/console/menu-config.json');
-            if (!response.ok) {
-                throw new Error('菜单配置加载失败');
-            }
-        }
-        menuConfig = await response.json();
-        renderMenu();
-    } catch (error) {
-        console.error('加载菜单配置错误:', error);
-        renderDefaultMenu();
-    }
-}
-
-function renderMenu() {
-    const navMenu = document.getElementById('nav-menu');
-    navMenu.innerHTML = '';
-    
-    menuConfig.menu.forEach(item => {
-        if (item.status === 'implemented' || item.id === 'dashboard') {
-            const menuItem = createMenuItem(item);
-            navMenu.appendChild(menuItem);
-            if (item.id !== 'dashboard') {
-                const divider = document.createElement('div');
-                divider.className = 'menu-divider';
-                navMenu.appendChild(divider);
-            }
-        }
-    });
-    
-    setupNavigation();
-}
-
-function createMenuItem(menuItem) {
-    const li = document.createElement('li');
-    
-    if (menuItem.children && menuItem.children.length > 0) {
-        const a = document.createElement('a');
-        a.href = `#${menuItem.id}`;
-        a.innerHTML = `
-            <i class="${menuItem.icon}"></i>
-            ${menuItem.name}
-            <span class="toggle-icon">›</span>
-        `;
-        
-        a.addEventListener('click', function(e) {
-            e.preventDefault();
-            const toggleIcon = this.querySelector('.toggle-icon');
-            const submenu = this.nextElementSibling;
-            
-            if (submenu) {
-                // 使用 style.display 与 menu-loader.js 保持一致
-                if (submenu.style.display === 'block') {
-                    submenu.style.display = 'none';
-                    toggleIcon.classList.remove('collapsed');
-                } else {
-                    submenu.style.display = 'block';
-                    toggleIcon.classList.add('collapsed');
-                }
-            }
-        });
-        
-        li.appendChild(a);
-        
-        const submenu = document.createElement('ul');
-        submenu.className = 'submenu';
-        
-        menuItem.children.forEach(childItem => {
-            if (childItem.status === 'implemented') {
-                const childLi = createMenuItem(childItem);
-                submenu.appendChild(childLi);
-            }
-        });
-        
-        li.appendChild(submenu);
-    } else {
-        const a = document.createElement('a');
-        if (menuItem.url) {
-            a.href = menuItem.url;
-        } else {
-            a.href = `#${menuItem.id}`;
-            a.setAttribute('data-page', menuItem.page || menuItem.id);
-        }
-        a.innerHTML = `
-            <i class="${menuItem.icon}"></i>
-            ${menuItem.name}
-        `;
-        li.appendChild(a);
-    }
-    
-    return li;
-}
-
-function renderDefaultMenu() {
-    const navMenu = document.getElementById('nav-menu');
-    navMenu.innerHTML = `
-        <li><a href="../index.html" class="active"><i class="ri-dashboard-line"></i> 仪表盘</a></li>
-        <li><a href="../pages/system/request-management.html"><i class="ri-computer-line"></i> 系统管理</a></li>
-        <li><a href="../pages/network/route-management.html"><i class="ri-wifi-line"></i> 网络管理</a></li>
-        <li><a href="../pages/terminal/terminal-management.html"><i class="ri-terminal-line"></i> 终端管理</a></li>
-        <li><a href="../pages/config/service-config.html"><i class="ri-settings-3-line"></i> 配置中心</a></li>
-    `;
-    setupNavigation();
-}
-
-function setupNavigation() {
-    const navLinks = document.querySelectorAll('.nav-menu a');
-    navLinks.forEach(link => {
-        if (link.hasAttribute('href') && link.getAttribute('href') !== '#' && link.getAttribute('href') !== '') {
-            const href = link.getAttribute('href');
-            if (href.startsWith('pages/')) {
-            } else if (!href.startsWith('http')) {
-                link.setAttribute('href', `../${href}`);
-            }
-        }
-        else if (link.hasAttribute('data-page') && link.getAttribute('href') === '#') {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                navLinks.forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-            });
         }
     });
 }

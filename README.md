@@ -224,11 +224,66 @@ docker run -d \
 3. **探索功能菜单**：熟悉各个功能模块
 4. **加入 P2P 网络**：配置网络发现，连接其他节点
 
-### 4.4 数据存储说明
+### 4.4 配置说明
+
+#### 4.4.1 Mock 模式开关（重要）
+
+ooderNexus 支持两种运行模式：
+
+| 模式 | 说明 | 适用场景 |
+|------|------|----------|
+| **真实模式** (默认) | 连接真实的 OpenWrt 路由器和设备 | 生产环境、真实设备管理 |
+| **Mock 模式** | 使用模拟数据，无需真实设备 | 开发测试、功能演示、离线体验 |
+
+**配置文件位置**：`config/application.yml`
+
+**修改 Mock 开关**：
+
+```yaml
+# Mock 模式开关配置
+# 设置为 true 启用模拟数据模式（无需真实设备即可测试功能）
+# 设置为 false 启用真实设备模式（需要连接真实的 OpenWrt 路由器）
+mock:
+  enabled: false  # 默认关闭，使用真实模式
+```
+
+**快速切换**：
+
+```bash
+# 启用 Mock 模式（开发测试）
+sed -i 's/mock:\s*enabled:\s*false/mock:\n  enabled: true/' config/application.yml
+
+# 禁用 Mock 模式（生产环境）
+sed -i 's/mock:\s*enabled:\s*true/mock:\n  enabled: false/' config/application.yml
+```
+
+**注意事项**：
+- 🚨 **生产环境**：务必设置为 `mock.enabled: false`，确保管理真实设备
+- 🧪 **开发测试**：可以设置为 `mock.enabled: true`，无需真实设备即可测试功能
+- 🔄 **修改后重启**：修改配置后需要重启服务才能生效
+- 📊 **数据隔离**：Mock 模式和真实模式的数据是隔离的，切换模式不会影响另一种模式的数据
+
+#### 4.4.2 其他常用配置
+
+```yaml
+server:
+  port: 8081  # Web 服务端口
+
+ooder:
+  agent:
+    id: "mcp-agent-001"     # Agent ID
+    name: "Nexus Agent"      # Agent 名称
+    type: "mcp"              # Agent 类型: mcp/routeAgent/nexus
+  udp:
+    port: 9876               # UDP 通信端口
+    host: 0.0.0.0            # 监听地址
+```
+
+### 4.5 数据存储说明
 
 ooderNexus 使用本地文件系统存储数据，所有数据默认保存在 `./storage/` 目录（OpenWrt 为 `/opt/ooder-nexus/storage/`）。
 
-#### 4.4.1 存储目录结构
+#### 4.5.1 存储目录结构
 
 ```
 storage/                          # 主存储目录
@@ -266,7 +321,7 @@ storage/                          # 主存储目录
     └── list-extract-tasks.json
 ```
 
-#### 4.4.2 Ooder SDK 0.6.6 存储架构
+#### 4.5.2 Ooder SDK 0.6.6 存储架构
 
 ooderNexus 基于 **Ooder Agent SDK 0.6.6** 构建，SDK 采用 **VFS（Virtual File System，虚拟文件系统）+ JSON 存储** 的混合架构。
 
@@ -437,7 +492,7 @@ Agent SDK 0.6.6 内置 **P2P 数据同步机制**：
 | ⚠️ **存储空间** | 监控磁盘空间，避免满盘 |
 | ⚠️ **同步延迟** | P2P 同步有延迟，非实时 |
 
-#### 4.4.3 数据备份与恢复
+#### 4.5.3 数据备份与恢复
 
 **⚠️ 重要提示**：备份时必须包含完整的 `storage/` 目录，因为 VFS 文件和 JSON 数据是相互关联的。
 

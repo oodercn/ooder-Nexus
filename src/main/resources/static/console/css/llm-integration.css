@@ -6,7 +6,7 @@
 
 .llm-integration-container .sidebar {
     width: 250px;
-    background: var(--ooder-card-bg);
+    background: var(--ooder-sidebar-bg);
     border-right: 1px solid var(--ooder-border);
     display: flex;
     flex-direction: column;

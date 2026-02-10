@@ -206,6 +206,16 @@
       "roles": ["personal", "home", "enterprise"],
       "children": [
         {
+          "id": "lan-dashboard",
+          "name": "局域网仪表盘",
+          "icon": "ri-wifi-line",
+          "level": 2,
+          "url": "pages/lan/lan-dashboard.html",
+          "priority": "high",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
           "id": "network-overview",
           "name": "网络概览",
           "icon": "ri-dashboard-line",

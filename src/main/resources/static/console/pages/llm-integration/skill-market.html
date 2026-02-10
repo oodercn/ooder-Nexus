@@ -645,8 +645,16 @@
     <script src="/console/js/llm-integration-api.js"></script>
     <script src="/console/js/skill-market.js"></script>
     <script>
-        window.onPageInit = function() {
-            // 技能市场初始化由 skill-market.js 处理
+        // 设置当前角色并初始化菜单
+        localStorage.setItem('currentRole', 'home');
+        
+        window.onload = async function() {
+            try {
+                await initMenu();
+                console.log('Skill Market: 菜单初始化完成');
+            } catch (error) {
+                console.error('Skill Market: 菜单初始化失败:', error);
+            }
         };
     </script>
 </body>
