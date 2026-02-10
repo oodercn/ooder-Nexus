@@ -516,7 +516,7 @@
           "name": "我的分享",
           "icon": "ri-share-line",
           "level": 2,
-          "url": "pages/storage/storage-management.html",
+          "url": "pages/storage/shared-files.html",
           "priority": "high",
           "status": "implemented",
           "roles": ["personal", "home", "enterprise"]
@@ -526,7 +526,7 @@
           "name": "接收分享",
           "icon": "ri-download-line",
           "level": 2,
-          "url": "pages/storage/storage-management.html",
+          "url": "pages/storage/received-files.html",
           "priority": "high",
           "status": "implemented",
           "roles": ["personal", "home", "enterprise"]
