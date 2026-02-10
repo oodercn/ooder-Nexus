@@ -31,11 +31,11 @@ public class NexusApplication {
             // 2. 创建AgentSDK实例
             AgentSDK agentSDK = new AgentSDK(config);
             
-            // 3. 创建并初始化Nexus�?�?
+            // 3. 创建并初始化Nexus技能
             NexusSkill nexusSkill = new NexusSkillImpl();
             nexusSkill.initialize(agentSDK);
             
-            // 4. 启动�?能和Agent SDK
+            // 4. 启动技能和Agent SDK
             agentSDK.start();
             nexusSkill.start();
             
@@ -49,7 +49,7 @@ public class NexusApplication {
                 log.info("Independent Nexus stopped successfully!");
             }));
             
-            // 主线程等待，防止应用�?�?
+            // 主线程等待，防止应用退出
             synchronized (NexusApplication.class) {
                 NexusApplication.class.wait();
             }

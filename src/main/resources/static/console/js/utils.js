@@ -33,23 +33,23 @@ function formatTime(timestamp) {
 function getRelativeTime(timestamp) {
     const now = Date.now();
     const diff = Math.floor((now - timestamp) / 1000);
-    
+
     if (diff < 60) {
-        return `${diff}s ago`;
+        return diff + 's ago';
     } else if (diff < 3600) {
-        return `${Math.floor(diff / 60)}m ago`;
+        return Math.floor(diff / 60) + 'm ago';
     } else if (diff < 86400) {
-        return `${Math.floor(diff / 3600)}h ago`;
+        return Math.floor(diff / 3600) + 'h ago';
     } else {
-        return `${Math.floor(diff / 86400)}d ago`;
+        return Math.floor(diff / 86400) + 'd ago';
     }
 }
 
 // 导出模块
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
-        formatBytes,
-        formatTime,
-        getRelativeTime
+        formatBytes: formatBytes,
+        formatTime: formatTime,
+        getRelativeTime: getRelativeTime
     };
 }
