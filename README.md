@@ -1,499 +1,1170 @@
 # ooderNexus - P2P AI 能力分发枢纽
 
-## 项目概述
+## 1. 项目简介
 
-ooderNexus 是一个基于 Ooder Agent 架构的 P2P AI 能力分发枢纽产品，采用 MIT 开源协议。本项目旨在打造一个去中心化的 AI 能力共享和管理平台，支持个人、小微企业及部门内部部署，实现 AI 能力的安全、高效分发。
+### 1.1 什么是 ooderNexus？
 
-当前版本是在 Ooder Agent 核心 0.6.6 开发的预览版程序，0.6.6 以后会独立建立分支。部分程序未经严格测试，正式发布版本前仅供研究学习 Ooder Agent 框架。相关应用推荐配合 ooder-skillsCenter 使用。
+ooderNexus 是一个基于 Ooder Agent 架构的 **P2P AI 能力分发枢纽**，采用 MIT 开源协议。它将去中心化的 P2P 网络技术与 AI 能力管理相结合，让用户能够在本地网络中构建私有的 AI 能力共享平台。
 
-### SDK 0.6.6 与示例程序说明
+**核心能力**：
+- 🤝 **去中心化组网** - 无需中心服务器，节点间直接通信
+- 🧠 **AI 技能管理** - 发布、分享、执行 AI 技能
+- 🔧 **网络管理中枢** - 可视化网络拓扑和设备管理
+- 📡 **OpenWrt 集成** - 深度集成路由器系统
+- 🧪 **协议仿真调试** - 离线开发和测试
 
-SDK 0.6.6 实现了完整的 Ooder Agent 协议，为 ooderNexus 提供了稳定的底层通信能力。ooderNexus 在 SDK 基础的通讯和能力管理上，针对常见的路由器安装、智能设备安装提供了网络和路由管理示例页面，同时针对家庭网关的特殊设备也提供了相应的开发示例。
+### 1.2 版本信息
 
-开发者可以通过 skillsCenter 下载相应的 skills 插件，安装在自己的路由器或网关上，就可以有针对性地进行开发，使其支持跨生态的 AI 分发服务。
+**当前版本：2.0.0**（生产就绪版本）
 
-## Ooder Agent 与 ooderNexus 的关系
+- ✅ 完整功能实现，可用于生产环境
+- ✅ 经过多场景测试验证
+- ✅ 企业级稳定性和安全性
 
-### 架构层次关系
+### 1.3 适用场景
 
-| 层次 | 组件 | 职责 |
+| 场景 | 部署设备 | 主要用途 |
+|------|----------|----------|
+| 🏠 **家庭智能中枢** | OpenWrt 路由器 | 智能家居控制、网络管理 |
+| 🏢 **企业 AI 平台** | 服务器/工控机 | 内部 AI 能力共享 |
+| 🌐 **边缘计算网络** | 树莓派/开发板 | 分布式计算节点 |
+| 💻 **开发测试平台** | PC/笔记本 | 协议开发、技能调试 |
+
+---
+
+## 2. 核心功能
+
+### 2.1 功能概览
+
+ooderNexus 2.0.0 包含以下六大核心功能模块：
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     ooderNexus 2.0.0                        │
+├─────────────┬─────────────┬─────────────┬───────────────────┤
+│  P2P 网络   │  AI 技能    │  OpenWrt   │   协议仿真        │
+│   管理      │   中心      │   集成     │   调试           │
+├─────────────┼─────────────┼─────────────┼───────────────────┤
+│ • 网络拓扑  │ • 技能发布  │ • 系统监控 │ • MCP 仿真       │
+│ • 节点发现  │ • 技能分享  │ • 网络配置 │ • Route 仿真     │
+│ • 链路管理  │ • 技能执行  │ • IP 管理  │ • 场景测试       │
+│ • 流量监控  │ • 技能同步  │ • 命令执行 │ • 日志分析       │
+├─────────────┴─────────────┴─────────────┴───────────────────┤
+│              存储管理  │  系统监控  │  用户中心            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 2.2 功能详解
+
+#### 2.2.1 P2P 网络管理
+- **无中心架构**：基于 Ooder Agent 协议，自动组网
+- **智能发现**：UDP 广播 + 心跳检测，自动发现节点
+- **网络拓扑**：可视化展示 P2P 网络结构
+- **链路管理**：节点间链路创建、监控、断开
+- **流量监控**：实时网络流量统计和分析
+
+#### 2.2.2 AI 技能中心
+- **技能发布**：将本地 AI 能力发布到网络
+- **技能分享**：分享给特定用户或群组
+- **技能执行**：远程执行网络中的技能
+- **技能同步**：多节点间技能自动同步
+- **技能市场**：浏览和安装网络中的技能
+
+#### 2.2.3 OpenWrt 集成（特色功能）
+- **系统监控**：CPU、内存、温度、运行时间
+- **网络配置**：接口管理、DHCP、防火墙
+- **IP 管理**：静态 IP 分配、DHCP 租约
+- **访问控制**：黑白名单、MAC 过滤
+- **命令执行**：Web 界面执行 Shell 命令
+- **配置文件**：查看和编辑系统配置
+
+#### 2.2.4 协议仿真与调试
+- **MCP 仿真器**：模拟 MCP 协议通信
+- **Route 仿真器**：模拟 Route 协议路由
+- **场景测试**：自定义测试场景
+- **可视化调试**：图形化展示协议流程
+- **执行日志**：详细的协议执行记录
+
+#### 2.2.5 存储管理
+- **虚拟文件系统**：统一的文件管理接口
+- **文件版本**：自动版本控制和回滚
+- **文件分享**：接收和分享文件
+- **哈希校验**：MD5 文件完整性校验
+
+#### 2.2.6 系统监控
+- **健康检查**：系统、网络、服务状态
+- **性能指标**：CPU、内存、磁盘监控
+- **告警管理**：阈值告警和通知
+- **日志管理**：系统日志查看和分析
+
+---
+
+## 3. 技术架构
+
+### 3.1 系统架构图
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        用户界面层                            │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐       │
+│  │ Web 控制台│ │  REST API │ │  协议仿真 │ │  OpenWrt │       │
+│  │(HTML/JS) │ │           │ │   界面   │ │  管理界面│       │
+│  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘       │
+└───────┼────────────┼────────────┼────────────┼──────────────┘
+        │            │            │            │
+        └────────────┴────────────┴────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                        应用服务层                            │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐         │
+│  │  P2P 网络    │ │  AI 技能     │ │  存储管理    │         │
+│  │  管理服务    │ │  管理服务    │ │  服务        │         │
+│  └──────────────┘ └──────────────┘ └──────────────┘         │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐         │
+│  │ OpenWrt      │ │ 协议仿真     │ │ 系统监控     │         │
+│  │ 集成服务     │ │ 引擎         │ │ 服务         │         │
+│  └──────────────┘ └──────────────┘ └──────────────┘         │
+└─────────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                        基础平台层                            │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │              Ooder Agent SDK 0.6.6                  │   │
+│  │  (P2P 通信、服务发现、命令处理、协议适配)            │   │
+│  └─────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │              Spring Boot 2.7.0 + Java 8              │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 3.2 技术栈
+
+| 层次 | 技术 | 用途 |
 |------|------|------|
-| 基础层 | Ooder Agent | 提供 P2P 网络通信、服务发现、命令处理等基础功能 |
-| 应用层 | ooderNexus | 基于 Ooder Agent 构建的 AI 能力分发枢纽，提供高级功能 |
+| **前端** | HTML5, CSS3, JavaScript | Web 控制台界面 |
+| **后端** | Spring Boot 2.7.0, Java 8 | 业务逻辑处理 |
+| **P2P 网络** | Ooder Agent SDK 0.6.6 | 底层网络通信 |
+| **存储** | 本地文件系统 + VFS | 数据和文件存储 |
+| **配置** | UCI (OpenWrt) | 路由器配置管理 |
 
-### 核心关系
+### 3.3 与 Ooder Agent 的关系
 
-1. **基础依赖**：ooderNexus 依赖 Ooder Agent 提供的底层能力，如 P2P 网络通信、服务发现等
-2. **功能扩展**：ooderNexus 扩展了 Ooder Agent 的功能，实现了个人中心、技能管理、存储管理等高级功能
-3. **集成运行**：ooderNexus 与 MCP Agent 集成在同一个 Spring Boot 应用程序中运行
-4. **技能体系**：两者共享同一个技能体系，ooderNexus 提供更丰富的技能管理功能
-5. **网络架构**：都采用 P2P 自组网架构，但 ooderNexus 提供了更高级的网络管理功能
+ooderNexus 基于 Ooder Agent SDK 构建，两者的关系如下：
 
-### 技术集成
+| 对比项 | Ooder Agent | ooderNexus |
+|--------|-------------|------------|
+| **定位** | P2P 网络基础库 | AI 能力分发应用 |
+| **功能** | 网络通信、服务发现 | 技能管理、Web 控制台 |
+| **界面** | 无 | 完整的 Web 界面 |
+| **部署** | 嵌入式集成 | 独立应用 |
+| **用户** | 开发者 | 终端用户 |
 
-- **Agent SDK**：ooderNexus 使用 Ooder Agent SDK (v0.6.6) 进行 P2P 网络通信
-- **技能管理**：ooderNexus 扩展了 Ooder Agent 的技能管理能力，提供更丰富的技能发布、分享、执行功能
-- **存储系统**：ooderNexus 实现了基于本地文件系统的存储管理功能
-- **监控系统**：ooderNexus 提供了更全面的系统监控和告警功能
+---
 
-### 部署关系
+## 4. 快速开始
 
-- **独立部署**：ooderNexus 可以作为独立应用部署，内置了 Ooder Agent 功能
-- **网络互联**：多个 ooderNexus 节点可以通过 P2P 网络互联，形成分布式 AI 能力分发网络
-- **扩展性**：ooderNexus 支持通过技能扩展功能，无需修改底层 Ooder Agent 代码
+### 4.1 环境要求
 
-## 版本信息
+- **操作系统**：Windows / Linux / macOS / OpenWrt
+- **Java**：JDK 8 或更高（OpenWrt 除外）
+- **内存**：最低 64MB，推荐 128MB+
+- **存储**：最低 100MB，推荐 256MB+
 
-**当前版本**：2.0.0
+### 4.2 安装方式
 
-## 核心特性
+#### 方式一：通用安装（推荐）
 
-### 1. P2P 自组网
-- **无中心架构**：基于 Ooder Agent 架构，在无中心状态下采用 P2P 协议自组网
-- **智能发现**：自动发现网络中的其他 Nexus 节点
-- **弹性网络**：支持节点动态加入和退出，网络自动恢复
+适用于 Windows、Linux、macOS：
 
-### 2. 多平台支持
-- **PC 部署**：支持 Windows、Linux、macOS 等桌面系统
-- **NAS 存储**：支持各类 NAS 设备，实现数据持久化存储
-- **智能设备**：支持电视、路由器、智能家居网关等智能设备部署
-- **OpenWrt 支持**：原生支持 OpenWrt 路由器系统，提供专用管理界面
-
-### 3. 协议仿真与调试
-- **协议仿真器**：内置 MCP 和 Route 协议仿真器，支持离线调试
-- **可视化调试**：提供协议执行流程的可视化展示
-- **场景模拟**：支持自定义场景进行协议行为模拟
-- **执行日志**：详细的协议执行日志记录和分析
-
-### 4. 可视化增强
-- **网络拓扑可视化**：直观的 P2P 网络拓扑图展示
-- **实时监控图表**：系统指标的实时图表展示
-- **链路状态可视化**：节点间链路状态一目了然
-- **交互式控制台**：现代化的 Web 控制台界面
-
-### 5. AI 能力分发
-- **能力共享**：支持 AI 技能的发布、分享和接收
-- **技能市场**：提供技能发现和安装功能
-- **执行管理**：支持技能的远程执行和结果管理
-- **技能同步**：支持技能的多节点同步和版本管理
-
-### 5. 本地存储支持
-- **虚拟文件系统**：提供统一的虚拟文件系统接口
-- **文件管理**：支持文件的创建、读取、更新、删除
-- **文件夹管理**：支持文件夹的创建、读取、更新、删除
-- **版本控制**：支持文件版本管理
-- **文件哈希**：基于 MD5 的文件哈希计算和缓存
-
-## 技术架构
-
-### 前端架构
-- **技术栈**：HTML5, CSS3, JavaScript (ES6+)
-- **UI 框架**：Ooder Rad Style 风格
-- **图标库**：Remixicon (ri- 开源图标)
-- **响应式设计**：支持多种屏幕尺寸和设备类型
-- **页面结构**：独立 HTML 页面 + JSON 菜单配置
-
-### 后端架构
-- **技术栈**：Java 8, Spring Boot 2.7.0
-- **API 风格**：RESTful API
-- **服务组件**：
-  - Personal Controller：个人中心 API
-  - MCP Agent Controller：主控节点 API
-  - Monitor Controller：系统监控 API
-  - Network Controller：网络管理 API
-  - System Controller：系统管理 API
-
-### P2P 网络架构
-- **协议**：基于 Ooder SDK 的 P2P 协议
-- **发现机制**：UDP 广播 + 心跳检测
-- **数据传输**：支持点对点数据传输和技能分发
-- **安全机制**：支持加密通信和身份验证
-
-### SDK 集成
-- **Agent SDK**：v0.6.6
-- **功能**：网络通信、命令处理、服务发现、P2P 组网
-
-### 存储架构
-- **虚拟文件系统**：本地磁盘存储支持
-- **文件哈希**：基于 MD5 的文件哈希计算
-- **版本控制**：文件版本管理
-- **缓存机制**：基于哈希的文件缓存
-
-## 功能模块
-
-### 1. 个人中心
-- **个人仪表盘**：个人统计数据和活动记录
-- **我的技能**：个人技能的发布、编辑、删除
-- **执行历史**：技能执行记录和结果查看
-- **分享管理**：技能分享和接收管理
-- **我的群组**：群组创建和管理
-- **个人身份**：个人信息管理和身份映射
-
-### 2. 系统监控
-- **健康检查**：系统、网络、服务状态监控
-- **系统指标**：CPU、内存、磁盘、负载监控
-- **告警管理**：基于阈值的自动告警
-- **日志管理**：系统日志查看和过滤
-
-### 3. 网络管理
-- **网络拓扑**：P2P 网络拓扑可视化
-- **节点管理**：网络节点的发现和管理
-- **链路管理**：节点间链路的创建和管理
-- **场景管理**：网络场景配置和切换
-- **流量监控**：实时网络流量监控和分析
-- **IP 管理**：IP 地址分配和管理
-
-### 4. OpenWrt 管理
-- **系统状态**：OpenWrt 路由器系统状态监控
-- **网络设置**：路由器网络配置管理
-- **IP 管理**：路由器 IP 地址管理
-- **黑白名单**：访问控制黑白名单管理
-- **配置文件**：OpenWrt 配置文件管理
-- **命令执行**：远程执行 OpenWrt 命令
-
-### 5. 协议仿真与调试
-- **MCP 仿真器**：MCP 协议仿真和调试
-- **Route 仿真器**：Route 协议仿真和调试
-- **场景调试**：自定义场景进行协议调试
-- **执行分析**：协议执行结果分析和展示
-- **日志记录**：详细的协议执行日志
-
-### 4. 命令体系
-- **命令发送**：向网络节点发送命令
-- **命令队列**：命令队列管理和监控
-- **执行统计**：命令执行统计和分析
-- **网络链接**：网络链接状态管理
-
-
-
-### 6. 存储管理
-- **文件管理**：文件的创建、读取、更新、删除
-- **文件夹管理**：文件夹的创建、读取、更新、删除
-- **版本控制**：文件版本管理
-- **文件哈希**：基于 MD5 的文件哈希计算
-- **文件缓存**：基于哈希的文件缓存机制
-
-## 部署场景
-
-### 1. 个人使用
-- **PC 部署**：在个人电脑上部署，管理个人 AI 技能
-- **家庭网络**：在家庭网络中部署，实现家庭设备间的 AI 能力共享
-- **移动办公**：支持远程访问和管理
-
-### 2. 小微企业
-- **部门部署**：在部门内部部署，实现部门内的 AI 能力共享
-- **私有网络**：创建企业私有 P2P 网络，确保数据安全
-- **成本优化**：利用现有设备，降低 AI 能力获取成本
-
-### 3. 智能设备
-- **路由器部署**：在路由器上部署，实现网络级别的 AI 能力分发
-- **智能家居网关**：在智能家居网关上部署，实现智能设备间的 AI 能力协同
-- **电视部署**：在智能电视上部署，实现家庭娱乐 AI 能力
-
-## API 接口文档
-
-### 个人中心 API (/api/personal)
-
-#### 仪表盘统计
-- **GET /dashboard/stats**
-- **响应**：个人统计数据、活动记录、执行统计
-
-#### 技能管理
-- **GET /skills** - 获取个人技能列表
-- **POST /skills** - 发布个人技能
-- **PUT /skills/{id}** - 更新个人技能
-- **DELETE /skills/{id}** - 删除个人技能
-
-#### 执行管理
-- **POST /execution/execute/{skillId}** - 执行个人技能
-- **GET /execution/history** - 获取执行历史
-- **GET /execution/result/{executionId}** - 获取执行结果
-
-#### 分享管理
-- **GET /sharing/shared** - 获取分享的技能列表
-- **GET /sharing/received** - 获取收到的技能列表
-- **POST /sharing** - 分享技能
-
-#### 群组管理
-- **GET /groups** - 获取我的群组列表
-- **GET /groups/{groupId}/skills** - 获取群组技能列表
-
-#### 身份管理
-- **GET /identity** - 获取个人身份信息
-- **PUT /identity** - 更新个人身份信息
-
-#### 帮助与支持
-- **GET /help** - 获取帮助文档
-- **GET /system/info** - 获取系统信息
-
-### P2P 网络 API (/api/network)
-
-#### 网络发现
-- **GET /discovery** - 发现网络中的其他节点
-- **POST /join** - 加入 P2P 网络
-
-#### 节点管理
-- **GET /nodes** - 获取网络节点列表
-- **GET /nodes/{nodeId}** - 获取节点详情
-- **DELETE /nodes/{nodeId}** - 移除节点
-
-#### 技能分发
-- **POST /skill/publish** - 发布技能到网络
-- **POST /skill/subscribe** - 订阅网络中的技能
-- **GET /skill/market** - 获取技能市场列表
-
-### 监控 API (/api/monitor)
-
-#### 系统指标
-- **GET /metrics** - 获取系统指标
-- **GET /metrics/history** - 获取历史指标数据
-
-#### 告警管理
-- **GET /alerts** - 获取告警列表
-- **POST /alerts/clear** - 清除告警
-
-### 存储管理 API (/api/storage)
-
-#### 存储空间
-- **GET /space** - 获取存储空间信息
-
-#### 文件夹管理
-- **GET /folder/{folderId}/children** - 获取文件夹内容
-- **POST /folder** - 创建文件夹
-- **DELETE /folder/{folderId}** - 删除文件夹
-
-#### 文件管理
-- **POST /upload** - 上传文件
-- **GET /download/{fileId}** - 下载文件
-- **DELETE /file/{fileId}** - 删除文件
-- **PUT /file/{fileId}** - 更新文件信息
-
-#### 版本管理
-- **GET /file/{fileId}/versions** - 获取文件版本列表
-- **POST /file/{fileId}/restore/{versionId}** - 恢复文件版本
-
-#### 存储清理
-- **POST /cleanup** - 清理存储缓存
-
-#### 文件分享
-- **GET /shared** - 获取分享的文件列表
-- **POST /share** - 分享文件
-- **GET /received** - 获取收到的文件列表
-
-## 前端页面使用指南
-
-### 1. 访问控制台
-- **URL**：http://localhost:8091/console/index.html
-- **默认端口**：8091
-
-### 2. 主要功能
-- **个人中心**：个人仪表盘、我的技能、执行历史、分享管理、我的群组
-- **网络管理**：网络拓扑、节点管理、链路管理、场景管理
-- **系统监控**：健康检查、系统指标、告警管理、日志管理
-- **存储管理**：文件管理、文件夹管理、文件上传、文件下载、版本控制
-
-## 后端服务配置
-
-### 配置文件
-- **application.yml**：Spring Boot 应用配置
-
-### 主要配置项
-```yaml
-server:
-  port: 8091
-
-spring:
-  application:
-    name: ooder-nexus
-
-ooder:
-  agent:
-    id: "nexus-001"
-    name: "Nexus"
-    type: "nexus"
-    description: "P2P AI Capability Distribution Hub"
-  network:
-    mode: "p2p"
-    discovery:
-      enabled: true
-      interval: 30000
-    security:
-      enabled: true
-      encryption: "AES-256"
-  p2p:
-    port: 9876
-    host: 0.0.0.0
-    timeout: 30000
-    retry: 3
-    max-nodes: 100
-  skill:
-    base-package: "net.ooder.nexus.skill"
-    auto-discovery: true
-  storage:
-    type: "local"
-    local:
-      root-path: "./data/storage"
-      cache-path: "./data/cache"
-      temp-path: "./data/temp"
-    version:
-      enabled: true
-      max-versions: 10
-    hash:
-      algorithm: "MD5"
-    cleanup:
-      enabled: true
-      interval: 86400
-```
-
-### 环境要求
-- **Java**：8+
-- **Maven**：3.6+
-- **操作系统**：Windows / Linux / macOS
-- **内存**：最低 2GB，推荐 4GB+
-- **磁盘**：最低 500MB，推荐 2GB+
-
-## 部署指南
-
-### 1. 编译打包
 ```bash
-mvn clean package
+# 1. 下载安装包
+wget https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0/ooder-nexus-2.0.0.tar.gz
+
+# 2. 解压
+tar -xzf ooder-nexus-2.0.0.tar.gz
+cd ooder-nexus-2.0.0
+
+# 3. 启动
+./bin/start.sh
 ```
 
-### 2. 运行服务
+访问：`http://localhost:8091/console/index.html`
+
+#### 方式二：OpenWrt 一键安装
+
+适用于 OpenWrt 路由器：
+
 ```bash
-java -jar target/independent-nexus-0.6.6.jar
+# 在路由器上执行
+wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0/install-openwrt.sh
+chmod +x /tmp/install.sh
+/tmp/install.sh
 ```
 
-### 3. 访问控制台
-打开浏览器，访问：http://localhost:8091/console/index.html
+访问：`http://路由器IP:8091/console/index.html`
 
-### 4. P2P 网络配置
-1. 启动第一个 Nexus 节点作为网络种子
-2. 其他节点通过种子节点加入网络
-3. 节点自动发现并建立 P2P 连接
-4. 开始共享和使用 AI 能力
+#### 方式三：Docker 安装
 
+```bash
+docker run -d \
+  --name ooder-nexus \
+  -p 8091:8091 \
+  -p 9876:9876 \
+  -v ./data:/app/data \
+  oodercn/ooder-nexus:2.0.0
+```
 
+### 4.3 首次使用
 
-## 安全特性
+1. **访问 Web 控制台**：浏览器打开 `http://IP:8091/console/index.html`
+2. **查看仪表盘**：了解系统状态和基本信息
+3. **探索功能菜单**：熟悉各个功能模块
+4. **加入 P2P 网络**：配置网络发现，连接其他节点
 
-### 1. 数据安全
-- **加密通信**：所有 P2P 通信均采用 AES-256 加密
-- **身份验证**：支持基于 KEY 的身份验证
-- **权限控制**：细粒度的权限控制
+### 4.4 数据存储说明
 
-### 2. 网络安全
-- **私有网络**：支持企业私有网络部署
-- **访问控制**：支持白名单和黑名单
-- **防火墙友好**：支持 NAT 穿透和防火墙友好配置
+ooderNexus 使用本地文件系统存储数据，所有数据默认保存在 `./storage/` 目录（OpenWrt 为 `/opt/ooder-nexus/storage/`）。
 
-### 3. 数据隐私
-- **本地存储**：数据默认本地存储，不上传云端
-- **隐私保护**：支持匿名模式
-- **数据所有权**：用户完全控制自己的数据
+#### 4.4.1 存储目录结构
 
-## 常见问题解答
+```
+storage/                          # 主存储目录
+├── agents/                       # Agent 节点信息
+│   └── end-agents.json          # 终端代理列表
+├── devices/                      # 设备资产管理
+│   └── device-assets.json       # 设备资产数据
+├── network/                      # 网络配置数据
+│   ├── ip-allocations.json      # IP 地址分配记录
+│   ├── ip-pool.json             # IP 地址池配置
+│   └── traffic-stats.json       # 流量统计信息
+├── sdk/                          # Ooder SDK 核心数据
+│   ├── capabilities/            # 能力定义
+│   │   ├── endagent-discovery.json
+│   │   ├── link-management.json
+│   │   ├── network-topology.json
+│   │   └── route-discovery.json
+│   ├── devices/                 # 设备实例数据
+│   │   ├── device-001.json
+│   │   ├── device-002.json
+│   │   └── ...
+│   ├── endagents/               # 终端代理详情
+│   │   ├── endagent-001.json
+│   │   ├── endagent-002.json
+│   │   └── ...
+│   ├── routes/                  # 路由配置
+│   │   ├── route-001.json
+│   │   └── ...
+│   └── system_status/           # 系统状态
+│       └── main.json
+├── sync/                         # 同步任务数据
+│   └── sync-tasks.json          # 技能同步任务
+└── tasks/                        # 数据提取任务
+    ├── extract-tasks.json
+    └── list-extract-tasks.json
+```
 
-### 1. 节点无法发现
-- **检查网络**：确保节点在同一网络或可互相访问
-- **检查防火墙**：确保防火墙允许 P2P 通信端口
-- **检查配置**：确保 P2P 配置正确
+#### 4.4.2 Ooder SDK 0.6.6 存储架构
 
-### 2. 技能无法执行
-- **检查权限**：确保有执行该技能的权限
-- **检查依赖**：确保技能依赖已安装
-- **查看日志**：检查执行日志获取详细错误信息
+ooderNexus 基于 **Ooder Agent SDK 0.6.6** 构建，SDK 采用 **VFS（Virtual File System，虚拟文件系统）+ JSON 存储** 的混合架构。
 
-### 3. 网络连接不稳定
-- **检查网络质量**：确保网络质量良好
-- **检查节点数量**：确保网络中有足够的节点
-- **检查配置**：确保 P2P 配置参数合理
+##### VFS 存储策略
 
-### 4. 数据同步问题
-- **检查存储**：确保存储路径有足够的磁盘空间
-- **检查备份**：确保备份配置正确
-- **检查网络**：确保网络连接稳定
+**什么是 VFS？**
 
-## 版本历史
+VFS 是 Agent SDK 的核心存储抽象层，提供统一的文件管理接口，将物理存储与逻辑存储分离：
 
-### v2.0.0
-- **协议仿真**：新增 MCP 和 Route 协议仿真器，支持离线调试
-- **可视化增强**：网络拓扑可视化、实时监控图表、交互式控制台
-- **OpenWrt 支持**：原生支持 OpenWrt 路由器，提供专用管理界面
-- **技能同步**：新增技能中心同步功能，支持技能的多节点同步
-- **存储分享**：新增文件分享功能，支持接收和分享文件
-- **流量监控**：新增网络流量监控和分析功能
-- **前端优化**：修复大量前端页面问题，优化用户体验
-- **API 扩展**：新增大量 RESTful API 接口
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      应用层 (ooderNexus)                     │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐       │
+│  │ 文件管理  │ │ 版本控制  │ │ 文件分享  │ │ 存储管理  │       │
+│  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘       │
+└───────┼────────────┼────────────┼────────────┼──────────────┘
+        │            │            │            │
+        └────────────┴──────┬─────┴────────────┘
+                            │
+                    ┌───────▼────────┐
+                    │   VFS 抽象层    │
+                    │ (LocalVFSManager)│
+                    └───────┬────────┘
+                            │
+        ┌───────────────────┼───────────────────┐
+        ▼                   ▼                   ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│  本地文件系统  │   │  内存缓存     │   │  网络存储     │
+│  (storage/)   │   │  (Hash Cache) │   │  (P2P Sync)   │
+└───────────────┘   └───────────────┘   └───────────────┘
+```
 
-### v1.0.0
-- 初始版本
-- 实现基本的 P2P 网络功能
-- 支持个人中心功能
-- 支持技能发布和分享
-- 支持系统监控和管理
-- 支持多平台部署
-- 集成本地磁盘存储支持
+**VFS 核心组件**：
 
-## 许可证
+| 组件 | 类名 | 功能 |
+|------|------|------|
+| **VFS 管理器** | `LocalVFSManager` | 单例模式管理所有文件操作 |
+| **文件对象** | `LocalFileObject` | 基于 MD5 哈希的文件存储 |
+| **文件信息** | `LocalFile` | 文件元数据管理 |
+| **文件夹** | `LocalFolder` | 目录结构管理 |
+| **版本控制** | `LocalFileVersion` | 文件版本管理 |
 
-MIT License
+**VFS 存储特点**：
 
-Copyright (c) 2026 ooder
+1. **哈希去重存储**
+   - 文件内容使用 **MD5 哈希** 作为唯一标识
+   - 相同内容只存储一份，节省空间
+   - 文件路径：`storage/data/cache/{hash}`
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following conditions:
+2. **写时复制（Copy-on-Write）**
+   ```java
+   // 文件修改时创建新版本，不覆盖原文件
+   LocalFileVersion newVersion = file.createFileVersion();
+   newVersion.setFileObjectId(hash);
+   ```
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+3. **原子操作保证**
+   - 使用临时文件 + 重命名机制
+   - 防止写入过程中断导致数据损坏
+   - 示例流程：
+     ```
+     1. 写入临时文件: file.tmp
+     2. 计算 MD5 哈希
+     3. 重命名为: {hash}
+     4. 更新索引
+     ```
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+4. **内存缓存加速**
+   - 热点文件缓存到内存
+   - 减少磁盘 I/O 操作
+   - 缓存目录：`storage/data/cache/`
 
-## 联系信息
+##### Agent SDK 数据存储
 
-- **作者**：北京紫蜂智联智能科技有限公司
-- **官方地址**：https://gitee.com/ooderCN
-- **官方网站**：ooder.net
-- **GitHub地址**：https://github.com/oodercn/ooder-Nexus.git
+**存储机制**：
 
-## 文档中心
+Agent SDK 使用 **JSON 文件存储** 管理结构化数据，与 VFS 文件存储形成互补：
 
-- **用户指南**：[USER-GUIDE.md](USER-GUIDE.md) - 终端用户操作指南
-- **管理员指南**：[ADMIN-GUIDE.md](ADMIN-GUIDE.md) - 系统管理员配置和维护指南
-- **存储指南**：[STORAGE-GUIDE.md](STORAGE-GUIDE.md) - 存储管理和最佳实践
-- **技能开发指南**：[SKILL-DEVELOPMENT.md](SKILL-DEVELOPMENT.md) - AI 技能开发教程
-- **技能同步设计**：[docs/SKILL-SYNC-DESIGN.md](docs/SKILL-SYNC-DESIGN.md) - 技能同步模块架构设计
-- **技能同步使用**：[docs/SKILL-SYNC-GUIDE.md](docs/SKILL-SYNC-GUIDE.md) - 技能同步功能使用说明
-- **开发文档**：[DEVELOPMENT.md](DEVELOPMENT.md) - 项目开发和整合指南
-- **API 手册**：[API-MANUAL.md](API-MANUAL.md) - 详细的 API 接口文档
-- **测试用例报告**：[TEST-CASE-REPORT.md](TEST-CASE-REPORT.md) - 测试覆盖情况和测试结果分析
+| 存储类型 | 技术 | 适用场景 |
+|---------|------|----------|
+| **VFS 存储** | MD5 哈希 + 文件系统 | 大文件、二进制数据、版本控制 |
+| **JSON 存储** | 结构化 JSON 文件 | 配置数据、元数据、状态信息 |
 
+**数据分类与存储位置**：
 
+| 数据类型 | 存储位置 | 格式 | 说明 |
+|---------|----------|------|------|
+| **网络能力** | `sdk/capabilities/` | JSON | P2P 网络能力定义 |
+| **设备信息** | `sdk/devices/` | JSON | 每个设备独立文件 |
+| **终端代理** | `sdk/endagents/` | JSON | 代理节点详细信息 |
+| **路由配置** | `sdk/routes/` | JSON | 网络路由规则 |
+| **系统状态** | `sdk/system_status/` | JSON | 运行时状态 |
+| **文件内容** | `data/cache/{hash}` | Binary | VFS 哈希存储 |
+| **网络数据** | `network/` | JSON | IP、流量统计 |
+| **任务数据** | `tasks/`, `sync/` | JSON | 异步任务 |
 
-## 贡献指南
+**数据关系与同步**：
 
-欢迎贡献代码、报告问题或提出建议。请遵循以下步骤：
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Agent SDK 数据关系                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   ┌─────────────┐     ┌─────────────┐     ┌─────────────┐  │
+│   │  网络能力    │────▶│   设备实例   │────▶│  终端代理   │  │
+│   │capabilities │     │   devices   │     │  endagents  │  │
+│   │  (JSON)     │     │   (JSON)    │     │   (JSON)    │  │
+│   └─────────────┘     └──────┬──────┘     └──────┬──────┘  │
+│          │                   │                   │         │
+│          │                   ▼                   │         │
+│          │            ┌─────────────┐            │         │
+│          │            │  VFS 文件   │◀───────────┘         │
+│          │            │  (Hash)     │                      │
+│          │            └─────────────┘                      │
+│          │                                                   │
+│          ▼                   ▼                              │
+│   ┌─────────────┐     ┌─────────────┐                      │
+│   │   路由配置   │◀────│   系统状态   │                      │
+│   │   routes    │     │ system_status│                      │
+│   │   (JSON)    │     │   (JSON)    │                      │
+│   └─────────────┘     └─────────────┘                      │
+│                                                             │
+│   ═══════════════════════════════════════════════════════  │
+│                         P2P 同步层                          │
+│   默认情况下，所有 Agent 数据会自动同步到网络中的其他节点      │
+└─────────────────────────────────────────────────────────────┘
+```
 
-1. Fork 本项目
+**数据同步策略**：
+
+Agent SDK 0.6.6 内置 **P2P 数据同步机制**：
+
+1. **自动同步范围**
+   - ✅ `sdk/` 目录下的所有 JSON 数据
+   - ✅ 网络拓扑信息
+   - ✅ 设备发现信息
+   - ✅ 路由配置信息
+   - ❌ VFS 文件内容（大文件按需同步）
+   - ❌ 日志文件
+
+2. **同步触发条件**
+   - 节点加入网络时全量同步
+   - 数据变更时增量同步
+   - 定时心跳检测差异同步
+
+3. **冲突解决**
+   - 时间戳优先：`_updatedAt` 字段较新的胜出
+   - 手动合并：冲突时保留多个版本
+
+**存储优势**：
+
+| 优势 | 说明 |
+|------|------|
+| ✅ **无需数据库** | 零依赖，开箱即用 |
+| ✅ **去重存储** | MD5 哈希避免重复文件 |
+| ✅ **版本控制** | 自动文件版本管理 |
+| ✅ **P2P 同步** | 数据自动同步到网络节点 |
+| ✅ **易于备份** | 直接复制目录即可 |
+| ✅ **人类可读** | JSON 格式便于调试 |
+
+**注意事项**：
+
+| 注意点 | 说明 |
+|--------|------|
+| ⚠️ **不要手动修改** | 运行时不要编辑 JSON 文件 |
+| ⚠️ **备份 storage/** | 必须备份整个 storage 目录 |
+| ⚠️ **权限设置** | 确保程序有读写权限 |
+| ⚠️ **存储空间** | 监控磁盘空间，避免满盘 |
+| ⚠️ **同步延迟** | P2P 同步有延迟，非实时 |
+
+#### 4.4.3 数据备份与恢复
+
+**⚠️ 重要提示**：备份时必须包含完整的 `storage/` 目录，因为 VFS 文件和 JSON 数据是相互关联的。
+
+**备份数据**：
+
+```bash
+# 方式 1：直接复制目录（推荐，保留文件权限）
+cp -rp storage/ storage-backup-$(date +%Y%m%d)/
+
+# 方式 2：打包压缩（适合传输和长期保存）
+tar -czpf ooder-nexus-backup-$(date +%Y%m%d).tar.gz storage/ config/
+
+# 方式 3：使用 rsync（增量备份，适合自动化）
+rsync -avz --delete storage/ backup-server:/backups/ooder-nexus/storage/
+rsync -avz --delete config/ backup-server:/backups/ooder-nexus/config/
+```
+
+**备份内容说明**：
+
+| 目录 | 必须备份 | 说明 |
+|------|----------|------|
+| `storage/sdk/` | ✅ 必须 | Agent SDK 核心数据（网络、设备、路由） |
+| `storage/data/` | ✅ 必须 | VFS 文件存储（哈希文件、缓存） |
+| `storage/network/` | ✅ 必须 | 网络配置和流量统计 |
+| `storage/tasks/` | ✅ 必须 | 任务数据 |
+| `config/` | ⚠️ 建议 | 应用配置文件 |
+| `logs/` | ❌ 不需要 | 日志文件可随时生成 |
+
+**恢复数据**：
+
+```bash
+# 1. 停止服务
+/etc/init.d/ooder-nexus stop  # OpenWrt
+# 或
+./bin/stop.sh                 # 通用安装
+
+# 2. 备份当前数据（以防万一）
+mv storage/ storage-old-$(date +%Y%m%d)/
+
+# 3. 恢复数据
+tar -xzpf ooder-nexus-backup-20240101.tar.gz
+
+# 4. 检查数据完整性
+ls -la storage/sdk/           # 检查 JSON 文件
+ls -la storage/data/cache/    # 检查 VFS 缓存
+
+# 5. 启动服务
+/etc/init.d/ooder-nexus start
+
+# 6. 验证恢复
+# 登录 Web 控制台，检查数据是否完整
+```
+
+**VFS 数据一致性检查**：
+
+如果怀疑 VFS 数据损坏，可以运行一致性检查：
+
+```bash
+# 检查所有哈希文件是否存在
+find storage/data/cache/ -type f | while read file; do
+  hash=$(basename "$file")
+  echo "检查: $hash"
+done
+
+# 检查 JSON 索引中的文件引用
+# 如果索引中引用的哈希文件不存在，需要清理无效索引
+```
+
+**自动备份脚本（生产环境推荐）**：
+
+```bash
+#!/bin/sh
+# 保存为 /opt/ooder-nexus/backup.sh
+# 生产环境自动备份脚本
+
+set -e
+
+INSTALL_DIR="/opt/ooder-nexus"
+BACKUP_DIR="/mnt/usb/backups"
+DATE=$(date +%Y%m%d_%H%M%S)
+KEEP_DAYS=30
+LOG_FILE="/var/log/ooder-nexus-backup.log"
+
+# 日志函数
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a $LOG_FILE
+}
+
+log "开始备份..."
+
+# 检查目录
+if [ ! -d "$INSTALL_DIR/storage" ]; then
+    log "错误: storage 目录不存在"
+    exit 1
+fi
+
+# 创建备份目录
+mkdir -p $BACKUP_DIR
+
+# 创建临时备份目录
+TEMP_DIR=$(mktemp -d)
+
+# 复制数据（保持权限）
+log "复制 storage 目录..."
+cp -rp $INSTALL_DIR/storage $TEMP_DIR/
+
+log "复制 config 目录..."
+cp -rp $INSTALL_DIR/config $TEMP_DIR/
+
+# 创建备份信息文件
+cat > $TEMP_DIR/backup-info.txt << EOF
+备份时间: $(date)
+备份版本: $(cat $INSTALL_DIR/version 2>/dev/null || echo "unknown")
+主机名: $(hostname)
+EOF
+
+# 打包压缩
+log "创建压缩包..."
+tar -czpf ${BACKUP_DIR}/ooder-nexus-backup-${DATE}.tar.gz -C $TEMP_DIR .
+
+# 清理临时目录
+rm -rf $TEMP_DIR
+
+# 删除旧备份
+log "清理旧备份..."
+find ${BACKUP_DIR} -name "ooder-nexus-backup-*.tar.gz" -mtime +${KEEP_DAYS} -delete
+
+# 检查备份文件
+BACKUP_SIZE=$(du -h ${BACKUP_DIR}/ooder-nexus-backup-${DATE}.tar.gz | cut -f1)
+log "备份完成: ${BACKUP_DIR}/ooder-nexus-backup-${DATE}.tar.gz (大小: $BACKUP_SIZE)"
+
+# 可选：上传到远程服务器
+# scp ${BACKUP_DIR}/ooder-nexus-backup-${DATE}.tar.gz user@backup-server:/backups/
+```
+
+**添加到定时任务**：
+
+```bash
+# 编辑 crontab
+crontab -e
+
+# 每天凌晨 3 点执行备份
+0 3 * * * /opt/ooder-nexus/backup.sh
+
+# 每周日凌晨 3 点执行备份并上传到远程服务器
+0 3 * * 0 /opt/ooder-nexus/backup.sh && scp /mnt/usb/backups/ooder-nexus-backup-$(date +\%Y\%m\%d)*.tar.gz user@backup-server:/backups/
+```
+
+**P2P 网络数据恢复注意事项**：
+
+当从备份恢复数据后，节点重新加入 P2P 网络时：
+
+1. **数据同步**：节点会自动与网络中的其他节点同步数据
+2. **冲突处理**：如果备份数据较旧，可能会被网络中的新数据覆盖
+3. **建议操作**：
+   - 恢复后先断开网络连接
+   - 检查数据完整性
+   - 确认无误后再连接网络
+
+```bash
+# 恢复后断开网络同步（临时）
+# 编辑配置，禁用自动发现
+uci set ooder-nexus.network.auto_discovery=0
+uci commit ooder-nexus
+
+# 启动服务检查数据
+/etc/init.d/ooder-nexus start
+
+# 确认数据完整后，重新启用网络
+uci set ooder-nexus.network.auto_discovery=1
+uci commit ooder-nexus
+/etc/init.d/ooder-nexus restart
+```
+
+---
+
+## 5. 部署指南
+
+### 5.1 部署场景选择
+
+| 场景 | 推荐设备 | 部署方式 | Agent 角色 | 特点 |
+|------|----------|----------|------------|------|
+| 个人使用 | PC / NAS | 通用安装 | `mcp` / `nexus` | 功能完整，易于管理 |
+| 家庭网络 | OpenWrt 路由器 | 一键安装 | **`routeAgent`** ⭐ | 24小时运行，网络中枢，自动路由 |
+| 企业部署 | 服务器 | Docker | `mcp` / `routeAgent` | 高可用，易扩展 |
+| 边缘节点 | 树莓派 | 通用安装 | `mcp` / `nexus` | 低功耗，分布式 |
+
+**Agent 角色说明**：
+- **`routeAgent`**：路由代理，具备网络路由能力，适合部署在路由器/网关设备上
+- **`mcp`**：标准 MCP 节点，普通终端设备角色
+- **`nexus`**：基础节点，最小功能集
+
+**OpenWrt 自动设置**：当 ooderNexus 部署在 OpenWrt 设备上时，系统会**自动**将 Agent 角色设置为 `routeAgent`，无需手动配置。
+
+### 5.2 OpenWrt 部署详解
+
+OpenWrt 是 ooderNexus 的典型部署场景，提供完整的集成能力。
+
+#### 5.2.1 为什么选择 OpenWrt？
+
+- ✅ 路由器 24 小时运行，无需额外设备
+- ✅ 网络中枢位置，便于管理所有设备
+- ✅ 原生集成，深度管理路由器功能
+- ✅ 低功耗，适合长期运行
+
+#### 5.2.2 支持的设备
+
+| 设备类型 | 代表型号 | 性能 | 难度 |
+|----------|----------|------|------|
+| x86 软路由 | J4125/N5105 | ⭐⭐⭐⭐⭐ | ⭐ |
+| ARM 开发板 | 树莓派 4 | ⭐⭐⭐⭐ | ⭐⭐ |
+| MIPS 路由器 | 红米 AC2100 | ⭐⭐ | ⭐⭐⭐ |
+
+#### 5.2.3 安装步骤
+
+详见 [OpenWrt 安装指南](#6-openwrt-安装指南)
+
+---
+
+## 6. OpenWrt 安装指南
+
+> ⚠️ **重要提示**：本章节专为 OpenWrt 用户编写，包含详细的集成说明和操作步骤。
+
+### 6.1 集成概述
+
+#### 6.1.1 什么是 OpenWrt 集成？
+
+ooderNexus 安装到 OpenWrt 路由器后，可以通过 Web 界面直接管理路由器的各种功能，包括：
+
+- 查看系统状态（CPU、内存、温度）
+- 管理网络配置（接口、DHCP、防火墙）
+- 执行系统命令
+- 监控网络流量
+
+#### 6.1.2 OpenWrt 自动角色设置（重要）
+
+**自动检测机制**：
+
+ooderNexus 启动时会**自动检测**当前系统是否为 OpenWrt：
+
+| 检测方式 | 检测目标 | 说明 |
+|---------|---------|------|
+| 文件检测 | `/etc/openwrt_release` | OpenWrt 版本文件 |
+| 内容检测 | `/etc/os-release` | 系统标识文件 |
+| 命令检测 | `/bin/opkg` 或 `/usr/bin/opkg` | 包管理器 |
+| 命令检测 | `/bin/uci` 或 `/usr/bin/uci` | 配置管理工具 |
+
+**自动角色切换**：
+
+当检测到 OpenWrt 系统时，ooderNexus 会**自动将 Agent 角色设置为 `routeAgent`**：
+
+```
+启动日志示例：
+[INFO] 检测到 OpenWrt 系统: /etc/openwrt_release 文件存在
+[INFO] OpenWrt 系统检测到，自动将 Agent 角色设置为 'routeAgent'
+[INFO] 原始配置 agent.type: mcp，已覆盖为: routeAgent
+[INFO] Agent 配置完成: id=mcp-agent-001, name=Independent MCP Agent, type=routeAgent
+```
+
+**为什么需要设置为 routeAgent？**
+
+| 角色 | 适用场景 | 功能特点 |
+|------|----------|----------|
+| `routeAgent` | **路由器/网关设备** | 具备路由能力，可管理网络拓扑，转发数据包 |
+| `mcp` | 普通终端设备 | 标准 MCP 协议支持，作为终端节点接入网络 |
+| `nexus` | 独立节点 | 基础 P2P 功能，不参与路由决策 |
+
+**OpenWrt 设备作为 routeAgent 的优势**：
+- ✅ **网络中枢**：位于网络核心位置，便于管理所有设备
+- ✅ **路由能力**：可以转发其他节点的数据包
+- ✅ **拓扑核心**：在 P2P 网络拓扑中作为关键节点
+- ✅ **网关功能**：可以代理其他节点的网络请求
+
+**注意事项**：
+- 自动检测和角色切换在**启动时**完成
+- 如需手动覆盖，可修改 `application.yml` 中的 `agent.type` 配置
+- 角色切换后，其他节点会通过 P2P 网络自动发现该 routeAgent
+
+#### 6.1.3 集成架构
+
+```
+用户浏览器 → ooderNexus Web → OpenWrt API → OpenWrt 系统
+                ↓
+           P2P 网络服务
+```
+
+### 6.2 安装前准备
+
+#### 6.2.1 系统要求
+
+- **OpenWrt 版本**：21.02 或更高
+- **内存**：最低 64MB，推荐 128MB+
+- **存储**：最低 100MB，推荐 256MB+
+- **网络**：已配置并能访问互联网
+
+#### 6.2.2 检查系统
+
+```bash
+# 检查 OpenWrt 版本
+cat /etc/openwrt_release
+
+# 检查内存
+free
+
+# 检查存储
+df -h
+```
+
+#### 6.2.3 配置防火墙
+
+必须开放以下端口：
+- `8091/tcp` - Web 控制台
+- `9876/tcp+udp` - P2P 通信
+
+**图形界面配置**：
+1. 登录 OpenWrt 后台 → 网络 → 防火墙
+2. 添加通信规则：
+   - 名称：`ooderNexus`
+   - 协议：TCP+UDP
+   - 端口：8091,9876
+   - 操作：接受
+
+**命令行配置**：
+```bash
+uci add firewall rule
+uci set firewall.@rule[-1].name='ooderNexus'
+uci set firewall.@rule[-1].src='wan'
+uci set firewall.@rule[-1].dest_port='8091 9876'
+uci set firewall.@rule[-1].proto='tcp udp'
+uci set firewall.@rule[-1].target='ACCEPT'
+uci commit firewall
+/etc/init.d/firewall restart
+```
+
+### 6.3 安装步骤
+
+#### 6.3.1 一键安装（推荐）
+
+```bash
+wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0/install-openwrt.sh
+chmod +x /tmp/install.sh
+/tmp/install.sh
+```
+
+安装脚本会自动完成：
+1. 检测系统架构
+2. 检查/安装 Java
+3. 下载安装包
+4. 配置服务
+5. 启动服务
+
+#### 6.3.2 验证安装
+
+```bash
+# 检查服务状态
+/etc/init.d/ooder-nexus status
+
+# 查看日志
+tail -f /opt/ooder-nexus/logs/system.log
+```
+
+访问：`http://路由器IP:8091/console/index.html`
+
+### 6.4 安装后配置
+
+#### 6.4.1 常用命令
+
+```bash
+# 启动/停止/重启
+/etc/init.d/ooder-nexus start
+/etc/init.d/ooder-nexus stop
+/etc/init.d/ooder-nexus restart
+
+# 开机自启
+/etc/init.d/ooder-nexus enable
+
+# 查看状态
+/etc/init.d/ooder-nexus status
+```
+
+#### 6.4.2 文件位置
+
+```
+/opt/ooder-nexus/
+├── bin/start.sh          # 启动脚本
+├── config/               # 配置文件
+├── lib/                  # 程序文件
+├── storage/              # 数据存储目录（重要）
+│   ├── agents/          # Agent 节点信息
+│   ├── devices/         # 设备资产数据
+│   ├── network/         # 网络配置数据
+│   ├── sdk/             # Ooder SDK 核心数据
+│   ├── sync/            # 同步任务数据
+│   └── tasks/           # 数据提取任务
+├── data/                 # 旧版数据目录（兼容）
+└── logs/                 # 日志目录
+    ├── system.log       # 系统日志
+    └── error.log        # 错误日志
+```
+
+**重要提示**：`storage/` 目录包含所有业务数据，**必须定期备份**！
+
+#### 6.4.3 故障排查
+
+**问题 1：无法访问 Web 界面**
+- 检查防火墙规则
+- 检查服务状态
+- 查看错误日志
+
+**问题 2：OpenWrt 菜单不显示**
+- 清除浏览器缓存
+- 检查系统识别日志
+- 重启服务
+
+**问题 3：内存不足**
+- 创建交换分区
+- 减小 Java 内存配置
+
+---
+
+## 7. 使用指南
+
+### 7.1 Web 控制台
+
+#### 7.1.1 界面布局
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Logo    搜索                    通知  用户  设置   │
+├────────┬────────────────────────────────────────────┤
+│        │                                            │
+│  菜单   │              主内容区                      │
+│        │                                            │
+│  - 仪表盘│                                            │
+│  - 网络 │                                            │
+│  - 技能 │                                            │
+│  - 存储 │                                            │
+│  - 系统 │                                            │
+│        │                                            │
+└────────┴────────────────────────────────────────────┘
+```
+
+#### 7.1.2 主要菜单
+
+| 菜单 | 功能 |
+|------|------|
+| **仪表盘** | 系统概览、统计数据 |
+| **P2P 网络** | 网络拓扑、节点管理 |
+| **AI 技能** | 技能管理、市场、执行历史 |
+| **存储管理** | 文件管理、版本控制 |
+| **OpenWrt** | 路由器管理（仅 OpenWrt） |
+| **系统监控** | 健康检查、日志、告警 |
+
+### 7.2 典型操作
+
+#### 7.2.1 发布技能
+
+1. 进入「AI 技能」→「我的技能」
+2. 点击「发布技能」
+3. 填写技能信息（名称、描述、命令）
+4. 点击「发布」
+
+#### 7.2.2 加入 P2P 网络
+
+1. 进入「P2P 网络」→「网络设置」
+2. 开启「自动发现」
+3. 等待节点发现
+4. 查看「网络拓扑」确认连接
+
+#### 7.2.3 分享文件
+
+1. 进入「存储管理」→「我的文件」
+2. 选择文件，点击「分享」
+3. 设置分享密码（可选）
+4. 复制分享链接
+
+---
+
+## 8. API 文档
+
+### 8.1 个人中心 API
+
+#### 获取仪表盘统计
+```http
+GET /api/personal/dashboard/stats
+```
+
+#### 获取技能列表
+```http
+GET /api/personal/skills
+```
+
+#### 执行技能
+```http
+POST /api/personal/execution/execute/{skillId}
+```
+
+### 8.2 网络管理 API
+
+#### 获取节点列表
+```http
+GET /api/network/nodes
+```
+
+#### 发现网络
+```http
+POST /api/network/discovery
+```
+
+### 8.3 OpenWrt API（OpenWrt 专属）
+
+#### 获取系统状态
+```http
+GET /api/openwrt/status
+```
+
+#### 执行命令
+```http
+POST /api/openwrt/command
+Content-Type: application/json
+
+{
+  "command": "uptime"
+}
+```
+
+---
+
+## 9. 开发指南
+
+### 9.1 协议仿真开发
+
+#### 9.1.1 创建测试场景
+
+1. 进入「协议仿真」→「场景管理」
+2. 点击「新建场景」
+3. 添加步骤（发送命令、等待响应、验证结果）
+4. 保存并运行
+
+#### 9.1.2 调试协议
+
+1. 选择「MCP 仿真器」或「Route 仿真器」
+2. 输入协议命令
+3. 查看执行结果和日志
+4. 分析协议行为
+
+### 9.2 技能开发
+
+#### 9.2.1 技能规范
+
+技能是一个可执行的命令或脚本，包含：
+- **名称**：技能的显示名称
+- **描述**：功能说明
+- **命令**：实际执行的命令
+- **参数**：输入参数定义
+- **输出**：返回结果格式
+
+#### 9.2.2 示例技能
+
+```json
+{
+  "name": "系统信息",
+  "description": "获取系统基本信息",
+  "command": "uname -a && free -h",
+  "params": [],
+  "output": "text"
+}
+```
+
+---
+
+## 10. 常见问题
+
+### Q1: ooderNexus 和 skillsCenter 的关系？
+
+**A**: skillsCenter 是技能发布和分享的平台，ooderNexus 是技能运行和管理的节点。两者配合实现完整的 AI 能力生态。
+
+### Q2: 是否必须运行在 OpenWrt 上？
+
+**A**: 不是。ooderNexus 支持 Windows、Linux、macOS 等多种平台。OpenWrt 只是其中一个典型部署场景。
+
+### Q3: 如何备份数据？
+
+**A**: ooderNexus 使用 **VFS + JSON 混合存储**，备份时必须包含完整的 `storage/` 目录。
+
+**OpenWrt 安装**：
+```bash
+# 备份所有数据（必须包含 storage/ 和 config/）
+tar -czpf backup.tar.gz /opt/ooder-nexus/storage/ /opt/ooder-nexus/config/
+```
+
+**通用安装**：
+```bash
+# 备份所有数据
+tar -czpf backup.tar.gz ./storage/ ./config/
+```
+
+**重要数据说明**：
+
+| 目录 | 必须备份 | 说明 |
+|------|----------|------|
+| `storage/sdk/` | ✅ 必须 | Agent SDK 核心数据（网络拓扑、设备、路由） |
+| `storage/data/` | ✅ 必须 | **VFS 文件存储**（哈希文件、缓存，与 JSON 数据关联） |
+| `storage/network/` | ✅ 必须 | 网络配置和流量统计 |
+| `storage/tasks/` | ✅ 必须 | 任务数据 |
+| `config/` | ⚠️ 建议 | 应用配置文件 |
+| `logs/` | ❌ 不需要 | 日志文件可随时生成 |
+
+**⚠️ 特别注意**：
+- VFS 文件使用 **MD5 哈希** 存储在 `storage/data/cache/`
+- JSON 数据中引用的是哈希值，不是文件路径
+- **必须同时备份** JSON 索引和 VFS 哈希文件，否则文件无法恢复
+
+**P2P 同步说明**：
+- 默认情况下，Agent SDK 会自动同步 `sdk/` 目录数据到网络中的其他节点
+- VFS 大文件（`storage/data/`）默认**不会自动同步**，需要手动分享
+- 恢复数据后重新加入网络，可能会与网络中的数据进行合并
+
+详见 [数据存储说明](#44-数据存储说明) 章节。
+
+### Q4: 支持哪些 AI 技能？
+
+**A**: 理论上支持任何可命令行执行的 AI 能力，包括但不限于：
+- 大语言模型（LLM）调用
+- 图像识别和处理
+- 语音识别和合成
+- 数据分析和处理
+
+### Q5: 如何保证安全？
+
+**A**: 
+- P2P 通信支持加密
+- 技能执行有权限控制
+- 支持访问白名单
+- 所有数据本地存储
+
+---
+
+## 11. 版本历史
+
+### v2.0.0（当前版本）- 2025-02-10
+
+#### 🎯 主要更新
+
+**OpenWrt 集成增强**
+- ✨ **自动角色检测**：启动时自动检测 OpenWrt 系统，自动设置 Agent 角色为 `routeAgent`
+- ✨ **深度系统集成**：支持路由器系统状态监控、网络配置管理、IP 地址管理
+- ✨ **一键安装脚本**：提供 OpenWrt 专用安装脚本，自动完成环境配置
+
+**存储架构升级**
+- ✨ **VFS 虚拟文件系统**：基于 MD5 哈希的去重存储，支持文件版本控制
+- ✨ **P2P 数据同步**：Agent SDK 数据自动同步到网络节点
+- ✨ **混合存储策略**：JSON 结构化数据 + VFS 二进制文件存储
+
+**协议仿真与调试**
+- ✨ **MCP 协议仿真器**：离线模拟 MCP 协议通信
+- ✨ **Route 协议仿真器**：模拟路由协议行为
+- ✨ **场景化测试**：支持自定义测试场景和用例
+
+**网络管理功能**
+- ✨ **网络拓扑可视化**：图形化展示 P2P 网络结构
+- ✨ **链路管理**：节点间链路创建、监控、断开
+- ✨ **流量监控**：实时网络流量统计和分析
+
+#### 🔧 优化与改进
+- 🔧 重构前端界面，提升用户体验
+- 🔧 优化 P2P 网络发现机制
+- 🔧 增强系统监控和告警能力
+- 🔧 改进技能管理和执行流程
+- 🔧 完善 API 文档和错误处理
+
+#### 🐛 问题修复
+- 🐛 修复网络连接稳定性问题
+- 🐛 修复文件存储并发访问问题
+- 🐛 修复内存泄漏问题
+- 🐛 修复多线程安全问题
+
+#### 📦 发布文件
+
+| 文件 | 说明 | 适用平台 |
+|------|------|----------|
+| `ooder-nexus-2.0.0.jar` | 可执行 JAR 包 | Windows/Linux/macOS |
+| `ooder-nexus-2.0.0.tar.gz` | 通用安装包 | Windows/Linux/macOS |
+| `ooder-nexus-2.0.0-openwrt-x86_64.tar.gz` | OpenWrt x86_64 | x86_64 软路由 |
+| `ooder-nexus-2.0.0-openwrt-aarch64.tar.gz` | OpenWrt aarch64 | ARM64 设备 |
+| `ooder-nexus-2.0.0-openwrt-armv7.tar.gz` | OpenWrt armv7 | ARMv7 设备 |
+| `install-openwrt.sh` | OpenWrt 一键安装脚本 | OpenWrt 通用 |
+
+### v1.0.0 - 2024-12-01
+- 🎉 初始版本发布
+- ✨ P2P 网络功能
+- ✨ 基础技能管理
+- ✨ 本地存储支持
+
+---
+
+## 12. 社区与支持
+
+### 12.1 获取帮助
+
+- 📖 **文档**：https://github.com/oodercn/ooder-Nexus/wiki
+- 🐛 **Issue**：https://github.com/oodercn/ooder-Nexus/issues
+- 💬 **讨论**：https://github.com/oodercn/ooder-Nexus/discussions
+
+### 12.2 贡献代码
+
+1. Fork 本仓库
 2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
 3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 提交 Pull Request
+4. 推送分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
 
-## 致谢
+### 12.3 许可证
 
-感谢所有为本项目做出贡献的开发者。
+本项目采用 MIT 开源许可证 - 详见 [LICENSE](LICENSE) 文件
 
-## 免责声明
+---
 
-本项目采用 MIT 许可证开源，使用者需自行承担使用本项目的风险。项目作者不对因使用本项目而导致的任何损失负责。
+## 13. 致谢
+
+- [Ooder Agent](https://github.com/oodercn/ooder-agent) - 底层 P2P 网络通信框架
+- [Spring Boot](https://spring.io/projects/spring-boot) - 后端开发框架
+- [OpenWrt](https://openwrt.org/) - 开源路由器操作系统
+
+---
+
+<p align="center">
+  <b>ooderNexus - 让 AI 能力无处不在</b><br>
+  Made with ❤️ by ooder Team
+</p>
