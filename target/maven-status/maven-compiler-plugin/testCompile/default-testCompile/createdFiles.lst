@@ -1,4 +1,5 @@
 net\ooder\nexus\controller\AnnotationTest.class
+net\ooder\nexus\service\OpenWrtServiceTest.class
 net\ooder\nexus\controller\DeviceAssetControllerTest.class
 net\ooder\nexus\controller\SimpleContextTest.class
 net\ooder\nexus\controller\SimpleRouteControllerTest.class
@@ -6,6 +7,7 @@ net\ooder\nexus\controller\DataExtractTaskControllerTest.class
 net\ooder\nexus\controller\SimpleTest.class
 net\ooder\nexus\controller\ManualContextTest.class
 net\ooder\nexus\controller\ContextTest.class
+net\ooder\nexus\model\ResultTest.class
 net\ooder\nexus\controller\BasicTest.class
 net\ooder\nexus\protocol\ProtocolHubTest.class
 net\ooder\nexus\controller\ListDataExtractTaskControllerTest.class

@@ -3,20 +3,20 @@ package net.ooder.nexus.core.protocol.model;
 import java.io.Serializable;
 
 /**
- * 协议状�??
+ * 协议状态
  */
 public class ProtocolStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 状�?�枚�?
+     * 状态枚举
      */
     public enum Status {
         INITIALIZING,   // 初始化中
-        RUNNING,        // 运行�?
-        PAUSED,         // 已暂�?
-        ERROR,          // 错误状�??
-        STOPPED         // 已停�?
+        RUNNING,        // 运行中
+        PAUSED,         // 已暂停
+        ERROR,          // 错误状态
+        STOPPED         // 已停止
     }
 
     /**
@@ -25,17 +25,17 @@ public class ProtocolStatus implements Serializable {
     private String protocolType;
 
     /**
-     * 当前状�??
+     * 当前状态
      */
     private Status status;
 
     /**
-     * 状�?�描�?
+     * 状态描述
      */
     private String description;
 
     /**
-     * �?后错误信�?
+     * 最后错误信息
      */
     private String lastError;
 
@@ -45,7 +45,7 @@ public class ProtocolStatus implements Serializable {
     private long startTime;
 
     /**
-     * �?后活动时�?
+     * 最后活动时间
      */
     private long lastActiveTime;
 

@@ -487,19 +487,12 @@ public class OpenWrtMockService implements OpenWrtBridge {
     @Override
     public Map<String, Object> executeCommand(String command) {
         log.info("[MOCK] Executing command: {}", command);
-        Map<String, Object> response = new HashMap<>();
-
         Map<String, Object> result = new HashMap<>();
-        result.put("stdout", "Mock command output for: " + command);
-        result.put("stderr", "");
+        result.put("output", "Mock command output for: " + command);
         result.put("exitCode", 0);
         result.put("success", true);
-
-        response.put("status", "success");
-        response.put("message", "Command executed successfully");
-        response.put("data", result);
-        response.put("timestamp", System.currentTimeMillis());
-        return response;
+        result.put("timestamp", System.currentTimeMillis());
+        return result;
     }
 
     @Override
@@ -523,42 +516,31 @@ public class OpenWrtMockService implements OpenWrtBridge {
     @Override
     public Map<String, Object> getSystemStatus() {
         log.info("[MOCK] Getting system status");
-        Map<String, Object> response = new HashMap<>();
-
         Map<String, Object> status = new HashMap<>();
-        status.put("uptime", "up 3 days, 12:34, load average: 0.12, 0.15, 0.18");
-        status.put("loadAverage", "0.12 0.15 0.18 1/120 1234");
-        status.put("memory", "total: 128MB, used: 64MB, free: 64MB");
-        status.put("cpuUsage", "15%");
+        status.put("cpu", "15%");
+        status.put("memory", "50%");
+        status.put("temperature", "45°C");
+        status.put("uptime", "3 days, 12:34");
+        status.put("loadAverage", "0.12 0.15 0.18");
         status.put("firmwareVersion", "OpenWrt 23.05.0");
         status.put("kernelVersion", "Linux 5.15.0");
         status.put("deviceModel", "TP-Link TL-WDR7660");
-        status.put("temperature", "45°C");
-
-        response.put("status", "success");
-        response.put("message", "System status retrieved successfully");
-        response.put("data", status);
-        response.put("timestamp", System.currentTimeMillis());
-        return response;
+        status.put("timestamp", System.currentTimeMillis());
+        return status;
     }
 
     @Override
     public Map<String, Object> getVersionInfo() {
         log.info("[MOCK] Getting version info");
-        Map<String, Object> response = new HashMap<>();
-
         Map<String, Object> versionInfo = new HashMap<>();
+        versionInfo.put("version", "23.05.0");
         versionInfo.put("openWrtVersion", "23.05.0");
         versionInfo.put("versionDetected", true);
         versionInfo.put("isSupported", true);
         versionInfo.put("kernelVersion", "Linux 5.15.0");
         versionInfo.put("deviceInfo", "TP-Link TL-WDR7660");
-
-        response.put("status", "success");
-        response.put("message", "Version information retrieved successfully");
-        response.put("data", versionInfo);
-        response.put("timestamp", System.currentTimeMillis());
-        return response;
+        versionInfo.put("timestamp", System.currentTimeMillis());
+        return versionInfo;
     }
 
     @Override

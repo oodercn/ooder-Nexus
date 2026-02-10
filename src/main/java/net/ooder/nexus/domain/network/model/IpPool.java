@@ -128,4 +128,12 @@ public class IpPool {
     public double getAllocationRate() {
         return totalCount > 0 ? (double) allocatedCount / totalCount * 100 : 0;
     }
+    
+    /**
+     * 空 setter 用于 JSON 反序列化时忽略 allocationRate 字段
+     * 实际值通过 getAllocationRate() 方法动态计算
+     */
+    public void setAllocationRate(double allocationRate) {
+        // 忽略传入的值，由 getAllocationRate() 动态计算
+    }
 }
