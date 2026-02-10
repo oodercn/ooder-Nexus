@@ -193,6 +193,23 @@ cd ooder-nexus-2.0.0
 
 访问：`http://localhost:8091/console/index.html`
 
+#### 方式一（Windows）：OpenWrt 预览版
+
+适用于 Windows 用户测试 OpenWrt 管理功能：
+
+```bash
+# 1. 下载 Windows OpenWrt 预览版
+https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/ooder-nexus-2.0.0-openwrt-preview-windows.zip
+
+# 2. 解压到任意目录
+
+# 3. 双击运行 start.bat
+```
+
+访问：`http://localhost:8081/console/index.html`
+
+> **注意**：OpenWrt 预览版专注于 OpenWrt 路由器管理功能，默认关闭 Mock 模式，需要连接真实的 OpenWrt 设备进行测试。
+
 #### 方式二：OpenWrt 一键安装
 
 适用于 OpenWrt 路由器：
