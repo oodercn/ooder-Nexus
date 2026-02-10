@@ -181,11 +181,11 @@ ooderNexus 基于 Ooder Agent SDK 构建，两者的关系如下：
 
 ```bash
 # 1. 下载安装包
-wget https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0/ooder-nexus-2.0.0.tar.gz
+wget https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/ooder-nexus-2.0.0-openwrt-preview.tar.gz
 
 # 2. 解压
-tar -xzf ooder-nexus-2.0.0.tar.gz
-cd ooder-nexus-2.0.0
+tar -xzf ooder-nexus-2.0.0-openwrt-preview.tar.gz
+cd ooder-nexus-2.0.0-openwrt-preview
 
 # 3. 启动
 ./bin/start.sh
@@ -216,7 +216,7 @@ https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/
 
 ```bash
 # 在路由器上执行
-wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0/install-openwrt.sh
+wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/install-openwrt.sh
 chmod +x /tmp/install.sh
 /tmp/install.sh
 ```
@@ -849,7 +849,7 @@ uci commit firewall
 #### 6.3.1 一键安装（推荐）
 
 ```bash
-wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0/install-openwrt.sh
+wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/install-openwrt.sh
 chmod +x /tmp/install.sh
 /tmp/install.sh
 ```
@@ -1150,7 +1150,7 @@ tar -czpf backup.tar.gz ./storage/ ./config/
 
 ## 11. 版本历史
 
-### v2.0.0（当前版本）- 2025-02-10
+### v2.0.0-openwrt-preview（当前版本）- 2026-02-11
 
 #### 🎯 主要更新
 
@@ -1191,8 +1191,9 @@ tar -czpf backup.tar.gz ./storage/ ./config/
 
 | 文件 | 说明 | 适用平台 |
 |------|------|----------|
-| `ooder-nexus-2.0.0.jar` | 可执行 JAR 包 | Windows/Linux/macOS |
-| `ooder-nexus-2.0.0.tar.gz` | 通用安装包 | Windows/Linux/macOS |
+| `ooder-nexus-2.0.0-openwrt-preview.jar` | 可执行 JAR 包 | Windows/Linux/macOS |
+| `ooder-nexus-2.0.0-openwrt-preview.tar.gz` | 通用安装包 | Windows/Linux/macOS |
+| `ooder-nexus-2.0.0-openwrt-preview-windows.zip` | Windows 安装包 | Windows 10/11 |
 | `ooder-nexus-2.0.0-openwrt-x86_64.tar.gz` | OpenWrt x86_64 | x86_64 软路由 |
 | `ooder-nexus-2.0.0-openwrt-aarch64.tar.gz` | OpenWrt aarch64 | ARM64 设备 |
 | `ooder-nexus-2.0.0-openwrt-armv7.tar.gz` | OpenWrt armv7 | ARMv7 设备 |
