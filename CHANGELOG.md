@@ -1,353 +1,174 @@
-# ooderNexus 功能变更说明
+# Changelog
 
-## 版本 2.0.1 - UI主题和样式修复
+所有重要的变更都将记录在此文件中。
 
-**发布日期**: 2026-02-10
+格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
+并且本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
----
+## [Unreleased]
 
-### 概述
+### Added
+- 计划添加更多OpenWrt设备支持
+- 计划添加Docker部署支持
+- 计划添加WebDAV文件共享功能
 
-本次版本主要修复了前端UI的主题切换问题和表格样式不一致问题，提升了用户体验。
-
-### 主要修复
-
-#### 1. 主题切换功能修复
-- **问题**: 部分页面背景颜色无法随主题切换变化
-- **原因**: `styles.css` 中存在大量硬编码颜色值
-- **修复**: 将所有硬编码颜色改为CSS变量
-- **影响文件**: `styles.css`, `theme.css`
-
-#### 2. 表格样式统一
-- **问题**: 多个页面表格样式不一致，部分页面表格显示异常
-- **修复**: 为所有使用表格的页面添加 `dashboard.css` 引用
-- **影响页面**: 
-  - `sync-dashboard.html`
-  - `ip-management.html`
-  - `device-assets.html`
-  - `route-management.html`
-  - `health-check.html`
-  - `network-devices.html`
-  - `lan/ip-management.html`
-
-#### 3. 数据同步功能增强
-- **修复**: 同步任务CRUD操作的错误处理
-- **修复**: 中文编码问题（添加UTF-8支持）
-- **优化**: 前端API调用错误提示
+### Changed
+- 优化P2P网络发现性能
+- 改进Web控制台用户体验
 
 ---
 
-## 版本 2.0 - 南向协议架构重构
+## [2.0.0-openwrt-preview] - 2026-02-11
 
-**发布日期**: 2026-02-09
+### 🎉 新增功能
+
+#### OpenWrt 路由器管理（预览版）
+- **路由器自动发现**: 自动扫描并发现局域网内的OpenWrt设备
+- **SSH连接管理**: 支持通过SSH连接到OpenWrt路由器
+- **系统状态监控**: 实时显示CPU、内存、温度、运行时间
+- **网络配置管理**: 查看和配置网络接口、DHCP、防火墙
+- **命令执行**: 通过Web界面执行Shell命令
+- **文件管理**: 上传、下载、编辑路由器文件
+
+#### Windows 安装包
+- **一键启动**: 提供`start.bat`脚本，双击即可运行
+- **真实设备模式**: 默认关闭Mock模式，连接真实OpenWrt设备
+- **详细文档**: 包含完整的安装和使用说明（README-Preview.txt）
+
+#### 技能管理增强
+- **技能发布**: 支持将本地AI能力发布到网络
+- **技能分享**: 支持分享给特定用户或群组
+- **技能执行**: 远程执行网络中的技能
+- **技能市场**: 浏览和安装网络中的技能
+
+### 🔧 改进优化
+
+#### 系统架构
+- 优化OpenWrt自动检测逻辑，支持多种检测方式
+- 改进Web控制台UI，增加OpenWrt管理页面
+- 优化P2P网络连接稳定性
+- 改进错误处理和日志记录
+
+#### 性能优化
+- 优化SSH连接池管理
+- 减少内存占用
+- 提高并发处理能力
+
+### 🐛 问题修复
+
+- 修复SSH连接超时问题
+- 修复技能执行日志显示异常
+- 修复网络拓扑图在某些情况下不更新的问题
+- 修复文件传输进度显示不准确的问题
+
+### ⚠️ 已知限制
+
+1. **预览版声明**: 此版本为预览版，仅供测试和评估使用
+2. **功能不完整**: 部分高级功能仍在开发中
+3. **兼容性问题**: 仅测试了部分OpenWrt版本（21.02+）
+4. **数据迁移**: 预览版数据可能不兼容正式版
+5. **Mock模式**: Windows版本默认关闭Mock，需要真实OpenWrt设备
+
+### 📦 发布文件
+
+| 文件 | 大小 | 说明 |
+|------|------|------|
+| `ooder-nexus-2.0.0-openwrt-preview-windows.zip` | 40.7 MB | Windows安装包 |
+| `ooder-nexus-2.0.0-preview.jar` | 44.7 MB | 可执行JAR包 |
+| `README-Preview.txt` | 3.4 KB | 详细说明文档 |
+| `start.bat` | 827 B | Windows启动脚本 |
+
+### 🔗 下载地址
+
+- **GitHub Releases**: https://github.com/oodercn/ooder-Nexus/releases/tag/v2.0.0-openwrt-preview
+- **Gitee 镜像**: https://gitee.com/ooderCN/ooder-nexus/releases
 
 ---
 
-## 概述
+## [2.0.0] - 2025-02-10
 
-本次版本对ooderNexus的南向协议架构进行了全面重构，引入了清晰的协议分层设计，实现了协议处理的标准化和模块化。同时优化了前端UI的滚动条样式和菜单布局。
+### 🎉 新增功能
+
+#### OpenWrt 集成
+- **自动角色检测**: 启动时自动检测OpenWrt系统，自动设置Agent角色为`routeAgent`
+- **深度系统集成**: 支持路由器系统状态监控、网络配置管理、IP地址管理
+- **一键安装脚本**: 提供OpenWrt专用安装脚本，自动完成环境配置
+
+#### VFS 虚拟文件系统
+- **哈希去重**: 相同文件只存储一份，节省存储空间
+- **版本控制**: 文件修改自动创建新版本，支持历史回溯
+- **原子操作**: 临时文件+重命名机制，防止数据损坏
+- **P2P同步**: 文件自动同步到网络节点，实现分布式存储
+
+#### 协议仿真与调试
+- **MCP仿真器**: 模拟MCP协议通信流程
+- **Route仿真器**: 模拟路由协议行为
+- **场景化测试**: 自定义测试场景，验证协议正确性
+- **可视化调试**: 图形化展示协议执行流程
+
+#### 网络管理
+- **网络拓扑可视化**: 图形化展示P2P网络结构
+- **链路管理**: 节点间链路创建、监控、断开
+- **流量监控**: 实时网络流量统计和分析
+
+### 🔧 改进优化
+
+- 优化P2P网络发现性能
+- 改进Web控制台响应速度
+- 优化数据存储结构
+- 改进错误提示信息
+
+### 🐛 问题修复
+
+- 修复P2P连接在某些网络环境下不稳定的问题
+- 修复技能执行超时处理不当的问题
+- 修复文件同步冲突处理逻辑
+- 修复日志文件过大导致的性能问题
 
 ---
 
-## 主要变更
+## [1.0.0] - 2024-12-01
 
-### 1. 南向协议架构重构
+### 🎉 初始版本发布
 
-#### 1.1 新增协议中枢层 (Protocol Hub)
+#### 核心功能
+- **P2P网络**: 去中心化组网，节点自动发现
+- **AI技能管理**: 发布、分享、执行AI技能
+- **存储管理**: 虚拟文件系统，支持文件版本控制
+- **系统监控**: 实时监控系统状态和性能指标
 
-**功能描述**:
-- 统一管理和分发南向协议命令
-- 支持动态协议注册和注销
-- 提供协议统计和监控功能
+#### 技术特性
+- 基于Ooder Agent SDK 0.6.6
+- Spring Boot 2.7.0 + Java 8
+- 支持Windows/Linux/macOS/OpenWrt
+- MIT开源协议
 
-**新增文件**:
-```
-src/main/java/net/ooder/nexus/protocol/
-├── ProtocolHub.java              # 协议中枢接口
-├── ProtocolHubImpl.java          # 协议中枢实现
-├── ProtocolHandler.java          # 协议处理器接口
-└── ProtocolAdapterInitializer.java  # 适配器自动初始化
-```
+---
 
-**核心功能**:
-| 功能 | 说明 |
+## 版本说明
+
+### 版本号格式
+
+本项目遵循[语义化版本](https://semver.org/lang/zh-CN/)规范：
+
+- **MAJOR**: 不兼容的API修改
+- **MINOR**: 向下兼容的功能新增
+- **PATCH**: 向下兼容的问题修复
+- **prerelease**: 预发布标识（如`-alpha`, `-beta`, `-preview`）
+
+### 版本标签说明
+
+| 标签 | 含义 |
 |------|------|
-| 协议注册 | `registerProtocolHandler(String, ProtocolHandler)` |
-| 协议注销 | `unregisterProtocolHandler(String)` |
-| 命令处理 | `handleCommand(CommandPacket)` |
-| 统计查询 | `getProtocolStats(String)` |
-| 异步处理 | `handleCommandAsync(CommandPacket, Callback)` |
-
-#### 1.2 新增协议适配器层
-
-**功能描述**:
-- 将原有混合代码拆分为独立的协议适配器
-- 每个适配器负责特定协议的处理
-- 支持命令验证、处理和状态管理
-
-**新增文件**:
-```
-src/main/java/net/ooder/nexus/protocol/adapter/
-├── AbstractProtocolAdapter.java  # 适配器抽象基类
-├── McpProtocolAdapter.java       # MCP协议适配器
-├── RouteProtocolAdapter.java     # 路由协议适配器
-└── EndProtocolAdapter.java       # 终端协议适配器
-```
-
-**支持的协议命令**:
-
-**MCP协议** (Master Control Protocol):
-- `MCP_REGISTER` - MCP节点注册
-- `MCP_DEREGISTER` - MCP节点注销
-- `MCP_HEARTBEAT` - 心跳保活
-- `MCP_STATUS` - 状态查询/上报
-- `MCP_DISCOVER` - 设备发现
-- `MCP_CONFIG` - 配置下发
-
-**Route协议** (Routing Protocol):
-- `ROUTE_REGISTER` - 路由节点注册
-- `ROUTE_DEREGISTER` - 路由节点注销
-- `ROUTE_UPDATE` - 路由表更新
-- `ROUTE_QUERY` - 路由查询
-- `ROUTE_STATUS` - 状态查询
-- `ROUTE_HEARTBEAT` - 心跳保活
-
-**End协议** (End Device Protocol):
-- `END_REGISTER` - 终端注册
-- `END_DEREGISTER` - 终端注销
-- `END_CAPABILITY` - 能力上报
-- `END_STATUS` - 状态查询/上报
-- `END_COMMAND` - 命令下发
-- `END_RESULT` - 结果上报
-- `END_HEARTBEAT` - 心跳保活
-
-#### 1.3 新增协议模型类
-
-**功能描述**:
-- 定义标准化的协议数据格式
-- 支持命令封装、签名验证和结果返回
-
-**新增文件**:
-```
-src/main/java/net/ooder/nexus/model/protocol/
-├── CommandPacket.java       # 命令数据包
-├── CommandHeader.java       # 命令头部信息
-├── CommandResult.java       # 命令执行结果
-├── CommandSignature.java    # 数字签名
-├── ProtocolStats.java       # 协议统计信息
-└── ProtocolStatus.java      # 协议状态
-```
-
-**数据模型**:
-
-```java
-// 命令数据包结构
-CommandPacket {
-    header: CommandHeader {
-        version: "2.0"           // 协议版本
-        protocolType: "MCP"      // 协议类型
-        commandType: "REGISTER"  // 命令类型
-        commandId: "uuid"        // 命令唯一ID
-        timestamp: 1707312000000 // 时间戳
-        sourceId: "device-001"   // 源节点ID
-        targetId: "nexus-001"    // 目标节点ID
-        priority: "NORMAL"       // 优先级
-        ttl: 30                  // 生存时间
-    }
-    payload: Map<String, Object> // 负载数据
-    signature: CommandSignature  // 数字签名
-}
-
-// 命令结果结构
-CommandResult {
-    code: 200                    // 状态码
-    message: "Success"          // 结果消息
-    data: Map<String, Object>   // 结果数据
-    executionTime: 15           // 执行时间(ms)
-    commandId: "uuid"           // 对应命令ID
-    timestamp: 1707312000015    // 时间戳
-}
-```
-
-### 2. 前端UI优化
-
-#### 2.1 滚动条样式优化
-
-**变更文件**: `src/main/resources/static/console/css/styles.css`
-
-**新增样式**:
-```css
-/* 滚动条样式 */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--ooder-background);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--ooder-border);
-    border-radius: 4px;
-    transition: background 0.2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--ooder-secondary);
-}
-```
-
-**效果**:
-- 统一的滚动条外观风格
-- 支持悬停效果
-- 与整体UI主题协调
-
-#### 2.2 侧边栏菜单自适应高度
-
-**变更内容**:
-```css
-/* 侧边栏样式优化 */
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-.nav-menu {
-    flex: 1;
-    overflow-y: auto;
-}
-```
-
-**效果**:
-- 菜单区域自适应侧边栏高度
-- 超出内容自动显示滚动条
-- 改善长菜单的显示效果
+| `[Unreleased]` | 未发布的功能，正在开发中 |
+| `Added` | 新增功能 |
+| `Changed` | 功能变更 |
+| `Deprecated` | 废弃功能 |
+| `Removed` | 移除功能 |
+| `Fixed` | 问题修复 |
+| `Security` | 安全修复 |
 
 ---
 
-## 架构改进
-
-### 前后对比
-
-| 方面 | 重构前 | 重构后 |
-|------|--------|--------|
-| 协议处理 | 混合在NexusSkillImpl中 | 独立的协议适配器 |
-| 扩展性 | 需修改核心代码 | 动态注册新协议 |
-| 代码组织 | 职责不清 | 分层清晰 |
-| 测试性 | 难以单元测试 | 可独立测试适配器 |
-| 统计监控 | 无统一统计 | 自动收集协议统计 |
-
-### 新架构优势
-
-1. **清晰的职责分离**
-   - ProtocolHub: 协议管理和路由
-   - ProtocolAdapter: 协议具体实现
-   - Model: 标准化数据格式
-
-2. **动态扩展能力**
-   - 运行时注册新协议
-   - 无需修改核心代码
-   - 支持热插拔
-
-3. **更好的可维护性**
-   - 代码模块化
-   - 易于理解和修改
-   - 降低耦合度
-
-4. **完善的监控能力**
-   - 自动统计命令处理情况
-   - 协议状态实时监控
-   - 性能指标收集
-
----
-
-## 兼容性说明
-
-### 向后兼容
-
-- 所有现有API保持不变
-- 现有功能不受影响
-- 新架构与旧代码共存
-
-### 升级建议
-
-1. **对于开发者**:
-   - 了解新的协议处理流程
-   - 使用ProtocolHub处理南向命令
-   - 参考适配器实现新协议
-
-2. **对于运维人员**:
-   - 监控新的协议统计指标
-   - 关注日志中的协议注册信息
-   - 无需修改现有配置
-
----
-
-## 性能指标
-
-### 协议处理性能
-
-| 指标 | 目标值 | 测试值 |
-|------|--------|--------|
-| 命令路由延迟 | < 10ms | ~5ms |
-| 协议注册时间 | < 100ms | ~50ms |
-| 并发处理能力 | 10,000+ | 通过测试 |
-
-### 资源占用
-
-- 内存占用增加: ~5MB (协议注册表和统计信息)
-- 启动时间增加: ~200ms (适配器初始化)
-- 运行时开销: 可忽略
-
----
-
-## 后续计划
-
-### Phase 2: 可视化增强 (进行中)
-
-- [ ] 集成D3.js/ECharts拓扑图
-- [ ] 实时流量监控
-- [ ] 网络状态仪表盘
-- [ ] 告警可视化
-
-### Phase 3: 安全模块
-
-- [ ] 身份认证体系
-- [ ] 权限控制(RBAC+ABAC)
-- [ ] 威胁检测与响应
-- [ ] 安全审计日志
-
-### Phase 4: 高级功能
-
-- [ ] 地理信息可视化
-- [ ] 智能网络分析
-- [ ] 自动故障诊断
-
----
-
-## 文档清单
-
-- [x] 功能变更说明 (本文档)
-- [x] 南向协议功能设计文档 (`SOUTH_PROTOCOL_DESIGN.md`)
-- [x] 实现路线图 (`IMPLEMENTATION_ROADMAP.md`)
-- [ ] API接口文档 (待补充)
-- [ ] 开发指南 (待补充)
-
----
-
-## 问题反馈
-
-如在使用过程中遇到问题，请通过以下方式反馈:
-
-1. 在GitHub提交Issue
-2. 联系开发团队
-3. 查看日志文件: `logs/system.log`
-
----
-
-**文档版本**: 1.0  
-**最后更新**: 2026-02-09  
-**作者**: ooderNexus开发团队
+**维护者**: ooder Team  
+**最后更新**: 2026-02-11
