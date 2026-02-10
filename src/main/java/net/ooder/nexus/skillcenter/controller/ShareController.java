@@ -35,14 +35,14 @@ public class ShareController {
         try {
             if (request.getSkillId() == null || request.getGroupId() == null) {
                 return ResponseEntity.badRequest()
-                        .body(ApiResponse.error(400, "Skill ID and Group ID are required"));
+                        .body(ApiResponse.error("400", "Skill ID and Group ID are required"));
             }
 
             boolean result = shareService.shareSkill(request.getSkillId(), request.getGroupId(), request.getMessage());
             return ResponseEntity.ok(ApiResponse.success(result));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to share skill: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to share skill: " + e.getMessage()));
         }
     }
 
@@ -57,7 +57,7 @@ public class ShareController {
             return ResponseEntity.ok(ApiResponse.success(sharedSkills));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to get shared skills: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to get shared skills: " + e.getMessage()));
         }
     }
 
@@ -72,7 +72,7 @@ public class ShareController {
             return ResponseEntity.ok(ApiResponse.success(receivedSkills));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to get received skills: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to get received skills: " + e.getMessage()));
         }
     }
 
@@ -86,19 +86,19 @@ public class ShareController {
         try {
             if (shareId == null || shareId.isEmpty()) {
                 return ResponseEntity.badRequest()
-                        .body(ApiResponse.error(400, "Share ID is required"));
+                        .body(ApiResponse.error("400", "Share ID is required"));
             }
 
             boolean result = shareService.unshareSkill(shareId);
             if (!result) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error(404, "Share not found"));
+                        .body(ApiResponse.error("404", "Share not found"));
             }
 
             return ResponseEntity.ok(ApiResponse.success(true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to unshare skill: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to unshare skill: " + e.getMessage()));
         }
     }
 

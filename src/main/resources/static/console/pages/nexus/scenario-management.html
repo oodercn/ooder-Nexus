@@ -153,59 +153,101 @@
             loadScenarios();
         };
 
-        // 模拟场景数据
+        // 场景数据
         let scenarios = [];
 
         async function loadScenarios() {
             try {
-                // 模拟API请求
-                const mockResponse = {
-                    status: 'success',
-                    message: '获取场景列表成功',
-                    data: [
-                        {
+                // 从设备列表生成场景数据
+                const response = await fetch('/api/devices/list');
+                const result = await response.json();
+
+                if (result.code === 200 && result.data) {
+                    const devices = result.data.devices || [];
+                    
+                    // 根据设备类型生成场景
+                    const enterpriseDevices = devices.filter(d => ['router', 'switch', 'nas'].includes(d.type));
+                    const personalDevices = devices.filter(d => ['light', 'socket', 'lock', 'sensor'].includes(d.type));
+                    const otherDevices = devices.filter(d => !['router', 'switch', 'nas', 'light', 'socket', 'lock', 'sensor'].includes(d.type));
+                    
+                    scenarios = [];
+                    
+                    if (enterpriseDevices.length > 0) {
+                        scenarios.push({
                             id: 'scenario-001',
                             name: '企业网络场景',
                             type: 'enterprise',
                             status: 'active',
-                            description: '企业网络环境',
+                            description: `包含 ${enterpriseDevices.length} 个企业设备`,
                             createdAt: new Date().toISOString(),
                             updatedAt: new Date().toISOString()
-                        },
-                        {
+                        });
+                    }
+                    
+                    if (personalDevices.length > 0) {
+                        scenarios.push({
                             id: 'scenario-002',
-                            name: '个人网络场景',
+                            name: '智能家居场景',
                             type: 'personal',
                             status: 'active',
-                            description: '个人网络环境',
+                            description: `包含 ${personalDevices.length} 个智能设备`,
                             createdAt: new Date().toISOString(),
                             updatedAt: new Date().toISOString()
-                        },
-                        {
+                        });
+                    }
+                    
+                    if (otherDevices.length > 0 || scenarios.length === 0) {
+                        scenarios.push({
                             id: 'scenario-003',
-                            name: '测试网络场景',
+                            name: '通用网络场景',
                             type: 'test',
-                            status: 'inactive',
-                            description: '测试网络环境',
+                            status: 'active',
+                            description: `包含 ${otherDevices.length} 个其他设备`,
                             createdAt: new Date().toISOString(),
                             updatedAt: new Date().toISOString()
-                        }
-                    ],
-                    timestamp: new Date().getTime()
-                };
-
-                // 验证API返回格式
-                const validatedResponse = nexusCommon.validateApiResponse(mockResponse);
-
-                if (validatedResponse.status === 'success' && validatedResponse.data) {
-                    scenarios = validatedResponse.data;
+                        });
+                    }
+                    
+                    renderScenarios();
+                    updateStatusOverview();
+                } else {
+                    // 使用默认场景
+                    scenarios = getDefaultScenarios();
                     renderScenarios();
                     updateStatusOverview();
                 }
             } catch (error) {
                 console.error('加载场景列表失败:', error);
-                nexusCommon.handleApiError(error, '加载场景列表失败');
+                // 使用默认场景
+                scenarios = getDefaultScenarios();
+                renderScenarios();
+                updateStatusOverview();
+                nexusCommon.handleApiError(error, '加载场景列表失败，使用默认数据');
             }
+        }
+        
+        // 获取默认场景
+        function getDefaultScenarios() {
+            return [
+                {
+                    id: 'scenario-001',
+                    name: '企业网络场景',
+                    type: 'enterprise',
+                    status: 'active',
+                    description: '企业网络环境',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'scenario-002',
+                    name: '智能家居场景',
+                    type: 'personal',
+                    status: 'active',
+                    description: '智能家居环境',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
         }
 
         function renderScenarios() {

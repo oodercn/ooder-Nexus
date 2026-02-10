@@ -76,7 +76,7 @@
             </div>
             
             <!-- 快捷操作 -->
-            <h3 style="margin: 30px 0 15px; color: var(--ooder-text);">快捷操作</h3>
+            <h3 style="margin: 30px 0 15px; color: var(--nexus-text);">快捷操作</h3>
             <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                 <div class="card status-card" onclick="navigateTo('network-settings')" style="cursor: pointer;">
                     <div class="status-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
@@ -387,16 +387,7 @@
             }
         }
 
-        // 切换主题 - 使用统一的 cookie 存储
-        function toggleTheme() {
-            document.body.classList.toggle('light-theme');
-            document.documentElement.classList.toggle('light-theme');
-            const isLightTheme = document.body.classList.contains('light-theme');
-            // 使用统一的 cookie key: nexus_theme
-            const expires = new Date();
-            expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
-            document.cookie = 'nexus_theme=' + (isLightTheme ? 'light' : 'dark') + '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
-        }
+        // 主题切换由 theme-manager.js 统一处理，使用 window.toggleTheme() 调用
 
         // 显示提示消息
         function showToast(message, type = 'info') {

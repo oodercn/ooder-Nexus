@@ -140,16 +140,16 @@ public class SkillManager {
 
     private void addDefaultSkills() {
         SkillInfo[] defaultSkills = {
-            new SkillInfo("skill-weather", "天气查询�?�?", "查询实时天气信息", "utilities"),
-            new SkillInfo("skill-stock", "股票查询�?�?", "查询股票实时行情", "finance"),
-            new SkillInfo("skill-translate", "翻译�?�?", "多语�?翻译服务", "utilities"),
-            new SkillInfo("skill-calculator", "计算器技�?", "数学计算工具", "utilities"),
-            new SkillInfo("skill-notes", "笔记�?�?", "创建和管理笔�?", "productivity"),
-            new SkillInfo("skill-reminder", "提醒�?�?", "设置和管理提�?", "productivity"),
-            new SkillInfo("skill-calendar", "日历�?�?", "管理日程安排", "productivity"),
-            new SkillInfo("skill-email", "邮件�?�?", "发�?�和管理邮件", "communication"),
-            new SkillInfo("skill-chat", "聊天�?�?", "实时聊天功能", "communication"),
-            new SkillInfo("skill-image", "图像处理�?�?", "图像处理和编�?", "media")
+            new SkillInfo("skill-weather", "天气查询技能", "查询实时天气信息", "utilities"),
+            new SkillInfo("skill-stock", "股票查询技能", "查询股票实时行情", "finance"),
+            new SkillInfo("skill-translate", "翻译技能", "多语言翻译服务", "utilities"),
+            new SkillInfo("skill-calculator", "计算器技能", "数学计算工具", "utilities"),
+            new SkillInfo("skill-notes", "笔记技能", "创建和管理笔记", "productivity"),
+            new SkillInfo("skill-reminder", "提醒技能", "设置和管理提醒", "productivity"),
+            new SkillInfo("skill-calendar", "日历技能", "管理日程安排", "productivity"),
+            new SkillInfo("skill-email", "邮件技能", "发送和管理邮件", "communication"),
+            new SkillInfo("skill-chat", "聊天技能", "实时聊天功能", "communication"),
+            new SkillInfo("skill-image", "图像处理技能", "图像处理和编辑", "media")
         };
         
         for (SkillInfo skill : defaultSkills) {

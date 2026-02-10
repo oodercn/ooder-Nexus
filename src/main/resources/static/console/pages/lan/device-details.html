@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>设备详情 - Nexus</title>
     <link rel="stylesheet" href="../../css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/sdk-data-service.js"></script>
 </head>
 <body>
     <div class="container">
@@ -21,8 +23,8 @@
         <div class="header">
             <h1><i class="ri-information-line"></i> 设备详情</h1>
             <div class="header-actions">
-                <button class="btn btn-secondary" onclick="toggleTheme()">
-                    <i class="ri-moon-line"></i> 切换主题
+                <button class="btn btn-secondary theme-toggle-btn">
+                    <i class="ri-sun-line"></i> 浅色模式
                 </button>
                 <button class="btn btn-secondary" onclick="backToList()">
                     <i class="ri-arrow-left-line"></i> 返回列表
@@ -185,10 +187,13 @@
     </div>
     
     <script>
-        // 模拟设备数据
-        const devices = {
-            1: {
-                id: 1,
+        // SDK存储集合名称
+        const COLLECTION_LAN_DEVICES = 'lan_devices';
+
+        // 默认设备数据
+        const defaultDevices = [
+            {
+                id: "1",
                 name: "主路由器",
                 type: "router",
                 ip: "192.168.1.1",
@@ -203,8 +208,8 @@
                 firstSeen: "2026-01-01 10:00:00",
                 lastSeen: "2026-01-30 19:00:00"
             },
-            2: {
-                id: 2,
+            {
+                id: "2",
                 name: "交换机",
                 type: "switch",
                 ip: "192.168.1.2",
@@ -219,8 +224,8 @@
                 firstSeen: "2026-01-02 11:00:00",
                 lastSeen: "2026-01-30 18:50:00"
             },
-            3: {
-                id: 3,
+            {
+                id: "3",
                 name: "PC 1",
                 type: "pc",
                 ip: "192.168.1.100",
@@ -235,19 +240,33 @@
                 firstSeen: "2026-01-03 09:00:00",
                 lastSeen: "2026-01-30 19:10:00"
             }
-        };
-        
+        ];
+
         // 获取URL参数中的设备ID
         function getDeviceId() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('id') || '1';
         }
-        
+
         // 初始化页面
-        function init() {
-            const deviceId = getDeviceId();
-            const device = devices[deviceId] || devices[1];
-            loadDeviceData(device);
+        async function init() {
+            try {
+                // 初始化默认数据
+                await SdkDataService.initCollection(COLLECTION_LAN_DEVICES, defaultDevices);
+
+                const deviceId = getDeviceId();
+                const result = await SdkDataService.getById(COLLECTION_LAN_DEVICES, deviceId);
+
+                if (result.code === 200 && result.data) {
+                    loadDeviceData(result.data);
+                } else {
+                    // 使用默认数据
+                    loadDeviceData(defaultDevices[0]);
+                }
+            } catch (error) {
+                console.error('加载设备数据失败:', error);
+                loadDeviceData(defaultDevices[0]);
+            }
         }
         
         // 加载设备数据
@@ -321,15 +340,7 @@
             }
         }
         
-        // 切换主题
-        function toggleTheme() {
-            const body = document.body;
-            if (body.classList.contains('dark-theme')) {
-                body.classList.remove('dark-theme');
-            } else {
-                body.classList.add('dark-theme');
-            }
-        }
+        // 主题切换由 theme-manager.js 统一处理
         
         // 初始化函数（由window.onload调用）
     </script>

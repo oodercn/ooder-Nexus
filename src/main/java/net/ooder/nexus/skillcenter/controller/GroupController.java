@@ -37,7 +37,7 @@ public class GroupController {
             return ResponseEntity.ok(ApiResponse.success(groups));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to get groups: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to get groups: " + e.getMessage()));
         }
     }
 
@@ -52,12 +52,12 @@ public class GroupController {
             Group group = groupStore.get(groupId);
             if (group == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error(404, "Group not found"));
+                        .body(ApiResponse.error("404", "Group not found"));
             }
             return ResponseEntity.ok(ApiResponse.success(group));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to get group: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to get group: " + e.getMessage()));
         }
     }
 
@@ -71,7 +71,7 @@ public class GroupController {
         try {
             if (request.getName() == null || request.getName().isEmpty()) {
                 return ResponseEntity.badRequest()
-                        .body(ApiResponse.error(400, "Group name is required"));
+                        .body(ApiResponse.error("400", "Group name is required"));
             }
 
             String groupId = "group-" + UUID.randomUUID().toString().substring(0, 8);
@@ -104,7 +104,7 @@ public class GroupController {
             return ResponseEntity.ok(ApiResponse.success(group));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to create group: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to create group: " + e.getMessage()));
         }
     }
 
@@ -120,7 +120,7 @@ public class GroupController {
             Group group = groupStore.get(groupId);
             if (group == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error(404, "Group not found"));
+                        .body(ApiResponse.error("404", "Group not found"));
             }
 
             if (request.getName() != null) {
@@ -133,7 +133,7 @@ public class GroupController {
             return ResponseEntity.ok(ApiResponse.success(group));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to update group: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to update group: " + e.getMessage()));
         }
     }
 
@@ -148,13 +148,13 @@ public class GroupController {
             Group removed = groupStore.remove(groupId);
             if (removed == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error(404, "Group not found"));
+                        .body(ApiResponse.error("404", "Group not found"));
             }
             groupMembers.remove(groupId);
             return ResponseEntity.ok(ApiResponse.success(true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to delete group: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to delete group: " + e.getMessage()));
         }
     }
 
@@ -170,7 +170,7 @@ public class GroupController {
             return ResponseEntity.ok(ApiResponse.success(members));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to get members: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to get members: " + e.getMessage()));
         }
     }
 
@@ -186,7 +186,7 @@ public class GroupController {
             Group group = groupStore.get(groupId);
             if (group == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error(404, "Group not found"));
+                        .body(ApiResponse.error("404", "Group not found"));
             }
 
             String memberId = "member-" + UUID.randomUUID().toString().substring(0, 8);
@@ -209,7 +209,7 @@ public class GroupController {
             return ResponseEntity.ok(ApiResponse.success(member));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to add member: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to add member: " + e.getMessage()));
         }
     }
 
@@ -225,13 +225,13 @@ public class GroupController {
             List<GroupMember> members = groupMembers.get(groupId);
             if (members == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error(404, "Group not found"));
+                        .body(ApiResponse.error("404", "Group not found"));
             }
 
             boolean removed = members.removeIf(m -> m.getId().equals(memberId));
             if (!removed) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error(404, "Member not found"));
+                        .body(ApiResponse.error("404", "Member not found"));
             }
 
             // 更新成员数量
@@ -243,7 +243,7 @@ public class GroupController {
             return ResponseEntity.ok(ApiResponse.success(true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(500, "Failed to remove member: " + e.getMessage()));
+                    .body(ApiResponse.error("500", "Failed to remove member: " + e.getMessage()));
         }
     }
 

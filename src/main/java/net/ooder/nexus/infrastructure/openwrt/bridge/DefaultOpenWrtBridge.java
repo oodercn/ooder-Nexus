@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1309,14 +1310,14 @@ public class DefaultOpenWrtBridge implements OpenWrtBridge {
                 channel.connect(commandTimeout);
 
                 StringBuilder stdout = new StringBuilder();
-                BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(in));
+                BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
                 String line;
                 while ((line = stdoutReader.readLine()) != null) {
                     stdout.append(line).append("\n");
                 }
 
                 StringBuilder stderr = new StringBuilder();
-                BufferedReader stderrReader = new BufferedReader(new InputStreamReader(err));
+                BufferedReader stderrReader = new BufferedReader(new InputStreamReader(err, StandardCharsets.UTF_8));
                 while ((line = stderrReader.readLine()) != null) {
                     stderr.append(line).append("\n");
                 }

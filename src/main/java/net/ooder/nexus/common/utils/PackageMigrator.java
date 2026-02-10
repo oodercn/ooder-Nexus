@@ -1,6 +1,7 @@
 package net.ooder.nexus.common.utils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
@@ -85,11 +86,11 @@ public class PackageMigrator {
         Files.createDirectories(targetFile.getParent());
 
         // 读取并修改内容
-        String content = new String(Files.readAllBytes(sourceFile));
+        String content = new String(Files.readAllBytes(sourceFile), StandardCharsets.UTF_8);
         String modifiedContent = updatePackageDeclarations(content);
 
         // 写入新文件
-        Files.write(targetFile, modifiedContent.getBytes());
+        Files.write(targetFile, modifiedContent.getBytes(StandardCharsets.UTF_8));
 
         System.out.println("  Copied: " + relPath);
     }

@@ -14,8 +14,8 @@
       "roles": ["personal", "home", "enterprise"]
     },
     {
-      "id": "personal-center",
-      "name": "个人中心",
+      "id": "user-center",
+      "name": "用户中心",
       "icon": "ri-user-line",
       "level": 1,
       "priority": "high",
@@ -24,7 +24,7 @@
       "children": [
         {
           "id": "personal-dashboard",
-          "name": "个人仪表盘",
+          "name": "个人概览",
           "icon": "ri-dashboard-3-line",
           "level": 2,
           "url": "pages/personal/dashboard.html",
@@ -34,7 +34,7 @@
         },
         {
           "id": "my-skills",
-          "name": "我的技能",
+          "name": "技能库",
           "icon": "ri-apps-line",
           "level": 2,
           "url": "pages/skillcenter/personal/my-skill.html",
@@ -54,7 +54,7 @@
         },
         {
           "id": "my-sharing",
-          "name": "技能分享",
+          "name": "技能共享",
           "icon": "ri-share-line",
           "level": 2,
           "url": "pages/skillcenter/my-sharing.html",
@@ -64,7 +64,7 @@
         },
         {
           "id": "my-groups",
-          "name": "我的群组",
+          "name": "用户群组",
           "icon": "ri-team-line",
           "level": 2,
           "url": "pages/skillcenter/my-groups.html",
@@ -75,8 +75,8 @@
       ]
     },
     {
-      "id": "ai-skill-center",
-      "name": "AI 技能中心",
+      "id": "ai-skills",
+      "name": "智能技能",
       "icon": "ri-robot-line",
       "level": 1,
       "priority": "high",
@@ -115,7 +115,7 @@
         },
         {
           "id": "user-preferences",
-          "name": "用户偏好",
+          "name": "偏好设置",
           "icon": "ri-settings-3-line",
           "level": 2,
           "url": "pages/llm-integration/user-preferences.html",
@@ -136,8 +136,8 @@
       ]
     },
     {
-      "id": "cloud-sync",
-      "name": "云端同步",
+      "id": "data-sync",
+      "name": "数据同步",
       "icon": "ri-cloud-line",
       "level": 1,
       "priority": "high",
@@ -145,8 +145,8 @@
       "roles": ["personal", "home", "enterprise"],
       "children": [
         {
-          "id": "sync-dashboard",
-          "name": "同步仪表盘",
+          "id": "sync-overview",
+          "name": "同步概览",
           "icon": "ri-dashboard-line",
           "level": 2,
           "url": "pages/skillcenter-sync/sync-dashboard.html",
@@ -155,8 +155,8 @@
           "roles": ["personal", "home", "enterprise"]
         },
         {
-          "id": "skill-upload",
-          "name": "技能上传",
+          "id": "skill-import",
+          "name": "导入技能",
           "icon": "ri-upload-line",
           "level": 2,
           "url": "pages/skillcenter-sync/skill-upload.html",
@@ -165,8 +165,8 @@
           "roles": ["personal", "home", "enterprise"]
         },
         {
-          "id": "skill-download",
-          "name": "技能下载",
+          "id": "skill-export",
+          "name": "导出技能",
           "icon": "ri-download-line",
           "level": 2,
           "url": "pages/skillcenter-sync/skill-download.html",
@@ -206,172 +206,100 @@
       "roles": ["personal", "home", "enterprise"],
       "children": [
         {
-          "id": "openwrt-router",
-          "name": "OpenWrt 路由器",
-          "icon": "ri-router-line",
+          "id": "network-overview",
+          "name": "网络概览",
+          "icon": "ri-dashboard-line",
           "level": 2,
+          "url": "pages/network/network-overview.html",
           "priority": "high",
           "status": "implemented",
-          "roles": ["personal", "home", "enterprise"],
-          "children": [
-            {
-              "id": "openwrt-dashboard",
-              "name": "路由器管理",
-              "icon": "ri-dashboard-line",
-              "level": 3,
-              "url": "pages/openwrt/router-dashboard.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "openwrt-network",
-              "name": "网络设置",
-              "icon": "ri-settings-3-line",
-              "level": 3,
-              "url": "pages/openwrt/network-settings.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "openwrt-ip",
-              "name": "IP 地址管理",
-              "icon": "ri-computer-line",
-              "level": 3,
-              "url": "pages/openwrt/ip-management.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "openwrt-blacklist",
-              "name": "黑名单管理",
-              "icon": "ri-shield-cross-line",
-              "level": 3,
-              "url": "pages/openwrt/blacklist.html",
-              "priority": "medium",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "openwrt-config",
-              "name": "配置文件",
-              "icon": "ri-file-settings-line",
-              "level": 3,
-              "url": "pages/openwrt/config-files.html",
-              "priority": "medium",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "openwrt-system",
-              "name": "系统状态",
-              "icon": "ri-server-line",
-              "level": 3,
-              "url": "pages/openwrt/system-status.html",
-              "priority": "medium",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "openwrt-command",
-              "name": "命令执行",
-              "icon": "ri-terminal-line",
-              "level": 3,
-              "url": "pages/openwrt/command.html",
-              "priority": "medium",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            }
-          ]
+          "roles": ["personal", "home", "enterprise"]
         },
         {
-          "id": "lan-network",
-          "name": "小局域网",
-          "icon": "ri-wifi-line",
+          "id": "network-config",
+          "name": "网络配置",
+          "icon": "ri-settings-3-line",
           "level": 2,
+          "url": "pages/network/network-config.html",
           "priority": "high",
           "status": "implemented",
-          "roles": ["personal", "home", "enterprise"],
-          "children": [
-            {
-              "id": "lan-dashboard",
-              "name": "局域网仪表盘",
-              "icon": "ri-dashboard-line",
-              "level": 3,
-              "url": "pages/lan/lan-dashboard.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "network-devices",
-              "name": "设备列表",
-              "icon": "ri-list-check",
-              "level": 3,
-              "url": "pages/lan/network-devices.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "device-details",
-              "name": "设备详情",
-              "icon": "ri-information-line",
-              "level": 3,
-              "url": "pages/lan/device-details.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "lan-network-settings",
-              "name": "网络设置",
-              "icon": "ri-settings-3-line",
-              "level": 3,
-              "url": "pages/lan/network-settings.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "lan-ip-management",
-              "name": "IP管理",
-              "icon": "ri-computer-line",
-              "level": 3,
-              "url": "pages/lan/ip-management.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "network-status",
-              "name": "网络状态",
-              "icon": "ri-signal-line",
-              "level": 3,
-              "url": "pages/lan/network-status.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            },
-            {
-              "id": "bandwidth-monitor",
-              "name": "带宽监控",
-              "icon": "ri-equalizer-line",
-              "level": 3,
-              "url": "pages/lan/bandwidth-monitor.html",
-              "priority": "high",
-              "status": "implemented",
-              "roles": ["personal", "home", "enterprise"]
-            }
-          ]
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
+          "id": "ip-management",
+          "name": "IP地址管理",
+          "icon": "ri-computer-line",
+          "level": 2,
+          "url": "pages/network/ip-management.html",
+          "priority": "high",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
+          "id": "device-assets",
+          "name": "设备资产",
+          "icon": "ri-list-check",
+          "level": 2,
+          "url": "pages/network/device-assets.html",
+          "priority": "high",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
+          "id": "traffic-monitor",
+          "name": "流量监控",
+          "icon": "ri-equalizer-line",
+          "level": 2,
+          "url": "pages/network/traffic-monitor.html",
+          "priority": "high",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
+          "id": "access-control",
+          "name": "访问控制",
+          "icon": "ri-shield-cross-line",
+          "level": 2,
+          "url": "pages/network/access-control.html",
+          "priority": "medium",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
+          "id": "config-management",
+          "name": "配置管理",
+          "icon": "ri-file-settings-line",
+          "level": 2,
+          "url": "pages/network/config-management.html",
+          "priority": "medium",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
+          "id": "device-monitor",
+          "name": "设备监控",
+          "icon": "ri-server-line",
+          "level": 2,
+          "url": "pages/network/device-monitor.html",
+          "priority": "medium",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
+          "id": "remote-terminal",
+          "name": "远程终端",
+          "icon": "ri-terminal-line",
+          "level": 2,
+          "url": "pages/network/remote-terminal.html",
+          "priority": "medium",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
         }
       ]
     },
     {
-      "id": "nexus-agent",
-      "name": "Nexus Agent",
+      "id": "system-services",
+      "name": "系统服务",
       "icon": "ri-server-line",
       "level": 1,
       "priority": "high",
@@ -380,7 +308,7 @@
       "children": [
         {
           "id": "nexus-dashboard",
-          "name": "仪表盘",
+          "name": "服务概览",
           "icon": "ri-dashboard-line",
           "level": 2,
           "url": "pages/nexus/dashboard.html",
@@ -565,7 +493,7 @@
       ]
     },
     {
-      "id": "storage-management",
+      "id": "storage",
       "name": "存储管理",
       "icon": "ri-folder-5-line",
       "level": 1,
@@ -595,7 +523,7 @@
         },
         {
           "id": "received-files",
-          "name": "收到的分享",
+          "name": "接收分享",
           "icon": "ri-download-line",
           "level": 2,
           "url": "pages/storage/storage-management.html",
@@ -606,8 +534,8 @@
       ]
     },
     {
-      "id": "system-tools",
-      "name": "系统工具",
+      "id": "ops-tools",
+      "name": "运维工具",
       "icon": "ri-tools-line",
       "level": 1,
       "priority": "medium",
@@ -627,8 +555,8 @@
       ]
     },
     {
-      "id": "admin-center",
-      "name": "管理中心",
+      "id": "system-admin",
+      "name": "系统管理",
       "icon": "ri-admin-line",
       "level": 1,
       "priority": "high",
@@ -637,7 +565,7 @@
       "children": [
         {
           "id": "admin-dashboard",
-          "name": "管理仪表盘",
+          "name": "管理概览",
           "icon": "ri-dashboard-line",
           "level": 2,
           "url": "pages/skillcenter/admin/dashboard.html",

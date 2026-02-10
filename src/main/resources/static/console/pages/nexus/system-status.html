@@ -328,6 +328,7 @@
     <!-- 公共JS模块 -->
     <script src="../../js/menu-loader.js"></script>
     <script src="../../js/nexus/common.js"></script>
+    <script src="/console/js/sdk-data-service.js"></script>
     <script>
         window.onload = function() {
             // 初始化菜单
@@ -336,8 +337,15 @@
             nexusCommon.initPage('system-status', loadSystemStatus);
         };
 
-        // 模拟系统状态数据
-        let systemStatus = {
+        // SDK存储集合名称
+        const COLLECTION_SYSTEM_STATUS = 'system_status';
+
+        // 系统状态数据
+        let systemStatus = null;
+
+        // 默认系统状态数据
+        const defaultSystemStatus = {
+            id: 'main',
             overview: {
                 version: "v1.0.0",
                 uptime: "24天 12小时 30分钟",
@@ -429,10 +437,34 @@
             ]
         };
 
-        function loadSystemStatus() {
-            updateSystemOverview();
-            updateServiceStatus();
-            updateSystemEvents();
+        async function loadSystemStatus() {
+            try {
+                // 检查是否存在系统状态数据
+                const exists = await SdkDataService.exists(COLLECTION_SYSTEM_STATUS, 'main');
+                if (!exists) {
+                    // 初始化默认数据
+                    await SdkDataService.save(COLLECTION_SYSTEM_STATUS, 'main', defaultSystemStatus);
+                    systemStatus = defaultSystemStatus;
+                } else {
+                    // 从SDK存储获取系统状态
+                    const result = await SdkDataService.getById(COLLECTION_SYSTEM_STATUS, 'main');
+                    if (result.code === 200 && result.data) {
+                        systemStatus = result.data;
+                    } else {
+                        systemStatus = defaultSystemStatus;
+                    }
+                }
+
+                updateSystemOverview();
+                updateServiceStatus();
+                updateSystemEvents();
+            } catch (error) {
+                console.error('加载系统状态失败:', error);
+                systemStatus = defaultSystemStatus;
+                updateSystemOverview();
+                updateServiceStatus();
+                updateSystemEvents();
+            }
         }
 
         function updateSystemOverview() {

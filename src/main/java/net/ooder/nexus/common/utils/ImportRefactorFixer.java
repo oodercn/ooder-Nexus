@@ -1,6 +1,7 @@
 package net.ooder.nexus.common.utils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
@@ -59,7 +60,7 @@ public class ImportRefactorFixer {
     }
 
     private static void fixFile(Path file) throws IOException {
-        String content = new String(Files.readAllBytes(file));
+        String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
         String originalContent = content;
 
         // 按长度降序排序，避免部分匹配问题
@@ -85,7 +86,7 @@ public class ImportRefactorFixer {
 
         // 如果有修改，写回文件
         if (!content.equals(originalContent)) {
-            Files.write(file, content.getBytes());
+            Files.write(file, content.getBytes(StandardCharsets.UTF_8));
             System.out.println("  Fixed imports: " + file.getFileName());
         }
     }

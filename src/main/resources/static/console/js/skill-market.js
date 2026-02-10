@@ -7,6 +7,19 @@ class SkillMarket {
             keyword: ''
         };
         this.currentPreviewSkill = null;
+        
+        // 分类色系配置
+        this.categoryColors = {
+            '网络管理': { color: '#3b82f6', light: '#60a5fa', bg: 'rgba(59, 130, 246, 0.1)' },
+            '家庭安全': { color: '#10b981', light: '#34d399', bg: 'rgba(16, 185, 129, 0.1)' },
+            '网络优化': { color: '#f59e0b', light: '#fbbf24', bg: 'rgba(245, 158, 11, 0.1)' },
+            '网络安全': { color: '#ef4444', light: '#f87171', bg: 'rgba(239, 68, 68, 0.1)' },
+            '设备管理': { color: '#8b5cf6', light: '#a78bfa', bg: 'rgba(139, 92, 246, 0.1)' },
+            '网络监控': { color: '#06b6d4', light: '#22d3ee', bg: 'rgba(6, 182, 212, 0.1)' },
+            '网络工具': { color: '#64748b', light: '#94a3b8', bg: 'rgba(100, 116, 139, 0.1)' },
+            '系统核心': { color: '#ec4899', light: '#f472b6', bg: 'rgba(236, 72, 153, 0.1)' },
+            '智能家居': { color: '#14b8a6', light: '#2dd4bf', bg: 'rgba(20, 184, 166, 0.1)' }
+        };
     }
 
     async init() {
@@ -36,6 +49,8 @@ class SkillMarket {
             
             if (data && data.code === 200 && data.data) {
                 this.skillList = data.data;
+                // 更新统计信息
+                this.updateStats();
                 // 应用筛选
                 this.applyFilter();
             } else {
@@ -48,6 +63,20 @@ class SkillMarket {
             this.renderSkillMarket();
             this.showError('加载技能市场失败，请检查网络连接');
         }
+    }
+
+    updateStats() {
+        const totalSkills = this.skillList.length;
+        const totalDownloads = this.skillList.reduce((sum, skill) => {
+            return sum + (skill.metadata?.downloads || 0);
+        }, 0);
+        const avgRating = totalSkills > 0 ? 
+            (this.skillList.reduce((sum, skill) => sum + (skill.metadata?.rating || 0), 0) / totalSkills).toFixed(1) : 
+            '0.0';
+        
+        document.getElementById('total-skills').textContent = totalSkills;
+        document.getElementById('total-downloads').textContent = this.formatNumber(totalDownloads);
+        document.getElementById('avg-rating').textContent = avgRating;
     }
 
     applyFilter() {
@@ -64,7 +93,7 @@ class SkillMarket {
             filteredSkills = filteredSkills.filter(skill => 
                 skill.skillName.toLowerCase().includes(keyword) ||
                 skill.description.toLowerCase().includes(keyword) ||
-                skill.tags.some(tag => tag.toLowerCase().includes(keyword))
+                skill.tags?.some(tag => tag.toLowerCase().includes(keyword))
             );
         }
         
@@ -89,10 +118,10 @@ class SkillMarket {
         skills.forEach(skill => {
             const meta = skill.metadata || {};
             const tags = meta.tags || [];
-            const capabilities = meta.capabilities || [];
+            const categoryColor = this.categoryColors[skill.category] || this.categoryColors['网络管理'];
             
             html += `
-                <div class="skill-card" data-skill-id="${skill.skillId}">
+                <div class="skill-card" data-skill-id="${skill.skillId}" data-category="${skill.category}">
                     <div class="skill-card-header">
                         <div class="skill-icon">
                             <i class="${meta.icon || 'ri-code-line'}"></i>
@@ -156,99 +185,83 @@ class SkillMarket {
         }
     }
 
-    async installSkill(skillId) {
-        try {
-            const skill = this.skillList.find(s => s.skillId === skillId);
-            if (!skill) {
-                this.showError('技能不存在');
-                return;
-            }
+    previewSkill(skillId) {
+        const skill = this.skillList.find(s => s.skillId === skillId);
+        if (!skill) return;
 
-            // 模拟安装过程
-            this.showSuccess(`正在安装 ${skill.skillName}...`);
-            
-            setTimeout(() => {
-                this.showSuccess(`${skill.skillName} 安装成功！`);
-            }, 1500);
-            
-        } catch (error) {
-            console.error('安装技能失败:', error);
-            this.showError('安装技能失败，请检查网络连接');
+        this.currentPreviewSkill = skill;
+        const meta = skill.metadata || {};
+        const categoryColor = this.categoryColors[skill.category] || this.categoryColors['网络管理'];
+
+        // 更新弹窗内容
+        document.getElementById('preview-skill-name').textContent = skill.skillName;
+        document.getElementById('preview-skill-author').textContent = meta.author || '未知';
+        document.getElementById('preview-skill-category').textContent = skill.category;
+        document.getElementById('preview-skill-rating').textContent = (meta.rating || 0) + ' 分';
+        document.getElementById('preview-skill-downloads').textContent = this.formatNumber(meta.downloads || 0) + ' 次';
+        document.getElementById('preview-skill-description').textContent = skill.description;
+        
+        const iconEl = document.getElementById('preview-skill-icon');
+        iconEl.className = meta.icon || 'ri-code-line';
+
+        // 更新能力列表
+        const capabilitiesList = document.getElementById('preview-skill-capabilities');
+        const capabilities = meta.capabilities || [];
+        capabilitiesList.innerHTML = capabilities.map(cap => `<li>${cap}</li>`).join('');
+
+        // 设置弹窗颜色主题 - 通过设置CSS变量
+        const modalContent = document.querySelector('#skill-preview-modal .modal-content');
+        if (modalContent) {
+            modalContent.style.setProperty('--skill-color', categoryColor.color);
+            modalContent.style.setProperty('--skill-color-light', categoryColor.light);
+            modalContent.style.setProperty('--skill-bg', categoryColor.bg);
         }
+
+        // 显示弹窗
+        openModal('skill-preview-modal');
     }
 
-    async previewSkill(skillId) {
-        try {
-            const skill = this.skillList.find(s => s.skillId === skillId);
-            if (!skill) {
-                this.showError('技能不存在');
-                return;
-            }
+    installSkill(skillId) {
+        const skill = this.skillList.find(s => s.skillId === skillId);
+        if (!skill) return;
 
-            this.currentPreviewSkill = skill;
-            const meta = skill.metadata || {};
-            
-            // 填充预览信息
-            document.getElementById('preview-skill-name').textContent = skill.skillName;
-            document.getElementById('preview-skill-description').textContent = skill.description;
-            document.getElementById('preview-skill-version').textContent = meta.version || '1.0.0';
-            document.getElementById('preview-skill-author').textContent = meta.author || '未知';
-            document.getElementById('preview-skill-category').textContent = skill.category;
-            document.getElementById('preview-skill-rating').textContent = (meta.rating || 0) + ' 分';
-            document.getElementById('preview-skill-downloads').textContent = this.formatNumber(meta.downloads || 0);
-            
-            const iconEl = document.getElementById('preview-skill-icon');
-            iconEl.className = meta.icon || 'ri-code-line';
-            
-            // 填充功能特性
-            const capabilitiesList = document.getElementById('preview-skill-capabilities');
-            const capabilities = meta.capabilities || [];
-            capabilitiesList.innerHTML = capabilities.map(cap => `<li>${cap}</li>`).join('');
-            
-            // 显示模态框
-            document.getElementById('skill-preview-modal').classList.add('active');
-            
-        } catch (error) {
-            console.error('预览技能失败:', error);
-            this.showError('预览技能失败');
-        }
+        // 模拟安装过程
+        this.showNotification(`正在安装 ${skill.skillName}...`, 'info');
+        
+        setTimeout(() => {
+            this.showNotification(`${skill.skillName} 安装成功！`, 'success');
+        }, 1500);
     }
 
-    showSuccess(message) {
-        this.showNotification(message, 'success');
-    }
-
-    showError(message) {
-        this.showNotification(message, 'error');
-    }
-
-    showNotification(message, type) {
+    showNotification(message, type = 'success') {
         // 移除现有通知
         const existingNotification = document.querySelector('.notification');
         if (existingNotification) {
             existingNotification.remove();
         }
-        
+
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <i class="ri-${type === 'success' ? 'check-line' : 'error-warning-line'}"></i>
-            ${message}
-        `;
+        notification.textContent = message;
         document.body.appendChild(notification);
-        
+
         setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease forwards';
-            setTimeout(() => notification.remove(), 300);
+            notification.remove();
         }, 3000);
+    }
+
+    showError(message) {
+        this.showNotification(message, 'error');
     }
 }
 
-let skillMarket;
-document.addEventListener('DOMContentLoaded', () => {
-    skillMarket = new SkillMarket();
-    skillMarket.init();
-});
+// 全局函数，供HTML调用
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
 
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
@@ -257,25 +270,21 @@ function closeModal(modalId) {
     }
 }
 
-async function refreshSkillMarket() {
-    if (skillMarket) {
-        await skillMarket.loadSkillMarket();
-    } else {
-        alert('页面未完全加载，请刷新后重试');
-    }
-}
-
-async function installSkillFromPreview() {
-    if (skillMarket && skillMarket.currentPreviewSkill) {
-        await skillMarket.installSkill(skillMarket.currentPreviewSkill.skillId);
+function installSkillFromPreview() {
+    if (skillMarket.currentPreviewSkill) {
+        skillMarket.installSkill(skillMarket.currentPreviewSkill.skillId);
         closeModal('skill-preview-modal');
     }
 }
 
-// 点击模态框外部关闭
-window.onclick = function(event) {
-    const modal = document.getElementById('skill-preview-modal');
-    if (event.target === modal) {
-        closeModal('skill-preview-modal');
-    }
+function refreshSkillMarket() {
+    skillMarket.loadSkillMarket();
 }
+
+// 初始化
+const skillMarket = new SkillMarket();
+
+// 等待DOM加载完成后初始化
+document.addEventListener('DOMContentLoaded', () => {
+    skillMarket.init();
+});

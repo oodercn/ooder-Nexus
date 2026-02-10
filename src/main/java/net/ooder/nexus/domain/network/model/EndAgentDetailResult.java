@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * 终端代理详情结果实体Bean
- * 用于EndAgentController中getEndAgentDetail方法的返回类�?
+ * 用于EndAgentController中getEndAgentDetail方法的返回类型
  */
 public class EndAgentDetailResult {
     

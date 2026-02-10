@@ -12,6 +12,7 @@
     <script src="../../js/nexus/ui.js"></script>
     <script src="../../js/nexus/utils.js"></script>
     <script src="../../js/nexus/sdk-proxy.js"></script>
+    <script src="/console/js/sdk-data-service.js"></script>
 </head>
 <body class="nexus-page">
     <div class="nexus-container">
@@ -176,151 +177,55 @@
             nexusCommon.initPage('network-topology', loadNetworkTopology);
         };
 
-        // 模拟网络拓扑数据
+        // SDK存储集合名称
+        const COLLECTION_TOPOLOGY = 'topology';
+
+        // 网络拓扑数据
         let networkTopology = {
             nodes: [],
             connections: []
         };
 
+        // 默认拓扑数据
+        const defaultTopology = {
+            nodes: [
+                { id: "mcp-agent-001", name: "主Nexus", type: "mcp", status: "active", x: 200, y: 200 },
+                { id: "route-agent-001", name: "路由代理1", type: "route", status: "active", x: 400, y: 100 },
+                { id: "route-agent-002", name: "路由代理2", type: "route", status: "active", x: 400, y: 300 },
+                { id: "end-agent-001", name: "智能灯泡", type: "end", status: "active", x: 600, y: 50 },
+                { id: "end-agent-002", name: "智能插座", type: "end", status: "active", x: 600, y: 150 },
+                { id: "end-agent-003", name: "摄像头", type: "end", status: "inactive", x: 600, y: 250 },
+                { id: "end-agent-004", name: "智能音箱", type: "end", status: "active", x: 600, y: 350 },
+                { id: "gateway-001", name: "网关", type: "gateway", status: "active", x: 100, y: 200 }
+            ],
+            connections: [
+                { id: "conn-001", source: "mcp-agent-001", target: "route-agent-001", type: "direct", status: "active" },
+                { id: "conn-002", source: "mcp-agent-001", target: "route-agent-002", type: "direct", status: "active" },
+                { id: "conn-003", source: "route-agent-001", target: "end-agent-001", type: "direct", status: "active" },
+                { id: "conn-004", source: "route-agent-001", target: "end-agent-002", type: "direct", status: "active" },
+                { id: "conn-005", source: "route-agent-002", target: "end-agent-003", type: "direct", status: "inactive" },
+                { id: "conn-006", source: "route-agent-002", target: "end-agent-004", type: "direct", status: "active" },
+                { id: "conn-007", source: "mcp-agent-001", target: "gateway-001", type: "direct", status: "active" },
+                { id: "conn-008", source: "route-agent-001", target: "route-agent-002", type: "direct", status: "active" }
+            ]
+        };
+
         async function loadNetworkTopology() {
             try {
-                // 模拟API请求
-                const mockResponse = {
-                    status: 'success',
-                    message: '获取网络拓扑数据成功',
-                    data: {
-                        nodes: [
-                            {
-                                id: "mcp-agent-001",
-                                name: "主Nexus",
-                                type: "mcp",
-                                status: "active",
-                                x: 200,
-                                y: 200
-                            },
-                            {
-                                id: "route-agent-001",
-                                name: "路由代理1",
-                                type: "route",
-                                status: "active",
-                                x: 400,
-                                y: 100
-                            },
-                            {
-                                id: "route-agent-002",
-                                name: "路由代理2",
-                                type: "route",
-                                status: "active",
-                                x: 400,
-                                y: 300
-                            },
-                            {
-                                id: "end-agent-001",
-                                name: "智能灯泡",
-                                type: "end",
-                                status: "active",
-                                x: 600,
-                                y: 50
-                            },
-                            {
-                                id: "end-agent-002",
-                                name: "智能插座",
-                                type: "end",
-                                status: "active",
-                                x: 600,
-                                y: 150
-                            },
-                            {
-                                id: "end-agent-003",
-                                name: "摄像头",
-                                type: "end",
-                                status: "inactive",
-                                x: 600,
-                                y: 250
-                            },
-                            {
-                                id: "end-agent-004",
-                                name: "智能音箱",
-                                type: "end",
-                                status: "active",
-                                x: 600,
-                                y: 350
-                            },
-                            {
-                                id: "gateway-001",
-                                name: "网关",
-                                type: "gateway",
-                                status: "active",
-                                x: 100,
-                                y: 200
-                            }
-                        ],
-                        connections: [
-                            {
-                                id: "conn-001",
-                                source: "mcp-agent-001",
-                                target: "route-agent-001",
-                                type: "direct",
-                                status: "active"
-                            },
-                            {
-                                id: "conn-002",
-                                source: "mcp-agent-001",
-                                target: "route-agent-002",
-                                type: "direct",
-                                status: "active"
-                            },
-                            {
-                                id: "conn-003",
-                                source: "route-agent-001",
-                                target: "end-agent-001",
-                                type: "direct",
-                                status: "active"
-                            },
-                            {
-                                id: "conn-004",
-                                source: "route-agent-001",
-                                target: "end-agent-002",
-                                type: "direct",
-                                status: "active"
-                            },
-                            {
-                                id: "conn-005",
-                                source: "route-agent-002",
-                                target: "end-agent-003",
-                                type: "direct",
-                                status: "inactive"
-                            },
-                            {
-                                id: "conn-006",
-                                source: "route-agent-002",
-                                target: "end-agent-004",
-                                type: "direct",
-                                status: "active"
-                            },
-                            {
-                                id: "conn-007",
-                                source: "mcp-agent-001",
-                                target: "gateway-001",
-                                type: "direct",
-                                status: "active"
-                            },
-                            {
-                                id: "conn-008",
-                                source: "route-agent-001",
-                                target: "route-agent-002",
-                                type: "direct",
-                                status: "active"
-                            }
-                        ]
-                    },
-                    timestamp: new Date().getTime()
-                };
+                // 检查是否存在拓扑数据
+                const exists = await SdkDataService.exists(COLLECTION_TOPOLOGY, 'main');
+                if (!exists) {
+                    // 初始化默认拓扑数据
+                    await SdkDataService.save(COLLECTION_TOPOLOGY, 'main', defaultTopology);
+                }
 
-                // 验证API返回格式
-                const validatedResponse = nexusCommon.validateApiResponse(mockResponse);
-
-                if (validatedResponse.status === 'success' && validatedResponse.data) {
+                // 从SDK存储获取拓扑数据
+                const result = await SdkDataService.getById(COLLECTION_TOPOLOGY, 'main');
+                if (result.code === 200 && result.data) {
+                    networkTopology = result.data;
+                } else {
+                    networkTopology = defaultTopology;
+                }
                     networkTopology = validatedResponse.data;
                     renderNetworkTopology();
                     updateStatusOverview();

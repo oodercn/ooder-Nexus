@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Nexus�?能实现类
+ * Nexus技能实现类
  */
 public class NexusSkillImpl implements NexusSkill {
     
@@ -38,10 +38,10 @@ public class NexusSkillImpl implements NexusSkill {
     // 自有网络链路存储
     private final Map<String, NetworkLink> networkLinks = new ConcurrentHashMap<>();
     
-    // Nexus管理�?
+    // Nexus管理器
     private NexusManager nexusManager;
     
-    // 网络状�?�监�?
+    // 网络状态监听
     private final AtomicLong packetsSent = new AtomicLong(0);
     private final AtomicLong packetsReceived = new AtomicLong(0);
     private final AtomicLong packetsFailed = new AtomicLong(0);
@@ -58,12 +58,12 @@ public class NexusSkillImpl implements NexusSkill {
     private final Map<String, CommandTask> activeCommands = new ConcurrentHashMap<>();
     private final Map<String, CommandStats> commandStats = new ConcurrentHashMap<>();
     private final AtomicInteger commandProcessorCount = new AtomicInteger(0);
-    private final int maxConcurrentCommands = 10; // �?大并发命令数
-    private final long commandTimeoutThreshold = 30000; // 30秒命令超�?
+    private final int maxConcurrentCommands = 10; // 最大并发命令数
+    private final long commandTimeoutThreshold = 30000; // 30秒命令超时
     private ScheduledExecutorService commandMonitorExecutor;
     private ScheduledExecutorService commandProcessorExecutor;
     
-    // 命令任务�?
+    // 命令任务数
     private static class CommandTask {
         private String commandId;
         private CommandPacket packet;
@@ -103,7 +103,7 @@ public class NexusSkillImpl implements NexusSkill {
         }
     }
     
-    // 命令统计�?
+    // 命令统计数
     private static class CommandStats {
         private AtomicLong totalCommands = new AtomicLong(0);
         private AtomicLong successfulCommands = new AtomicLong(0);
@@ -227,7 +227,7 @@ public class NexusSkillImpl implements NexusSkill {
         }
     }
     
-    // 网络状�?�枚�?
+    // 网络状态枚举
     public enum NetworkStatus {
         OK,
         WARNING,
@@ -243,11 +243,11 @@ public class NexusSkillImpl implements NexusSkill {
         this.agentSDK = sdk;
         this.agentId = sdk.getAgentId();
         
-        // 初始化Nexus管理�?
+        // 初始化Nexus管理器
         nexusManager = new NexusManagerImpl();
         nexusManager.initialize(sdk);
         
-        // 启动网络状�?�监�?
+        // 启动网络状态监听
         startNetworkMonitoring();
         
         log.info("Nexus Skill initialized successfully");
@@ -257,9 +257,9 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleMcpRegisterCommand(CommandPacket packet) {
         log.info("Handling MCP register command: {}", packet);
         try {
-            // 南下协议基础逻辑：存储注册信�?
+            // 南下协议基础逻辑：存储注册信息
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String agentId = "agent_" + System.currentTimeMillis();
             data.put("agentId", agentId);
             data.put("status", "registered");
@@ -267,7 +267,7 @@ public class NexusSkillImpl implements NexusSkill {
             data.put("lastHeartbeatTime", System.currentTimeMillis());
             routeAgents.put(agentId, data);
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Registered agent: {}", agentId);
@@ -281,13 +281,13 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleMcpDeregisterCommand(CommandPacket packet) {
         log.info("Handling MCP deregister command: {}", packet);
         try {
-            // 南下协议基础逻辑：移除注册信�?
+            // 南下协议基础逻辑：移除注册信息
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String agentId = "agent_" + System.currentTimeMillis();
             routeAgents.remove(agentId);
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Deregistered agent: {}", agentId);
@@ -301,9 +301,9 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleMcpHeartbeatCommand(CommandPacket packet) {
         log.info("Handling MCP heartbeat command: {}", packet);
         try {
-            // 南下协议基础逻辑：更新心跳时�?
+            // 南下协议基础逻辑：更新心跳时间
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String agentId = "agent_" + System.currentTimeMillis();
             if (routeAgents.containsKey(agentId)) {
                 Map<String, Object> agentInfo = routeAgents.get(agentId);
@@ -311,13 +311,13 @@ public class NexusSkillImpl implements NexusSkill {
                 agentInfo.put("status", "active");
                 routeAgents.put(agentId, agentInfo);
                 
-                // 更新网络链路的心跳时�?
+                // 更新网络链路的心跳时间
                 updateLinkHeartbeat(agentId);
                 
                 log.info("Updated heartbeat for agent: {}", agentId);
             }
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
         } catch (Exception e) {
@@ -330,7 +330,7 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleMcpStatusCommand(CommandPacket packet) {
         log.info("Handling MCP status command: {}", packet);
         try {
-            // 南下协议基础逻辑：返回状态信�?
+            // 南下协议基础逻辑：返回状态信息
             Map<String, Object> status = new HashMap<>();
             status.put("agentId", agentId);
             status.put("status", "online");
@@ -341,7 +341,7 @@ public class NexusSkillImpl implements NexusSkill {
             status.put("networkStatus", networkStatus);
             status.put("networkStats", getNetworkStats());
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Status: {}", status);
@@ -355,14 +355,14 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleMcpDiscoverCommand(CommandPacket packet) {
         log.info("Handling MCP discover command: {}", packet);
         try {
-            // 南下协议基础逻辑：返回发现结�?
+            // 南下协议基础逻辑：返回发现结果
             Map<String, Object> result = new HashMap<>();
             result.put("agents", routeAgents);
             result.put("links", networkLinks);
             result.put("networkStatus", networkStatus);
             result.put("timestamp", System.currentTimeMillis());
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Discover result: {}", result);
@@ -376,13 +376,13 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleRouteQueryCommand(CommandPacket packet) {
         log.info("Handling route query command: {}", packet);
         try {
-            // 南下协议基础逻辑：返回路由信�?
+            // 南下协议基础逻辑：返回路由信息
             Map<String, Object> result = new HashMap<>();
             result.put("routes", routeAgents);
             result.put("networkStatus", networkStatus);
             result.put("timestamp", System.currentTimeMillis());
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Route query result: {}", result);
@@ -396,16 +396,16 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleRouteUpdateCommand(CommandPacket packet) {
         log.info("Handling route update command: {}", packet);
         try {
-            // 南下协议基础逻辑：更新路由信�?
+            // 南下协议基础逻辑：更新路由信息
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String routeId = "route_" + System.currentTimeMillis();
             data.put("routeId", routeId);
             data.put("status", "updated");
             data.put("updateTime", System.currentTimeMillis());
             routeAgents.put(routeId, data);
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Updated route: {}", routeId);
@@ -419,13 +419,13 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleEndagentDiscoverCommand(CommandPacket packet) {
         log.info("Handling endagent discover command: {}", packet);
         try {
-            // 南下协议基础逻辑：返回终端发现结�?
+            // 南下协议基础逻辑：返回终端发现结果
             Map<String, Object> result = new HashMap<>();
             result.put("endagents", endAgents);
             result.put("networkStatus", networkStatus);
             result.put("timestamp", System.currentTimeMillis());
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Endagent discover result: {}", result);
@@ -439,16 +439,16 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleEndagentStatusCommand(CommandPacket packet) {
         log.info("Handling endagent status command: {}", packet);
         try {
-            // 南下协议基础逻辑：返回终端状�?
+            // 南下协议基础逻辑：返回终端状态
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String endagentId = "endagent_" + System.currentTimeMillis();
             if (endAgents.containsKey(endagentId)) {
                 Map<String, Object> status = endAgents.get(endagentId);
                 log.info("Endagent status: {}", status);
             }
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
         } catch (Exception e) {
             log.error("Error handling endagent status command: {}", e.getMessage(), e);
@@ -460,20 +460,20 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleEndagentAddCommand(CommandPacket packet) {
         log.info("Handling endagent add command: {}", packet);
         try {
-            // 南下协议基础逻辑：添加终�?
+            // 南下协议基础逻辑：添加终端
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String endagentId = "endagent_" + System.currentTimeMillis();
-            // 1. �?查是否已存在
+            // 1. 检查是否已存在
             if (endAgents.containsKey(endagentId)) {
-                // 2. �?查激活状�?
+                // 2. 检查激活状态
                 Map<String, Object> existingEndagent = endAgents.get(endagentId);
                 String status = (String) existingEndagent.get("status");
                 if ("active".equals(status)) {
                     log.info("Endagent already exists and is active: {}", endagentId);
                     return;
                 } else {
-                    // 更新状�?�为active
+                    // 更新状态为active
                     existingEndagent.put("status", "active");
                     existingEndagent.put("lastUpdateTime", System.currentTimeMillis());
                     existingEndagent.put("lastHeartbeatTime", System.currentTimeMillis());
@@ -491,14 +491,14 @@ public class NexusSkillImpl implements NexusSkill {
                 endAgents.put(endagentId, data);
                 log.info("Added new endagent: {}", endagentId);
                 
-                // 4. MCP�?启端�?
+                // 4. MCP开启端口
                 openMcpPortForEndagent(endagentId);
                 
                 // 5. 允许endAgent扫描
                 allowEndagentScan(endagentId);
             }
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
         } catch (Exception e) {
             log.error("Error handling endagent add command: {}", e.getMessage(), e);
@@ -510,13 +510,13 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleEndagentRemoveCommand(CommandPacket packet) {
         log.info("Handling endagent remove command: {}", packet);
         try {
-            // 南下协议基础逻辑：移除终�?
+            // 南下协议基础逻辑：移除终端
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String endagentId = "endagent_" + System.currentTimeMillis();
             endAgents.remove(endagentId);
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Removed endagent: {}", endagentId);
@@ -530,15 +530,15 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleTaskRequestCommand(CommandPacket packet) {
         log.info("Handling task request command: {}", packet);
         try {
-            // 南下协议基础逻辑：存储任务请�?
+            // 南下协议基础逻辑：存储任务请求
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String taskId = "task_" + System.currentTimeMillis();
             data.put("taskId", taskId);
             data.put("status", "received");
             data.put("receiveTime", System.currentTimeMillis());
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Received task request: {}", taskId);
@@ -552,15 +552,15 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleTaskResponseCommand(CommandPacket packet) {
         log.info("Handling task response command: {}", packet);
         try {
-            // 南下协议基础逻辑：存储任务响�?
+            // 南下协议基础逻辑：存储任务响应
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String taskId = "task_" + System.currentTimeMillis();
             data.put("taskId", taskId);
             data.put("status", "completed");
             data.put("completeTime", System.currentTimeMillis());
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Received task response: {}", taskId);
@@ -574,15 +574,15 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleAuthenticateCommand(CommandPacket packet) {
         log.info("Handling authenticate command: {}", packet);
         try {
-            // 南下协议基础逻辑：处理认证请�?
+            // 南下协议基础逻辑：处理认证请求
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String authId = "auth_" + System.currentTimeMillis();
             data.put("authId", authId);
             data.put("status", "processing");
             data.put("requestTime", System.currentTimeMillis());
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Received authentication request: {}", authId);
@@ -596,15 +596,15 @@ public class NexusSkillImpl implements NexusSkill {
     public void handleAuthResponseCommand(CommandPacket packet) {
         log.info("Handling auth response command: {}", packet);
         try {
-            // 南下协议基础逻辑：处理认证响�?
+            // 南下协议基础逻辑：处理认证响应
             Map<String, Object> data = new HashMap<>();
-            // �?化实现，避免API调用错误
+            // 简化实现，避免API调用错误
             String authId = "auth_" + System.currentTimeMillis();
             data.put("authId", authId);
             data.put("status", "completed");
             data.put("responseTime", System.currentTimeMillis());
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnReceive(1);
             
             log.info("Received authentication response: {}", authId);
@@ -621,7 +621,7 @@ public class NexusSkillImpl implements NexusSkill {
             // 启动逻辑：初始化网络链路
             initializeNetworkLinks();
             
-            // 启动网络状�?�监�?
+            // 启动网络状态监听
             startNetworkMonitoring();
             
             log.info("Nexus Skill started successfully");
@@ -634,17 +634,17 @@ public class NexusSkillImpl implements NexusSkill {
     public void stop() {
         log.info("Stopping Nexus Skill");
         try {
-            // 停止逻辑：清理资�?
+            // 停止逻辑：清理资源
             routeAgents.clear();
             endAgents.clear();
             networkLinks.clear();
             
-            // 停止网络状�?�监�?
+            // 停止网络状态监听
             if (networkMonitorExecutor != null) {
                 networkMonitorExecutor.shutdownNow();
             }
             
-            // 停止Nexus管理�?
+            // 停止Nexus管理器
             if (nexusManager != null) {
                 nexusManager.shutdownSystem("Nexus Skill stopped");
             }
@@ -683,7 +683,7 @@ public class NexusSkillImpl implements NexusSkill {
             link.setHealthStats(new HashMap<>());
             networkLinks.put(linkId, link);
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnSend(1);
             
             log.info("Added network link: {}", linkId);
@@ -697,7 +697,7 @@ public class NexusSkillImpl implements NexusSkill {
         try {
             networkLinks.remove(linkId);
             
-            // 更新网络状�??
+            // 更新网络状态
             updateNetworkStatusOnSend(1);
             
             log.info("Removed network link: {}", linkId);
@@ -715,13 +715,13 @@ public class NexusSkillImpl implements NexusSkill {
                 link.setLastUpdateTime(System.currentTimeMillis());
                 link.setLastHeartbeatTime(System.currentTimeMillis());
                 
-                // 更新健康状�??
+                // 更新健康状态
                 Map<String, Object> healthStats = link.getHealthStats();
                 healthStats.put("lastStatusChangeTime", System.currentTimeMillis());
                 healthStats.put("currentStatus", status);
                 link.setHealthStats(healthStats);
                 
-                // 更新网络状�??
+                // 更新网络状态
                 updateNetworkStatusOnSend(1);
                 
                 log.info("Updated network link status: {} -> {}", linkId, status);
@@ -732,23 +732,23 @@ public class NexusSkillImpl implements NexusSkill {
         }
     }
     
-    // MCP端口�?启功�?
+    // MCP端口开启功能
     private void openMcpPortForEndagent(String endagentId) {
-        // 模拟MCP端口�?启�?�辑
+        // 模拟MCP端口开启逻辑
         log.info("Opening MCP port for endagent: {}", endagentId);
-        // 实际实现中，这里应该调用相关的网络服务来�?启端�?
-        // 例如：调用网络管理服务开启指定端�?
+        // 实际实现中，这里应该调用相关的网络服务来开启端口
+        // 例如：调用网络管理服务开启指定端口
     }
     
     // 终端扫描允许功能
     private void allowEndagentScan(String endagentId) {
         // 模拟终端扫描允许逻辑
         log.info("Allowing scan for endagent: {}", endagentId);
-        // 实际实现中，这里应该设置相关的扫描权�?
+        // 实际实现中，这里应该设置相关的扫描权限
         // 例如：更新终端的扫描权限配置
     }
     
-    // 网络状�?�监控相关方�?
+    // 网络状态监控相关方法
     private void startNetworkMonitoring() {
         if (networkMonitorExecutor != null && !networkMonitorExecutor.isShutdown()) {
             return;
@@ -768,13 +768,13 @@ public class NexusSkillImpl implements NexusSkill {
             } catch (Exception e) {
                 log.error("Error in network monitoring: {}", e.getMessage(), e);
             }
-        }, 10, 30, TimeUnit.SECONDS); // �?30秒检查一次网络状�?
+        }, 10, 30, TimeUnit.SECONDS); // 每30秒检查一次网络状态
     }
     
     private void checkNetworkStatus() {
         long currentTime = System.currentTimeMillis();
         
-        // �?查网络超�?
+        // 检查网络超时
         if (currentTime - lastPacketReceivedTime > networkTimeoutThreshold) {
             setNetworkStatus(NetworkStatus.TIMEOUT);
             log.warn("Network timeout detected: No packets received for {}ms", 
@@ -862,9 +862,9 @@ public class NexusSkillImpl implements NexusSkill {
     }
     
     private void initializeNetworkLinks() {
-        // 初始化默认网络链�?
+        // 初始化默认网络链路
         log.info("Initializing network links");
-        // 这里可以添加�?些默认的网络链路初始化�?�辑
+        // 这里可以添加一些默认的网络链路初始化逻辑
     }
     
     // 重置网络统计数据
@@ -877,7 +877,7 @@ public class NexusSkillImpl implements NexusSkill {
         log.info("Network stats reset");
     }
     
-    // 获取网络状�??
+    // 获取网络状态
     public NetworkStatus getNetworkStatus() {
         return networkStatus;
     }

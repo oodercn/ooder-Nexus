@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP管理 - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
+    <link rel="stylesheet" href="/console/css/styles.css">
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <ul class="nav-menu" id="nav-menu"></ul>
+        </aside>
+        <main class="main-content">
+            <div class="content-header">
+                <h1><i class="ri-ip-line"></i> IP管理</h1>
+                <div class="content-actions">
+                    <button class="btn btn-primary" onclick="showAddModal()">
+                        <i class="ri-add-line"></i> 添加分配
+                    </button>
+                    <button class="btn btn-secondary" onclick="refreshData()">
+                        <i class="ri-refresh-line"></i> 刷新
+                    </button>
+                </div>
+            </div>
+
+            <!-- IP统计卡片 -->
+            <div class="stats-grid" id="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-allocated">-</div>
+                    <div class="stat-label">已分配IP</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-available">-</div>
+                    <div class="stat-label">可用IP</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-rate">-</div>
+                    <div class="stat-label">分配率</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-static">-</div>
+                    <div class="stat-label">静态IP</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-dhcp">-</div>
+                    <div class="stat-label">DHCP</div>
+                </div>
+            </div>
+
+            <!-- IP池信息 -->
+            <div class="card" id="pool-info">
+                <h3>IP池配置</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>起始IP</label>
+                        <input type="text" id="pool-start" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>结束IP</label>
+                        <input type="text" id="pool-end" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>子网掩码</label>
+                        <input type="text" id="pool-mask" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>网关</label>
+                        <input type="text" id="pool-gateway" class="form-input" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 搜索和过滤 -->
+            <div class="search-filter">
+                <input type="text" id="search-input" class="form-input" placeholder="搜索设备名称或MAC地址">
+                <select id="type-filter" class="form-select">
+                    <option value="all">全部类型</option>
+                    <option value="static">静态IP</option>
+                    <option value="dhcp">DHCP</option>
+                </select>
+                <select id="status-filter" class="form-select">
+                    <option value="all">全部状态</option>
+                    <option value="active">活跃</option>
+                    <option value="inactive">非活跃</option>
+                </select>
+                <button class="btn btn-secondary" onclick="searchAllocations()">搜索</button>
+            </div>
+
+            <!-- IP分配表格 -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>设备名称</th>
+                            <th>MAC地址</th>
+                            <th>IP地址</th>
+                            <th>类型</th>
+                            <th>状态</th>
+                            <th>分配时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allocation-table-body">
+                        <tr><td colspan="7" style="text-align: center; padding: 40px;">加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- 添加/编辑模态框 -->
+    <div id="allocation-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">添加IP分配</h3>
+                <button class="btn btn-secondary" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label>设备名称</label>
+                    <input type="text" id="device-name" class="form-input" placeholder="输入设备名称">
+                </div>
+                <div class="form-group">
+                    <label>MAC地址</label>
+                    <input type="text" id="mac-address" class="form-input" placeholder="00:11:22:33:44:55">
+                </div>
+                <div class="form-group">
+                    <label>IP地址</label>
+                    <input type="text" id="ip-address" class="form-input" placeholder="192.168.1.100">
+                </div>
+                <div class="form-group">
+                    <label>分配类型</label>
+                    <select id="allocation-type" class="form-select">
+                        <option value="static">静态IP</option>
+                        <option value="dhcp">DHCP</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select id="allocation-status" class="form-select">
+                        <option value="active">活跃</option>
+                        <option value="inactive">非活跃</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>描述</label>
+                    <input type="text" id="description" class="form-input" placeholder="可选描述">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveAllocation()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allAllocations = [];
+        let filteredAllocations = [];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initMenu();
+            loadData();
+        });
+
+        // 加载所有数据
+        async function loadData() {
+            await Promise.all([
+                loadStatistics(),
+                loadPoolInfo(),
+                loadAllocations()
+            ]);
+        }
+
+        // 加载统计数据
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/ip/statistics');
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('stat-allocated').textContent = result.data.totalAllocated;
+                    document.getElementById('stat-available').textContent = result.data.totalAvailable;
+                    document.getElementById('stat-rate').textContent = result.data.allocationRate.toFixed(1) + '%';
+                    document.getElementById('stat-static').textContent = result.data.staticCount;
+                    document.getElementById('stat-dhcp').textContent = result.data.dhcpCount;
+                }
+            } catch (error) {
+                console.error('加载统计数据失败:', error);
+            }
+        }
+
+        // 加载IP池信息
+        async function loadPoolInfo() {
+            try {
+                const response = await fetch('/api/ip/pool');
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('pool-start').value = result.data.startIp;
+                    document.getElementById('pool-end').value = result.data.endIp;
+                    document.getElementById('pool-mask').value = result.data.subnetMask;
+                    document.getElementById('pool-gateway').value = result.data.gateway || '-';
+                }
+            } catch (error) {
+                console.error('加载IP池信息失败:', error);
+            }
+        }
+
+        // 加载IP分配列表
+        async function loadAllocations() {
+            try {
+                const response = await fetch('/api/ip/allocations');
+                const result = await response.json();
+                if (result.success) {
+                    allAllocations = result.data;
+                    filteredAllocations = [...allAllocations];
+                    renderAllocations();
+                }
+            } catch (error) {
+                console.error('加载IP分配失败:', error);
+                document.getElementById('allocation-table-body').innerHTML = 
+                    '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--nexus-danger);">加载失败</td></tr>';
+            }
+        }
+
+        // 渲染分配列表
+        function renderAllocations() {
+            const tbody = document.getElementById('allocation-table-body');
+            tbody.innerHTML = '';
+
+            if (filteredAllocations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">暂无数据</td></tr>';
+                return;
+            }
+
+            filteredAllocations.forEach(allocation => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${allocation.deviceName}</td>
+                    <td>${allocation.macAddress}</td>
+                    <td>${allocation.ipAddress}</td>
+                    <td><span class="badge badge-${allocation.allocationType}">${allocation.allocationType === 'static' ? '静态' : 'DHCP'}</span></td>
+                    <td><span class="status-indicator status-${allocation.status}">${allocation.status === 'active' ? '活跃' : '非活跃'}</span></td>
+                    <td>${new Date(allocation.allocateTime).toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="editAllocation('${allocation.id}')">编辑</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteAllocation('${allocation.id}')">删除</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 搜索过滤
+        function searchAllocations() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const typeFilter = document.getElementById('type-filter').value;
+            const statusFilter = document.getElementById('status-filter').value;
+
+            filteredAllocations = allAllocations.filter(a => {
+                const matchSearch = !searchTerm || 
+                    a.deviceName.toLowerCase().includes(searchTerm) ||
+                    a.macAddress.toLowerCase().includes(searchTerm);
+                const matchType = typeFilter === 'all' || a.allocationType === typeFilter;
+                const matchStatus = statusFilter === 'all' || a.status === statusFilter;
+                return matchSearch && matchType && matchStatus;
+            });
+
+            renderAllocations();
+        }
+
+        // 显示添加模态框
+        function showAddModal() {
+            document.getElementById('modal-title').textContent = '添加IP分配';
+            document.getElementById('edit-id').value = '';
+            document.getElementById('device-name').value = '';
+            document.getElementById('mac-address').value = '';
+            document.getElementById('ip-address').value = '';
+            document.getElementById('allocation-type').value = 'static';
+            document.getElementById('allocation-status').value = 'active';
+            document.getElementById('description').value = '';
+            document.getElementById('allocation-modal').style.display = 'flex';
+        }
+
+        // 编辑分配
+        function editAllocation(id) {
+            const allocation = allAllocations.find(a => a.id === id);
+            if (!allocation) return;
+
+            document.getElementById('modal-title').textContent = '编辑IP分配';
+            document.getElementById('edit-id').value = allocation.id;
+            document.getElementById('device-name').value = allocation.deviceName;
+            document.getElementById('mac-address').value = allocation.macAddress;
+            document.getElementById('ip-address').value = allocation.ipAddress;
+            document.getElementById('allocation-type').value = allocation.allocationType;
+            document.getElementById('allocation-status').value = allocation.status;
+            document.getElementById('description').value = allocation.description || '';
+            document.getElementById('allocation-modal').style.display = 'flex';
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('allocation-modal').style.display = 'none';
+        }
+
+        // 保存分配
+        async function saveAllocation() {
+            const id = document.getElementById('edit-id').value;
+            const allocation = {
+                deviceName: document.getElementById('device-name').value,
+                macAddress: document.getElementById('mac-address').value,
+                ipAddress: document.getElementById('ip-address').value,
+                allocationType: document.getElementById('allocation-type').value,
+                status: document.getElementById('allocation-status').value,
+                description: document.getElementById('description').value
+            };
+
+            try {
+                const url = id ? `/api/ip/allocations/${id}` : '/api/ip/allocations';
+                const method = id ? 'PUT' : 'POST';
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(allocation)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    closeModal();
+                    loadData();
+                } else {
+                    alert(result.message || '保存失败');
+                }
+            } catch (error) {
+                console.error('保存失败:', error);
+                alert('保存失败');
+            }
+        }
+
+        // 删除分配
+        async function deleteAllocation(id) {
+            if (!confirm('确定要删除此IP分配吗？')) return;
+
+            try {
+                const response = await fetch(`/api/ip/allocations/${id}`, { method: 'DELETE' });
+                const result = await response.json();
+                if (result.success) {
+                    loadData();
+                } else {
+                    alert(result.message || '删除失败');
+                }
+            } catch (error) {
+                console.error('删除失败:', error);
+                alert('删除失败');
+            }
+        }
+
+        // 刷新数据
+        function refreshData() {
+            loadData();
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('allocation-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--nexus-card-bg);
+            border: 1px solid var(--nexus-border);
+            border-radius: var(--nexus-radius);
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--nexus-primary);
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: var(--nexus-text-secondary);
+        }
+        .search-filter {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .search-filter input {
+            flex: 1;
+            min-width: 200px;
+        }
+        .badge-static {
+            background: var(--nexus-primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .badge-dhcp {
+            background: var(--nexus-success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .status-active {
+            color: var(--nexus-success);
+        }
+        .status-inactive {
+            color: var(--nexus-text-secondary);
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: var(--nexus-card-bg);
+            border: 1px solid var(--nexus-border);
+            border-radius: var(--nexus-radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--nexus-border);
+        }
+        .modal-header h3 {
+            margin: 0;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--nexus-border);
+        }
+    </style>
+</body>
+</html>

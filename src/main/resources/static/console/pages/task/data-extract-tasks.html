@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据抽取任务管理 - Nexus</title>
+    <link rel="stylesheet" href="../../css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/mcpagent/common.css">
+    <script src="../../js/theme-manager.js"></script>
+    <script src="../../js/nexus/base.js"></script>
+    <script src="../../js/nexus/api.js"></script>
+    <script src="../../js/nexus/ui.js"></script>
+    <script src="../../js/nexus/utils.js"></script>
+    <script src="../../js/nexus/sdk-proxy.js"></script>
+    <style>
+        .task-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .task-stat-card {
+            background: var(--nexus-card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--nexus-border);
+        }
+        .task-stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--nexus-primary);
+            margin-bottom: 8px;
+        }
+        .task-stat-label {
+            font-size: 14px;
+            color: var(--nexus-text-secondary);
+        }
+        .task-list {
+            background: var(--nexus-card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--nexus-border);
+            overflow: hidden;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--nexus-border);
+            transition: background-color 0.2s;
+        }
+        .task-item:hover {
+            background-color: var(--nexus-hover-bg);
+        }
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        .task-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .task-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--nexus-text-primary);
+        }
+        .task-meta {
+            font-size: 12px;
+            color: var(--nexus-text-secondary);
+        }
+        .task-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 16px;
+        }
+        .task-status-pending {
+            background: var(--nexus-warning-bg);
+            color: var(--nexus-warning);
+        }
+        .task-status-running {
+            background: var(--nexus-primary-bg);
+            color: var(--nexus-primary);
+        }
+        .task-status-completed {
+            background: var(--nexus-success-bg);
+            color: var(--nexus-success);
+        }
+        .task-status-failed {
+            background: var(--nexus-error-bg);
+            color: var(--nexus-error);
+        }
+        .task-status-cancelled {
+            background: var(--nexus-secondary-bg);
+            color: var(--nexus-text-secondary);
+        }
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .task-type-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            background: var(--nexus-secondary-bg);
+            color: var(--nexus-text-secondary);
+            margin-right: 8px;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--nexus-card-bg);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--nexus-border);
+        }
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--nexus-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--nexus-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--nexus-text-primary);
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--nexus-border);
+            border-radius: 6px;
+            background: var(--nexus-bg);
+            color: var(--nexus-text-primary);
+            font-size: 14px;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--nexus-text-secondary);
+        }
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="nexus-page">
+    <div class="nexus-container">
+        <!-- 侧边导航栏 -->
+        <div class="nexus-sidebar">
+            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+            <ul class="nav-menu" id="nav-menu"></ul>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="nexus-main-content">
+            <div class="nexus-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h1><i class="ri-database-2-line"></i> 数据抽取任务管理</h1>
+                    <button class="theme-toggle-btn nexus-btn nexus-btn-secondary" style="padding: 8px 16px; font-size: 14px;">
+                        <i class="ri-sun-line"></i> 浅色模式
+                    </button>
+                </div>
+                <div class="subtitle">
+                    <span class="badge" style="background-color: var(--nexus-primary); color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin-right: 16px;">Task</span>
+                    <span>管理和监控数据抽取任务</span>
+                </div>
+            </div>
+
+            <!-- 统计卡片 -->
+            <div class="task-stats">
+                <div class="task-stat-card">
+                    <div class="task-stat-value" id="totalCount">0</div>
+                    <div class="task-stat-label">总任务数</div>
+                </div>
+                <div class="task-stat-card">
+                    <div class="task-stat-value" id="enabledCount">0</div>
+                    <div class="task-stat-label">已启用</div>
+                </div>
+                <div class="task-stat-card">
+                    <div class="task-stat-value" id="runningCount">0</div>
+                    <div class="task-stat-label">执行中</div>
+                </div>
+                <div class="task-stat-card">
+                    <div class="task-stat-value" id="completedCount">0</div>
+                    <div class="task-stat-label">已完成</div>
+                </div>
+                <div class="task-stat-card">
+                    <div class="task-stat-value" id="failedCount">0</div>
+                    <div class="task-stat-label">失败</div>
+                </div>
+            </div>
+
+            <!-- 操作栏 -->
+            <section class="nexus-operation-section">
+                <div class="nexus-section-header">
+                    <h3>任务列表</h3>
+                    <div class="nexus-operation-buttons">
+                        <button class="nexus-btn nexus-btn-primary" onclick="openTaskModal()">
+                            <i class="ri-add-line"></i>
+                            新建任务
+                        </button>
+                        <button class="nexus-btn nexus-btn-secondary" onclick="refreshTasks()">
+                            <i class="ri-refresh-line"></i>
+                            刷新
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 任务列表 -->
+            <div class="task-list" id="taskList">
+                <div class="empty-state">
+                    <i class="ri-database-2-line"></i>
+                    <p>暂无数据抽取任务</p>
+                    <p style="font-size: 12px; margin-top: 8px;">点击"新建任务"按钮创建第一个任务</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 任务编辑模态框 -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">新建任务</h3>
+                <button class="nexus-btn nexus-btn-icon" onclick="closeTaskModal()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm">
+                    <input type="hidden" id="taskId">
+                    <div class="form-group">
+                        <label>任务名称 <span style="color: var(--nexus-error);">*</span></label>
+                        <input type="text" id="taskName" placeholder="请输入任务名称" required>
+                    </div>
+                    <div class="form-group">
+                        <label>任务描述</label>
+                        <input type="text" id="taskDescription" placeholder="请输入任务描述">
+                    </div>
+                    <div class="form-group">
+                        <label>任务类型 <span style="color: var(--nexus-error);">*</span></label>
+                        <select id="taskType" required>
+                            <option value="">请选择任务类型</option>
+                            <option value="DATABASE">数据库抽取</option>
+                            <option value="API">API接口抽取</option>
+                            <option value="FILE">文件抽取</option>
+                            <option value="LOG">日志抽取</option>
+                            <option value="CUSTOM">自定义抽取</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>源配置 (JSON格式)</label>
+                        <textarea id="sourceConfig" placeholder='{"url": "", "method": "GET", "headers": {}}'></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>目标配置 (JSON格式)</label>
+                        <textarea id="targetConfig" placeholder='{"collection": "", "mapping": {}}'></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Cron表达式</label>
+                        <input type="text" id="cronExpression" placeholder="0 0 * * * ? (每小时执行)">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="taskEnabled" checked>
+                            启用任务
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="nexus-btn nexus-btn-secondary" onclick="closeTaskModal()">取消</button>
+                <button class="nexus-btn nexus-btn-primary" onclick="saveTask()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 公共JS模块 -->
+    <script src="../../js/menu-loader.js"></script>
+    <script src="../../js/nexus/common.js"></script>
+    <script>
+        window.onload = function() {
+            initMenu();
+            loadTasks();
+            loadStats();
+        };
+
+        let tasks = [];
+
+        // 加载任务列表
+        async function loadTasks() {
+            try {
+                const response = await fetch('/api/tasks');
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    tasks = result.data || [];
+                    renderTasks();
+                } else {
+                    nexusCommon.showMessage('加载任务列表失败: ' + result.message, 'error');
+                }
+            } catch (error) {
+                console.error('加载任务列表失败:', error);
+                nexusCommon.showMessage('加载任务列表失败', 'error');
+            }
+        }
+
+        // 加载统计信息
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/tasks/stats');
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    const stats = result.data;
+                    document.getElementById('totalCount').textContent = stats.totalCount || 0;
+                    document.getElementById('enabledCount').textContent = stats.enabledCount || 0;
+                    document.getElementById('runningCount').textContent = stats.runningCount || 0;
+                    document.getElementById('completedCount').textContent = stats.completedCount || 0;
+                    document.getElementById('failedCount').textContent = stats.failedCount || 0;
+                }
+            } catch (error) {
+                console.error('加载统计信息失败:', error);
+            }
+        }
+
+        // 渲染任务列表
+        function renderTasks() {
+            const container = document.getElementById('taskList');
+            
+            if (tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="ri-database-2-line"></i>
+                        <p>暂无数据抽取任务</p>
+                        <p style="font-size: 12px; margin-top: 8px;">点击"新建任务"按钮创建第一个任务</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = tasks.map(task => `
+                <div class="task-item">
+                    <div class="task-info">
+                        <div class="task-name">
+                            <span class="task-type-badge">${getTaskTypeLabel(task.type)}</span>
+                            ${task.name}
+                        </div>
+                        <div class="task-meta">
+                            ${task.description || '无描述'} | 
+                            创建时间: ${nexusCommon.formatTimestamp(new Date(task.createTime).getTime())} |
+                            执行次数: ${task.executeCount || 0} |
+                            成功: ${task.successCount || 0} | 
+                            失败: ${task.failCount || 0}
+                        </div>
+                    </div>
+                    <div class="task-status task-status-${(task.status || 'pending').toLowerCase()}">
+                        ${getTaskStatusLabel(task.status)}
+                    </div>
+                    <div class="task-actions">
+                        <button class="nexus-btn nexus-btn-sm nexus-btn-primary" onclick="executeTask('${task.id}')" 
+                                ${task.status === 'RUNNING' ? 'disabled' : ''}>
+                            <i class="ri-play-line"></i>
+                        </button>
+                        <button class="nexus-btn nexus-btn-sm nexus-btn-secondary" onclick="editTask('${task.id}')">
+                            <i class="ri-edit-line"></i>
+                        </button>
+                        <button class="nexus-btn nexus-btn-sm ${task.enabled ? 'nexus-btn-warning' : 'nexus-btn-success'}" 
+                                onclick="toggleTask('${task.id}', ${!task.enabled})">
+                            <i class="ri-${task.enabled ? 'pause' : 'play'}-line"></i>
+                        </button>
+                        <button class="nexus-btn nexus-btn-sm nexus-btn-danger" onclick="deleteTask('${task.id}')">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 获取任务类型标签
+        function getTaskTypeLabel(type) {
+            const labels = {
+                'DATABASE': '数据库',
+                'API': 'API',
+                'FILE': '文件',
+                'LOG': '日志',
+                'CUSTOM': '自定义'
+            };
+            return labels[type] || type;
+        }
+
+        // 获取任务状态标签
+        function getTaskStatusLabel(status) {
+            const labels = {
+                'PENDING': '待执行',
+                'RUNNING': '执行中',
+                'COMPLETED': '已完成',
+                'FAILED': '失败',
+                'CANCELLED': '已取消'
+            };
+            return labels[status] || status;
+        }
+
+        // 刷新任务列表
+        function refreshTasks() {
+            loadTasks();
+            loadStats();
+            nexusCommon.showMessage('任务列表已刷新', 'info');
+        }
+
+        // 打开任务模态框
+        function openTaskModal(taskId = null) {
+            const modal = document.getElementById('taskModal');
+            const title = document.getElementById('modalTitle');
+            const form = document.getElementById('taskForm');
+            
+            if (taskId) {
+                const task = tasks.find(t => t.id === taskId);
+                if (task) {
+                    title.textContent = '编辑任务';
+                    document.getElementById('taskId').value = task.id;
+                    document.getElementById('taskName').value = task.name;
+                    document.getElementById('taskDescription').value = task.description || '';
+                    document.getElementById('taskType').value = task.type;
+                    document.getElementById('sourceConfig').value = task.sourceConfig || '';
+                    document.getElementById('targetConfig').value = task.targetConfig || '';
+                    document.getElementById('cronExpression').value = task.cronExpression || '';
+                    document.getElementById('taskEnabled').checked = task.enabled;
+                }
+            } else {
+                title.textContent = '新建任务';
+                form.reset();
+                document.getElementById('taskId').value = '';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        // 关闭任务模态框
+        function closeTaskModal() {
+            document.getElementById('taskModal').classList.remove('active');
+        }
+
+        // 保存任务
+        async function saveTask() {
+            const taskId = document.getElementById('taskId').value;
+            const task = {
+                name: document.getElementById('taskName').value,
+                description: document.getElementById('taskDescription').value,
+                type: document.getElementById('taskType').value,
+                sourceConfig: document.getElementById('sourceConfig').value,
+                targetConfig: document.getElementById('targetConfig').value,
+                cronExpression: document.getElementById('cronExpression').value,
+                enabled: document.getElementById('taskEnabled').checked
+            };
+            
+            if (!task.name || !task.type) {
+                nexusCommon.showMessage('请填写必填项', 'warning');
+                return;
+            }
+            
+            try {
+                const url = taskId ? `/api/tasks/${taskId}` : '/api/tasks';
+                const method = taskId ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(task)
+                });
+                
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    nexusCommon.showMessage(taskId ? '任务更新成功' : '任务创建成功', 'success');
+                    closeTaskModal();
+                    loadTasks();
+                    loadStats();
+                } else {
+                    nexusCommon.showMessage(result.message || '操作失败', 'error');
+                }
+            } catch (error) {
+                console.error('保存任务失败:', error);
+                nexusCommon.showMessage('保存任务失败', 'error');
+            }
+        }
+
+        // 编辑任务
+        function editTask(taskId) {
+            openTaskModal(taskId);
+        }
+
+        // 执行任务
+        async function executeTask(taskId) {
+            try {
+                const response = await fetch(`/api/tasks/${taskId}/execute`, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    nexusCommon.showMessage('任务开始执行', 'success');
+                    loadTasks();
+                    loadStats();
+                } else {
+                    nexusCommon.showMessage(result.message || '执行失败', 'error');
+                }
+            } catch (error) {
+                console.error('执行任务失败:', error);
+                nexusCommon.showMessage('执行任务失败', 'error');
+            }
+        }
+
+        // 切换任务状态
+        async function toggleTask(taskId, enable) {
+            try {
+                const url = enable ? `/api/tasks/${taskId}/enable` : `/api/tasks/${taskId}/disable`;
+                const response = await fetch(url, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    nexusCommon.showMessage(enable ? '任务已启用' : '任务已禁用', 'success');
+                    loadTasks();
+                    loadStats();
+                } else {
+                    nexusCommon.showMessage(result.message || '操作失败', 'error');
+                }
+            } catch (error) {
+                console.error('切换任务状态失败:', error);
+                nexusCommon.showMessage('切换任务状态失败', 'error');
+            }
+        }
+
+        // 删除任务
+        async function deleteTask(taskId) {
+            if (!confirm('确定要删除这个任务吗？')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/tasks/${taskId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    nexusCommon.showMessage('任务删除成功', 'success');
+                    loadTasks();
+                    loadStats();
+                } else {
+                    nexusCommon.showMessage(result.message || '删除失败', 'error');
+                }
+            } catch (error) {
+                console.error('删除任务失败:', error);
+                nexusCommon.showMessage('删除任务失败', 'error');
+            }
+        }
+
+        // 点击模态框外部关闭
+        document.getElementById('taskModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTaskModal();
+            }
+        });
+    </script>
+</body>
+</html>

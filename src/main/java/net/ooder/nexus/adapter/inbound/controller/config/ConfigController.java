@@ -39,7 +39,7 @@ public class ConfigController {
     // 配置修改历史
     private final List<ConfigChange> configChanges = new ArrayList<>();
 
-    // 初始化默认配置数�?
+    // 初始化默认配置数据
     public ConfigController() {
         initializeDefaultConfigs();
     }
@@ -62,10 +62,10 @@ public class ConfigController {
     private void initializeMcpConfig() {
         mcpConfig.put("version", "0.6.5");
         mcpConfig.put("servicePort", 8080);
-        mcpConfig.put("heartbeatInterval", 30000); // 30�?
+        mcpConfig.put("heartbeatInterval", 30000); // 30秒
         mcpConfig.put("logLevel", "INFO");
         mcpConfig.put("maxConnections", 1000);
-        mcpConfig.put("connectionTimeout", 60000); // 60�?
+        mcpConfig.put("connectionTimeout", 60000); // 60秒
         mcpConfig.put("threadPoolSize", 20);
         mcpConfig.put("bufferSize", 8192);
         mcpConfig.put("enableTls", false);
@@ -80,34 +80,34 @@ public class ConfigController {
 
     private void initializeRouteConfig() {
         routeConfig.put("maxRoutes", 1000);
-        routeConfig.put("routeTimeout", 30000); // 30�?
+        routeConfig.put("routeTimeout", 30000); // 30秒
         routeConfig.put("routeRetryCount", 3);
-        routeConfig.put("routeRetryDelay", 1000); // 1�?
+        routeConfig.put("routeRetryDelay", 1000); // 1秒
         routeConfig.put("enableRouteDiscovery", true);
         routeConfig.put("routeDiscoveryInterval", 300000); // 5分钟
-        routeConfig.put("routeDiscoveryTimeout", 10000); // 10�?
+        routeConfig.put("routeDiscoveryTimeout", 10000); // 10秒
         routeConfig.put("maxRouteHistory", 1000);
         routeConfig.put("routeHealthCheckInterval", 60000); // 1分钟
-        routeConfig.put("routeHealthCheckTimeout", 5000); // 5�?
+        routeConfig.put("routeHealthCheckTimeout", 5000); // 5秒
         routeConfig.put("minRouteLatency", 1);
-        routeConfig.put("maxRouteLatency", 5000); // 5�?
-        routeConfig.put("routeLatencyThreshold", 1000); // 1�?
+        routeConfig.put("maxRouteLatency", 5000); // 5秒
+        routeConfig.put("routeLatencyThreshold", 1000); // 1秒
         routeConfig.put("routeReliabilityThreshold", 90.0);
     }
 
     private void initializeEndConfig() {
         endConfig.put("maxEndAgents", 500);
-        endConfig.put("endAgentTimeout", 60000); // 60�?
-        endConfig.put("endAgentHeartbeatInterval", 45000); // 45�?
+        endConfig.put("endAgentTimeout", 60000); // 60秒
+        endConfig.put("endAgentHeartbeatInterval", 45000); // 45秒
         endConfig.put("endAgentMaxHeartbeatMisses", 3);
         endConfig.put("enableEndAgentDiscovery", true);
         endConfig.put("endAgentDiscoveryInterval", 600000); // 10分钟
-        endConfig.put("endAgentDiscoveryTimeout", 15000); // 15�?
-        endConfig.put("endAgentConnectionTimeout", 30000); // 30�?
-        endConfig.put("endAgentReadTimeout", 60000); // 60�?
-        endConfig.put("endAgentWriteTimeout", 30000); // 30�?
+        endConfig.put("endAgentDiscoveryTimeout", 15000); // 15秒
+        endConfig.put("endAgentConnectionTimeout", 30000); // 30秒
+        endConfig.put("endAgentReadTimeout", 60000); // 60秒
+        endConfig.put("endAgentWriteTimeout", 30000); // 30秒
         endConfig.put("maxEndAgentCommands", 100);
-        endConfig.put("endAgentCommandTimeout", 30000); // 30�?
+        endConfig.put("endAgentCommandTimeout", 30000); // 30秒
         endConfig.put("endAgentQueueSize", 1000);
         endConfig.put("endAgentMaxRetries", 3);
     }
@@ -339,7 +339,7 @@ public class ConfigController {
     }
 
     /**
-     * 获取�?有配�?
+     * 获取所有配置
      */
     @GetMapping("/all")
     public Result<AllConfigsResult> getAllConfigs() {
@@ -418,7 +418,7 @@ public class ConfigController {
     }
 
     /**
-     * 重置配置为默认�??
+     * 重置配置为默认值
      */
     @PostMapping("/reset/{configType}")
     public Result<ConfigResetResult> resetConfig(@PathVariable String configType) {
@@ -614,7 +614,7 @@ public class ConfigController {
                 }
             }
 
-            // 按时间�?�序排序
+            // 按时间倒序排序
             filteredHistory.sort(Comparator.comparingLong(ConfigChange::getTimestamp).reversed());
 
             return Result.success("Config history retrieved successfully", filteredHistory);

@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -670,7 +671,7 @@ public class LogManagementController {
     private boolean exportLogsAsJson(List<LogEntry> logs, String fileName) {
         try {
             File exportFile = new File(LOG_DIR, fileName);
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile)))) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile), StandardCharsets.UTF_8))) {
                 writer.write("[");
                 for (int i = 0; i < logs.size(); i++) {
                     LogEntry entry = logs.get(i);
@@ -694,7 +695,7 @@ public class LogManagementController {
     private boolean exportLogsAsCsv(List<LogEntry> logs, String fileName) {
         try {
             File exportFile = new File(LOG_DIR, fileName);
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile)))) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile), StandardCharsets.UTF_8))) {
                 // 写入表头
                 writer.write("id,timestamp,level,source,message,details,ip,user,sourceType,severity\n");
                 
@@ -717,7 +718,7 @@ public class LogManagementController {
     private boolean exportLogsAsText(List<LogEntry> logs, String fileName) {
         try {
             File exportFile = new File(LOG_DIR, fileName);
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile)))) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile), StandardCharsets.UTF_8))) {
                 for (LogEntry entry : logs) {
                     writer.write(entry.toString());
                     writer.write("\n\n");

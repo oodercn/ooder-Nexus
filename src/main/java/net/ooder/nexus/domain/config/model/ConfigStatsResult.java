@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * 配置统计结果
- * 用于ConfigController中getConfigStats方法的返回类�?
+ * 用于ConfigController中getConfigStats方法的返回类型
  */
 public class ConfigStatsResult implements Serializable {
     private int nexusConfigCount;

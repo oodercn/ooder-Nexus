@@ -32,7 +32,7 @@ public class DebugConsoleService {
     }
 
     /**
-     * 获取�?有协�?
+     * 获取所有协议
      */
     public List<ProtocolInfo> getAllProtocols() {
         List<String> protocolTypes = protocolHub.getSupportedProtocols();
@@ -83,28 +83,28 @@ public class DebugConsoleService {
     }
 
     /**
-     * 获取�?有模拟器
+     * 获取所有模拟器
      */
     public List<SimulatorRegistry.SimulatorInfo> getAllSimulators() {
         return simulatorRegistry.getAllSimulators();
     }
 
     /**
-     * 创建模拟�?
+     * 创建模拟器
      */
     public Simulator createSimulator(SimulatorRegistry.SimulatorConfig config) {
         return simulatorRegistry.createSimulator(config);
     }
 
     /**
-     * 启动模拟�?
+     * 启动模拟器
      */
     public void startSimulator(String simulatorId) {
         simulatorRegistry.startSimulator(simulatorId);
     }
 
     /**
-     * 停止模拟�?
+     * 停止模拟器
      */
     public void stopSimulator(String simulatorId) {
         simulatorRegistry.stopSimulator(simulatorId);
@@ -118,14 +118,14 @@ public class DebugConsoleService {
     }
 
     /**
-     * 获取模拟器日�?
+     * 获取模拟器日志
      */
     public List<ProtocolSimulator.ExecutionLog> getSimulatorLogs(String simulatorId) {
         return simulatorRegistry.getSimulatorLogs(simulatorId);
     }
 
     /**
-     * 获取�?有场�?
+     * 获取所有场景
      */
     public List<ScenarioInfo> getAllScenarios() {
         List<String> scenarioIds = storage.listFiles("scenarios");
@@ -157,7 +157,7 @@ public class DebugConsoleService {
     }
 
     /**
-     * 获取�?有执行结�?
+     * 获取所有执行结果
      */
     public List<ExecutionResult> getAllExecutionResults() {
         List<String> executionIds = storage.listFiles("results");
@@ -198,14 +198,14 @@ public class DebugConsoleService {
     private String getProtocolDescription(String type) {
         switch (type) {
             case "MCP": return "主控制协议，用于管理MCP节点";
-            case "ROUTE": return "路由协议，用于网络路由转�?";
-            case "END": return "终端设备协议，用于终端设备�?�信";
+            case "ROUTE": return "路由协议，用于网络路由转发";
+            case "END": return "终端设备协议，用于终端设备通信";
             default: return "Unknown protocol";
         }
     }
 
     /**
-     * 获取支持的命�?
+     * 获取支持的命令
      */
     private List<CommandInfo> getSupportedCommands(String protocolType) {
         List<CommandInfo> commands = new ArrayList<>();
@@ -215,23 +215,23 @@ public class DebugConsoleService {
                 commands.add(new CommandInfo("MCP_REGISTER", "节点注册"));
                 commands.add(new CommandInfo("MCP_DEREGISTER", "节点注销"));
                 commands.add(new CommandInfo("MCP_HEARTBEAT", "心跳保活"));
-                commands.add(new CommandInfo("MCP_STATUS", "状�?�查�?"));
+                commands.add(new CommandInfo("MCP_STATUS", "状态查询"));
                 commands.add(new CommandInfo("MCP_DISCOVER", "设备发现"));
                 commands.add(new CommandInfo("MCP_CONFIG", "配置下发"));
                 break;
             case "ROUTE":
                 commands.add(new CommandInfo("ROUTE_REGISTER", "路由注册"));
                 commands.add(new CommandInfo("ROUTE_DEREGISTER", "路由注销"));
-                commands.add(new CommandInfo("ROUTE_UPDATE", "路由表更�?"));
+                commands.add(new CommandInfo("ROUTE_UPDATE", "路由表更新"));
                 commands.add(new CommandInfo("ROUTE_QUERY", "路由查询"));
-                commands.add(new CommandInfo("ROUTE_STATUS", "状�?�查�?"));
+                commands.add(new CommandInfo("ROUTE_STATUS", "状态查询"));
                 commands.add(new CommandInfo("ROUTE_HEARTBEAT", "心跳保活"));
                 break;
             case "END":
                 commands.add(new CommandInfo("END_REGISTER", "终端注册"));
                 commands.add(new CommandInfo("END_DEREGISTER", "终端注销"));
                 commands.add(new CommandInfo("END_CAPABILITY", "能力上报"));
-                commands.add(new CommandInfo("END_STATUS", "状�?�查�?"));
+                commands.add(new CommandInfo("END_STATUS", "状态查询"));
                 commands.add(new CommandInfo("END_COMMAND", "命令下发"));
                 commands.add(new CommandInfo("END_RESULT", "结果上报"));
                 commands.add(new CommandInfo("END_HEARTBEAT", "心跳保活"));
@@ -242,7 +242,7 @@ public class DebugConsoleService {
     }
 
     /**
-     * 转换为统计信�?
+     * 转换为统计信息
      */
     private ProtocolStatistics toStatistics(ProtocolStats stats) {
         ProtocolStatistics statistics = new ProtocolStatistics();
@@ -255,7 +255,7 @@ public class DebugConsoleService {
     }
 
     /**
-     * 计算成功�?
+     * 计算成功率
      */
     private double calculateSuccessRate(ProtocolStats stats) {
         if (stats.getTotalCommands() == 0) {

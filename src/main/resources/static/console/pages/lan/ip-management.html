@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP管理 - Nexus</title>
     <link rel="stylesheet" href="../../css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
+    <script src="/console/js/theme-manager.js"></script>
 </head>
 <body>
     <div class="container">
@@ -30,16 +32,16 @@
                         <h3>IP 分配状态</h3>
                         <div style="display: flex; gap: 16px;">
                             <div style="flex: 1;">
-                                <p style="font-size: 14px; color: var(--ooder-secondary); margin-bottom: 8px;">已分配 IP</p>
-                                <p style="font-size: 24px; font-weight: 600; color: var(--ooder-dark);">12</p>
+                                <p style="font-size: 14px; color: var(--nexus-secondary); margin-bottom: 8px;">已分配 IP</p>
+                                <p style="font-size: 24px; font-weight: 600; color: var(--nexus-dark);">12</p>
                             </div>
                             <div style="flex: 1;">
-                                <p style="font-size: 14px; color: var(--ooder-secondary); margin-bottom: 8px;">可用 IP</p>
-                                <p style="font-size: 24px; font-weight: 600; color: var(--ooder-success);">88</p>
+                                <p style="font-size: 14px; color: var(--nexus-secondary); margin-bottom: 8px;">可用 IP</p>
+                                <p style="font-size: 24px; font-weight: 600; color: var(--nexus-success);">88</p>
                             </div>
                             <div style="flex: 1;">
-                                <p style="font-size: 14px; color: var(--ooder-secondary); margin-bottom: 8px;">分配率</p>
-                                <p style="font-size: 24px; font-weight: 600; color: var(--ooder-warning);">12%</p>
+                                <p style="font-size: 14px; color: var(--nexus-secondary); margin-bottom: 8px;">分配率</p>
+                                <p style="font-size: 24px; font-weight: 600; color: var(--nexus-warning);">12%</p>
                             </div>
                         </div>
                     </div>
@@ -48,16 +50,16 @@
                         <h3>IP 范围</h3>
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             <div style="display: flex; justify-content: space-between;">
-                                <span style="font-size: 14px; color: var(--ooder-secondary);">起始 IP</span>
-                                <span style="font-size: 14px; font-weight: 500; color: var(--ooder-dark);">192.168.1.100</span>
+                                <span style="font-size: 14px; color: var(--nexus-secondary);">起始 IP</span>
+                                <span style="font-size: 14px; font-weight: 500; color: var(--nexus-dark);">192.168.1.100</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
-                                <span style="font-size: 14px; color: var(--ooder-secondary);">结束 IP</span>
-                                <span style="font-size: 14px; font-weight: 500; color: var(--ooder-dark);">192.168.1.200</span>
+                                <span style="font-size: 14px; color: var(--nexus-secondary);">结束 IP</span>
+                                <span style="font-size: 14px; font-weight: 500; color: var(--nexus-dark);">192.168.1.200</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
-                                <span style="font-size: 14px; color: var(--ooder-secondary);">子网掩码</span>
-                                <span style="font-size: 14px; font-weight: 500; color: var(--ooder-dark);">255.255.255.0</span>
+                                <span style="font-size: 14px; color: var(--nexus-secondary);">子网掩码</span>
+                                <span style="font-size: 14px; font-weight: 500; color: var(--nexus-dark);">255.255.255.0</span>
                             </div>
                         </div>
                     </div>
@@ -95,7 +97,7 @@
                                     <td>主路由器</td>
                                     <td>00:11:22:33:44:55</td>
                                     <td>192.168.1.1</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>2023-12-01 10:00:00</td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
@@ -106,7 +108,7 @@
                                     <td>智能家居中心</td>
                                     <td>AA:BB:CC:DD:EE:FF</td>
                                     <td>192.168.1.10</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>2023-12-01 10:05:00</td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
@@ -117,7 +119,7 @@
                                     <td>网络存储</td>
                                     <td>11:22:33:44:55:66</td>
                                     <td>192.168.1.20</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>2023-12-01 10:10:00</td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
@@ -128,7 +130,7 @@
                                     <td>打印机</td>
                                     <td>22:33:44:55:66:77</td>
                                     <td>192.168.1.30</td>
-                                    <td><span style="color: var(--ooder-warning);">非活跃</span></td>
+                                    <td><span style="color: var(--nexus-warning);">非活跃</span></td>
                                     <td>2023-12-01 10:15:00</td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
@@ -139,7 +141,7 @@
                                     <td>监控摄像头</td>
                                     <td>33:44:55:66:77:88</td>
                                     <td>192.168.1.40</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>2023-12-01 10:20:00</td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">编辑</button>
@@ -193,7 +195,7 @@
                                     <td>192.168.1.101</td>
                                     <td>2023-12-01 11:00:00</td>
                                     <td>2023-12-02 11:00:00</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">设为静态</button>
                                         <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">释放</button>
@@ -205,7 +207,7 @@
                                     <td>192.168.1.102</td>
                                     <td>2023-12-01 11:30:00</td>
                                     <td>2023-12-02 11:30:00</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">设为静态</button>
                                         <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">释放</button>
@@ -217,7 +219,7 @@
                                     <td>192.168.1.103</td>
                                     <td>2023-12-01 12:00:00</td>
                                     <td>2023-12-02 12:00:00</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">设为静态</button>
                                         <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">释放</button>
@@ -229,7 +231,7 @@
                                     <td>192.168.1.104</td>
                                     <td>2023-12-01 12:30:00</td>
                                     <td>2023-12-02 12:30:00</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">设为静态</button>
                                         <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">释放</button>
@@ -241,7 +243,7 @@
                                     <td>192.168.1.105</td>
                                     <td>2023-12-01 13:00:00</td>
                                     <td>2023-12-02 13:00:00</td>
-                                    <td><span style="color: var(--ooder-success);">活跃</span></td>
+                                    <td><span style="color: var(--nexus-success);">活跃</span></td>
                                     <td>
                                         <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">设为静态</button>
                                         <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">释放</button>

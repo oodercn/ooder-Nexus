@@ -1,6 +1,7 @@
 package net.ooder.nexus.common.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -49,6 +50,17 @@ public class JsonUtils {
     public static <T> T fromJson(String json, Class<T> clazz) {
         try {
             return mapper.readValue(json, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse JSON to object", e);
+        }
+    }
+
+    /**
+     * JSON字符串转对象（支持TypeReference）
+     */
+    public static <T> T fromJson(String json, TypeReference<T> typeReference) {
+        try {
+            return mapper.readValue(json, typeReference);
         } catch (IOException e) {
             throw new RuntimeException("Failed to parse JSON to object", e);
         }

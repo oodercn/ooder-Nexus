@@ -3,8 +3,8 @@ package net.ooder.nexus.domain.config.model;
 import java.io.Serializable;
 
 /**
- * �?有配置结�?
- * 用于ConfigController中getAllConfigs方法的返回类�?
+ * 所有配置结果
+ * 用于ConfigController中getAllConfigs方法的返回类型
  */
 public class AllConfigsResult implements Serializable {
     private NexusConfigResult nexus;

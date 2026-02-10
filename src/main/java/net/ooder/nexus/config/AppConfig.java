@@ -11,7 +11,7 @@ import net.ooder.nexus.infrastructure.management.NexusManager;
 import net.ooder.nexus.infrastructure.management.NexusManagerImpl;
 
 /**
- * 应用配置�?
+ * 应用配置类
  */
 @Configuration
 public class AppConfig {

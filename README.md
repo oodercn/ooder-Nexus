@@ -433,6 +433,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 - **管理员指南**：[ADMIN-GUIDE.md](ADMIN-GUIDE.md) - 系统管理员配置和维护指南
 - **存储指南**：[STORAGE-GUIDE.md](STORAGE-GUIDE.md) - 存储管理和最佳实践
 - **技能开发指南**：[SKILL-DEVELOPMENT.md](SKILL-DEVELOPMENT.md) - AI 技能开发教程
+- **技能同步设计**：[docs/SKILL-SYNC-DESIGN.md](docs/SKILL-SYNC-DESIGN.md) - 技能同步模块架构设计
+- **技能同步使用**：[docs/SKILL-SYNC-GUIDE.md](docs/SKILL-SYNC-GUIDE.md) - 技能同步功能使用说明
 - **开发文档**：[DEVELOPMENT.md](DEVELOPMENT.md) - 项目开发和整合指南
 - **API 手册**：[API-MANUAL.md](API-MANUAL.md) - 详细的 API 接口文档
 - **测试用例报告**：[TEST-CASE-REPORT.md](TEST-CASE-REPORT.md) - 测试覆盖情况和测试结果分析

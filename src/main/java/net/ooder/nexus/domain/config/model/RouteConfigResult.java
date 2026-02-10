@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * Route配置结果
- * 用于ConfigController中getRouteConfig和updateRouteConfig方法的返回类�?
+ * 用于ConfigController中getRouteConfig和updateRouteConfig方法的返回类型
  */
 public class RouteConfigResult implements Serializable {
     private int routeRefreshInterval;

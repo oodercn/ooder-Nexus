@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * 设备类型结果
- * 用于DeviceController中getDeviceTypes方法的返回类�?
+ * 用于DeviceController中getDeviceTypes方法的返回类型
  */
 public class DeviceTypesResult implements Serializable {
     private List<String> types;

@@ -1,19 +1,20 @@
 package net.ooder.nexus.common.utils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
 /**
- * 完全限定名修复工�? - 修复代码中使用完全限定名引用旧包的情�?
+ * 完全限定名修复工具 - 修复代码中使用完全限定名引用旧包的情况
  */
 public class FullyQualifiedNameFixer {
 
-    // 完全限定名映�?: 旧完全限定名 -> 新完全限定名
+    // 完全限定名映射: 旧完全限定名 -> 新完全限定名
     private static final Map<String, String> FQN_MAPPINGS = new LinkedHashMap<>();
 
     static {
-        // model 迁移�? domain
+        // model 迁移到 domain
         FQN_MAPPINGS.put("net.ooder.nexus.domain.network.model.NetworkDevice", "net.ooder.nexus.domain.network.model.NetworkDevice");
         FQN_MAPPINGS.put("net.ooder.nexus.domain.security.model.SecurityLog", "net.ooder.nexus.domain.security.model.SecurityLog");
     }
@@ -25,7 +26,7 @@ public class FullyQualifiedNameFixer {
 
         int fixedCount = 0;
 
-        // 修复�?有Java文件
+        // 修复所有Java文件
         Path directory = Paths.get(baseDir);
 
         List<Path> javaFiles = Files.walk(directory)
@@ -47,7 +48,7 @@ public class FullyQualifiedNameFixer {
     }
 
     private static boolean fixFile(Path file) throws IOException {
-        String content = new String(Files.readAllBytes(file));
+        String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
         String originalContent = content;
 
         // 按长度降序排序，避免部分匹配问题
@@ -58,13 +59,13 @@ public class FullyQualifiedNameFixer {
             String oldFQN = mapping.getKey();
             String newFQN = mapping.getValue();
 
-            // 替换完全限定�?
+            // 替换完全限定名
             content = content.replace(oldFQN, newFQN);
         }
 
         // 如果有修改，写回文件
         if (!content.equals(originalContent)) {
-            Files.write(file, content.getBytes());
+            Files.write(file, content.getBytes(StandardCharsets.UTF_8));
             return true;
         }
         return false;

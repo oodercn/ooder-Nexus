@@ -12,6 +12,7 @@
     <script src="../../js/nexus/ui.js"></script>
     <script src="../../js/nexus/utils.js"></script>
     <script src="../../js/nexus/sdk-proxy.js"></script>
+    <script src="/console/js/sdk-data-service.js"></script>
 </head>
 <body class="nexus-page">
     <div class="nexus-container">
@@ -138,92 +139,89 @@
             nexusCommon.initPage('endagent-management', loadEndAgents);
         };
 
-        // 模拟终端代理数据
+        // SDK存储集合名称
+        const COLLECTION_ENDAGENTS = 'endagents';
+
+        // 终端代理数据
         let endAgents = [];
+
+        // 默认终端数据
+        const defaultEndAgents = [
+            {
+                id: "endagent-001",
+                name: "智能灯泡1",
+                type: "light",
+                ip: "192.168.1.100",
+                mac: "AA:BB:CC:DD:EE:FF",
+                status: "active",
+                brightness: 80,
+                color: "#FFFFFF",
+                lastUpdate: new Date().toISOString()
+            },
+            {
+                id: "endagent-002",
+                name: "智能插座1",
+                type: "socket",
+                ip: "192.168.1.101",
+                mac: "AA:BB:CC:DD:EE:GG",
+                status: "active",
+                power: "on",
+                voltage: 220,
+                lastUpdate: new Date().toISOString()
+            },
+            {
+                id: "endagent-003",
+                name: "摄像头1",
+                type: "camera",
+                ip: "192.168.1.102",
+                mac: "AA:BB:CC:DD:EE:HH",
+                status: "inactive",
+                resolution: "1080p",
+                storage: "128GB",
+                lastUpdate: new Date().toISOString()
+            },
+            {
+                id: "endagent-004",
+                name: "智能音箱1",
+                type: "speaker",
+                ip: "192.168.1.103",
+                mac: "AA:BB:CC:DD:EE:II",
+                status: "active",
+                volume: 50,
+                lastUpdate: new Date().toISOString()
+            },
+            {
+                id: "endagent-005",
+                name: "温控器1",
+                type: "thermostat",
+                ip: "192.168.1.104",
+                mac: "AA:BB:CC:DD:EE:JJ",
+                status: "active",
+                temperature: 25,
+                humidity: 45,
+                lastUpdate: new Date().toISOString()
+            },
+            {
+                id: "endagent-006",
+                name: "智能门锁1",
+                type: "doorlock",
+                ip: "192.168.1.105",
+                mac: "AA:BB:CC:DD:EE:KK",
+                status: "active",
+                lockStatus: "locked",
+                battery: 80,
+                lastUpdate: new Date().toISOString()
+            }
+        ];
 
         async function loadEndAgents() {
             try {
-                // 模拟API请求
-                const mockResponse = {
-                    status: 'success',
-                    message: '获取终端列表成功',
-                    data: [
-                        {
-                            id: "endagent-001",
-                            name: "智能灯泡1",
-                            type: "light",
-                            ip: "192.168.1.100",
-                            mac: "AA:BB:CC:DD:EE:FF",
-                            status: "active",
-                            brightness: 80,
-                            color: "#FFFFFF",
-                            lastUpdate: new Date().toISOString()
-                        },
-                        {
-                            id: "endagent-002",
-                            name: "智能插座1",
-                            type: "socket",
-                            ip: "192.168.1.101",
-                            mac: "AA:BB:CC:DD:EE:GG",
-                            status: "active",
-                            power: "on",
-                            voltage: 220,
-                            lastUpdate: new Date().toISOString()
-                        },
-                        {
-                            id: "endagent-003",
-                            name: "摄像头1",
-                            type: "camera",
-                            ip: "192.168.1.102",
-                            mac: "AA:BB:CC:DD:EE:HH",
-                            status: "inactive",
-                            resolution: "1080p",
-                            storage: "128GB",
-                            lastUpdate: new Date().toISOString()
-                        },
-                        {
-                            id: "endagent-004",
-                            name: "智能音箱1",
-                            type: "speaker",
-                            ip: "192.168.1.103",
-                            mac: "AA:BB:CC:DD:EE:II",
-                            status: "active",
-                            volume: 50,
-                            lastUpdate: new Date().toISOString()
-                        },
-                        {
-                            id: "endagent-005",
-                            name: "温控器1",
-                            type: "thermostat",
-                            ip: "192.168.1.104",
-                            mac: "AA:BB:CC:DD:EE:JJ",
-                            status: "active",
-                            temperature: 25,
-                            humidity: 45,
-                            lastUpdate: new Date().toISOString()
-                        },
-                        {
-                            id: "endagent-006",
-                            name: "智能门锁1",
-                            type: "doorlock",
-                            ip: "192.168.1.105",
-                            mac: "AA:BB:CC:DD:EE:KK",
-                            status: "active",
-                            lockStatus: "locked",
-                            battery: 80,
-                            lastUpdate: new Date().toISOString()
-                        }
-                    ],
-                    timestamp: new Date().getTime()
-                };
+                // 初始化默认数据（如果集合为空）
+                await SdkDataService.initCollection(COLLECTION_ENDAGENTS, defaultEndAgents);
 
-                // 验证API返回格式
-                const validatedResponse = nexusCommon.validateApiResponse(mockResponse);
-
-                if (validatedResponse.status === 'success' && validatedResponse.data) {
-                    endAgents = validatedResponse.data;
-                    renderEndAgents();
-                }
+                // 从SDK存储获取终端列表
+                endAgents = await SdkDataService.getAll(COLLECTION_ENDAGENTS);
+                renderEndAgents();
             } catch (error) {
                 console.error('加载终端列表失败:', error);
                 nexusCommon.showMessage('加载终端列表失败', 'error');
@@ -273,57 +271,54 @@
                     return;
                 }
 
-                // 模拟API请求
-                const mockResponse = {
-                    status: 'success',
-                    message: '添加终端成功',
-                    data: {
-                        id: endAgentId,
-                        name: endAgentName || endAgentId,
-                        type: endAgentType,
-                        ip: endAgentIp || '192.168.1.100',
-                        mac: endAgentMac || 'AA:BB:CC:DD:EE:FF',
-                        status: 'active',
-                        lastUpdate: new Date().toISOString()
-                    },
-                    timestamp: new Date().getTime()
+                // 构建终端数据
+                const endAgentData = {
+                    id: endAgentId,
+                    name: endAgentName || endAgentId,
+                    type: endAgentType,
+                    ip: endAgentIp || '192.168.1.100',
+                    mac: endAgentMac || 'AA:BB:CC:DD:EE:FF',
+                    status: 'active',
+                    lastUpdate: new Date().toISOString()
                 };
 
                 // 根据终端类型添加特定属性
                 switch (endAgentType) {
                     case 'light':
-                        mockResponse.data.brightness = 50;
-                        mockResponse.data.color = '#FFFFFF';
+                        endAgentData.brightness = 50;
+                        endAgentData.color = '#FFFFFF';
                         break;
                     case 'socket':
-                        mockResponse.data.power = 'off';
-                        mockResponse.data.voltage = 220;
+                        endAgentData.power = 'off';
+                        endAgentData.voltage = 220;
                         break;
                     case 'camera':
-                        mockResponse.data.resolution = '720p';
-                        mockResponse.data.storage = '64GB';
+                        endAgentData.resolution = '720p';
+                        endAgentData.storage = '64GB';
                         break;
                     case 'speaker':
-                        mockResponse.data.volume = 30;
+                        endAgentData.volume = 30;
                         break;
                     case 'thermostat':
-                        mockResponse.data.temperature = 24;
-                        mockResponse.data.humidity = 50;
+                        endAgentData.temperature = 24;
+                        endAgentData.humidity = 50;
                         break;
                     case 'doorlock':
-                        mockResponse.data.lockStatus = 'locked';
-                        mockResponse.data.battery = 100;
+                        endAgentData.lockStatus = 'locked';
+                        endAgentData.battery = 100;
                         break;
                 }
 
-                // 验证API返回格式
-                const validatedResponse = nexusCommon.validateApiResponse(mockResponse);
+                // 保存到SDK存储
+                const result = await SdkDataService.save(COLLECTION_ENDAGENTS, endAgentId, endAgentData);
 
-                if (validatedResponse.status === 'success' && validatedResponse.data) {
-                    endAgents.push(validatedResponse.data);
+                if (result.code === 200) {
+                    endAgents.push(endAgentData);
                     renderEndAgents();
                     clearEndAgentForm();
-                    nexusCommon.handleApiSuccess(validatedResponse);
+                    nexusCommon.showMessage('添加终端成功', 'success');
+                } else {
+                    nexusCommon.showMessage(result.message || '添加终端失败', 'error');
                 }
             } catch (error) {
                 console.error('添加终端失败:', error);
@@ -348,20 +343,15 @@
                     return;
                 }
 
-                // 模拟API请求
-                const mockResponse = {
-                    status: 'success',
-                    message: '移除终端成功',
-                    timestamp: new Date().getTime()
-                };
+                // 从SDK存储删除
+                const result = await SdkDataService.delete(COLLECTION_ENDAGENTS, endAgentId);
 
-                // 验证API返回格式
-                const validatedResponse = nexusCommon.validateApiResponse(mockResponse);
-
-                if (validatedResponse.status === 'success') {
+                if (result.code === 200) {
                     endAgents.splice(index, 1);
                     renderEndAgents();
-                    nexusCommon.handleApiSuccess(validatedResponse);
+                    nexusCommon.showMessage('移除终端成功', 'success');
+                } else {
+                    nexusCommon.showMessage(result.message || '移除终端失败', 'error');
                 }
             } catch (error) {
                 console.error('移除终端失败:', error);

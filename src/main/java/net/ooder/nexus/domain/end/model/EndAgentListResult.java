@@ -7,7 +7,7 @@ import net.ooder.nexus.domain.network.model.EndAgent;
 
 /**
  * EndAgent列表结果
- * 用于EndAgentController中getEndAgents方法的返回类�?
+ * 用于EndAgentController中getEndAgents方法的返回类型
  */
 public class EndAgentListResult implements Serializable {
     private List<EndAgent> agents;

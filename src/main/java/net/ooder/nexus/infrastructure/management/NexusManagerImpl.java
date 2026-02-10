@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Nexus管理实现�?
+ * Nexus管理实现类
  */
 public class NexusManagerImpl implements NexusManager {
 
@@ -19,10 +19,10 @@ public class NexusManagerImpl implements NexusManager {
 
     private AgentSDK agentSDK;
 
-    // LLM提供者映�?
+    // LLM提供者映射
     private final Map<String, Map<String, Object>> llmProviders = new ConcurrentHashMap<>();
 
-    // 协议处理器映�?
+    // 协议处理器映射
     private final Map<String, ProtocolHandler> protocolHandlers = new ConcurrentHashMap<>();
 
     // 网络节点映射
@@ -121,7 +121,7 @@ public class NexusManagerImpl implements NexusManager {
     public void removeNetworkNode(String nodeId) {
         log.info("Removing network node: {}", nodeId);
         networkNodes.remove(nodeId);
-        // 同时移除相关的网络连�?
+        // 同时移除相关的网络连接
         networkConnections.entrySet().removeIf(entry -> {
             Map<String, Object> connInfo = entry.getValue();
             return nodeId.equals(connInfo.get("sourceNodeId")) || nodeId.equals(connInfo.get("targetNodeId"));
