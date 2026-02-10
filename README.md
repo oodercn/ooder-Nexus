@@ -1217,6 +1217,15 @@ tar -czpf backup.tar.gz ./storage/ ./config/
 - 🐛 **Issue**：https://github.com/oodercn/ooder-Nexus/issues
 - 💬 **讨论**：https://github.com/oodercn/ooder-Nexus/discussions
 
+### 12.2 国内镜像
+
+由于网络原因，国内用户可以使用 Gitee 镜像：
+
+- 🪞 **Gitee 仓库**：https://gitee.com/ooderCN/ooder-nexus
+- 📥 **Gitee Releases**：https://gitee.com/ooderCN/ooder-nexus/releases
+
+> **注意**：Gitee 镜像可能会有同步延迟，最新版本请以 GitHub 为准。安装包等大文件需要手动上传到 Gitee Releases。
+
 ### 12.2 开发文档
 
 - 🛠️ **开发指南**：`docs/development/DEVELOPMENT_GUIDE.md`（开发中）
