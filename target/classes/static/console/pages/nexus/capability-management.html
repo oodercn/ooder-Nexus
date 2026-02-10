@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -106,48 +106,64 @@
     <script src="../../js/menu-loader.js"></script>
     <script src="../../common/api-client.js"></script>
     <script src="../../common/utils.js"></script>
+    <script src="/console/js/sdk-data-service.js"></script>
     <script>
         window.onload = function() {
             initMenu();
             loadCapabilities();
         };
 
-        // 模拟能力数据
+        // SDK存储集合名称
+        const COLLECTION_CAPABILITIES = 'capabilities';
+
+        // 能力数据
         let capabilities = [];
 
-        function loadCapabilities() {
-            // 模拟加载能力数据
-            capabilities = [
-                {
-                    id: "network-topology",
-                    name: "网络拓扑分析",
-                    description: "分析网络拓扑结构，生成网络地图",
-                    registeredTime: new Date().toISOString(),
-                    status: "active"
-                },
-                {
-                    id: "link-management",
-                    name: "链路管理",
-                    description: "管理网络链路的创建和断开",
-                    registeredTime: new Date().toISOString(),
-                    status: "active"
-                },
-                {
-                    id: "endagent-discovery",
-                    name: "终端发现",
-                    description: "发现网络中的终端设备",
-                    registeredTime: new Date().toISOString(),
-                    status: "active"
-                },
-                {
-                    id: "route-discovery",
-                    name: "路由发现",
-                    description: "发现网络中的路由路径",
-                    registeredTime: new Date().toISOString(),
-                    status: "active"
-                }
-            ];
-            renderCapabilities();
+        // 默认能力数据
+        const defaultCapabilities = [
+            {
+                id: "network-topology",
+                name: "网络拓扑分析",
+                description: "分析网络拓扑结构，生成网络地图",
+                registeredTime: new Date().toISOString(),
+                status: "active"
+            },
+            {
+                id: "link-management",
+                name: "链路管理",
+                description: "管理网络链路的创建和断开",
+                registeredTime: new Date().toISOString(),
+                status: "active"
+            },
+            {
+                id: "endagent-discovery",
+                name: "终端发现",
+                description: "发现网络中的终端设备",
+                registeredTime: new Date().toISOString(),
+                status: "active"
+            },
+            {
+                id: "route-discovery",
+                name: "路由发现",
+                description: "发现网络中的路由路径",
+                registeredTime: new Date().toISOString(),
+                status: "active"
+            }
+        ];
+
+        async function loadCapabilities() {
+            try {
+                // 初始化默认数据
+                await SdkDataService.initCollection(COLLECTION_CAPABILITIES, defaultCapabilities);
+
+                // 从SDK存储获取能力列表
+                capabilities = await SdkDataService.getAll(COLLECTION_CAPABILITIES);
+                renderCapabilities();
+            } catch (error) {
+                console.error('加载能力数据失败:', error);
+                capabilities = defaultCapabilities;
+                renderCapabilities();
+            }
         }
 
         function renderCapabilities() {

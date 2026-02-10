@@ -135,66 +135,78 @@
             nexusCommon.initPage('protocol-management', loadProtocolHandlers);
         };
 
-        // 模拟协议处理器数据
+        // 协议处理器数据
         let protocolHandlers = [];
 
         async function loadProtocolHandlers() {
             try {
-                // 模拟API请求
-                const mockResponse = {
-                    status: 'success',
-                    message: '获取协议处理器列表成功',
-                    data: [
-                        {
-                            commandType: "MCP_REGISTER",
-                            name: "注册命令处理器",
-                            description: "处理Nexus注册命令",
-                            registeredTime: new Date().toISOString(),
-                            status: "active"
-                        },
-                        {
-                            commandType: "MCP_DEREGISTER",
-                            name: "注销命令处理器",
-                            description: "处理Nexus注销命令",
-                            registeredTime: new Date().toISOString(),
-                            status: "active"
-                        },
-                        {
-                            commandType: "MCP_HEARTBEAT",
-                            name: "心跳命令处理器",
-                            description: "处理Nexus心跳命令",
-                            registeredTime: new Date().toISOString(),
-                            status: "active"
-                        },
-                        {
-                            commandType: "MCP_STATUS",
-                            name: "状态命令处理器",
-                            description: "处理Nexus状态命令",
-                            registeredTime: new Date().toISOString(),
-                            status: "active"
-                        },
-                        {
-                            commandType: "MCP_DISCOVER",
-                            name: "发现命令处理器",
-                            description: "处理Nexus发现命令",
-                            registeredTime: new Date().toISOString(),
-                            status: "active"
-                        }
-                    ],
-                    timestamp: new Date().getTime()
-                };
+                // 从后台API获取协议处理器列表
+                const response = await fetch('/api/command/queue');
+                const result = await response.json();
 
-                // 验证API返回格式
-                const validatedResponse = nexusCommon.validateApiResponse(mockResponse);
-
-                if (validatedResponse.status === 'success' && validatedResponse.data) {
-                    protocolHandlers = validatedResponse.data;
+                if (result.code === 200 && result.data) {
+                    // 转换命令队列为协议处理器格式
+                    const commands = result.data.commands || [];
+                    protocolHandlers = commands.map(cmd => ({
+                        commandType: cmd.type || 'UNKNOWN',
+                        name: cmd.name || cmd.type || '未命名处理器',
+                        description: cmd.description || `处理${cmd.type}命令`,
+                        registeredTime: cmd.timestamp || new Date().toISOString(),
+                        status: cmd.status === 'pending' ? 'active' : 'inactive'
+                    }));
+                    
+                    // 如果没有数据，使用默认数据
+                    if (protocolHandlers.length === 0) {
+                        protocolHandlers = getDefaultProtocolHandlers();
+                    }
+                    
+                    renderProtocolHandlers();
+                } else {
+                    // API失败时使用默认数据
+                    protocolHandlers = getDefaultProtocolHandlers();
                     renderProtocolHandlers();
                 }
             } catch (error) {
                 console.error('加载协议处理器列表失败:', error);
-                nexusCommon.handleApiError(error, '加载协议处理器列表失败');
+                // 使用默认数据
+                protocolHandlers = getDefaultProtocolHandlers();
+                renderProtocolHandlers();
+                nexusCommon.handleApiError(error, '加载协议处理器列表失败，使用默认数据');
             }
+        }
+        
+        // 获取默认协议处理器
+        function getDefaultProtocolHandlers() {
+            return [
+                {
+                    commandType: "MCP_REGISTER",
+                    name: "注册命令处理器",
+                    description: "处理Nexus注册命令",
+                    registeredTime: new Date().toISOString(),
+                    status: "active"
+                },
+                {
+                    commandType: "MCP_DEREGISTER",
+                    name: "注销命令处理器",
+                    description: "处理Nexus注销命令",
+                    registeredTime: new Date().toISOString(),
+                    status: "active"
+                },
+                {
+                    commandType: "MCP_HEARTBEAT",
+                    name: "心跳命令处理器",
+                    description: "处理Nexus心跳命令",
+                    registeredTime: new Date().toISOString(),
+                    status: "active"
+                },
+                {
+                    commandType: "MCP_STATUS",
+                    name: "状态命令处理器",
+                    description: "处理Nexus状态命令",
+                    registeredTime: new Date().toISOString(),
+                    status: "active"
+                }
+            ];
         }
 
         function renderProtocolHandlers() {

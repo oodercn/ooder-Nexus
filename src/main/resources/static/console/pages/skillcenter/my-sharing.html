@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技能分�?- Nexus SkillCenter</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <title>技能分享 - Nexus SkillCenter</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
         .sharing-container {
@@ -237,7 +237,7 @@
         </aside>
         <main class="main-content">
             <div class="content-header">
-                <h1><i class="ri-share-line"></i> 技能分�?/h1>
+                <h1><i class="ri-share-line"></i> 技能分享</h1>
                 <div class="content-actions">
                     <button class="btn btn-secondary" onclick="refreshData()">
                         <i class="ri-refresh-line"></i> 刷新
@@ -248,20 +248,23 @@
             <div class="sharing-container">
                 <div class="sharing-tabs">
                     <button class="tab-btn active" data-tab="share" onclick="switchTab('share')">
-                        <i class="ri-share-forward-line"></i> 分享技�?                    </button>
+                        <i class="ri-share-forward-line"></i> 分享技能
+                    </button>
                     <button class="tab-btn" data-tab="shared" onclick="switchTab('shared')">
-                        <i class="ri-upload-cloud-line"></i> 已分�?                    </button>
+                        <i class="ri-upload-cloud-line"></i> 已分享
+                    </button>
                     <button class="tab-btn" data-tab="received" onclick="switchTab('received')">
-                        <i class="ri-download-cloud-line"></i> 收到的技�?                    </button>
+                        <i class="ri-download-cloud-line"></i> 收到的技能
+                    </button>
                 </div>
                 
-                <!-- 分享技�?-->
+                <!-- 分享技能 -->
                 <div class="tab-content active" id="share-tab">
                     <div class="share-form">
                         <div class="form-group">
-                            <label class="form-label">选择技�?/label>
+                            <label class="form-label">选择技能</label>
                             <select id="share-skill-select" class="form-control">
-                                <option value="">请选择要分享的技�?/option>
+                                <option value="">请选择要分享的技能</option>
                                 <option value="openwrt-network-control">OpenWrt网络控制</option>
                                 <option value="parental-control">家长上网控制</option>
                                 <option value="smart-bandwidth">智能带宽管理</option>
@@ -280,28 +283,29 @@
                             <textarea id="share-message" class="form-control" placeholder="添加分享消息（可选）..."></textarea>
                         </div>
                         <button class="btn btn-primary" onclick="submitShare()">
-                            <i class="ri-share-forward-line"></i> 分享技�?                        </button>
+                            <i class="ri-share-forward-line"></i> 分享技能
+                        </button>
                     </div>
                 </div>
                 
-                <!-- 已分享技�?-->
+                <!-- 已分享技能 -->
                 <div class="tab-content" id="shared-tab">
                     <div class="skill-list" id="shared-skills-list">
                         <div class="empty-state">
                             <i class="ri-upload-cloud-line"></i>
-                            <h3>暂无已分享的技�?/h3>
-                            <p>您分享的技能将显示在这�?/p>
+                            <h3>暂无已分享的技能</h3>
+                            <p>您分享的技能将显示在这里</p>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 收到的技�?-->
+                <!-- 收到的技能 -->
                 <div class="tab-content" id="received-tab">
                     <div class="skill-list" id="received-skills-list">
                         <div class="empty-state">
                             <i class="ri-download-cloud-line"></i>
-                            <h3>暂无收到的技�?/h3>
-                            <p>群组成员分享的技能将显示在这�?/p>
+                            <h3>暂无收到的技能</h3>
+                            <p>群组成员分享的技能将显示在这里</p>
                         </div>
                     </div>
                 </div>
@@ -310,7 +314,8 @@
     </div>
 
     <script>
-        // 切换标签�?        function switchTab(tabName) {
+        // 切换标签页
+        function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
@@ -353,7 +358,7 @@
             const message = document.getElementById('share-message').value;
             
             if (!skillId) {
-                showNotification('请选择要分享的技�?, 'error');
+                showNotification('请选择要分享的技能', 'error');
                 return;
             }
             if (!groupId) {
@@ -380,11 +385,12 @@
                 }
             } catch (error) {
                 console.error('分享失败:', error);
-                showNotification('分享失败，请检查网络连�?, 'error');
+                showNotification('分享失败，请检查网络连接', 'error');
             }
         }
         
-        // 加载已分享的技�?        async function loadSharedSkills() {
+        // 加载已分享的技能
+        async function loadSharedSkills() {
             try {
                 const response = await fetch('/api/skillcenter/share/shared');
                 const data = await response.json();
@@ -400,7 +406,7 @@
                             <div class="skill-info">
                                 <div class="skill-name">${share.skillName || share.skillId}</div>
                                 <div class="skill-meta">
-                                    分享�? ${share.groupName || share.groupId} | 
+                                    分享到: ${share.groupName || share.groupId} | 
                                     ${new Date(share.sharedAt).toLocaleString()}
                                 </div>
                             </div>
@@ -415,17 +421,18 @@
                     container.innerHTML = `
                         <div class="empty-state">
                             <i class="ri-upload-cloud-line"></i>
-                            <h3>暂无已分享的技�?/h3>
-                            <p>您分享的技能将显示在这�?/p>
+                            <h3>暂无已分享的技能</h3>
+                            <p>您分享的技能将显示在这里</p>
                         </div>
                     `;
                 }
             } catch (error) {
-                console.error('加载已分享技能失�?', error);
+                console.error('加载已分享技能失败:', error);
             }
         }
         
-        // 加载收到的技�?        async function loadReceivedSkills() {
+        // 加载收到的技能
+        async function loadReceivedSkills() {
             try {
                 const response = await fetch('/api/skillcenter/share/received');
                 const data = await response.json();
@@ -441,7 +448,7 @@
                             <div class="skill-info">
                                 <div class="skill-name">${skill.skillName}</div>
                                 <div class="skill-meta">
-                                    分享�? ${skill.sharerName} | 
+                                    分享者: ${skill.sharerName} | 
                                     群组: ${skill.groupName} |
                                     ${new Date(skill.receivedAt).toLocaleString()}
                                 </div>
@@ -458,19 +465,19 @@
                     container.innerHTML = `
                         <div class="empty-state">
                             <i class="ri-download-cloud-line"></i>
-                            <h3>暂无收到的技�?/h3>
-                            <p>群组成员分享的技能将显示在这�?/p>
+                            <h3>暂无收到的技能</h3>
+                            <p>群组成员分享的技能将显示在这里</p>
                         </div>
                     `;
                 }
             } catch (error) {
-                console.error('加载收到的技能失�?', error);
+                console.error('加载收到的技能失败:', error);
             }
         }
         
         // 取消分享
         async function unshareSkill(shareId) {
-            if (!confirm('确定要取消分享吗�?)) return;
+            if (!confirm('确定要取消分享吗？')) return;
             
             try {
                 const response = await fetch(`/api/skillcenter/share/${shareId}`, {
@@ -480,14 +487,14 @@
                 const data = await response.json();
                 
                 if (data.code === 200) {
-                    showNotification('已取消分�?, 'success');
+                    showNotification('已取消分享', 'success');
                     loadSharedSkills();
                 } else {
                     showNotification(data.message || '操作失败', 'error');
                 }
             } catch (error) {
                 console.error('取消分享失败:', error);
-                showNotification('操作失败，请检查网络连�?, 'error');
+                showNotification('操作失败，请检查网络连接', 'error');
             }
         }
         
@@ -515,7 +522,8 @@
             setTimeout(() => notification.remove(), 3000);
         }
         
-        // 页面初始�?        window.onPageInit = function() {
+        // 页面初始化
+        window.onPageInit = function() {
             loadGroups();
         };
     </script>

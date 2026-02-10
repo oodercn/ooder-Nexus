@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技能管�?- Nexus SkillCenter</title>
+    <title>技能管理 - Nexus SkillCenter</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,7 +18,7 @@
         </aside>
         <main class="main-content">
             <header class="header">
-                <h1>技能管�?/h1>
+                <h1>技能管理</h1>
                 <div class="header-actions">
                     <button class="btn btn-primary" onclick="showAddCategoryModal()">
                         <i class="ri-add-line"></i> 添加分类
@@ -24,26 +27,26 @@
             </header>
             <div class="content">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('skills')">技能列�?/button>
-                    <button class="tab-btn" onclick="switchTab('categories')">技能分�?/button>
-                    <button class="tab-btn" onclick="switchTab('approvals')">技能审�?/button>
+                    <button class="tab-btn active" onclick="switchTab('skills')">技能列表</button>
+                    <button class="tab-btn" onclick="switchTab('categories')">技能分类</button>
+                    <button class="tab-btn" onclick="switchTab('approvals')">技能审批</button>
                 </div>
                 
                 <div class="tab-content" id="skills-tab">
                     <div class="skill-list" id="skill-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
                 
                 <div class="tab-content" id="categories-tab" style="display: none;">
                     <div class="category-list" id="category-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
                 
                 <div class="tab-content" id="approvals-tab" style="display: none;">
                     <div class="skill-list" id="approval-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
             </div>
@@ -86,7 +89,7 @@
         async function loadSkills() {
             try {
                 const skillList = document.getElementById('skill-list');
-                skillList.innerHTML = '<div class="loading">加载�?..</div>';
+                skillList.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/skills');
                 
@@ -106,9 +109,9 @@
                     throw new Error(result.message || '响应数据格式错误');
                 }
             } catch (error) {
-                console.error('加载技能列表错�?', error);
+                console.error('加载技能列表错误:', error);
                 document.getElementById('skill-list').innerHTML = '<div class="empty-state">加载失败</div>';
-                showError('加载技能列表失�?);
+                showError('加载技能列表失败');
             }
         }
 
@@ -117,7 +120,7 @@
             skillList.innerHTML = '';
             
             if (skills.length === 0) {
-                skillList.innerHTML = '<div class="empty-state">暂无技�?/div>';
+                skillList.innerHTML = '<div class="empty-state">暂无技能</div>';
                 return;
             }
             
@@ -129,7 +132,7 @@
                         <h3>${skill.name}</h3>
                         <p>${skill.description || '暂无描述'}</p>
                         <span class="skill-category">${getCategoryName(skill.category)}</span>
-                        <span class="skill-author">作�? ${skill.author}</span>
+                        <span class="skill-author">作者: ${skill.author}</span>
                     </div>
                     <div class="skill-actions">
                         <button class="btn btn-secondary" onclick="viewSkill('${skill.id}')">
@@ -147,7 +150,7 @@
         async function loadCategories() {
             try {
                 const categoryList = document.getElementById('category-list');
-                categoryList.innerHTML = '<div class="loading">加载�?..</div>';
+                categoryList.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/categories');
                 
@@ -189,7 +192,7 @@
                     <div class="category-info">
                         <h3>${category.name}</h3>
                         <p>${category.description || '暂无描述'}</p>
-                        <span class="category-count">${category.skillCount || 0} 个技�?/span>
+                        <span class="category-count">${category.skillCount || 0} 个技能</span>
                     </div>
                     <div class="category-actions">
                         <button class="btn btn-secondary" onclick="editCategory('${category.id}')">
@@ -207,7 +210,7 @@
         async function loadApprovals() {
             try {
                 const approvalList = document.getElementById('approval-list');
-                approvalList.innerHTML = '<div class="loading">加载�?..</div>';
+                approvalList.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/skills/pending');
                 
@@ -238,7 +241,7 @@
             approvalList.innerHTML = '';
             
             if (skills.length === 0) {
-                approvalList.innerHTML = '<div class="empty-state">暂无待审批技�?/div>';
+                approvalList.innerHTML = '<div class="empty-state">暂无待审批技能</div>';
                 return;
             }
             
@@ -249,7 +252,7 @@
                     <div class="skill-info">
                         <h3>${skill.name}</h3>
                         <p>${skill.description || '暂无描述'}</p>
-                        <span class="skill-author">作�? ${skill.author}</span>
+                        <span class="skill-author">作者: ${skill.author}</span>
                         <span class="skill-time">提交时间: ${formatTime(skill.submittedAt)}</span>
                     </div>
                     <div class="skill-actions">
@@ -268,7 +271,7 @@
         function getCategoryName(category) {
             const categoryMap = {
                 'text-processing': '文本处理',
-                'development': '开发工�?,
+                'development': '开发工具',
                 'deployment': '部署工具',
                 'media': '媒体处理',
                 'storage': '存储管理'
@@ -297,7 +300,7 @@
             const description = document.getElementById('category-description').value;
             
             if (!name) {
-                showError('请填写分类名�?);
+                showError('请填写分类名称');
                 return;
             }
             
@@ -377,7 +380,7 @@
         }
 
         async function deleteSkill(skillId) {
-            if (!confirm('确定要删除此技能吗�?)) {
+            if (!confirm('确定要删除此技能吗？')) {
                 return;
             }
             
@@ -397,14 +400,14 @@
                 }
                 
                 if (result && result.code === 200) {
-                    showSuccess('技能删除成�?);
+                    showSuccess('技能删除成功');
                     loadSkills();
                 } else {
-                    showError(result.message || '技能删除失�?);
+                    showError(result.message || '技能删除失败');
                 }
             } catch (error) {
-                console.error('删除技能错�?', error);
-                showError('技能删除失�?);
+                console.error('删除技能错误:', error);
+                showError('技能删除失败');
             }
         }
 
@@ -431,13 +434,13 @@
                     showError(result.message || '审批失败');
                 }
             } catch (error) {
-                console.error('审批技能错�?', error);
+                console.error('审批技能错误:', error);
                 showError('审批失败');
             }
         }
 
         async function rejectSkill(skillId) {
-            if (!confirm('确定要拒绝此技能吗�?)) {
+            if (!confirm('确定要拒绝此技能吗？')) {
                 return;
             }
             
@@ -463,7 +466,7 @@
                     showError(result.message || '拒绝失败');
                 }
             } catch (error) {
-                console.error('拒绝技能错�?', error);
+                console.error('拒绝技能错误:', error);
                 showError('拒绝失败');
             }
         }

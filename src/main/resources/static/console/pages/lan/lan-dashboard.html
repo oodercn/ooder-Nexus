@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>局域网仪表�?- Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <title>局域网仪表盘 - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/common/button-manager.js"></script>
     <script src="/console/common/utils.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航�?-->
+        <!-- 侧边导航栏 -->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -23,7 +23,7 @@
         <div class="main-content">
             <!-- 头部 -->
             <div class="header">
-                <h1><i class="ri-wifi-line"></i> 局域网仪表�?/h1>
+                <h1><i class="ri-wifi-line"></i> 局域网仪表盘</h1>
                 <div class="header-actions">
                     <button class="theme-toggle-btn btn btn-secondary">
                         <i class="ri-sun-line"></i> 浅色模式
@@ -34,14 +34,14 @@
                 </div>
             </div>
             
-            <!-- 状态概�?-->
+            <!-- 状态概览 -->
             <div class="grid">
                 <div class="card status-card">
                     <div class="status-icon">
                         <i class="ri-router-wireless-line"></i>
                     </div>
                     <div class="status-value" id="totalDevices">0</div>
-                    <div class="status-label">网络设备�?/div>
+                    <div class="status-label">网络设备数</div>
                 </div>
                 
                 <div class="card status-card">
@@ -49,7 +49,7 @@
                         <i class="ri-signal-line"></i>
                     </div>
                     <div class="status-value" id="networkStatus">-</div>
-                    <div class="status-label">网络状�?/div>
+                    <div class="status-label">网络状态</div>
                 </div>
                 
                 <div class="card status-card">
@@ -57,7 +57,7 @@
                         <i class="ri-data-line"></i>
                     </div>
                     <div class="status-value" id="bandwidthUsage">0</div>
-                    <div class="status-label">带宽使用�?/div>
+                    <div class="status-label">带宽使用率</div>
                 </div>
                 
                 <div class="card status-card">
@@ -65,7 +65,7 @@
                         <i class="ri-ip-line"></i>
                     </div>
                     <div class="status-value" id="ipUsage">0</div>
-                    <div class="status-label">IP使用�?/div>
+                    <div class="status-label">IP使用率</div>
                 </div>
             </div>
             
@@ -80,13 +80,13 @@
                 <div class="network-topology">
                     <div class="topology-diagram">
                         <svg width="100%" height="100%" viewBox="0 0 800 250">
-                            <!-- 路由�?-->
+                            <!-- 路由器 -->
                             <circle cx="400" cy="50" r="30" fill="var(--nexus-primary)" stroke="var(--nexus-dark)" stroke-width="2" />
-                            <text x="400" y="55" text-anchor="middle" fill="white" font-size="14" font-weight="600">路由�?/text>
+                            <text x="400" y="55" text-anchor="middle" fill="white" font-size="14" font-weight="600">路由器</text>
                             
-                            <!-- 交换�?-->
+                            <!-- 交换机 -->
                             <rect x="300" y="120" width="200" height="40" rx="5" fill="var(--nexus-secondary)" stroke="var(--nexus-dark)" stroke-width="2" />
-                            <text x="400" y="145" text-anchor="middle" fill="white" font-size="14" font-weight="600">交换�?/text>
+                            <text x="400" y="145" text-anchor="middle" fill="white" font-size="14" font-weight="600">交换机</text>
                             
                             <!-- 设备1 -->
                             <rect x="150" y="200" width="100" height="30" rx="5" fill="var(--nexus-success)" stroke="var(--nexus-dark)" stroke-width="2" />
@@ -98,13 +98,13 @@
                             
                             <!-- 设备3 -->
                             <rect x="450" y="200" width="100" height="30" rx="5" fill="var(--nexus-warning)" stroke="var(--nexus-dark)" stroke-width="2" />
-                            <text x="500" y="220" text-anchor="middle" fill="white" font-size="12">打印�?/text>
+                            <text x="500" y="220" text-anchor="middle" fill="white" font-size="12">打印机</text>
                             
                             <!-- 设备4 -->
                             <rect x="600" y="200" width="100" height="30" rx="5" fill="var(--nexus-danger)" stroke="var(--nexus-dark)" stroke-width="2" />
                             <text x="650" y="220" text-anchor="middle" fill="white" font-size="12">NAS</text>
                             
-                            <!-- 连接�?-->
+                            <!-- 连接线 -->
                             <line x1="400" y1="80" x2="400" y2="120" stroke="var(--nexus-dark)" stroke-width="2" />
                             <line x1="300" y1="160" x2="200" y2="200" stroke="var(--nexus-dark)" stroke-width="2" />
                             <line x1="350" y1="160" x2="350" y2="200" stroke="var(--nexus-dark)" stroke-width="2" />
@@ -159,7 +159,7 @@
                     </button>
                 </div>
                 <div class="device-list" id="deviceList">
-                    <!-- 设备列表将通过JavaScript动态生�?-->
+                    <!-- 设备列表将通过JavaScript动态生成 -->
                 </div>
             </div>
         </div>

@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>同步仪表盘 - Nexus</title>
+    <title>数据同步 - Nexus</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
     <link rel="stylesheet" href="/console/css/llm-integration.css">
+    <link rel="stylesheet" href="/console/css/styles.css">
+    <script src="/console/js/theme-manager.js"></script>
     <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/common.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,60 +19,862 @@
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
         <main class="main-content">
-            <div class="content-header">
-                <h1>Nexus SkillCenter 同步仪表盘</h1>
-                <div class="content-actions">
-                    <button class="btn btn-primary" onclick="showBatchSyncModal()">
-                        <i class="ri-upload-cloud-line"></i>
-                        批量同步
-                    </button>
-                    <button class="btn btn-secondary" onclick="refreshSyncStatus()">
-                        <i class="ri-refresh-line"></i>
-                        刷新状态
-                    </button>
-                </div>
-            </div>
-            <div class="sync-dashboard">
-                <div class="sync-stats">
-                    <div class="stat-card">
-                        <div class="stat-icon ri-cloud-line"></div>
-                        <div class="stat-info">
-                            <h3>已同步技能</h3>
-                            <p class="stat-value" id="synced-count">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon ri-time-line"></div>
-                        <div class="stat-info">
-                            <h3>最后同步时间</h3>
-                            <p class="stat-value" id="last-sync-time">从未同步</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon ri-error-warning-line"></div>
-                        <div class="stat-info">
-                            <h3>同步失败</h3>
-                            <p class="stat-value" id="sync-failed-count">0</p>
-                        </div>
+            <div class="sync-dashboard-container">
+                <div class="content-header">
+                    <h1><i class="ri-sync-line"></i> 数据同步</h1>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="showSyncModal()">
+                            <i class="ri-add-line"></i> 新建同步
+                        </button>
+                        <button class="btn btn-secondary" onclick="refreshData()">
+                            <i class="ri-refresh-line"></i> 刷新
+                        </button>
                     </div>
                 </div>
-                <div class="sync-tasks">
-                    <h3>同步任务</h3>
-                    <div class="task-list" id="sync-task-list">
-                        <div class="empty-state">暂无同步任务</div>
+
+                <!-- 统计卡片 -->
+                <div class="stats-grid" id="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-total">-</div>
+                        <div class="stat-label">总任务</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-completed">-</div>
+                        <div class="stat-label">已完成</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-running">-</div>
+                        <div class="stat-label">进行中</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-skills">-</div>
+                        <div class="stat-label">已同步技能</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-rate">-</div>
+                        <div class="stat-label">成功率</div>
+                    </div>
+                </div>
+
+                <!-- 标签页 -->
+                <div class="tabs">
+                    <div class="tab-header">
+                        <div class="tab-item active" data-tab="tasks" onclick="switchTab('tasks')">
+                            <i class="ri-task-line"></i> 同步任务
+                        </div>
+                        <div class="tab-item" data-tab="skills" onclick="switchTab('skills')">
+                            <i class="ri-apps-line"></i> 技能管理
+                        </div>
+                        <div class="tab-item" data-tab="history" onclick="switchTab('history')">
+                            <i class="ri-history-line"></i> 同步历史
+                        </div>
+                    </div>
+
+                <!-- 同步任务标签页 -->
+                <div class="tab-content active" id="tab-tasks">
+                    <div class="search-filter">
+                        <select id="status-filter" class="form-select" onchange="filterTasks()">
+                            <option value="all">全部状态</option>
+                            <option value="pending">待执行</option>
+                            <option value="running">进行中</option>
+                            <option value="completed">已完成</option>
+                            <option value="failed">失败</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>任务名称</th>
+                                    <th>类型</th>
+                                    <th>状态</th>
+                                    <th>进度</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="task-table-body">
+                                <tr><td colspan="6" style="text-align: center; padding: 40px;">加载中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 技能管理标签页 -->
+                <div class="tab-content" id="tab-skills">
+                    <div class="search-filter">
+                        <input type="text" id="skill-search" class="form-input" placeholder="搜索技能" onkeyup="filterSkills()">
+                        <button class="btn btn-primary" onclick="batchSync()">
+                            <i class="ri-sync-line"></i> 批量同步
+                        </button>
+                    </div>
+                    <div class="skill-grid" id="skill-grid">
+                        <!-- 技能卡片将动态加载 -->
+                    </div>
+                </div>
+
+                <!-- 同步历史标签页 -->
+                <div class="tab-content" id="tab-history">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>技能名称</th>
+                                    <th>同步方向</th>
+                                    <th>同步时间</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body">
+                                <tr><td colspan="4" style="text-align: center; padding: 40px;">加载中...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <script src="/console/js/common/ApiClient.js"></script>
-    <script src="/console/js/skillcenter-sync-api.js"></script>
-    <script src="/console/js/sync-dashboard.js"></script>
+    <!-- 新建同步模态框 -->
+    <div id="sync-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建同步任务</h3>
+                <button class="btn btn-secondary" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>任务名称</label>
+                    <input type="text" id="sync-name" class="form-input" placeholder="输入任务名称">
+                </div>
+                <div class="form-group">
+                    <label>同步类型</label>
+                    <select id="sync-type" class="form-select">
+                        <option value="upload">上传到云端</option>
+                        <option value="download">下载到本地</option>
+                        <option value="bidirectional">双向同步</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>源位置</label>
+                    <input type="text" id="sync-source" class="form-input" value="本地" readonly>
+                </div>
+                <div class="form-group">
+                    <label>目标位置</label>
+                    <input type="text" id="sync-target" class="form-input" value="云端" readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="createSync()">创建</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        window.onload = function() {
+        let allTasks = [];
+        let allSkills = [];
+        let selectedSkills = new Set();
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
             initMenu();
-        };
+            loadData();
+        });
+
+        // 加载所有数据
+        async function loadData() {
+            await Promise.all([
+                loadStatistics(),
+                loadTasks(),
+                loadSkills(),
+                loadHistory()
+            ]);
+        }
+
+        // 加载统计信息
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/sync/statistics');
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('stat-total').textContent = result.data.totalTasks || 0;
+                    document.getElementById('stat-completed').textContent = result.data.completedTasks || 0;
+                    document.getElementById('stat-running').textContent = result.data.runningTasks || 0;
+                    document.getElementById('stat-skills').textContent = result.data.totalSyncedSkills || 0;
+                    document.getElementById('stat-rate').textContent = (result.data.successRate || 0).toFixed(1) + '%';
+                }
+            } catch (error) {
+                console.error('加载统计信息失败:', error);
+            }
+        }
+
+        // 加载同步任务
+        async function loadTasks() {
+            try {
+                const response = await fetch('/api/sync/tasks');
+                const result = await response.json();
+                if (result.success) {
+                    allTasks = result.data;
+                    filterTasks();
+                }
+            } catch (error) {
+                console.error('加载同步任务失败:', error);
+                document.getElementById('task-table-body').innerHTML = 
+                    '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--nexus-danger);">加载失败</td></tr>';
+            }
+        }
+
+        // 过滤任务
+        function filterTasks() {
+            const statusFilter = document.getElementById('status-filter').value;
+            let filtered = allTasks;
+            
+            if (statusFilter !== 'all') {
+                filtered = allTasks.filter(t => t.status === statusFilter);
+            }
+            
+            renderTasks(filtered);
+        }
+
+        // 渲染任务列表
+        function renderTasks(tasks) {
+            const tbody = document.getElementById('task-table-body');
+            tbody.innerHTML = '';
+
+            if (tasks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">暂无数据</td></tr>';
+                return;
+            }
+
+            tasks.forEach(task => {
+                const row = document.createElement('tr');
+                const typeText = { upload: '上传', download: '下载', bidirectional: '双向' }[task.type] || task.type;
+                const statusClass = { pending: 'status-pending', running: 'status-running', completed: 'status-completed', failed: 'status-failed', cancelled: 'status-cancelled' }[task.status] || '';
+                const statusText = { pending: '待执行', running: '进行中', completed: '已完成', failed: '失败', cancelled: '已取消' }[task.status] || task.status;
+                
+                row.innerHTML = `
+                    <td>${task.name}</td>
+                    <td>${typeText}</td>
+                    <td><span class="status-indicator ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${task.progress || 0}%"></div>
+                            <span class="progress-text">${(task.processedItems || 0)}/${(task.totalItems || 0)}</span>
+                        </div>
+                    </td>
+                    <td>${new Date(task.createTime).toLocaleString()}</td>
+                    <td>
+                        ${task.status === 'pending' ? `<button class="btn btn-sm btn-primary" onclick="executeTask('${task.id}')">执行</button>` : ''}
+                        ${task.status === 'running' ? `<button class="btn btn-sm btn-secondary" onclick="cancelTask('${task.id}')">取消</button>` : ''}
+                        <button class="btn btn-sm btn-danger" onclick="deleteTask('${task.id}')">删除</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 加载技能列表
+        async function loadSkills() {
+            try {
+                const response = await fetch('/api/sync/skills/syncable');
+                const result = await response.json();
+                if (result.success) {
+                    allSkills = result.data;
+                    renderSkills(allSkills);
+                }
+            } catch (error) {
+                console.error('加载技能列表失败:', error);
+                document.getElementById('skill-grid').innerHTML = '<div style="text-align: center; padding: 40px; color: var(--nexus-danger);">加载失败</div>';
+            }
+        }
+
+        // 渲染技能卡片
+        function renderSkills(skills) {
+            const grid = document.getElementById('skill-grid');
+            grid.innerHTML = '';
+
+            if (skills.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; padding: 40px;">暂无技能</div>';
+                return;
+            }
+
+            skills.forEach(skill => {
+                const card = document.createElement('div');
+                card.className = `skill-card ${selectedSkills.has(skill.id) ? 'selected' : ''}`;
+                card.innerHTML = `
+                    <div class="skill-checkbox">
+                        <input type="checkbox" ${selectedSkills.has(skill.id) ? 'checked' : ''} onchange="toggleSkill('${skill.id}')">
+                    </div>
+                    <div class="skill-icon">
+                        <i class="ri-apps-line"></i>
+                    </div>
+                    <div class="skill-info">
+                        <h4>${skill.name}</h4>
+                        <p>${skill.description}</p>
+                        <div class="skill-meta">
+                            <span class="badge badge-${skill.category}">${skill.category}</span>
+                            <span class="skill-version">v${skill.version}</span>
+                            ${skill.synced ? '<span class="badge badge-success">已同步</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="skill-actions">
+                        ${!skill.synced ? 
+                            `<button class="btn btn-sm btn-primary" onclick="uploadSkill('${skill.id}')">上传</button>` :
+                            `<button class="btn btn-sm btn-secondary" onclick="downloadSkill('${skill.id}')">下载</button>`
+                        }
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 过滤技能
+        function filterSkills() {
+            const searchTerm = document.getElementById('skill-search').value.toLowerCase();
+            const filtered = allSkills.filter(s => 
+                s.name.toLowerCase().includes(searchTerm) ||
+                s.description.toLowerCase().includes(searchTerm)
+            );
+            renderSkills(filtered);
+        }
+
+        // 切换技能选择
+        function toggleSkill(skillId) {
+            if (selectedSkills.has(skillId)) {
+                selectedSkills.delete(skillId);
+            } else {
+                selectedSkills.add(skillId);
+            }
+            renderSkills(allSkills);
+        }
+
+        // 加载历史记录
+        async function loadHistory() {
+            try {
+                const response = await fetch('/api/sync/skills/synced');
+                const result = await response.json();
+                if (result.success) {
+                    renderHistory(result.data);
+                }
+            } catch (error) {
+                console.error('加载历史记录失败:', error);
+                document.getElementById('history-table-body').innerHTML = 
+                    '<tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--nexus-danger);">加载失败</td></tr>';
+            }
+        }
+
+        // 渲染历史记录
+        function renderHistory(skills) {
+            const tbody = document.getElementById('history-table-body');
+            tbody.innerHTML = '';
+
+            if (skills.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px;">暂无历史记录</td></tr>';
+                return;
+            }
+
+            skills.forEach(skill => {
+                const row = document.createElement('tr');
+                const directionText = skill.syncDirection === 'upload' ? '上传' : '下载';
+                const statusClass = skill.syncStatus === 'success' ? 'status-completed' : 'status-failed';
+                const statusText = skill.syncStatus === 'success' ? '成功' : '失败';
+                
+                row.innerHTML = `
+                    <td>${skill.name}</td>
+                    <td>${directionText}</td>
+                    <td>${new Date(skill.syncTime).toLocaleString()}</td>
+                    <td><span class="status-indicator ${statusClass}">${statusText}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 切换标签页
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        // 显示同步模态框
+        function showSyncModal() {
+            document.getElementById('sync-modal').style.display = 'flex';
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('sync-modal').style.display = 'none';
+        }
+
+        // 创建同步任务
+        async function createSync() {
+            const name = document.getElementById('sync-name').value;
+            const type = document.getElementById('sync-type').value;
+            
+            if (!name) {
+                alert('请输入任务名称');
+                return;
+            }
+
+            const task = {
+                name: name,
+                type: type,
+                source: '本地',
+                target: '云端',
+                totalItems: selectedSkills.size || 1
+            };
+
+            try {
+                const response = await fetch('/api/sync/tasks', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify(task)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Create task response:', result);
+                
+                if (result.success === true) {
+                    closeModal();
+                    document.getElementById('sync-name').value = '';
+                    await loadData();
+                    alert('同步任务创建成功');
+                } else {
+                    alert(result.message || '创建失败: ' + JSON.stringify(result));
+                }
+            } catch (error) {
+                console.error('创建失败:', error);
+                alert('创建失败: ' + error.message);
+            }
+        }
+
+        // 执行任务
+        async function executeTask(taskId) {
+            try {
+                const response = await fetch(`/api/sync/tasks/${taskId}/execute`, { method: 'POST' });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Execute task response:', result);
+                
+                if (result.success === true) {
+                    await loadData();
+                    alert('任务已开始执行');
+                } else {
+                    alert(result.message || '执行失败: ' + JSON.stringify(result));
+                }
+            } catch (error) {
+                console.error('执行失败:', error);
+                alert('执行失败: ' + error.message);
+            }
+        }
+
+        // 取消任务
+        async function cancelTask(taskId) {
+            try {
+                const response = await fetch(`/api/sync/tasks/${taskId}/cancel`, { method: 'POST' });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Cancel task response:', result);
+                
+                if (result.success === true) {
+                    await loadData();
+                    alert('任务已取消');
+                } else {
+                    alert(result.message || '取消失败: ' + JSON.stringify(result));
+                }
+            } catch (error) {
+                console.error('取消失败:', error);
+                alert('取消失败: ' + error.message);
+            }
+        }
+
+        // 删除任务
+        async function deleteTask(taskId) {
+            if (!confirm('确定要删除此任务吗？')) return;
+            
+            try {
+                const response = await fetch(`/api/sync/tasks/${taskId}`, { method: 'DELETE' });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Delete task response:', result);
+                
+                if (result.success === true) {
+                    await loadData();
+                    alert('删除成功');
+                } else {
+                    alert(result.message || '删除失败: ' + JSON.stringify(result));
+                }
+            } catch (error) {
+                console.error('删除失败:', error);
+                alert('删除失败: ' + error.message);
+            }
+        }
+
+        // 上传技能
+        async function uploadSkill(skillId) {
+            try {
+                const response = await fetch(`/api/sync/skills/${skillId}/upload`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({ target: '云端' })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Upload skill response:', result);
+                
+                if (result.success === true) {
+                    await loadData();
+                    alert('上传任务已创建');
+                } else {
+                    alert(result.message || '上传失败: ' + JSON.stringify(result));
+                }
+            } catch (error) {
+                console.error('上传失败:', error);
+                alert('上传失败: ' + error.message);
+            }
+        }
+
+        // 下载技能
+        async function downloadSkill(skillId) {
+            try {
+                const response = await fetch(`/api/sync/skills/${skillId}/download`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({ source: '云端' })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Download skill response:', result);
+                
+                if (result.success === true) {
+                    await loadData();
+                    alert('下载任务已创建');
+                } else {
+                    alert(result.message || '下载失败: ' + JSON.stringify(result));
+                }
+            } catch (error) {
+                console.error('下载失败:', error);
+                alert('下载失败: ' + error.message);
+            }
+        }
+
+        // 批量同步
+        async function batchSync() {
+            if (selectedSkills.size === 0) {
+                alert('请至少选择一个技能');
+                return;
+            }
+
+            const skillIds = Array.from(selectedSkills);
+            try {
+                const response = await fetch('/api/sync/batch', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({ skillIds: skillIds, type: 'bidirectional' })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Batch sync response:', result);
+                
+                if (result.success === true) {
+                    selectedSkills.clear();
+                    await loadData();
+                    alert('批量同步任务已创建');
+                } else {
+                    alert(result.message || '批量同步失败: ' + JSON.stringify(result));
+                }
+            } catch (error) {
+                console.error('批量同步失败:', error);
+                alert('批量同步失败: ' + error.message);
+            }
+        }
+
+        // 刷新数据
+        function refreshData() {
+            loadData();
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('sync-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
     </script>
+
+    <style>
+        .sync-dashboard-container {
+            padding: 24px;
+        }
+        .sync-dashboard-container .content-header {
+            margin-bottom: 24px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--nexus-card-bg);
+            border: 1px solid var(--nexus-border);
+            border-radius: var(--nexus-radius);
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--nexus-primary);
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: var(--nexus-text-secondary);
+        }
+        .tabs {
+            background: var(--nexus-card-bg);
+            border: 1px solid var(--nexus-border);
+            border-radius: var(--nexus-radius);
+            overflow: hidden;
+        }
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid var(--nexus-border);
+            background: var(--nexus-bg-secondary);
+        }
+        .tab-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-item:hover {
+            background: var(--nexus-bg-hover);
+        }
+        .tab-item.active {
+            border-bottom-color: var(--nexus-primary);
+            color: var(--nexus-primary);
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .search-filter {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .search-filter input {
+            flex: 1;
+            min-width: 200px;
+        }
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        .skill-card {
+            background: var(--nexus-bg-secondary);
+            border: 1px solid var(--nexus-border);
+            border-radius: var(--nexus-radius);
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+        .skill-card:hover {
+            border-color: var(--nexus-primary);
+        }
+        .skill-card.selected {
+            border-color: var(--nexus-primary);
+            background: var(--nexus-primary-bg);
+        }
+        .skill-checkbox {
+            margin-top: 4px;
+        }
+        .skill-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--nexus-primary);
+            border-radius: var(--nexus-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        .skill-info {
+            flex: 1;
+        }
+        .skill-info h4 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+        }
+        .skill-info p {
+            margin: 0 0 8px 0;
+            font-size: 13px;
+            color: var(--nexus-text-secondary);
+        }
+        .skill-meta {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .skill-version {
+            font-size: 12px;
+            color: var(--nexus-text-secondary);
+        }
+        .skill-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .progress-bar {
+            position: relative;
+            height: 20px;
+            background: var(--nexus-bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--nexus-primary);
+            transition: width 0.3s;
+        }
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: var(--nexus-text);
+        }
+        .status-pending { color: var(--nexus-warning); }
+        .status-running { color: var(--nexus-primary); }
+        .status-completed { color: var(--nexus-success); }
+        .status-failed { color: var(--nexus-danger); }
+        .status-cancelled { color: var(--nexus-text-secondary); }
+
+        /* 表格样式 - 确保主题一致 */
+        .table-container {
+            overflow-x: auto;
+            background: var(--nexus-card-bg);
+            border-radius: var(--nexus-radius);
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .data-table th {
+            background-color: var(--nexus-bg-secondary, var(--nexus-card-bg));
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--nexus-text);
+            border-bottom: 2px solid var(--nexus-border);
+        }
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--nexus-border);
+            color: var(--nexus-text);
+        }
+        .data-table tr:hover {
+            background-color: var(--nexus-bg-hover, rgba(59, 130, 246, 0.1));
+        }
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: var(--nexus-card-bg);
+            border: 1px solid var(--nexus-border);
+            border-radius: var(--nexus-radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--nexus-border);
+        }
+        .modal-header h3 {
+            margin: 0;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--nexus-border);
+        }
+    </style>
 </body>
 </html>

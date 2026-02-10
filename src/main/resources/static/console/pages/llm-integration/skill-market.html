@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技能市�?- Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <title>技能市场 - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <link rel="stylesheet" href="/console/css/llm-integration.css">
     <link rel="stylesheet" href="/console/css/styles.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
         .skill-market-container {
@@ -437,7 +437,7 @@
         }
         
         .skill-capabilities li::before {
-            content: "�?;
+            content: "✓";
             position: absolute;
             left: 12px;
             color: var(--skill-color, var(--nexus-success));
@@ -537,7 +537,7 @@
         </aside>
         <main class="main-content">
             <div class="content-header">
-                <h1><i class="ri-store-line"></i> 技能市�?/h1>
+                <h1><i class="ri-store-line"></i> 技能市场</h1>
                 <div class="content-actions">
                     <button class="btn btn-secondary" onclick="refreshSkillMarket()">
                         <i class="ri-refresh-line"></i> 刷新
@@ -552,7 +552,7 @@
                         <i class="ri-apps-line" style="font-size: 24px; color: var(--nexus-primary);"></i>
                         <div>
                             <div class="skill-stat-value" id="total-skills">0</div>
-                            <div class="skill-stat-label">可用技�?/div>
+                            <div class="skill-stat-label">可用技能</div>
                         </div>
                     </div>
                     <div class="skill-stat-item">
@@ -574,11 +574,11 @@
                 <div class="skill-market-header">
                     <div class="skill-market-filters">
                         <div class="search-box">
-                            <input type="text" id="search-input" placeholder="搜索技�?..">
+                            <input type="text" id="search-input" placeholder="搜索技能...">
                             <i class="ri-search-line search-icon"></i>
                         </div>
                         <select id="category-filter" class="form-input" style="width: 160px;">
-                            <option value="">所有分�?/option>
+                            <option value="">所有分类</option>
                             <option value="网络管理">网络管理</option>
                             <option value="家庭安全">家庭安全</option>
                             <option value="网络优化">网络优化</option>
@@ -595,7 +595,7 @@
                 <div class="skill-grid" id="skill-market-grid">
                     <div class="loading">
                         <i class="ri-loader-4-line ri-spin" style="font-size: 32px;"></i>
-                        <p>加载�?..</p>
+                        <p>加载中...</p>
                     </div>
                 </div>
             </div>
@@ -606,7 +606,7 @@
     <div class="modal" id="skill-preview-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>技能详�?/h3>
+                <h3>技能详情</h3>
                 <button class="modal-close" onclick="closeModal('skill-preview-modal')">&times;</button>
             </div>
             <div class="modal-body">
@@ -615,9 +615,9 @@
                         <i id="preview-skill-icon" class="ri-code-line"></i>
                     </div>
                     <div class="skill-preview-info">
-                        <h2 id="preview-skill-name">技能名�?/h2>
+                        <h2 id="preview-skill-name">技能名称</h2>
                         <div class="skill-preview-meta">
-                            <span><i class="ri-user-line"></i> <span id="preview-skill-author">作�?/span></span>
+                            <span><i class="ri-user-line"></i> <span id="preview-skill-author">作者</span></span>
                             <span class="skill-preview-category-wrapper">
                                 <i class="ri-folder-line" style="color: var(--skill-color, var(--nexus-primary));"></i> 
                                 <span id="preview-skill-category" class="skill-preview-category">分类</span>
@@ -629,13 +629,14 @@
                 </div>
                 <p id="preview-skill-description" style="color: var(--nexus-text-secondary); line-height: 1.6;"></p>
                 <div class="skill-capabilities">
-                    <h4>功能特�?/h4>
+                    <h4>功能特性</h4>
                     <ul id="preview-skill-capabilities"></ul>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" onclick="installSkillFromPreview()">
-                    <i class="ri-download-line"></i> 安装技�?                </button>
+                    <i class="ri-download-line"></i> 安装技能
+                </button>
                 <button class="btn btn-secondary" onclick="closeModal('skill-preview-modal')">关闭</button>
             </div>
         </div>
@@ -645,7 +646,7 @@
     <script src="/console/js/skill-market.js"></script>
     <script>
         window.onPageInit = function() {
-            // 技能市场初始化�?skill-market.js 处理
+            // 技能市场初始化由 skill-market.js 处理
         };
     </script>
 </body>

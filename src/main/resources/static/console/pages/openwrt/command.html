@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>命令执行 - OpenWrt - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
         .terminal-output {
@@ -68,7 +68,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航�?-->
+        <!-- 侧边导航栏 -->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -93,7 +93,7 @@
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title"><i class="ri-terminal-box-line"></i> 终端</h2>
-                    <span id="connectionStatus" class="badge badge-secondary">未连�?/span>
+                    <span id="connectionStatus" class="badge badge-secondary">未连接</span>
                 </div>
                 <div class="card-body">
                     <div id="terminalOutput" class="terminal-output">欢迎使用 OpenWrt 命令执行终端
@@ -153,31 +153,35 @@
     <script src="/console/common/button-manager.js"></script>
     <script src="/console/common/utils.js"></script>
     <script>
-        // API 客户端实�?        const openwrtApi = new ApiClient('/api/openwrt');
+        // API 客户端实例
+        const openwrtApi = new ApiClient('/api/openwrt');
 
-        // 页面初始�?        window.onPageInit = function() {
+        // 页面初始化
+        window.onPageInit = function() {
             checkConnectionStatus();
         };
 
-        // 检查连接状�?        async function checkConnectionStatus() {
+        // 检查连接状态
+        async function checkConnectionStatus() {
             try {
                 const data = await openwrtApi.get('/status');
                 const statusBadge = document.getElementById('connectionStatus');
                 
                 if (data.connected) {
-                    statusBadge.textContent = '已连�?;
+                    statusBadge.textContent = '已连接';
                     statusBadge.className = 'badge badge-success';
                 } else {
-                    statusBadge.textContent = '未连�?;
+                    statusBadge.textContent = '未连接';
                     statusBadge.className = 'badge badge-secondary';
                 }
             } catch (error) {
-                console.error('检查连接状态失�?', error);
-                document.getElementById('connectionStatus').textContent = '未连�?;
+                console.error('检查连接状态失败:', error);
+                document.getElementById('connectionStatus').textContent = '未连接';
             }
         }
 
-        // 处理回车�?        function handleKeyPress(event) {
+        // 处理回车键
+        function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 executeCommand();
             }
@@ -195,13 +199,14 @@
             const command = commandInput.value.trim();
             
             if (!command) {
-                showToast('请输入命�?, 'warning');
+                showToast('请输入命令', 'warning');
                 return;
             }
 
             const outputDiv = document.getElementById('terminalOutput');
             
-            // 添加命令到输�?            outputDiv.innerHTML += `\n\n$ ${command}\n`;
+            // 添加命令到输出
+            outputDiv.innerHTML += `\n\n$ ${command}\n`;
             outputDiv.scrollTop = outputDiv.scrollHeight;
 
             try {

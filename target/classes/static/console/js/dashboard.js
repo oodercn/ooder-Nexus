@@ -2,6 +2,44 @@ let currentPage = 'dashboard';
 let menuConfig = null;
 let agentListManager = null;
 
+// 工具函数对象
+const utils = {
+    showNotification: function(message, type = 'info') {
+        console.log(`[${type}] ${message}`);
+        // 简单的通知实现
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `<i class="ri-${type === 'success' ? 'check' : type === 'error' ? 'error-warning' : 'information'}-line"></i> ${message}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: var(--nexus-card-bg);
+            border: 1px solid var(--nexus-border);
+            border-radius: var(--nexus-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    },
+    showLoader: function(message = '加载中...') {
+        console.log(`[Loader] ${message}`);
+        return {
+            hide: function() {
+                console.log('[Loader] Hidden');
+            }
+        };
+    },
+    formatTimestamp: function(timestamp) {
+        return new Date(timestamp).toLocaleString('zh-CN');
+    }
+};
+
 function init() {
     updateTimestamp();
     loadMenuConfig();
@@ -81,8 +119,14 @@ function createMenuItem(menuItem) {
             const submenu = this.nextElementSibling;
             
             if (submenu) {
-                submenu.classList.toggle('hidden');
-                toggleIcon.classList.toggle('collapsed');
+                // 使用 style.display 与 menu-loader.js 保持一致
+                if (submenu.style.display === 'block') {
+                    submenu.style.display = 'none';
+                    toggleIcon.classList.remove('collapsed');
+                } else {
+                    submenu.style.display = 'block';
+                    toggleIcon.classList.add('collapsed');
+                }
             }
         });
         
@@ -153,20 +197,35 @@ async function loadDashboard() {
     try {
         const loader = utils.showLoader('加载仪表盘数据...');
         
-        setTimeout(() => {
-            document.getElementById('system-status').textContent = '正常';
-            document.getElementById('network-count').textContent = '12';
-            document.getElementById('cpu-usage').textContent = '25%';
-            document.getElementById('memory-usage').textContent = '45%';
-            document.getElementById('disk-usage').textContent = '32%';
-            document.getElementById('system-load').textContent = '0.8';
-            document.getElementById('request-rate').textContent = '1000/秒';
-            document.getElementById('response-time').textContent = '120ms';
-            document.getElementById('active-tasks').textContent = '15';
-            document.getElementById('system-temp').textContent = '45°C';
-            document.getElementById('network-bandwidth').textContent = '2.5Gbps';
-            document.getElementById('health-score').textContent = '95';
-        }, 500);
+        // 从API获取系统状态数据
+        try {
+            const [healthResponse, systemResponse, networkResponse] = await Promise.all([
+                fetch('/api/health/overview').catch(() => null),
+                fetch('/api/mcp/system/status').catch(() => null),
+                fetch('/api/mcp/network/status').catch(() => null)
+            ]);
+            
+            let healthData = null;
+            let systemData = null;
+            let networkData = null;
+            
+            if (healthResponse && healthResponse.ok) {
+                healthData = await healthResponse.json();
+            }
+            if (systemResponse && systemResponse.ok) {
+                systemData = await systemResponse.json();
+            }
+            if (networkResponse && networkResponse.ok) {
+                networkData = await networkResponse.json();
+            }
+            
+            // 更新仪表盘数据
+            updateDashboardData(healthData, systemData, networkData);
+        } catch (apiError) {
+            console.warn('API数据获取失败，使用默认数据:', apiError);
+            // 使用默认数据
+            updateDashboardData(null, null, null);
+        }
         
         generateNetworkTopology();
         await loadAgentData();
@@ -179,14 +238,103 @@ async function loadDashboard() {
     }
 }
 
+function updateDashboardData(healthData, systemData, networkData) {
+    // 系统状态
+    const systemStatus = document.getElementById('system-status');
+    if (systemStatus) {
+        systemStatus.textContent = healthData && healthData.status === 'healthy' ? '正常' : '异常';
+    }
+    
+    // 网络连接数
+    const networkCount = document.getElementById('network-count');
+    if (networkCount) {
+        networkCount.textContent = networkData && networkData.connections ? networkData.connections.length : '12';
+    }
+    
+    // CPU使用率
+    const cpuUsage = document.getElementById('cpu-usage');
+    if (cpuUsage) {
+        const cpu = systemData && systemData.cpu ? systemData.cpu.usage : 25;
+        cpuUsage.textContent = cpu + '%';
+    }
+    
+    // 内存使用率
+    const memoryUsage = document.getElementById('memory-usage');
+    if (memoryUsage) {
+        const memory = systemData && systemData.memory ? systemData.memory.usage : 45;
+        memoryUsage.textContent = memory + '%';
+    }
+    
+    // 磁盘使用率
+    const diskUsage = document.getElementById('disk-usage');
+    if (diskUsage) {
+        const disk = systemData && systemData.disk ? systemData.disk.usage : 32;
+        diskUsage.textContent = disk + '%';
+    }
+    
+    // 系统负载
+    const systemLoad = document.getElementById('system-load');
+    if (systemLoad) {
+        const load = systemData && systemData.load ? systemData.load['1min'] : 0.8;
+        systemLoad.textContent = load;
+    }
+    
+    // 请求处理速率
+    const requestRate = document.getElementById('request-rate');
+    if (requestRate) {
+        const rate = networkData && networkData.requestRate ? networkData.requestRate : 1000;
+        requestRate.textContent = rate + '/秒';
+    }
+    
+    // 平均响应时间
+    const responseTime = document.getElementById('response-time');
+    if (responseTime) {
+        const time = networkData && networkData.responseTime ? networkData.responseTime : 120;
+        responseTime.textContent = time + 'ms';
+    }
+    
+    // 活跃任务数
+    const activeTasks = document.getElementById('active-tasks');
+    if (activeTasks) {
+        const tasks = systemData && systemData.tasks ? systemData.tasks.active : 15;
+        activeTasks.textContent = tasks;
+    }
+    
+    // 系统温度
+    const systemTemp = document.getElementById('system-temp');
+    if (systemTemp) {
+        const temp = systemData && systemData.temperature ? systemData.temperature : 45;
+        systemTemp.textContent = temp + '°C';
+    }
+    
+    // 网络带宽
+    const networkBandwidth = document.getElementById('network-bandwidth');
+    if (networkBandwidth) {
+        const bandwidth = networkData && networkData.bandwidth ? networkData.bandwidth : 2.5;
+        networkBandwidth.textContent = bandwidth + 'Gbps';
+    }
+    
+    // 健康评分
+    const healthScore = document.getElementById('health-score');
+    if (healthScore) {
+        const score = healthData && healthData.score ? healthData.score : 95;
+        healthScore.textContent = score;
+    }
+}
+
 async function loadAgentData() {
     try {
+        // 检查 agentListManager 是否存在
+        if (!agentListManager) {
+            console.warn('agentListManager 未初始化');
+            return;
+        }
         await agentListManager.load();
-        const agentData = agentListManager.getCurrentPageData();
+        const agentData = agentListManager.data || [];
         console.log('Agent data:', agentData);
     } catch (error) {
-        console.error('加载Agent数据失败:', error);
-        throw error;
+        console.warn('加载Agent数据失败:', error);
+        // 不抛出错误，避免影响其他功能
     }
 }
 
@@ -258,7 +406,10 @@ function generateNetworkTopology() {
 
 function updateTimestamp() {
     const now = new Date();
-    document.getElementById('timestamp').textContent = utils.formatTimestamp(now.getTime());
+    const timestampEl = document.getElementById('timestamp');
+    if (timestampEl) {
+        timestampEl.textContent = now.toLocaleString('zh-CN');
+    }
 }
 
 window.onload = init;

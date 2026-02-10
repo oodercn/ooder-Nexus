@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网络设备管理 - Nexus</title>
     <link rel="stylesheet" href="../../css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
+    <script src="/console/js/theme-manager.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,10 +21,10 @@
         <div class="main-content">
         <!-- 头部 -->
         <div class="header">
-            <h1><i class="ri-list-check"></i> 网络设备列表 2</h1>
+            <h1><i class="ri-list-check"></i> 网络设备列表</h1>
             <div class="header-actions">
-                <button class="btn btn-secondary" onclick="toggleTheme()">
-                    <i class="ri-moon-line"></i> 切换主题
+                <button class="btn btn-secondary theme-toggle-btn">
+                    <i class="ri-sun-line"></i> 浅色模式
                 </button>
                 <button class="btn btn-primary" onclick="addDevice()">
                     <i class="ri-add-line"></i> 添加设备
@@ -91,113 +93,70 @@
     </div>
     
     <script>
-        // 模拟设备数据
-        const mockDevices = [
-            {
-                id: 1,
-                name: "主路由器",
-                type: "router",
-                ip: "192.168.1.1",
-                mac: "AA:BB:CC:DD:EE:FF",
-                status: "online",
-                description: "主网络路由器"
-            },
-            {
-                id: 2,
-                name: "交换机",
-                type: "switch",
-                ip: "192.168.1.2",
-                mac: "AA:BB:CC:DD:EE:GG",
-                status: "online",
-                description: "网络交换机"
-            },
-            {
-                id: 3,
-                name: "PC 1",
-                type: "pc",
-                ip: "192.168.1.100",
-                mac: "AA:BB:CC:DD:EE:HH",
-                status: "online",
-                description: "办公电脑"
-            },
-            {
-                id: 4,
-                name: "PC 2",
-                type: "pc",
-                ip: "192.168.1.101",
-                mac: "AA:BB:CC:DD:EE:II",
-                status: "online",
-                description: "家用电脑"
-            },
-            {
-                id: 5,
-                name: "打印机",
-                type: "printer",
-                ip: "192.168.1.102",
-                mac: "AA:BB:CC:DD:EE:JJ",
-                status: "warning",
-                description: "网络打印机"
-            },
-            {
-                id: 6,
-                name: "NAS",
-                type: "nas",
-                ip: "192.168.1.103",
-                mac: "AA:BB:CC:DD:EE:KK",
-                status: "offline",
-                description: "网络存储服务器"
-            },
-            {
-                id: 7,
-                name: "智能电视",
-                type: "other",
-                ip: "192.168.1.104",
-                mac: "AA:BB:CC:DD:EE:LL",
-                status: "online",
-                description: "智能电视"
-            },
-            {
-                id: 8,
-                name: "摄像头",
-                type: "other",
-                ip: "192.168.1.105",
-                mac: "AA:BB:CC:DD:EE:MM",
-                status: "online",
-                description: "网络摄像头"
-            },
-            {
-                id: 9,
-                name: "平板电脑",
-                type: "other",
-                ip: "192.168.1.106",
-                mac: "AA:BB:CC:DD:EE:NN",
-                status: "online",
-                description: "平板电脑"
-            }
-        ];
-        
+        // 设备数据存储
+        let allDevices = [];
         let currentPage = 1;
-        const pageSize = 3;
-        let filteredDevices = [...mockDevices];
+        const pageSize = 10;
+        let filteredDevices = [];
         
         // 初始化页面
-        function init() {
-            loadDevices();
+        async function init() {
+            await loadDevicesFromApi();
         }
         
-        // 加载设备数据
-        function loadDevices() {
+        // 从后台API加载设备数据
+        async function loadDevicesFromApi() {
+            try {
+                const tableBody = document.getElementById('deviceTableBody');
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;"><i class="ri-loader-4-line ri-spin"></i> 加载中...</td></tr>';
+                
+                const response = await fetch('/api/devices/list');
+                const result = await response.json();
+                
+                if (result.code === 200 && result.data) {
+                    allDevices = result.data.devices.map(device => ({
+                        id: device.id,
+                        name: device.name,
+                        type: device.type,
+                        ip: device.ip || 'N/A',
+                        mac: device.mac || 'N/A',
+                        status: device.status,
+                        description: device.description || ''
+                    }));
+                    filteredDevices = [...allDevices];
+                    renderDevices();
+                } else {
+                    showError('加载设备数据失败: ' + (result.message || '未知错误'));
+                }
+            } catch (error) {
+                console.error('加载设备数据失败:', error);
+                showError('加载设备数据失败，请检查网络连接');
+            }
+        }
+        
+        // 显示错误信息
+        function showError(message) {
+            const tableBody = document.getElementById('deviceTableBody');
+            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--nexus-danger);"><i class="ri-error-warning-line"></i> ${message}</td></tr>`;
+        }
+        
+        // 渲染设备列表
+        function renderDevices() {
             const tableBody = document.getElementById('deviceTableBody');
             tableBody.innerHTML = '';
             
-            // 计算分页数据
+            if (filteredDevices.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">暂无设备数据</td></tr>';
+                updatePagination();
+                return;
+            }
+            
             const startIndex = (currentPage - 1) * pageSize;
             const endIndex = startIndex + pageSize;
             const pageDevices = filteredDevices.slice(startIndex, endIndex);
             
             pageDevices.forEach(device => {
                 const row = document.createElement('tr');
-                
                 row.innerHTML = `
                     <td>
                         <i class="ri-${getDeviceIcon(device.type)} device-icon"></i>
@@ -211,17 +170,20 @@
                         ${getStatusText(device.status)}
                     </td>
                     <td>
-                        <button class="btn btn-secondary" onclick="viewDevice(${device.id})"><i class="ri-eye-line"></i></button>
-                        <button class="btn btn-primary" onclick="editDevice(${device.id})"><i class="ri-edit-line"></i></button>
-                        <button class="btn btn-danger" onclick="deleteDevice(${device.id})"><i class="ri-delete-line"></i></button>
+                        <button class="btn btn-secondary" onclick="viewDevice('${device.id}')"><i class="ri-eye-line"></i></button>
+                        <button class="btn btn-primary" onclick="editDevice('${device.id}')"><i class="ri-edit-line"></i></button>
+                        <button class="btn btn-danger" onclick="deleteDevice('${device.id}')"><i class="ri-delete-line"></i></button>
                     </td>
                 `;
-                
                 tableBody.appendChild(row);
             });
             
-            // 更新分页按钮
             updatePagination();
+        }
+        
+        // 加载设备数据（兼容旧调用）
+        function loadDevices() {
+            renderDevices();
         }
         
         // 获取设备图标
@@ -280,24 +242,60 @@
         }
         
         // 搜索设备
-        function searchDevices() {
+        async function searchDevices() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const statusFilter = document.getElementById('statusFilter').value;
             const typeFilter = document.getElementById('typeFilter').value;
             
-            filteredDevices = mockDevices.filter(device => {
-                const matchesSearch = device.name.toLowerCase().includes(searchTerm) || 
-                                     device.ip.toLowerCase().includes(searchTerm) ||
-                                     device.mac.toLowerCase().includes(searchTerm) ||
-                                     device.description.toLowerCase().includes(searchTerm);
-                const matchesStatus = statusFilter === 'all' || device.status === statusFilter;
-                const matchesType = typeFilter === 'all' || device.type === typeFilter;
-                
-                return matchesSearch && matchesStatus && matchesType;
-            });
+            const params = new URLSearchParams();
+            if (statusFilter !== 'all') {
+                params.append('status', statusFilter);
+            }
+            if (typeFilter !== 'all') {
+                params.append('type', typeFilter);
+            }
             
-            currentPage = 1;
-            loadDevices();
+            try {
+                const url = '/api/devices/list' + (params.toString() ? '?' + params.toString() : '');
+                const response = await fetch(url);
+                const result = await response.json();
+                
+                if (result.code === 200 && result.data) {
+                    allDevices = result.data.devices.map(device => ({
+                        id: device.id,
+                        name: device.name,
+                        type: device.type,
+                        ip: device.ip || 'N/A',
+                        mac: device.mac || 'N/A',
+                        status: device.status,
+                        description: device.description || ''
+                    })).filter(device => {
+                        if (!searchTerm) return true;
+                        return device.name.toLowerCase().includes(searchTerm) || 
+                               device.ip.toLowerCase().includes(searchTerm) ||
+                               device.mac.toLowerCase().includes(searchTerm) ||
+                               device.description.toLowerCase().includes(searchTerm);
+                    });
+                    
+                    filteredDevices = [...allDevices];
+                    currentPage = 1;
+                    renderDevices();
+                }
+            } catch (error) {
+                console.error('搜索设备失败:', error);
+                filteredDevices = allDevices.filter(device => {
+                    const matchesSearch = !searchTerm || 
+                                         device.name.toLowerCase().includes(searchTerm) || 
+                                         device.ip.toLowerCase().includes(searchTerm) ||
+                                         device.mac.toLowerCase().includes(searchTerm) ||
+                                         device.description.toLowerCase().includes(searchTerm);
+                    const matchesStatus = statusFilter === 'all' || device.status === statusFilter;
+                    const matchesType = typeFilter === 'all' || device.type === typeFilter;
+                    return matchesSearch && matchesStatus && matchesType;
+                });
+                currentPage = 1;
+                renderDevices();
+            }
         }
         
         // 切换页面
@@ -305,7 +303,7 @@
             const totalPages = Math.ceil(filteredDevices.length / pageSize);
             if (page >= 1 && page <= totalPages) {
                 currentPage = page;
-                loadDevices();
+                renderDevices();
             }
         }
         
@@ -331,15 +329,7 @@
             }
         }
         
-        // 切换主题
-        function toggleTheme() {
-            const body = document.body;
-            if (body.classList.contains('dark-theme')) {
-                body.classList.remove('dark-theme');
-            } else {
-                body.classList.add('dark-theme');
-            }
-        }
+        // 主题切换由 theme-manager.js 统一处理
         
         // 初始化
         init();
@@ -357,12 +347,12 @@
     
     <!-- 统一菜单加载脚本 -->
     <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/common.js"></script>
     <script>
         // 初始化菜单和页面
-        window.onload = function() {
+        document.addEventListener('DOMContentLoaded', function() {
             init();
-            initMenu();
-        };
+        });
     </script>
 </body>
 </html>

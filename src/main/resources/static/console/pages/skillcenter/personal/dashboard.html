@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人仪表�?- Nexus SkillCenter</title>
+    <title>个人仪表盘 - Nexus SkillCenter</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,7 +18,7 @@
         </aside>
         <main class="main-content">
             <header class="header">
-                <h1>个人仪表�?/h1>
+                <h1>个人仪表盘</h1>
                 <div class="user-info">
                     <span class="user-name">用户</span>
                     <i class="ri-user-line"></i>
@@ -26,7 +29,7 @@
                     <div class="stat-card">
                         <div class="stat-icon ri-lightbulb-line"></div>
                         <div class="stat-info">
-                            <h3>我的技�?/h3>
+                            <h3>我的技能</h3>
                             <p class="stat-value" id="skill-count">0</p>
                         </div>
                     </div>
@@ -40,7 +43,7 @@
                     <div class="stat-card">
                         <div class="stat-icon ri-share-line"></div>
                         <div class="stat-info">
-                            <h3>分享技�?/h3>
+                            <h3>分享技能</h3>
                             <p class="stat-value" id="shared-count">0</p>
                         </div>
                     </div>
@@ -53,7 +56,7 @@
                     </div>
                 </div>
                 <div class="recent-activities">
-                    <h2>最近活�?/h2>
+                    <h2>最近活动</h2>
                     <div class="activity-list" id="activity-list">
                         <div class="activity-item">
                             <div class="activity-icon ri-clock-line"></div>
@@ -64,7 +67,7 @@
                     </div>
                 </div>
                 <div class="skill-progress">
-                    <h2>技能执行统�?/h2>
+                    <h2>技能执行统计</h2>
                     <canvas id="execution-chart" width="400" height="200"></canvas>
                 </div>
             </div>
@@ -102,7 +105,7 @@
                     }
                 }
             } catch (error) {
-                console.error('加载仪表盘数据失�?', error);
+                console.error('加载仪表盘数据失败:', error);
             }
         }
 
@@ -139,9 +142,9 @@
             const diff = now - date;
             
             if (diff < 60000) {
-                return Math.floor(diff / 1000) + '分钟�?;
+                return Math.floor(diff / 1000) + '分钟前';
             } else if (diff < 3600000) {
-                return Math.floor(diff / 3600000) + '小时�?;
+                return Math.floor(diff / 3600000) + '小时前';
             } else {
                 return Math.floor(diff / 86400000) + '天前';
             }

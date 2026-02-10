@@ -766,6 +766,51 @@ body {
     color: var(--nexus-secondary);
 }
 
+/* ==================== Tab 标签页样式 ==================== */
+.tabs {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+}
+
+.tab-header {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--nexus-border);
+    margin-bottom: 24px;
+}
+
+.tab-item {
+    padding: 12px 24px;
+    cursor: pointer;
+    color: var(--nexus-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-item:hover {
+    color: var(--nexus-primary);
+}
+
+.tab-item.active {
+    color: var(--nexus-primary);
+    border-bottom-color: var(--nexus-primary);
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 .scenario-type {
     display: inline-block;
     padding: 4px 12px;

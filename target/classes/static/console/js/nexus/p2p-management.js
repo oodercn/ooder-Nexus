@@ -1,6 +1,10 @@
-﻿// P2P管理模块
+// P2P管理模块
 (function() {
     'use strict';
+
+    // SDK存储集合名称
+    const COLLECTION_P2P = 'p2p';
+    const COLLECTION_NODES = 'nodes';
 
     // P2P连接数据缓存
     let p2pConnections = new Map();
@@ -50,15 +54,52 @@
     }
 
     // 加载初始数据
-    function loadInitialData() {
+    async function loadInitialData() {
         console.log('Loading initial P2P data...');
-        // 模拟加载数据
-        setTimeout(() => {
+        try {
+            // 从SDK存储加载数据
+            const p2pData = await SdkDataService.getAll(COLLECTION_P2P);
+            const nodesData = await SdkDataService.getAll(COLLECTION_NODES);
+
+            if (p2pData.length === 0 || nodesData.length === 0) {
+                // 如果没有数据，生成默认数据
+                generateMockData();
+                // 保存到SDK存储
+                await saveMockDataToSdk();
+            } else {
+                // 转换数据格式
+                p2pConnections = new Map(p2pData.map(item => [item.connectionId, item]));
+                nodes = new Map(nodesData.map(item => [item.nodeId, item]));
+            }
+
+            updateP2PConnectionsTable();
+            updateNetworkTopology();
+            updateStatus();
+        } catch (error) {
+            console.error('加载P2P数据失败:', error);
+            // 使用默认数据
             generateMockData();
             updateP2PConnectionsTable();
             updateNetworkTopology();
             updateStatus();
-        }, 500);
+        }
+    }
+
+    // 保存模拟数据到SDK存储
+    async function saveMockDataToSdk() {
+        try {
+            // 保存节点数据
+            const nodesArray = Array.from(nodes.values());
+            await SdkDataService.saveBatch(COLLECTION_NODES, nodesArray);
+
+            // 保存P2P连接数据
+            const p2pArray = Array.from(p2pConnections.values());
+            await SdkDataService.saveBatch(COLLECTION_P2P, p2pArray);
+
+            console.log('P2P数据已保存到SDK存储');
+        } catch (error) {
+            console.error('保存P2P数据失败:', error);
+        }
     }
 
     // 生成模拟数据
@@ -281,7 +322,7 @@
     }
 
     // 添加P2P连接
-    function addP2PConnection() {
+    async function addP2PConnection() {
         if (!elements.addP2PForm) return;
 
         const formData = new FormData(elements.addP2PForm);
@@ -310,13 +351,21 @@
             }
         };
 
-        p2pConnections.set(connectionId, newConnection);
-        updateP2PConnectionsTable();
-        updateNetworkTopology();
-        updateStatus();
-        hideAddP2PModal();
+        try {
+            // 保存到SDK存储
+            await SdkDataService.save(COLLECTION_P2P, connectionId, newConnection);
 
-        console.log('Added new P2P connection:', newConnection);
+            p2pConnections.set(connectionId, newConnection);
+            updateP2PConnectionsTable();
+            updateNetworkTopology();
+            updateStatus();
+            hideAddP2PModal();
+
+            console.log('Added new P2P connection:', newConnection);
+        } catch (error) {
+            console.error('添加P2P连接失败:', error);
+            alert('添加P2P连接失败');
+        }
     }
 
     // 编辑P2P连接
@@ -327,13 +376,21 @@
     }
 
     // 删除P2P连接
-    function deleteP2PConnection(connectionId) {
+    async function deleteP2PConnection(connectionId) {
         if (confirm(`确定要删除P2P连接 ${connectionId} 吗？`)) {
-            p2pConnections.delete(connectionId);
-            updateP2PConnectionsTable();
-            updateNetworkTopology();
-            updateStatus();
-            console.log('Deleted P2P connection:', connectionId);
+            try {
+                // 从SDK存储删除
+                await SdkDataService.delete(COLLECTION_P2P, connectionId);
+
+                p2pConnections.delete(connectionId);
+                updateP2PConnectionsTable();
+                updateNetworkTopology();
+                updateStatus();
+                console.log('Deleted P2P connection:', connectionId);
+            } catch (error) {
+                console.error('删除P2P连接失败:', error);
+                alert('删除P2P连接失败');
+            }
         }
     }
 

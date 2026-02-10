@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技能认�?- Nexus SkillCenter</title>
+    <title>技能认证 - Nexus SkillCenter</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,34 +18,35 @@
         </aside>
         <main class="main-content">
             <header class="header">
-                <h1>技能认�?/h1>
+                <h1>技能认证</h1>
                 <div class="header-actions">
                     <button class="btn btn-primary" onclick="showCertifyModal()">
-                        <i class="ri-award-line"></i> 认证技�?                    </button>
+                        <i class="ri-award-line"></i> 认证技能
+                    </button>
                 </div>
             </header>
             <div class="content">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('skills')">技能认�?/button>
+                    <button class="tab-btn active" onclick="switchTab('skills')">技能认证</button>
                     <button class="tab-btn" onclick="switchTab('certificates')">证书管理</button>
                     <button class="tab-btn" onclick="switchTab('validations')">认证验证</button>
                 </div>
                 
                 <div class="tab-content" id="skills-tab">
                     <div class="skill-list" id="skill-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
                 
                 <div class="tab-content" id="certificates-tab" style="display: none;">
                     <div class="certificate-list" id="certificate-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
                 
                 <div class="tab-content" id="validations-tab" style="display: none;">
                     <div class="validation-list" id="validation-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
             </div>
@@ -52,15 +56,15 @@
     <div class="modal" id="certify-modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>认证技�?/h3>
+                <h3>认证技能</h3>
                 <button class="modal-close" onclick="closeModal('certify-modal')">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="certify-form">
                     <div class="form-group">
-                        <label>选择技�?/label>
+                        <label>选择技能</label>
                         <select id="skill-select" class="form-control">
-                            <option value="">请选择技�?/option>
+                            <option value="">请选择技能</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -96,7 +100,7 @@
         async function loadSkills() {
             try {
                 const skillList = document.getElementById('skill-list');
-                skillList.innerHTML = '<div class="loading">加载�?..</div>';
+                skillList.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/certification/skills');
                 
@@ -116,9 +120,9 @@
                     throw new Error('响应数据格式错误');
                 }
             } catch (error) {
-                console.error('加载技能列表错�?', error);
+                console.error('加载技能列表错误:', error);
                 document.getElementById('skill-list').innerHTML = '<div class="empty-state">加载失败</div>';
-                showError('加载技能列表失�?);
+                showError('加载技能列表失败');
             }
         }
 
@@ -127,7 +131,7 @@
             skillList.innerHTML = '';
             
             if (skills.length === 0) {
-                skillList.innerHTML = '<div class="empty-state">暂无技�?/div>';
+                skillList.innerHTML = '<div class="empty-state">暂无技能</div>';
                 return;
             }
             
@@ -139,8 +143,8 @@
                         <h3>${skill.name}</h3>
                         <p>${skill.description || '暂无描述'}</p>
                         <span class="skill-category">${getCategoryName(skill.category)}</span>
-                        <span class="skill-author">作�? ${skill.author}</span>
-                        <span class="skill-certification ${skill.certification ? 'success' : 'warning'}">${skill.certification ? '已认�? : '未认�?}</span>
+                        <span class="skill-author">作者: ${skill.author}</span>
+                        <span class="skill-certification ${skill.certification ? 'success' : 'warning'}">${skill.certification ? '已认证' : '未认证'}</span>
                     </div>
                     <div class="skill-actions">
                         <button class="btn btn-primary" onclick="showCertifyModal()">
@@ -155,7 +159,7 @@
         async function loadCertificates() {
             try {
                 const certificateList = document.getElementById('certificate-list');
-                certificateList.innerHTML = '<div class="loading">加载�?..</div>';
+                certificateList.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/certification/certificates');
                 
@@ -217,7 +221,7 @@
         async function loadValidations() {
             try {
                 const validationList = document.getElementById('validation-list');
-                validationList.innerHTML = '<div class="loading">加载�?..</div>';
+                validationList.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/certification/validations');
                 
@@ -289,7 +293,7 @@
                 
                 if (result && result.status === 'success') {
                     const skillSelect = document.getElementById('skill-select');
-                    skillSelect.innerHTML = '<option value="">请选择技�?/option>';
+                    skillSelect.innerHTML = '<option value="">请选择技能</option>';
                     result.data.forEach(skill => {
                         const option = document.createElement('option');
                         option.value = skill.id;
@@ -298,14 +302,14 @@
                     });
                 }
             } catch (error) {
-                console.error('加载技能列表错�?', error);
+                console.error('加载技能列表错误:', error);
             }
         }
 
         function getCategoryName(category) {
             const categoryMap = {
                 'text-processing': '文本处理',
-                'development': '开发工�?,
+                'development': '开发工具',
                 'deployment': '部署工具',
                 'media': '媒体处理',
                 'storage': '存储管理'
@@ -344,7 +348,7 @@
             const note = document.getElementById('certification-note').value;
             
             if (!skillId) {
-                showError('请选择技�?);
+                showError('请选择技能');
                 return;
             }
             
@@ -373,15 +377,15 @@
                 
                 if (result && result.status === 'success') {
                     closeModal('certify-modal');
-                    showSuccess('技能认证成�?);
+                    showSuccess('技能认证成功');
                     loadSkills();
                     loadCertificates();
                 } else {
-                    showError('技能认证失�?);
+                    showError('技能认证失败');
                 }
             } catch (error) {
-                console.error('认证技能错�?', error);
-                showError('技能认证失�?);
+                console.error('认证技能错误:', error);
+                showError('技能认证失败');
             }
         }
 
@@ -390,7 +394,7 @@
         }
 
         async function revokeCertificate(certId) {
-            if (!confirm('确定要撤销此证书吗�?)) {
+            if (!confirm('确定要撤销此证书吗？')) {
                 return;
             }
             

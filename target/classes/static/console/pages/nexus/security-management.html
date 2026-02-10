@@ -14,6 +14,7 @@
     <script src="../../js/nexus/utils.js"></script>
     <script src="../../js/nexus/sdk-proxy.js"></script>
     <script src="../../js/nexus/common.js"></script>
+    <script src="/console/js/sdk-data-service.js"></script>
 </head>
 <body class="nexus-page">
     <div class="nexus-container">
@@ -236,8 +237,18 @@
             });
         };
 
-        // 模拟用户数据
-        let users = [
+        // SDK存储集合名称
+        const COLLECTION_USERS = 'users';
+        const COLLECTION_SECURITY_LOGS = 'security_logs';
+
+        // 用户数据
+        let users = [];
+
+        // 安全日志数据
+        let securityLogs = [];
+
+        // 默认用户数据
+        const defaultUsers = [
             {
                 id: 1,
                 username: "admin",
@@ -275,21 +286,24 @@
             }
         ];
 
-        // 模拟安全日志
-        let securityLogs = [
+        // 默认安全日志
+        const defaultSecurityLogs = [
             {
+                id: 'log-001',
                 timestamp: new Date(Date.now() - 3600000).toISOString(),
                 event: "登录成功",
                 user: "admin",
                 ip: "192.168.1.100"
             },
             {
+                id: 'log-002',
                 timestamp: new Date(Date.now() - 7200000).toISOString(),
                 event: "登录成功",
                 user: "user1",
                 ip: "192.168.1.101"
             },
             {
+                id: 'log-003',
                 timestamp: new Date(Date.now() - 86400000).toISOString(),
                 event: "密码修改",
                 user: "admin",
@@ -297,41 +311,59 @@
             }
         ];
 
-        function loadUserData() {
-            const tbody = document.getElementById('userTableBody');
-            tbody.innerHTML = '';
+        async function loadUserData() {
+            try {
+                // 初始化默认数据
+                await SdkDataService.initCollection(COLLECTION_USERS, defaultUsers);
 
-            users.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.username}</td>
-                    <td>${user.role === 'personal' ? '个人' : user.role === 'home' ? '家庭' : '企业'}</td>
-                    <td><span class="nexus-status-badge ${user.status === 'active' ? 'nexus-status-active' : 'nexus-status-inactive'}">${user.status === 'active' ? '活跃' : '禁用'}</span></td>
-                    <td>${nexusCommon.formatTimestamp(new Date(user.lastLogin).getTime())}</td>
-                    <td>
-                        <button class="nexus-btn nexus-btn-sm nexus-btn-primary" onclick="editUser(${user.id})">编辑</button>
-                        <button class="nexus-btn nexus-btn-sm nexus-btn-secondary" onclick="${user.status === 'active' ? 'disableUser' : 'enableUser'}(${user.id})">${user.status === 'active' ? '禁用' : '启用'}</button>
-                        <button class="nexus-btn nexus-btn-sm nexus-btn-danger" onclick="deleteUser(${user.id})">删除</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+                // 从SDK存储获取用户列表
+                users = await SdkDataService.getAll(COLLECTION_USERS);
+
+                const tbody = document.getElementById('userTableBody');
+                tbody.innerHTML = '';
+
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.username}</td>
+                        <td>${user.role === 'personal' ? '个人' : user.role === 'home' ? '家庭' : '企业'}</td>
+                        <td><span class="nexus-status-badge ${user.status === 'active' ? 'nexus-status-active' : 'nexus-status-inactive'}">${user.status === 'active' ? '活跃' : '禁用'}</span></td>
+                        <td>${nexusCommon.formatTimestamp(new Date(user.lastLogin).getTime())}</td>
+                        <td>
+                            <button class="nexus-btn nexus-btn-sm nexus-btn-primary" onclick="editUser(${user.id})">编辑</button>
+                            <button class="nexus-btn nexus-btn-sm nexus-btn-secondary" onclick="${user.status === 'active' ? 'disableUser' : 'enableUser'}(${user.id})">${user.status === 'active' ? '禁用' : '启用'}</button>
+                            <button class="nexus-btn nexus-btn-sm nexus-btn-danger" onclick="deleteUser(${user.id})">删除</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('加载用户数据失败:', error);
+                nexusCommon.showMessage('加载用户数据失败', 'error');
+            }
         }
 
-        function loadSecurityLogs() {
-            const logContainer = document.getElementById('securityLogContainer');
-            logContainer.innerHTML = '';
+        async function loadSecurityLogs() {
+            try {
+                // 初始化默认数据
+                await SdkDataService.initCollection(COLLECTION_SECURITY_LOGS, defaultSecurityLogs);
 
-            securityLogs.forEach(log => {
-                const logItem = document.createElement('div');
-                logItem.className = 'nexus-log-item';
-                logItem.innerHTML = `
-                    <div class="nexus-log-header">
-                        <span class="nexus-log-timestamp">${nexusCommon.formatTimestamp(new Date(log.timestamp).getTime())}</span>
-                        <span class="nexus-log-level">${log.event}</span>
-                    </div>
-                    <div class="nexus-log-message">用户: ${log.user} | IP: ${log.ip}</div>
-                `;
+                // 从SDK存储获取日志列表
+                securityLogs = await SdkDataService.getAll(COLLECTION_SECURITY_LOGS);
+
+                const logContainer = document.getElementById('securityLogContainer');
+                logContainer.innerHTML = '';
+
+                securityLogs.forEach(log => {
+                    const logItem = document.createElement('div');
+                    logItem.className = 'nexus-log-item';
+                    logItem.innerHTML = `
+                        <div class="nexus-log-header">
+                            <span class="nexus-log-timestamp">${nexusCommon.formatTimestamp(new Date(log.timestamp).getTime())}</span>
+                            <span class="nexus-log-level">${log.event}</span>
+                        </div>
+                        <div class="nexus-log-message">用户: ${log.user} | IP: ${log.ip}</div>
+                    `;
                 logContainer.appendChild(logItem);
             });
         }

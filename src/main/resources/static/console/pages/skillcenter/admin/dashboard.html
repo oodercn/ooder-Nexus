@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理仪表�?- Nexus SkillCenter</title>
+    <title>管理仪表盘 - Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
-        /* 管理仪表盘特定样�?*/
+        /* 管理仪表盘特定样式 */
         .user-info {
             display: flex;
             align-items: center;
@@ -128,9 +128,9 @@
         </aside>
         <main class="main-content">
             <header class="header">
-                <h1>管理仪表�?/h1>
+                <h1>管理仪表盘</h1>
                 <div class="user-info">
-                    <span class="user-name">管理�?/span>
+                    <span class="user-name">管理员</span>
                     <i class="ri-admin-line"></i>
                 </div>
             </header>
@@ -146,7 +146,7 @@
                     <div class="stat-card">
                         <div class="stat-icon ri-user-line"></div>
                         <div class="stat-info">
-                            <h3>用户�?/h3>
+                            <h3>用户数</h3>
                             <p class="stat-value" id="total-users">0</p>
                         </div>
                     </div>
@@ -160,27 +160,27 @@
                     <div class="stat-card">
                         <div class="stat-icon ri-group-line"></div>
                         <div class="stat-info">
-                            <h3>群组�?/h3>
+                            <h3>群组数</h3>
                             <p class="stat-value" id="total-groups">0</p>
                         </div>
                     </div>
                 </div>
                 <div class="dashboard-sections">
                     <div class="section">
-                        <h2>待审批技�?/h2>
+                        <h2>待审批技能</h2>
                         <div class="skill-list" id="pending-skills">
-                            <div class="loading">加载�?..</div>
+                            <div class="loading">加载中...</div>
                         </div>
                     </div>
                     <div class="section">
-                        <h2>系统状�?/h2>
+                        <h2>系统状态</h2>
                         <div class="system-status">
                             <div class="status-item">
-                                <span class="status-label">服务状�?/span>
+                                <span class="status-label">服务状态</span>
                                 <span class="status-value success">正常</span>
                             </div>
                             <div class="status-item">
-                                <span class="status-label">数据�?/span>
+                                <span class="status-label">数据库</span>
                                 <span class="status-value success">正常</span>
                             </div>
                             <div class="status-item">
@@ -202,7 +202,7 @@
         async function loadDashboardData() {
             try {
                 const pendingSkills = document.getElementById('pending-skills');
-                pendingSkills.innerHTML = '<div class="loading">加载�?..</div>';
+                pendingSkills.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/dashboard/stats');
                 
@@ -226,15 +226,15 @@
                     if (data.pendingSkills) {
                         renderPendingSkills(data.pendingSkills);
                     } else {
-                        pendingSkills.innerHTML = '<div class="empty-state">暂无待审批技�?/div>';
+                        pendingSkills.innerHTML = '<div class="empty-state">暂无待审批技能</div>';
                     }
                 } else {
                     throw new Error('响应数据格式错误');
                 }
             } catch (error) {
-                console.error('加载仪表盘数据失�?', error);
+                console.error('加载仪表盘数据失败:', error);
                 document.getElementById('pending-skills').innerHTML = '<div class="empty-state">加载失败</div>';
-                showError('加载仪表盘数据失�?);
+                showError('加载仪表盘数据失败');
             }
         }
 
@@ -249,7 +249,7 @@
                     <div class="skill-info">
                         <h3>${skill.name}</h3>
                         <p>${skill.description || '暂无描述'}</p>
-                        <span class="skill-author">作�? ${skill.author}</span>
+                        <span class="skill-author">作者: ${skill.author}</span>
                     </div>
                     <div class="skill-actions">
                         <button class="btn btn-primary" onclick="approveSkill('${skill.id}')">
@@ -287,13 +287,13 @@
                     showError('审批失败');
                 }
             } catch (error) {
-                console.error('审批技能错�?', error);
+                console.error('审批技能错误:', error);
                 showError('审批失败');
             }
         }
 
         async function rejectSkill(skillId) {
-            if (!confirm('确定要拒绝此技能吗�?)) {
+            if (!confirm('确定要拒绝此技能吗？')) {
                 return;
             }
             
@@ -319,7 +319,7 @@
                     showError('拒绝失败');
                 }
             } catch (error) {
-                console.error('拒绝技能错�?', error);
+                console.error('拒绝技能错误:', error);
                 showError('拒绝失败');
             }
         }

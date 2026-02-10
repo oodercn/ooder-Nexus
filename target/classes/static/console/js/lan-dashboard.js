@@ -1,5 +1,68 @@
 let buttonManager;
 
+// 工具函数对象
+const utils = {
+    getStatusText: function(status, mapping) {
+        if (mapping && mapping[status]) {
+            return mapping[status];
+        }
+        const defaultMapping = {
+            'online': '在线',
+            'offline': '离线',
+            'active': '活跃',
+            'inactive': '非活跃',
+            'normal': '正常',
+            'abnormal': '异常'
+        };
+        return defaultMapping[status] || status;
+    },
+    getDeviceIcon: function(type) {
+        const icons = {
+            'router': 'router-line',
+            'switch': 'switch-line',
+            'ap': 'wifi-line',
+            'phone': 'smartphone-line',
+            'computer': 'computer-line',
+            'tv': 'tv-line',
+            'iot': 'sensor-line'
+        };
+        return icons[type] || 'device-line';
+    },
+    escapeHtml: function(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    },
+    getStatusClass: function(status) {
+        const classes = {
+            'online': 'status-online',
+            'offline': 'status-offline',
+            'active': 'status-active',
+            'inactive': 'status-inactive'
+        };
+        return classes[status] || 'status-unknown';
+    },
+    parallel: async function(promises) {
+        return Promise.all(promises);
+    },
+    showSuccess: function(message) {
+        console.log('[Success]', message);
+        alert(message);
+    },
+    showError: function(message) {
+        console.error('[Error]', message);
+        alert(message);
+    },
+    navigate: function(url) {
+        window.location.href = url;
+    },
+    toggleTheme: function() {
+        if (window.themeManager) {
+            window.themeManager.toggleTheme();
+        }
+    }
+};
+
 function init() {
     buttonManager = new ButtonManager();
     buttonManager.register('refresh-btn', {

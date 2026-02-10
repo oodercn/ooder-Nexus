@@ -16,8 +16,26 @@ class ThemeManager {
      */
     init() {
         this.loadTheme();
-        this.applyTheme();
+        this.applyThemeImmediately();
         this.bindEvents();
+    }
+
+    /**
+     * 立即应用主题（在DOM加载前）
+     * 防止页面闪烁
+     */
+    applyThemeImmediately() {
+        const theme = this.currentTheme;
+        
+        // 直接在 documentElement 上应用主题，不等待 body 加载
+        if (theme === 'light') {
+            document.documentElement.classList.add('light-theme');
+        } else {
+            document.documentElement.classList.remove('light-theme');
+        }
+        
+        // 添加一个标记，表示主题已初始化
+        document.documentElement.setAttribute('data-theme', theme);
     }
 
     /**
@@ -37,23 +55,24 @@ class ThemeManager {
     }
 
     /**
-     * 应用主题
+     * 应用主题（完整应用，包括body和按钮更新）
      */
     applyTheme() {
-        // 确保 body 存在
-        if (!document.body) {
-            // 如果 body 还不存在，等待 DOM 加载完成后再应用
-            document.addEventListener('DOMContentLoaded', () => this.applyTheme());
-            return;
-        }
-
+        // 应用主题到 documentElement
         if (this.currentTheme === 'light') {
             document.documentElement.classList.add('light-theme');
-            document.body.classList.add('light-theme');
+            if (document.body) {
+                document.body.classList.add('light-theme');
+            }
         } else {
             document.documentElement.classList.remove('light-theme');
-            document.body.classList.remove('light-theme');
+            if (document.body) {
+                document.body.classList.remove('light-theme');
+            }
         }
+        
+        // 更新主题标记
+        document.documentElement.setAttribute('data-theme', this.currentTheme);
 
         // 更新所有主题切换按钮的状态
         this.updateThemeButtons();
@@ -229,6 +248,32 @@ if (typeof module !== 'undefined' && module.exports) {
 if (!window.themeManager) {
     window.themeManager = new ThemeManager();
 }
+
+// 立即执行主题应用（防止页面闪烁）
+// 这段代码在脚本加载时立即执行，不需要等待 DOMContentLoaded
+(function() {
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+    
+    const savedTheme = getCookie('nexus_theme');
+    const theme = savedTheme || 'dark';
+    
+    // 立即应用主题到 html 元素
+    if (theme === 'light') {
+        document.documentElement.classList.add('light-theme');
+    } else {
+        document.documentElement.classList.remove('light-theme');
+    }
+    document.documentElement.setAttribute('data-theme', theme);
+})();
 
 // 全局主题切换函数
 window.toggleTheme = function() {

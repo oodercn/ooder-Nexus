@@ -167,6 +167,7 @@
 
     <!-- 公共JS模块 -->
     <script src="../../js/menu-loader.js"></script>
+    <script src="/console/js/sdk-data-service.js"></script>
     <script>
         window.onload = function() {
             // 初始化菜单
@@ -175,10 +176,16 @@
             nexusCommon.initPage('log-management', loadLogs);
         };
 
-        // 模拟日志数据
-        let logs = [
+        // SDK存储集合名称
+        const COLLECTION_LOGS = 'nexus_logs';
+
+        // 日志数据
+        let logs = [];
+
+        // 默认日志数据
+        const defaultLogs = [
             {
-                id: 1,
+                id: 'log-001',
                 timestamp: new Date(Date.now() - 300000).toISOString(),
                 level: "ERROR",
                 source: "network",
@@ -186,7 +193,7 @@
                 details: "连接超时，尝试重连失败，可能是网络问题或终端离线。"
             },
             {
-                id: 2,
+                id: 'log-002',
                 timestamp: new Date(Date.now() - 600000).toISOString(),
                 level: "WARNING",
                 source: "service",
@@ -194,7 +201,7 @@
                 details: "服务内存使用过高，触发自动重启机制。"
             },
             {
-                id: 3,
+                id: 'log-003',
                 timestamp: new Date(Date.now() - 900000).toISOString(),
                 level: "INFO",
                 source: "system",
@@ -202,7 +209,7 @@
                 details: "CPU使用率: 12%, 内存使用率: 25%, 磁盘使用率: 15%"
             },
             {
-                id: 4,
+                id: 'log-004',
                 timestamp: new Date(Date.now() - 1200000).toISOString(),
                 level: "DEBUG",
                 source: "terminal",
@@ -210,7 +217,7 @@
                 details: "终端类型: Windows PC, IP地址: 192.168.1.104"
             },
             {
-                id: 5,
+                id: 'log-005',
                 timestamp: new Date(Date.now() - 1500000).toISOString(),
                 level: "INFO",
                 source: "network",
@@ -219,9 +226,21 @@
             }
         ];
 
-        function loadLogs() {
-            displayLogs(logs);
-            updateLogStats(logs);
+        async function loadLogs() {
+            try {
+                // 初始化默认数据
+                await SdkDataService.initCollection(COLLECTION_LOGS, defaultLogs);
+
+                // 从SDK存储获取日志列表
+                logs = await SdkDataService.getAll(COLLECTION_LOGS);
+                displayLogs(logs);
+                updateLogStats(logs);
+            } catch (error) {
+                console.error('加载日志失败:', error);
+                logs = defaultLogs;
+                displayLogs(logs);
+                updateLogStats(logs);
+            }
         }
 
         function displayLogs(logList) {

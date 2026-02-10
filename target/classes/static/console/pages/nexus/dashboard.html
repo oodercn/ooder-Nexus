@@ -155,46 +155,55 @@
 
         async function loadDashboardData() {
             try {
-                // 模拟API请求
-                const mockResponse = {
-                    status: 'success',
-                    message: '获取仪表盘数据成功',
-                    data: {
-                        endAgentCount: 12,
-                        linkCount: 8,
-                        networkStatus: '正常',
-                        commandCount: 156,
-                        packetsSent: 1245,
-                        packetsReceived: 1189,
-                        packetsFailed: 12,
-                        networkStatusText: '正常',
-                        totalCommands: 156,
-                        successfulCommands: 148,
-                        failedCommands: 5,
-                        timeoutCommands: 3
-                    },
-                    timestamp: new Date().getTime()
-                };
+                // 从多个API获取数据
+                const [devicesRes, commandsRes, healthRes] = await Promise.all([
+                    fetch('/api/devices/list').catch(() => null),
+                    fetch('/api/command/stats').catch(() => null),
+                    fetch('/api/health/overview').catch(() => null)
+                ]);
 
-                // 验证API返回格式
-                const validatedResponse = nexusCommon.validateApiResponse(mockResponse);
+                let deviceData = { total: 0, online: 0 };
+                let commandData = { total: 0, successful: 0, failed: 0 };
+                let healthData = { status: '正常' };
+
+                // 解析设备数据
+                if (devicesRes) {
+                    const devicesResult = await devicesRes.json();
+                    if (devicesResult.code === 200 && devicesResult.data) {
+                        deviceData = devicesResult.data.stats || { total: 0, online: 0 };
+                    }
+                }
+
+                // 解析命令统计数据
+                if (commandsRes) {
+                    const commandsResult = await commandsRes.json();
+                    if (commandsResult.code === 200 && commandsResult.data) {
+                        commandData = commandsResult.data;
+                    }
+                }
+
+                // 解析健康状态
+                if (healthRes) {
+                    const healthResult = await healthRes.json();
+                    if (healthResult.code === 200 && healthResult.data) {
+                        healthData = healthResult.data;
+                    }
+                }
 
                 // 更新页面数据
-                if (validatedResponse.status === 'success' && validatedResponse.data) {
-                    const data = validatedResponse.data;
-                    document.getElementById('endAgentCount').textContent = data.endAgentCount;
-                    document.getElementById('linkCount').textContent = data.linkCount;
-                    document.getElementById('networkStatus').textContent = data.networkStatus;
-                    document.getElementById('commandCount').textContent = data.commandCount;
-                    document.getElementById('packetsSent').textContent = nexusCommon.formatNumber(data.packetsSent);
-                    document.getElementById('packetsReceived').textContent = nexusCommon.formatNumber(data.packetsReceived);
-                    document.getElementById('packetsFailed').textContent = data.packetsFailed;
-                    document.getElementById('networkStatusText').textContent = data.networkStatusText;
-                    document.getElementById('totalCommands').textContent = data.totalCommands;
-                    document.getElementById('successfulCommands').textContent = data.successfulCommands;
-                    document.getElementById('failedCommands').textContent = data.failedCommands;
-                    document.getElementById('timeoutCommands').textContent = data.timeoutCommands;
-                }
+                document.getElementById('endAgentCount').textContent = deviceData.total || 0;
+                document.getElementById('linkCount').textContent = deviceData.online || 0;
+                document.getElementById('networkStatus').textContent = healthData.status || '正常';
+                document.getElementById('commandCount').textContent = commandData.total || 0;
+                document.getElementById('packetsSent').textContent = nexusCommon.formatNumber(commandData.sent || 0);
+                document.getElementById('packetsReceived').textContent = nexusCommon.formatNumber(commandData.received || 0);
+                document.getElementById('packetsFailed').textContent = commandData.failed || 0;
+                document.getElementById('networkStatusText').textContent = healthData.status || '正常';
+                document.getElementById('totalCommands').textContent = commandData.total || 0;
+                document.getElementById('successfulCommands').textContent = commandData.successful || 0;
+                document.getElementById('failedCommands').textContent = commandData.failed || 0;
+                document.getElementById('timeoutCommands').textContent = commandData.timeout || 0;
+
             } catch (error) {
                 console.error('加载仪表盘数据失败:', error);
                 nexusCommon.showMessage('加载仪表盘数据失败', 'error');

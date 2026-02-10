@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>市场管理 - Nexus SkillCenter</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -24,19 +27,19 @@
             </header>
             <div class="content">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('market')">市场技�?/button>
-                    <button class="tab-btn" onclick="switchTab('enterprise')">企业级接�?/button>
+                    <button class="tab-btn active" onclick="switchTab('market')">市场技能</button>
+                    <button class="tab-btn" onclick="switchTab('enterprise')">企业级接口</button>
                 </div>
                 
                 <div class="tab-content" id="market-tab">
                     <div class="skill-list" id="market-skills">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
                 
                 <div class="tab-content" id="enterprise-tab" style="display: none;">
                     <div class="skill-list" id="enterprise-apis">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
             </div>
@@ -86,7 +89,7 @@
         async function loadMarketSkills() {
             try {
                 const marketSkills = document.getElementById('market-skills');
-                marketSkills.innerHTML = '<div class="loading">加载�?..</div>';
+                marketSkills.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/market/skills');
                 
@@ -106,9 +109,9 @@
                     throw new Error('响应数据格式错误');
                 }
             } catch (error) {
-                console.error('加载市场技能列表错�?', error);
+                console.error('加载市场技能列表错误:', error);
                 document.getElementById('market-skills').innerHTML = '<div class="empty-state">加载失败</div>';
-                showError('加载市场技能列表失�?);
+                showError('加载市场技能列表失败');
             }
         }
 
@@ -117,7 +120,7 @@
             skillList.innerHTML = '';
             
             if (skills.length === 0) {
-                skillList.innerHTML = '<div class="empty-state">暂无市场技�?/div>';
+                skillList.innerHTML = '<div class="empty-state">暂无市场技能</div>';
                 return;
             }
             
@@ -129,7 +132,7 @@
                         <h3>${skill.name}</h3>
                         <p>${skill.description || '暂无描述'}</p>
                         <span class="skill-category">${getCategoryName(skill.category)}</span>
-                        <span class="skill-author">作�? ${skill.author}</span>
+                        <span class="skill-author">作者: ${skill.author}</span>
                         <span class="skill-downloads">下载: ${skill.downloadCount || 0}</span>
                     </div>
                     <div class="skill-actions">
@@ -148,7 +151,7 @@
         async function loadEnterpriseAPIs() {
             try {
                 const enterpriseAPIs = document.getElementById('enterprise-apis');
-                enterpriseAPIs.innerHTML = '<div class="loading">加载�?..</div>';
+                enterpriseAPIs.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/market/enterprise');
                 
@@ -168,9 +171,9 @@
                     throw new Error('响应数据格式错误');
                 }
             } catch (error) {
-                console.error('加载企业级接口列表错�?', error);
+                console.error('加载企业级接口列表错误:', error);
                 document.getElementById('enterprise-apis').innerHTML = '<div class="empty-state">加载失败</div>';
-                showError('加载企业级接口列表失�?);
+                showError('加载企业级接口列表失败');
             }
         }
 
@@ -179,7 +182,7 @@
             apiList.innerHTML = '';
             
             if (apis.length === 0) {
-                apiList.innerHTML = '<div class="empty-state">暂无企业级接�?/div>';
+                apiList.innerHTML = '<div class="empty-state">暂无企业级接口</div>';
                 return;
             }
             
@@ -212,7 +215,7 @@
         function getCategoryName(category) {
             const categoryMap = {
                 'text-processing': '文本处理',
-                'development': '开发工�?,
+                'development': '开发工具',
                 'deployment': '部署工具',
                 'media': '媒体处理',
                 'storage': '存储管理'
@@ -289,7 +292,7 @@
         }
 
         async function removeSkill(skillId) {
-            if (!confirm('确定要移除此技能吗�?)) {
+            if (!confirm('确定要移除此技能吗？')) {
                 return;
             }
             
@@ -309,14 +312,14 @@
                 }
                 
                 if (result && result.status === 'success') {
-                    showSuccess('技能移除成�?);
+                    showSuccess('技能移除成功');
                     loadMarketSkills();
                 } else {
-                    showError('技能移除失�?);
+                    showError('技能移除失败');
                 }
             } catch (error) {
-                console.error('移除技能错�?', error);
-                showError('技能移除失�?);
+                console.error('移除技能错误:', error);
+                showError('技能移除失败');
             }
         }
 

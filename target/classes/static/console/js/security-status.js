@@ -1,5 +1,23 @@
 let securityAPI;
 
+// 工具函数对象
+const utils = {
+    showError: function(message, selector) {
+        console.error(message);
+        const el = document.querySelector(selector);
+        if (el) {
+            el.innerHTML = `<div class="error-message"><i class="ri-error-warning-line"></i> ${message}</div>`;
+        }
+    },
+    showSuccess: function(message, selector) {
+        console.log(message);
+        const el = document.querySelector(selector);
+        if (el) {
+            el.innerHTML = `<div class="success-message"><i class="ri-check-line"></i> ${message}</div>`;
+        }
+    }
+};
+
 async function initSecurityStatus() {
     try {
         securityAPI = new SecurityAPI();

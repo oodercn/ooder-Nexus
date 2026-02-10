@@ -118,17 +118,27 @@ class MenuLoader {
      */
     buildUrl(url) {
         if (!url) return '#';
-        
+
         // 如果是完整URL，直接返回
         if (url.startsWith('http://') || url.startsWith('https://')) {
             return url;
         }
-        
-        // 如果已经是从根路径开始的相对路径，直接返回
+
+        // 如果已经是 /console/ 开头的路径，直接返回
+        if (url.startsWith('/console/')) {
+            return url;
+        }
+
+        // 如果已经是以 / 开头的其他路径，直接返回
         if (url.startsWith('/')) {
             return url;
         }
-        
+
+        // 如果 URL 已经包含 console/ 前缀，避免重复添加
+        if (url.startsWith('console/')) {
+            return `/${url}`;
+        }
+
         // 构建从根路径开始的完整路径
         return `/console/${url}`;
     }

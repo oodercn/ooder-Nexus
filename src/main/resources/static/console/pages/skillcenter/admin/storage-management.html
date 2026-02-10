@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>存储管理 - Nexus SkillCenter</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,7 +22,7 @@
             </header>
             <div class="content">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('status')">存储状�?/button>
+                    <button class="tab-btn active" onclick="switchTab('status')">存储状态</button>
                     <button class="tab-btn" onclick="switchTab('backup')">存储备份</button>
                     <button class="tab-btn" onclick="switchTab('restore')">存储恢复</button>
                     <button class="tab-btn" onclick="switchTab('clean')">存储清理</button>
@@ -28,13 +31,13 @@
                 
                 <div class="tab-content" id="status-tab">
                     <div class="storage-status" id="storage-status">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
                 
                 <div class="tab-content" id="backup-tab" style="display: none;">
                     <div class="backup-list" id="backup-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                     <div class="backup-actions">
                         <button class="btn btn-primary" onclick="createBackup()">
@@ -45,7 +48,7 @@
                 
                 <div class="tab-content" id="restore-tab" style="display: none;">
                     <div class="restore-list" id="restore-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
                 
@@ -69,7 +72,8 @@
                         </div>
                         <div class="form-group">
                             <label>
-                                <input type="checkbox" id="clean-old-backups"> 清理旧备�?                            </label>
+                                <input type="checkbox" id="clean-old-backups"> 清理旧备份
+                            </label>
                         </div>
                         <button class="btn btn-primary" onclick="performClean()">
                             <i class="ri-delete-bin-line"></i> 执行清理
@@ -86,7 +90,7 @@
                                 <input type="text" id="storage-path" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label>最大存储空�?(GB)</label>
+                                <label>最大存储空间 (GB)</label>
                                 <input type="number" id="max-storage" class="form-control">
                             </div>
                             <div class="form-group">
@@ -138,11 +142,11 @@
                 if (result.status === 'success') {
                     renderStorageStatus(result.data);
                 } else {
-                    showError('加载存储状态失�?);
+                    showError('加载存储状态失败');
                 }
             } catch (error) {
-                console.error('加载存储状态错�?', error);
-                showError('加载存储状态失�?);
+                console.error('加载存储状态错误:', error);
+                showError('加载存储状态失败');
             }
         }
 
@@ -151,11 +155,11 @@
             statusDiv.innerHTML = `
                 <div class="storage-overview">
                     <div class="storage-card">
-                        <h4>总空�?/h4>
+                        <h4>总空间</h4>
                         <p class="storage-value">${formatSize(status.totalSpace)}</p>
                     </div>
                     <div class="storage-card">
-                        <h4>已使�?/h4>
+                        <h4>已使用</h4>
                         <p class="storage-value">${formatSize(status.usedSpace)}</p>
                     </div>
                     <div class="storage-card">
@@ -163,14 +167,14 @@
                         <p class="storage-value">${formatSize(status.freeSpace)}</p>
                     </div>
                     <div class="storage-card">
-                        <h4>使用�?/h4>
+                        <h4>使用率</h4>
                         <p class="storage-value">${status.usagePercent}%</p>
                     </div>
                 </div>
                 <div class="storage-details">
                     <h4>存储详情</h4>
                     <ul>
-                        <li><strong>技能文�?</strong> ${formatSize(status.skillFiles)}</li>
+                        <li><strong>技能文件:</strong> ${formatSize(status.skillFiles)}</li>
                         <li><strong>备份文件:</strong> ${formatSize(status.backupFiles)}</li>
                         <li><strong>日志文件:</strong> ${formatSize(status.logFiles)}</li>
                         <li><strong>临时文件:</strong> ${formatSize(status.tempFiles)}</li>
@@ -217,7 +221,7 @@
                         <h3>${backup.name}</h3>
                         <p><strong>大小:</strong> ${formatSize(backup.size)}</p>
                         <p><strong>创建时间:</strong> ${formatTime(backup.createdAt)}</p>
-                        <p><strong>描述:</strong> ${backup.description || '�?}</p>
+                        <p><strong>描述:</strong> ${backup.description || '无'}</p>
                     </div>
                     <div class="backup-actions">
                         <button class="btn btn-secondary" onclick="downloadBackup('${backup.id}')">
@@ -370,7 +374,7 @@
         }
 
         async function restoreFromBackup(backupId) {
-            if (!confirm('确定要从此备份恢复吗？此操作将覆盖当前数据�?)) {
+            if (!confirm('确定要从此备份恢复吗？此操作将覆盖当前数据。')) {
                 return;
             }
             
@@ -470,7 +474,7 @@
                 }
                 
                 if (result.status === 'success') {
-                    showSuccess(`清理完成，释放空�? ${formatSize(result.data.freedSpace)}`);
+                    showSuccess(`清理完成，释放空间: ${formatSize(result.data.freedSpace)}`);
                     loadStorageStatus();
                 } else {
                     showError('清理失败');

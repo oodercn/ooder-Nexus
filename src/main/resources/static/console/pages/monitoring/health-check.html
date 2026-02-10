@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>健康检�?- Nexus</title>
+    <title>健康检查 - Nexus</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <link rel="stylesheet" href="/console/css/dashboard.css">
     <link rel="stylesheet" href="/console/css/styles.css">
+    <script src="/console/js/theme-manager.js"></script>
     <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航�?-->
+        <!-- 侧边导航栏 -->
         <aside class="sidebar" id="sidebar">
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
@@ -20,52 +21,52 @@
         <!-- 主内容区 -->
         <div class="main-content">
             <div class="header">
-                <h1><i class="ri-heart-pulse-line"></i> 健康检�?/h1>
+                <h1><i class="ri-heart-pulse-line"></i> 健康检查</h1>
                 <div class="subtitle">
-                    <span class="badge" style="background-color: var(--nexus-primary); color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin-right: 16px;">v0.6.6</span>
+                    <span class="badge" style="background-color: var(--nexus-primary); color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin-right: 16px;">v0.6.5</span>
                     <span>Nexus Style</span> | 
                     <span id="timestamp"></span>
                 </div>
             </div>
             
-            <!-- 健康状态卡�?-->
+            <!-- 健康状态卡片 -->
             <div class="dashboard">
                 <div class="card">
-                    <h3>系统状�?/h3>
+                    <h3>系统状态</h3>
                     <div class="value" id="system-status">正常</div>
-                    <div class="label">运行状�?/div>
+                    <div class="label">运行状态</div>
                 </div>
                 <div class="card">
-                    <h3>服务状�?/h3>
+                    <h3>服务状态</h3>
                     <div class="value" id="service-count">5/5</div>
                     <div class="label">服务运行/总数</div>
                 </div>
                 <div class="card">
-                    <h3>网络状�?/h3>
+                    <h3>网络状态</h3>
                     <div class="value" id="network-status">正常</div>
-                    <div class="label">连接状�?/div>
+                    <div class="label">连接状态</div>
                 </div>
                 <div class="card">
                     <h3>健康评分</h3>
                     <div class="value" id="health-score">95</div>
-                    <div class="label">系统健康�?/div>
+                    <div class="label">系统健康度</div>
                 </div>
             </div>
             
-            <!-- 系统状�?-->
+            <!-- 系统状态 -->
             <div class="section">
-                <h2>系统状态监�?/h2>
+                <h2>系统状态监控</h2>
                 <div class="status-grid" id="system-status-grid">
                     <div class="status-item ok">
-                        <div class="key">CPU 使用�?/div>
+                        <div class="key">CPU 使用率</div>
                         <div class="value" id="cpu-usage">25%</div>
                     </div>
                     <div class="status-item ok">
-                        <div class="key">内存使用�?/div>
+                        <div class="key">内存使用率</div>
                         <div class="value" id="memory-usage">45%</div>
                     </div>
                     <div class="status-item ok">
-                        <div class="key">磁盘使用�?/div>
+                        <div class="key">磁盘使用率</div>
                         <div class="value" id="disk-usage">32%</div>
                     </div>
                     <div class="status-item ok">
@@ -83,16 +84,17 @@
                 </div>
                 <div style="margin-top: 24px;">
                     <button class="btn btn-primary" onclick="refreshSystemStatus()">
-                        <i class="ri-refresh-line"></i> 刷新系统状�?                    </button>
+                        <i class="ri-refresh-line"></i> 刷新系统状态
+                    </button>
                 </div>
             </div>
             
-            <!-- 网络状�?-->
+            <!-- 网络状态 -->
             <div class="section">
-                <h2>网络状态监�?/h2>
+                <h2>网络状态监控</h2>
                 <div class="status-grid" id="network-status-grid">
                     <div class="status-item ok">
-                        <div class="key">网络连接�?/div>
+                        <div class="key">网络连接数</div>
                         <div class="value" id="network-connections">12</div>
                     </div>
                     <div class="status-item ok">
@@ -100,78 +102,79 @@
                         <div class="value" id="network-latency">15ms</div>
                     </div>
                     <div class="status-item ok">
-                        <div class="key">带宽使用�?/div>
+                        <div class="key">带宽使用率</div>
                         <div class="value" id="bandwidth-usage">20%</div>
                     </div>
                     <div class="status-item ok">
-                        <div class="key">丢包�?/div>
+                        <div class="key">丢包率</div>
                         <div class="value" id="packet-loss">0%</div>
                     </div>
                 </div>
                 <div style="margin-top: 24px;">
                     <button class="btn btn-primary" onclick="refreshNetworkStatus()">
-                        <i class="ri-refresh-line"></i> 刷新网络状�?                    </button>
+                        <i class="ri-refresh-line"></i> 刷新网络状态
+                    </button>
                 </div>
             </div>
             
-            <!-- 服务状�?-->
+            <!-- 服务状态 -->
             <div class="section">
-                <h2>服务状态监�?/h2>
+                <h2>服务状态监控</h2>
                 <div class="table-container">
                     <table id="service-status-table">
                         <thead>
                             <tr>
                                 <th>服务名称</th>
-                                <th>状�?/th>
+                                <th>状态</th>
                                 <th>版本</th>
-                                <th>最后检查时�?/th>
+                                <th>最后检查时间</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>Nexus</td>
-                                <td>运行�?/td>
-                                <td>v0.6.6</td>
+                                <td>运行中</td>
+                                <td>v0.6.5</td>
                                 <td id="mcp-last-check">2026-01-30 17:30:00</td>
                                 <td>
-                                    <button class="btn btn-secondary" onclick="checkServiceStatus('mcp')">检�?/button>
+                                    <button class="btn btn-secondary" onclick="checkServiceStatus('mcp')">检查</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Route Agent</td>
-                                <td>运行�?/td>
-                                <td>v0.6.6</td>
+                                <td>运行中</td>
+                                <td>v0.6.5</td>
                                 <td id="route-last-check">2026-01-30 17:30:00</td>
                                 <td>
-                                    <button class="btn btn-secondary" onclick="checkServiceStatus('route')">检�?/button>
+                                    <button class="btn btn-secondary" onclick="checkServiceStatus('route')">检查</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>End Agent</td>
-                                <td>运行�?/td>
-                                <td>v0.6.6</td>
+                                <td>运行中</td>
+                                <td>v0.6.5</td>
                                 <td id="end-last-check">2026-01-30 17:30:00</td>
                                 <td>
-                                    <button class="btn btn-secondary" onclick="checkServiceStatus('end')">检�?/button>
+                                    <button class="btn btn-secondary" onclick="checkServiceStatus('end')">检查</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Agent SDK</td>
-                                <td>运行�?/td>
-                                <td>v0.6.6</td>
+                                <td>运行中</td>
+                                <td>v0.6.5</td>
                                 <td id="sdk-last-check">2026-01-30 17:30:00</td>
                                 <td>
-                                    <button class="btn btn-secondary" onclick="checkServiceStatus('sdk')">检�?/button>
+                                    <button class="btn btn-secondary" onclick="checkServiceStatus('sdk')">检查</button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Web Console</td>
-                                <td>运行�?/td>
-                                <td>v0.6.6</td>
+                                <td>运行中</td>
+                                <td>v0.6.5</td>
                                 <td id="console-last-check">2026-01-30 17:30:00</td>
                                 <td>
-                                    <button class="btn btn-secondary" onclick="checkServiceStatus('console')">检�?/button>
+                                    <button class="btn btn-secondary" onclick="checkServiceStatus('console')">检查</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -179,7 +182,8 @@
                 </div>
                 <div style="margin-top: 24px;">
                     <button class="btn btn-primary" onclick="checkAllServices()">
-                        <i class="ri-check-line"></i> 检查所有服�?                    </button>
+                        <i class="ri-check-line"></i> 检查所有服务
+                    </button>
                 </div>
             </div>
             
@@ -188,15 +192,15 @@
                 <h2>系统监控指标</h2>
                 <div class="status-grid" id="system-metrics-grid">
                     <div class="status-item ok">
-                        <div class="key">CPU 使用�?/div>
+                        <div class="key">CPU 使用率</div>
                         <div class="value" id="cpu-usage">25%</div>
                     </div>
                     <div class="status-item ok">
-                        <div class="key">内存使用�?/div>
+                        <div class="key">内存使用率</div>
                         <div class="value" id="memory-usage">45%</div>
                     </div>
                     <div class="status-item ok">
-                        <div class="key">磁盘使用�?/div>
+                        <div class="key">磁盘使用率</div>
                         <div class="value" id="disk-usage">32%</div>
                     </div>
                     <div class="status-item ok">
@@ -240,21 +244,22 @@
                         <i class="ri-refresh-line"></i> 刷新告警
                     </button>
                     <button class="btn btn-danger" onclick="clearAlerts()">
-                        <i class="ri-delete-bin-line"></i> 清除所有告�?                    </button>
+                        <i class="ri-delete-bin-line"></i> 清除所有告警
+                    </button>
                 </div>
             </div>
             
-            <!-- 健康检查历�?-->
+            <!-- 健康检查历史 -->
             <div class="section">
-                <h2>健康检查历�?/h2>
+                <h2>健康检查历史</h2>
                 <div class="table-container">
                     <table id="health-history-table">
                         <thead>
                             <tr>
-                                <th>检查时�?/th>
-                                <th>系统状�?/th>
-                                <th>网络状�?/th>
-                                <th>服务状�?/th>
+                                <th>检查时间</th>
+                                <th>系统状态</th>
+                                <th>网络状态</th>
+                                <th>服务状态</th>
                                 <th>健康评分</th>
                                 <th>操作</th>
                             </tr>
@@ -298,13 +303,15 @@
     </div>
     
     <script>
-        // 初始化页�?        function init() {
+        // 初始化页面
+        function init() {
             updateTimestamp();
             loadHealthData();
             setInterval(updateTimestamp, 60000); // 每分钟更新时间戳
         }
         
-        // 更新时间�?        function updateTimestamp() {
+        // 更新时间戳
+        function updateTimestamp() {
             const now = new Date();
             document.getElementById('timestamp').textContent = now.toLocaleString('zh-CN');
         }
@@ -319,32 +326,37 @@
                     fetch('/api/mcp/system/status').then(r => r.json())
                 ]);
                 
-                // 更新系统状�?                if (healthData.status === 'healthy') {
+                // 更新系统状态
+                if (healthData.status === 'healthy') {
                     document.getElementById('system-status').textContent = '正常';
                 } else {
                     document.getElementById('system-status').textContent = '异常';
                 }
                 
-                // 更新网络状�?                if (networkData.status) {
+                // 更新网络状态
+                if (networkData.status) {
                     document.getElementById('network-status').textContent = '正常';
                 } else {
                     document.getElementById('network-status').textContent = '异常';
                 }
                 
-                // 更新服务状�?                document.getElementById('service-count').textContent = '5/5';
+                // 更新服务状态
+                document.getElementById('service-count').textContent = '5/5';
                 
                 // 计算健康评分
                 let healthScore = 95;
                 document.getElementById('health-score').textContent = healthScore;
                 
-                // 更新系统状态详�?                document.getElementById('cpu-usage').textContent = Math.floor(Math.random() * 100) + '%';
+                // 更新系统状态详情
+                document.getElementById('cpu-usage').textContent = Math.floor(Math.random() * 100) + '%';
                 document.getElementById('memory-usage').textContent = Math.floor(Math.random() * 100) + '%';
                 document.getElementById('disk-usage').textContent = Math.floor(Math.random() * 100) + '%';
                 document.getElementById('system-load').textContent = (Math.random() * 4).toFixed(2);
                 document.getElementById('uptime').textContent = '24 小时';
                 document.getElementById('system-temp').textContent = (40 + Math.random() * 20).toFixed(0) + '°C';
                 
-                // 更新网络状态详�?                document.getElementById('network-connections').textContent = Math.floor(Math.random() * 20) + 5;
+                // 更新网络状态详情
+                document.getElementById('network-connections').textContent = Math.floor(Math.random() * 20) + 5;
                 document.getElementById('network-latency').textContent = Math.floor(Math.random() * 50) + 'ms';
                 document.getElementById('bandwidth-usage').textContent = Math.floor(Math.random() * 100) + '%';
                 document.getElementById('packet-loss').textContent = (Math.random() * 2).toFixed(1) + '%';
@@ -371,13 +383,15 @@
             }
         }
         
-        // 刷新系统状�?        async function refreshSystemStatus() {
+        // 刷新系统状态
+        async function refreshSystemStatus() {
             try {
                 const response = await fetch('/api/mcp/system/status');
                 const data = await response.json();
                 
                 if (data.status === 'success') {
-                    // 更新系统状态详�?                    document.getElementById('cpu-usage').textContent = Math.floor(Math.random() * 100) + '%';
+                    // 更新系统状态详情
+                    document.getElementById('cpu-usage').textContent = Math.floor(Math.random() * 100) + '%';
                     document.getElementById('memory-usage').textContent = Math.floor(Math.random() * 100) + '%';
                     document.getElementById('disk-usage').textContent = Math.floor(Math.random() * 100) + '%';
                     document.getElementById('system-load').textContent = (Math.random() * 4).toFixed(2);
@@ -385,57 +399,62 @@
                     document.getElementById('system-temp').textContent = (40 + Math.random() * 20).toFixed(0) + '°C';
                     
                     // 显示成功提示
-                    showAlert('success', '系统状态刷新成�?);
+                    showAlert('success', '系统状态刷新成功');
                 } else {
-                    showAlert('error', '系统状态刷新失�? ' + data.message);
+                    showAlert('error', '系统状态刷新失败: ' + data.message);
                 }
             } catch (error) {
-                console.error('刷新系统状态错�?', error);
-                showAlert('error', '系统状态刷新失�? ' + error.message);
+                console.error('刷新系统状态错误:', error);
+                showAlert('error', '系统状态刷新失败: ' + error.message);
             }
         }
         
-        // 刷新网络状�?        async function refreshNetworkStatus() {
+        // 刷新网络状态
+        async function refreshNetworkStatus() {
             try {
                 const response = await fetch('/api/mcp/network/status');
                 const data = await response.json();
                 
                 if (data.status) {
-                    // 更新网络状态详�?                    document.getElementById('network-connections').textContent = Math.floor(Math.random() * 20) + 5;
+                    // 更新网络状态详情
+                    document.getElementById('network-connections').textContent = Math.floor(Math.random() * 20) + 5;
                     document.getElementById('network-latency').textContent = Math.floor(Math.random() * 50) + 'ms';
                     document.getElementById('bandwidth-usage').textContent = Math.floor(Math.random() * 100) + '%';
                     document.getElementById('packet-loss').textContent = (Math.random() * 2).toFixed(1) + '%';
                     
-                    showAlert('success', '网络状态刷新成�?);
+                    showAlert('success', '网络状态刷新成功');
                 } else {
-                    showAlert('error', '网络状态刷新失�?);
+                    showAlert('error', '网络状态刷新失败');
                 }
             } catch (error) {
-                console.error('刷新网络状态错�?', error);
-                showAlert('error', '网络状态刷新失�? ' + error.message);
+                console.error('刷新网络状态错误:', error);
+                showAlert('error', '网络状态刷新失败: ' + error.message);
             }
         }
         
-        // 检查服务状�?        async function checkServiceStatus(serviceType) {
+        // 检查服务状态
+        async function checkServiceStatus(serviceType) {
             try {
                 const response = await fetch('/api/health/service/check/' + serviceType);
                 const data = await response.json();
                 
                 if (data.code === 200 && data.data.status === 'healthy') {
-                    // 更新服务检查时�?                    const now = new Date().toLocaleString('zh-CN');
+                    // 更新服务检查时间
+                    const now = new Date().toLocaleString('zh-CN');
                     document.getElementById(serviceType + '-last-check').textContent = now;
                     
-                    showAlert('success', serviceType.toUpperCase() + ' 服务检查成�?);
+                    showAlert('success', serviceType.toUpperCase() + ' 服务检查成功');
                 } else {
-                    showAlert('error', serviceType.toUpperCase() + ' 服务检查失�? ' + (data.message || '未知错误'));
+                    showAlert('error', serviceType.toUpperCase() + ' 服务检查失败: ' + (data.message || '未知错误'));
                 }
             } catch (error) {
-                console.error('检查服务状态错�?', error);
-                showAlert('error', serviceType.toUpperCase() + ' 服务检查失�? ' + error.message);
+                console.error('检查服务状态错误:', error);
+                showAlert('error', serviceType.toUpperCase() + ' 服务检查失败: ' + error.message);
             }
         }
         
-        // 检查所有服�?        async function checkAllServices() {
+        // 检查所有服务
+        async function checkAllServices() {
             try {
                 const response = await fetch('/api/health/service/check-all', {
                     method: 'POST'
@@ -443,22 +462,24 @@
                 const data = await response.json();
                 
                 if (data.code === 200) {
-                    // 更新所有服务检查时�?                    const now = new Date().toLocaleString('zh-CN');
+                    // 更新所有服务检查时间
+                    const now = new Date().toLocaleString('zh-CN');
                     ['mcp', 'route', 'end', 'sdk', 'console'].forEach(service => {
                         document.getElementById(service + '-last-check').textContent = now;
                     });
                     
-                    showAlert('success', '所有服务检查成�? ' + data.data.healthyCount + '/' + data.data.totalCount);
+                    showAlert('success', '所有服务检查成功: ' + data.data.healthyCount + '/' + data.data.totalCount);
                 } else {
-                    showAlert('error', '服务检查失�? ' + (data.message || '未知错误'));
+                    showAlert('error', '服务检查失败: ' + (data.message || '未知错误'));
                 }
             } catch (error) {
-                console.error('检查所有服务错�?', error);
-                showAlert('error', '服务检查失�? ' + error.message);
+                console.error('检查所有服务错误:', error);
+                showAlert('error', '服务检查失败: ' + error.message);
             }
         }
         
-        // 查看健康检查详�?        function viewHealthDetails(time) {
+        // 查看健康检查详情
+        function viewHealthDetails(time) {
             alert(`查看 ${time} 的健康检查详情`);
         }
         
@@ -538,7 +559,8 @@
             }
         }
         
-        // 清除所有告�?        async function clearAlerts() {
+        // 清除所有告警
+        async function clearAlerts() {
             try {
                 const response = await fetch('/api/monitor/alerts/clear', {
                     method: 'POST'

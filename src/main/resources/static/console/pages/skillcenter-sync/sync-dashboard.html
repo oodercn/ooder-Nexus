@@ -132,9 +132,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
-</div>
+        </main>
+    </div>
 
     <!-- 新建同步模态框 -->
     <div id="sync-modal" class="modal" style="display: none;">
@@ -199,11 +198,11 @@
                 const response = await fetch('/api/sync/statistics');
                 const result = await response.json();
                 if (result.success) {
-                    document.getElementById('stat-total').textContent = result.data.totalTasks;
-                    document.getElementById('stat-completed').textContent = result.data.completedTasks;
-                    document.getElementById('stat-running').textContent = result.data.runningTasks;
-                    document.getElementById('stat-skills').textContent = result.data.totalSyncedSkills;
-                    document.getElementById('stat-rate').textContent = result.data.successRate.toFixed(1) + '%';
+                    document.getElementById('stat-total').textContent = result.data.totalTasks || 0;
+                    document.getElementById('stat-completed').textContent = result.data.completedTasks || 0;
+                    document.getElementById('stat-running').textContent = result.data.runningTasks || 0;
+                    document.getElementById('stat-skills').textContent = result.data.totalSyncedSkills || 0;
+                    document.getElementById('stat-rate').textContent = (result.data.successRate || 0).toFixed(1) + '%';
                 }
             } catch (error) {
                 console.error('加载统计信息失败:', error);

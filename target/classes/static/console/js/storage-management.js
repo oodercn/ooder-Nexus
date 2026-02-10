@@ -3,6 +3,53 @@ let currentFolderId = '';
 let modalManager;
 let buttonManager;
 
+// 工具函数对象
+const utils = {
+    showError: function(message, selector) {
+        console.error(message);
+        const el = document.querySelector(selector);
+        if (el) {
+            el.innerHTML = `<div class="error-message"><i class="ri-error-warning-line"></i> ${message}</div>`;
+        }
+    },
+    showSuccess: function(message, selector) {
+        console.log(message);
+        const el = document.querySelector(selector);
+        if (el) {
+            el.innerHTML = `<div class="success-message"><i class="ri-check-line"></i> ${message}</div>`;
+        }
+    },
+    formatBytes: function(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    },
+    formatTime: function(timestamp) {
+        return new Date(timestamp).toLocaleString('zh-CN');
+    },
+    escapeHtml: function(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    },
+    confirm: function(message) {
+        return window.confirm(message);
+    },
+    downloadFile: function(blob, filename) {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    },
+    parallel: async function(promises) {
+        return Promise.all(promises);
+    }
+};
+
 async function initStorageManagement() {
     try {
         await window.initMenu();

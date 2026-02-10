@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网络设置 - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
         .form-row {
@@ -38,7 +38,7 @@
         <div class="main-content">
             <div class="header">
                 <h1><i class="ri-wifi-settings-line"></i> 网络设置</h1>
-                <div class="subtitle">配置局域网网络参数和设�?/div>
+                <div class="subtitle">配置局域网网络参数和设置</div>
             </div>
             <div id="page-content">
                 <div class="section">
@@ -46,7 +46,7 @@
                     <div class="form-row">
                         <div>
                             <label class="form-label">网络名称 (SSID)</label>
-                            <input type="text" class="form-input" id="network-name" placeholder="请输入网络名�? value="HomeLAN">
+                            <input type="text" class="form-input" id="network-name" placeholder="请输入网络名称" value="HomeLAN">
                         </div>
                         <div>
                             <label class="form-label">网络模式</label>
@@ -78,11 +78,11 @@
                     <div class="form-row">
                         <div>
                             <label class="form-label">密码</label>
-                            <input type="password" class="form-input" id="network-password" placeholder="请输入网络密�? value="********">
+                            <input type="password" class="form-input" id="network-password" placeholder="请输入网络密码" value="********">
                         </div>
                         <div>
                             <label class="form-label">确认密码</label>
-                            <input type="password" class="form-input" id="confirm-password" placeholder="请再次输入密�? value="********">
+                            <input type="password" class="form-input" id="confirm-password" placeholder="请再次输入密码" value="********">
                         </div>
                     </div>
                     <div class="form-checkbox">
@@ -97,22 +97,22 @@
                             <label class="form-label">IP 分配模式</label>
                             <select class="form-input" id="ip-mode">
                                 <option value="dhcp" selected>DHCP 自动分配</option>
-                                <option value="static">静�?IP</option>
+                                <option value="static">静态 IP</option>
                             </select>
                         </div>
                         <div>
                             <label class="form-label">起始 IP 地址</label>
-                            <input type="text" class="form-input" id="start-ip" placeholder="请输入起�?IP" value="192.168.1.100">
+                            <input type="text" class="form-input" id="start-ip" placeholder="请输入起始 IP" value="192.168.1.100">
                         </div>
                     </div>
                     <div class="form-row">
                         <div>
                             <label class="form-label">结束 IP 地址</label>
-                            <input type="text" class="form-input" id="end-ip" placeholder="请输入结�?IP" value="192.168.1.200">
+                            <input type="text" class="form-input" id="end-ip" placeholder="请输入结束 IP" value="192.168.1.200">
                         </div>
                         <div>
                             <label class="form-label">子网掩码</label>
-                            <input type="text" class="form-input" id="subnet-mask" placeholder="请输入子网掩�? value="255.255.255.0">
+                            <input type="text" class="form-input" id="subnet-mask" placeholder="请输入子网掩码" value="255.255.255.0">
                         </div>
                     </div>
                 </div>
@@ -128,18 +128,18 @@
             const password = document.getElementById('network-password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             if (password !== confirmPassword) {
-                alert('密码不一致，请重新输�?);
+                alert('密码不一致，请重新输入');
                 return;
             }
-            alert('网络设置保存成功�?);
+            alert('网络设置保存成功！');
         }
         function resetSettings() {
-            if (confirm('确定要重置所有设置吗�?)) {
+            if (confirm('确定要重置所有设置吗？')) {
                 document.getElementById('network-name').value = 'HomeLAN';
                 document.getElementById('network-mode').value = '5ghz';
                 document.getElementById('channel').value = 'auto';
                 document.getElementById('security-mode').value = 'wpa2';
-                alert('设置已重置为默认�?);
+                alert('设置已重置为默认值');
             }
         }
         window.onPageInit = function() {};

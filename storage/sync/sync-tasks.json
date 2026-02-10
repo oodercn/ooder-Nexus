@@ -1,0 +1,17 @@
+[ {
+  "id" : "sync-001",
+  "name" : "初始同步",
+  "type" : "bidirectional",
+  "status" : "completed",
+  "source" : "本地",
+  "target" : "云端",
+  "totalItems" : 5,
+  "processedItems" : 5,
+  "failedItems" : 0,
+  "errorMessage" : null,
+  "createTime" : "2026-02-09T18:41:02.089",
+  "startTime" : "2026-02-09T18:41:02.089",
+  "endTime" : "2026-02-09T18:46:02.089",
+  "items" : null,
+  "progress" : 100.0
+} ]

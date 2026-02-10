@@ -1,8 +1,7 @@
 /**
  * 模拟数据服务
  * 为前端提供与后端API结构一致的模拟数据
- * 便于前端开发和测试，同时为后端开发提供数据结构参考
- */
+ * 便于前端开发和测试，同时为后端开发提供数据结构参�? */
 
 const MOCK_DATA = {
     // 模拟API基础URL
@@ -56,7 +55,7 @@ const MOCK_DATA = {
         },
         {
             id: 4,
-            name: '厨房摄像头',
+            name: '厨房摄像�?,
             type: 'camera',
             location: '厨房',
             status: 'warning',
@@ -89,7 +88,7 @@ const MOCK_DATA = {
             name: 'MCP Agent',
             type: 'core',
             status: 'running',
-            version: '0.6.5',
+            version: '0.6.6',
             uptime: 3600,
             cpu: 15.2,
             memory: 256,
@@ -112,7 +111,7 @@ const MOCK_DATA = {
             name: 'Skill Center',
             type: 'service',
             status: 'running',
-            version: '0.6.5',
+            version: '0.6.6',
             uptime: 3500,
             cpu: 8.7,
             memory: 192,
@@ -127,14 +126,14 @@ const MOCK_DATA = {
             endpoints: [
                 'http://localhost:8091/api/skills'
             ],
-            description: '技能中心服务，管理和协调各种技能模块'
+            description: '技能中心服务，管理和协调各种技能模�?
         },
         {
             id: 'skillflow',
             name: 'Skill Flow',
             type: 'workflow',
             status: 'warning',
-            version: '0.6.5',
+            version: '0.6.6',
             uptime: 3200,
             cpu: 22.5,
             memory: 384,
@@ -149,14 +148,14 @@ const MOCK_DATA = {
             endpoints: [
                 'http://localhost:8091/api/workflow'
             ],
-            description: '技能工作流服务，处理复杂的技能执行流程'
+            description: '技能工作流服务，处理复杂的技能执行流�?
         },
         {
             id: 'vfs',
             name: 'Virtual File System',
             type: 'storage',
             status: 'stopped',
-            version: '0.6.5',
+            version: '0.6.6',
             uptime: 0,
             cpu: 0,
             memory: 0,
@@ -175,15 +174,14 @@ const MOCK_DATA = {
         }
     ],
     
-    // 模拟仪表盘数据
-    dashboard: {
+    // 模拟仪表盘数�?    dashboard: {
         systemStatus: '正常',
         networkCount: 12,
         cpuUsage: '25%',
         memoryUsage: '45%',
         diskUsage: '32%',
         systemLoad: '0.8',
-        requestRate: '1000/秒',
+        requestRate: '1000/�?,
         temperature: '45°C',
         uptime: '24小时',
         agentCount: 5,
@@ -212,7 +210,7 @@ const MOCK_DATA = {
         },
         {
             id: 2,
-            name: '交换机',
+            name: '交换�?,
             type: 'switch',
             ip: '192.168.1.2',
             mac: 'AA:BB:CC:DD:EE:01',
@@ -271,7 +269,7 @@ const MOCK_DATA = {
             } else {
                 return {
                     status: 'error',
-                    message: '设备不存在',
+                    message: '设备不存�?,
                     code: 'DEVICE_NOT_FOUND',
                     timestamp: Date.now()
                 };
@@ -294,7 +292,7 @@ const MOCK_DATA = {
                         name: 'Default MCP Agent',
                         type: 'local',
                         status: 'running',
-                        version: '0.6.5',
+                        version: '0.6.6',
                         endpoint: 'localhost:9876',
                         heartbeatInterval: 30000,
                         description: '默认MCP Agent实例，用于本地开发和测试'
@@ -307,7 +305,7 @@ const MOCK_DATA = {
         '/api/mcp/status': function(params) {
             return {
                 status: 'success',
-                message: '系统状态获取成功',
+                message: '系统状态获取成�?,
                 data: {
                     systemStatus: MOCK_DATA.dashboard.systemStatus,
                     networkCount: MOCK_DATA.dashboard.networkCount,
@@ -327,8 +325,7 @@ const MOCK_DATA = {
     
     // 模拟API请求
     async fetch(url, options = {}) {
-        // 如果禁用模拟数据，直接返回真实请求
-        if (!MOCK_DATA.ENABLE_MOCK) {
+        // 如果禁用模拟数据，直接返回真实请�?        if (!MOCK_DATA.ENABLE_MOCK) {
             return fetch(url, options);
         }
         
@@ -364,8 +361,7 @@ const MOCK_DATA = {
             }
         }
         
-        // 调用对应的模拟响应函数
-        if (matchedPath) {
+        // 调用对应的模拟响应函�?        if (matchedPath) {
             const responseData = MOCK_DATA.mockResponses[matchedPath](params, pathParams.id);
             
             // 模拟响应对象

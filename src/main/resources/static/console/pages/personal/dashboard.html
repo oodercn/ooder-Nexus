@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人仪表�?- Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <title>个人仪表盘 - Nexus</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <script src="/console/js/personal-api.js"></script>
 </head>
@@ -18,7 +18,7 @@
         </aside>
         <main class="main-content">
             <div class="content-header">
-                <h1>个人仪表�?/h1>
+                <h1>个人仪表盘</h1>
                 <div class="content-actions">
                     <div class="user-info">
                         <span class="user-name" id="username">用户</span>
@@ -31,7 +31,7 @@
                     <div class="stat-card">
                         <div class="stat-icon ri-lightbulb-line"></div>
                         <div class="stat-info">
-                            <h3>我的技�?/h3>
+                            <h3>我的技能</h3>
                             <p class="stat-value" id="skill-count">0</p>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="stat-card">
                         <div class="stat-icon ri-share-line"></div>
                         <div class="stat-info">
-                            <h3>分享技�?/h3>
+                            <h3>分享技能</h3>
                             <p class="stat-value" id="shared-count">0</p>
                         </div>
                     </div>
@@ -58,13 +58,13 @@
                     </div>
                 </div>
                 <div class="recent-activities">
-                    <h2>最近活�?/h2>
+                    <h2>最近活动</h2>
                     <div class="activity-list" id="activity-list">
-                        <div class="loading">加载�?..</div>
+                        <div class="loading">加载中...</div>
                     </div>
                 </div>
                 <div class="skill-progress">
-                    <h2>技能执行统�?/h2>
+                    <h2>技能执行统计</h2>
                     <canvas id="execution-chart" width="400" height="200"></canvas>
                 </div>
             </div>
@@ -118,7 +118,7 @@
             } catch (error) {
                 console.error('初始化仪表盘失败:', error);
                 document.getElementById('activity-list').innerHTML = '<div class="empty-state">加载失败</div>';
-                showError('加载仪表盘数据失�?);
+                showError('加载仪表盘数据失败');
             }
         }
         
@@ -134,11 +134,11 @@
         
         function getActivityText(activity) {
             if (activity.type === 'execution') {
-                return `执行了技�?<span class="activity-skill">${activity.skillName}</span>`;
+                return `执行了技能 <span class="activity-skill">${activity.skillName}</span>`;
             } else if (activity.type === 'publish') {
-                return `发布了新技�?<span class="activity-skill">${activity.skillName}</span>`;
+                return `发布了新技能 <span class="activity-skill">${activity.skillName}</span>`;
             } else if (activity.type === 'share') {
-                return `分享了技�?<span class="activity-skill">${activity.skillName}</span>`;
+                return `分享了技能 <span class="activity-skill">${activity.skillName}</span>`;
             }
             return '未知活动';
         }
@@ -207,7 +207,8 @@
     </script>
     <script>
         window.onPageInit = function() {
-            // 页面初始化完�?        };
+            // 页面初始化完成
+        };
     </script>
 </body>
 </html>

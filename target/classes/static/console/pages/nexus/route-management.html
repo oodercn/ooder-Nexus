@@ -6,9 +6,11 @@
     <title>路由管理 - Nexus - Nexus</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
     <script src="/console/js/theme-manager.js"></script>
     <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
+    <script src="/console/js/sdk-data-service.js"></script>
 </head>
 <body>
     <div class="container">
@@ -131,62 +133,76 @@
             loadRoutes();
         };
 
-        // 模拟路由数据
+        // SDK存储集合名称
+        const COLLECTION_ROUTES = 'routes';
+
+        // 路由数据
         let routes = [];
 
-        function loadRoutes() {
-            // 模拟加载路由数据
-            routes = [
-                {
-                    id: "route-001",
-                    name: "主路由",
-                    source: "mcp-agent-001",
-                    target: "route-agent-001",
-                    type: "direct",
-                    status: "active",
-                    latency: 10,
-                    bandwidth: "100Mbps",
-                    createTime: new Date().toISOString(),
-                    lastUpdate: new Date().toISOString()
-                },
-                {
-                    id: "route-002",
-                    name: "备用路由",
-                    source: "mcp-agent-001",
-                    target: "route-agent-002",
-                    type: "indirect",
-                    status: "inactive",
-                    latency: 15,
-                    bandwidth: "50Mbps",
-                    createTime: new Date().toISOString(),
-                    lastUpdate: new Date().toISOString()
-                },
-                {
-                    id: "route-003",
-                    name: "终端路由",
-                    source: "route-agent-001",
-                    target: "end-agent-001",
-                    type: "direct",
-                    status: "active",
-                    latency: 8,
-                    bandwidth: "100Mbps",
-                    createTime: new Date().toISOString(),
-                    lastUpdate: new Date().toISOString()
-                },
-                {
-                    id: "route-004",
-                    name: "网关路由",
-                    source: "mcp-agent-001",
-                    target: "gateway-001",
-                    type: "direct",
-                    status: "active",
-                    latency: 12,
-                    bandwidth: "200Mbps",
-                    createTime: new Date().toISOString(),
-                    lastUpdate: new Date().toISOString()
-                }
-            ];
-            renderRoutes();
+        // 默认路由数据
+        const defaultRoutes = [
+            {
+                id: "route-001",
+                name: "主路由",
+                source: "mcp-agent-001",
+                target: "route-agent-001",
+                type: "direct",
+                status: "active",
+                latency: 10,
+                bandwidth: "100Mbps",
+                createTime: new Date().toISOString(),
+                lastUpdate: new Date().toISOString()
+            },
+            {
+                id: "route-002",
+                name: "备用路由",
+                source: "mcp-agent-001",
+                target: "route-agent-002",
+                type: "indirect",
+                status: "inactive",
+                latency: 15,
+                bandwidth: "50Mbps",
+                createTime: new Date().toISOString(),
+                lastUpdate: new Date().toISOString()
+            },
+            {
+                id: "route-003",
+                name: "终端路由",
+                source: "route-agent-001",
+                target: "end-agent-001",
+                type: "direct",
+                status: "active",
+                latency: 8,
+                bandwidth: "100Mbps",
+                createTime: new Date().toISOString(),
+                lastUpdate: new Date().toISOString()
+            },
+            {
+                id: "route-004",
+                name: "网关路由",
+                source: "mcp-agent-001",
+                target: "gateway-001",
+                type: "direct",
+                status: "active",
+                latency: 12,
+                bandwidth: "200Mbps",
+                createTime: new Date().toISOString(),
+                lastUpdate: new Date().toISOString()
+            }
+        ];
+
+        async function loadRoutes() {
+            try {
+                // 初始化默认数据（如果集合为空）
+                await SdkDataService.initCollection(COLLECTION_ROUTES, defaultRoutes);
+
+                // 从SDK存储获取路由列表
+                routes = await SdkDataService.getAll(COLLECTION_ROUTES);
+                renderRoutes();
+            } catch (error) {
+                console.error('加载路由数据失败:', error);
+                showMessage('加载路由数据失败', 'error');
+            }
         }
 
         function renderRoutes() {
@@ -212,7 +228,7 @@
             });
         }
 
-        function addRoute() {
+        async function addRoute() {
             const routeId = document.getElementById('routeId').value;
             const routeName = document.getElementById('routeName').value;
             const sourceNode = document.getElementById('sourceNode').value;
@@ -250,10 +266,21 @@
                 lastUpdate: new Date().toISOString()
             };
 
-            routes.push(newRoute);
-            renderRoutes();
-            clearRouteForm();
-            showMessage('路由添加成功');
+            try {
+                // 保存到SDK存储
+                const result = await SdkDataService.save(COLLECTION_ROUTES, routeId, newRoute);
+                if (result.code === 200) {
+                    routes.push(newRoute);
+                    renderRoutes();
+                    clearRouteForm();
+                    showMessage('路由添加成功');
+                } else {
+                    showMessage(result.message || '路由添加失败', 'error');
+                }
+            } catch (error) {
+                console.error('添加路由失败:', error);
+                showMessage('添加路由失败', 'error');
+            }
         }
 
         function removeRoute() {
@@ -265,16 +292,27 @@
             removeRouteById(routeId);
         }
 
-        function removeRouteById(routeId) {
+        async function removeRouteById(routeId) {
             const index = routes.findIndex(r => r.id === routeId);
             if (index === -1) {
                 alert('路由不存在');
                 return;
             }
 
-            routes.splice(index, 1);
-            renderRoutes();
-            showMessage('路由移除成功');
+            try {
+                // 从SDK存储删除
+                const result = await SdkDataService.delete(COLLECTION_ROUTES, routeId);
+                if (result.code === 200) {
+                    routes.splice(index, 1);
+                    renderRoutes();
+                    showMessage('路由移除成功');
+                } else {
+                    showMessage(result.message || '路由移除失败', 'error');
+                }
+            } catch (error) {
+                console.error('移除路由失败:', error);
+                showMessage('移除路由失败', 'error');
+            }
         }
 
         function getRouteDetails() {

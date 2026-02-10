@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>群组管理 - Nexus SkillCenter</title>
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/theme.css">
+    <link rel="stylesheet" href="/console/css/dashboard.css">
     <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/theme-manager.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
 </head>
 <body>
     <div class="container">
@@ -24,7 +27,7 @@
             </header>
             <div class="content">
                 <div class="group-list" id="group-list">
-                    <div class="loading">加载�?..</div>
+                    <div class="loading">加载中...</div>
                 </div>
             </div>
         </main>
@@ -78,7 +81,7 @@
                     <label>设置权限</label>
                     <select id="permission-level" class="form-control">
                         <option value="member">成员</option>
-                        <option value="admin">管理�?/option>
+                        <option value="admin">管理员</option>
                     </select>
                 </div>
             </div>
@@ -100,7 +103,7 @@
         async function loadGroups() {
             try {
                 const groupList = document.getElementById('group-list');
-                groupList.innerHTML = '<div class="loading">加载�?..</div>';
+                groupList.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch('/api/admin/groups');
                 
@@ -175,7 +178,7 @@
             const type = document.getElementById('group-type').value;
             
             if (!name) {
-                showError('请填写群组名�?);
+                showError('请填写群组名称');
                 return;
             }
             
@@ -224,7 +227,7 @@
             
             try {
                 const content = document.getElementById('group-detail-content');
-                content.innerHTML = '<div class="loading">加载�?..</div>';
+                content.innerHTML = '<div class="loading">加载中...</div>';
                 
                 const response = await fetch(`/api/admin/groups/${groupId}`);
                 
@@ -251,7 +254,7 @@
                                 ${group.members && group.members.length > 0 ? group.members.map(member => `
                                     <li>
                                         <span>${member.name}</span>
-                                        <span class="member-role">${member.role === 'admin' ? '管理�? : '成员'}</span>
+                                        <span class="member-role">${member.role === 'admin' ? '管理员' : '成员'}</span>
                                         <button class="btn btn-danger btn-sm" onclick="removeMember('${member.id}')">移除</button>
                                     </li>
                                 `).join('') : '<li>暂无成员</li>'}

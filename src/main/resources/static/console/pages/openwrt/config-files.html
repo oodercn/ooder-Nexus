@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>配置文件 - OpenWrt - Nexus</title>
-    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">`n    <link rel="stylesheet" href="/console/css/theme.css">`n    <link rel="stylesheet" href="/console/css/dashboard.css">`n    <link rel="stylesheet" href="/console/css/styles.css">
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
     <link rel="stylesheet" href="/console/css/theme.css">
     <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/theme-manager.js"></script>`n    <script src="/console/js/menu-loader.js"></script>
+    <script src="/console/js/menu-loader.js"></script>
     <script src="/console/js/common.js"></script>
     <style>
         .config-editor {
@@ -51,7 +51,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- 侧边导航�?-->
+        <!-- 侧边导航栏 -->
         <div class="sidebar">
             <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
             <ul class="nav-menu" id="nav-menu"></ul>
@@ -104,7 +104,7 @@
                     </div>
                 </div>
                 
-                <!-- 配置编辑�?-->
+                <!-- 配置编辑器 -->
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="ri-edit-line"></i> 编辑配置</h2>
@@ -122,18 +122,22 @@
     <script src="/console/common/button-manager.js"></script>
     <script src="/console/common/utils.js"></script>
     <script>
-        // API 客户端实�?        const openwrtApi = new ApiClient('/api/openwrt');
+        // API 客户端实例
+        const openwrtApi = new ApiClient('/api/openwrt');
         
-        // 当前编辑的文�?        let currentFile = 'network';
+        // 当前编辑的文件
+        let currentFile = 'network';
 
-        // 页面初始�?        window.onPageInit = function() {
+        // 页面初始化
+        window.onPageInit = function() {
             loadConfigFile('network');
         };
 
         // 加载配置文件
         async function loadConfigFile(fileName) {
             try {
-                // 更新选中状�?                document.querySelectorAll('.config-file-item').forEach(item => {
+                // 更新选中状态
+                document.querySelectorAll('.config-file-item').forEach(item => {
                     item.classList.remove('active');
                 });
                 document.querySelector(`[data-file="${fileName}"]`).classList.add('active');

@@ -1,20 +1,20 @@
-ï»¿/**
- * Nexus Real SDK å®ç°
+/**
+ * Nexus Real SDK ÊµÏÖ
  * 
- * æœ¬æ–‡ä»¶å®ç°äº† Nexus SDK çš„çœŸå® API è°ƒç”¨ç‰ˆæœ¬ï¼ŒåŸºäº ooderAgent 0.6.5 æ¥å£ã€‚
+ * ±¾ÎÄ¼şÊµÏÖÁË Nexus SDK µÄÕæÊµ API µ÷ÓÃ°æ±¾£¬»ùÓÚ ooderAgent 0.6.6 ½Ó¿Ú¡£
  * 
- * é…ç½®è¯´æ˜ï¼š
- * - Real SDK è°ƒç”¨çœŸå®çš„åç«¯ API æ¥å£
- * - æ‰€æœ‰ API è¯·æ±‚éƒ½é€šè¿‡ fetch å‘é€åˆ°åç«¯æœåŠ¡å™¨
- * - æ”¯æŒè¯·æ±‚è¶…æ—¶ã€é”™è¯¯å¤„ç†ã€å“åº”éªŒè¯ç­‰åŠŸèƒ½
+ * ÅäÖÃËµÃ÷£º
+ * - Real SDK µ÷ÓÃÕæÊµµÄºó¶Ë API ½Ó¿Ú
+ * - ËùÓĞ API ÇëÇó¶¼Í¨¹ı fetch ·¢ËÍµ½ºó¶Ë·şÎñÆ÷
+ * - Ö§³ÖÇëÇó³¬Ê±¡¢´íÎó´¦Àí¡¢ÏìÓ¦ÑéÖ¤µÈ¹¦ÄÜ
  * 
  * @module nexusSDK
  * @version 1.0.0
  */
 
 /**
- * Real SDK å®ç°ç±»
- * å®ç° InexusSDK æ¥å£ï¼Œè°ƒç”¨çœŸå®çš„åç«¯ API
+ * Real SDK ÊµÏÖÀà
+ * ÊµÏÖ InexusSDK ½Ó¿Ú£¬µ÷ÓÃÕæÊµµÄºó¶Ë API
  */
 class nexusRealSDK {
     constructor(config = {}) {
@@ -29,8 +29,8 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆå§‹åŒ– SDK
-     * @param {Object} config - SDK é…ç½®
+     * ³õÊ¼»¯ SDK
+     * @param {Object} config - SDK ÅäÖÃ
      * @returns {Promise<void>}
      */
     async initialize(config = {}) {
@@ -40,10 +40,10 @@ class nexusRealSDK {
     }
 
     /**
-     * å‘é€ HTTP è¯·æ±‚
-     * @param {string} method - HTTP æ–¹æ³•
-     * @param {string} endpoint - API ç«¯ç‚¹
-     * @param {Object} [data] - è¯·æ±‚æ•°æ®
+     * ·¢ËÍ HTTP ÇëÇó
+     * @param {string} method - HTTP ·½·¨
+     * @param {string} endpoint - API ¶Ëµã
+     * @param {Object} [data] - ÇëÇóÊı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async _request(method, endpoint, data = null) {
@@ -76,7 +76,7 @@ class nexusRealSDK {
         } catch (error) {
             const errorResponse = {
                 status: 'error',
-                message: error.message || 'è¯·æ±‚å¤±è´¥',
+                message: error.message || 'ÇëÇóÊ§°Ü',
                 code: error.name || 'REQUEST_ERROR',
                 timestamp: Date.now()
             };
@@ -89,26 +89,26 @@ class nexusRealSDK {
         }
     }
 
-    // ==================== Dashboard æ¨¡å— ====================
+    // ==================== Dashboard Ä£¿é ====================
 
     /**
-     * è·å–ä»ªè¡¨ç›˜æ•°æ®
+     * »ñÈ¡ÒÇ±íÅÌÊı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async getDashboardData() {
         const response = await this._request('GET', '/mcp/network/status');
         return {
             status: 'success',
-            message: 'è·å–ä»ªè¡¨ç›˜æ•°æ®æˆåŠŸ',
+            message: '»ñÈ¡ÒÇ±íÅÌÊı¾İ³É¹¦',
             data: {
                 endAgentCount: 12,
                 linkCount: 8,
-                networkStatus: 'æ­£å¸¸',
+                networkStatus: 'Õı³£',
                 commandCount: 156,
                 packetsSent: response.statistics?.packetsSent || 1245,
                 packetsReceived: response.statistics?.packetsReceived || 1189,
                 packetsFailed: response.statistics?.packetsFailed || 12,
-                networkStatusText: 'æ­£å¸¸',
+                networkStatusText: 'Õı³£',
                 totalCommands: 156,
                 successfulCommands: 148,
                 failedCommands: 5,
@@ -119,7 +119,7 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ·æ–°ç½‘ç»œçŠ¶æ€
+     * Ë¢ĞÂÍøÂç×´Ì¬
      * @returns {Promise<ApiResponse>}
      */
     async refreshNetworkStatus() {
@@ -127,17 +127,17 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ·æ–°å‘½ä»¤ç»Ÿè®¡
+     * Ë¢ĞÂÃüÁîÍ³¼Æ
      * @returns {Promise<ApiResponse>}
      */
     async refreshCommandStats() {
         return await this._request('GET', '/mcp/network/status');
     }
 
-    // ==================== System Status æ¨¡å— ====================
+    // ==================== System Status Ä£¿é ====================
 
     /**
-     * è·å–ç³»ç»ŸçŠ¶æ€
+     * »ñÈ¡ÏµÍ³×´Ì¬
      * @returns {Promise<ApiResponse>}
      */
     async getSystemStatus() {
@@ -145,7 +145,7 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ·æ–°ç³»ç»ŸçŠ¶æ€
+     * Ë¢ĞÂÏµÍ³×´Ì¬
      * @returns {Promise<ApiResponse>}
      */
     async refreshSystemStatus() {
@@ -153,8 +153,8 @@ class nexusRealSDK {
     }
 
     /**
-     * é‡å¯ç³»ç»Ÿ
-     * @param {Object} params - é‡å¯å‚æ•°
+     * ÖØÆôÏµÍ³
+     * @param {Object} params - ÖØÆô²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async restartSystem(params = {}) {
@@ -165,22 +165,22 @@ class nexusRealSDK {
     }
 
     /**
-     * å¯¼å‡ºç³»ç»ŸæŠ¥å‘Š
+     * µ¼³öÏµÍ³±¨¸æ
      * @returns {Promise<ApiResponse>}
      */
     async exportSystemReport() {
         const response = await this.getSystemStatus();
         return {
             status: 'success',
-            message: 'ç³»ç»ŸæŠ¥å‘Šå¯¼å‡ºæˆåŠŸ',
+            message: 'ÏµÍ³±¨¸æµ¼³ö³É¹¦',
             data: response.data,
             timestamp: Date.now()
         };
     }
 
     /**
-     * é‡å¯æœåŠ¡
-     * @param {string} serviceName - æœåŠ¡åç§°
+     * ÖØÆô·şÎñ
+     * @param {string} serviceName - ·şÎñÃû³Æ
      * @returns {Promise<ApiResponse>}
      */
     async restartService(serviceName) {
@@ -188,26 +188,26 @@ class nexusRealSDK {
     }
 
     /**
-     * åœæ­¢æœåŠ¡
-     * @param {string} serviceName - æœåŠ¡åç§°
+     * Í£Ö¹·şÎñ
+     * @param {string} serviceName - ·şÎñÃû³Æ
      * @returns {Promise<ApiResponse>}
      */
     async stopService(serviceName) {
         return await this._request('POST', `/api/system/services/${serviceName}/stop`);
     }
 
-    // ==================== Security Management æ¨¡å— ====================
+    // ==================== Security Management Ä£¿é ====================
 
     /**
-     * è·å–å®‰å…¨çŠ¶æ€
+     * »ñÈ¡°²È«×´Ì¬
      * @returns {Promise<ApiResponse>}
      */
     async getSecurityStatus() {
         return {
             status: 'success',
-            message: 'è·å–å®‰å…¨çŠ¶æ€æˆåŠŸ',
+            message: '»ñÈ¡°²È«×´Ì¬³É¹¦',
             data: {
-                securityStatus: 'å®‰å…¨',
+                securityStatus: '°²È«',
                 userCount: 5,
                 activeSessions: 2,
                 securityEvents: 0
@@ -217,7 +217,7 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ·æ–°å®‰å…¨çŠ¶æ€
+     * Ë¢ĞÂ°²È«×´Ì¬
      * @returns {Promise<ApiResponse>}
      */
     async refreshSecurityStatus() {
@@ -225,14 +225,14 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–ç”¨æˆ·åˆ—è¡¨
-     * @param {SearchParams} [params] - æœç´¢å‚æ•°
+     * »ñÈ¡ÓÃ»§ÁĞ±í
+     * @param {SearchParams} [params] - ËÑË÷²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async getUsers(params = {}) {
         return {
             status: 'success',
-            message: 'è·å–ç”¨æˆ·åˆ—è¡¨æˆåŠŸ',
+            message: '»ñÈ¡ÓÃ»§ÁĞ±í³É¹¦',
             data: [
                 { id: 1, username: 'admin', role: 'enterprise', status: 'active', lastLogin: Date.now() },
                 { id: 2, username: 'user1', role: 'personal', status: 'active', lastLogin: Date.now() - 3600000 }
@@ -242,8 +242,8 @@ class nexusRealSDK {
     }
 
     /**
-     * æ·»åŠ ç”¨æˆ·
-     * @param {Object} userData - ç”¨æˆ·æ•°æ®
+     * Ìí¼ÓÓÃ»§
+     * @param {Object} userData - ÓÃ»§Êı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async addUser(userData) {
@@ -251,9 +251,9 @@ class nexusRealSDK {
     }
 
     /**
-     * ç¼–è¾‘ç”¨æˆ·
-     * @param {string} userId - ç”¨æˆ· ID
-     * @param {Object} userData - ç”¨æˆ·æ•°æ®
+     * ±à¼­ÓÃ»§
+     * @param {string} userId - ÓÃ»§ ID
+     * @param {Object} userData - ÓÃ»§Êı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async editUser(userId, userData) {
@@ -261,8 +261,8 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ é™¤ç”¨æˆ·
-     * @param {string} userId - ç”¨æˆ· ID
+     * É¾³ıÓÃ»§
+     * @param {string} userId - ÓÃ»§ ID
      * @returns {Promise<ApiResponse>}
      */
     async deleteUser(userId) {
@@ -270,8 +270,8 @@ class nexusRealSDK {
     }
 
     /**
-     * å¯ç”¨ç”¨æˆ·
-     * @param {string} userId - ç”¨æˆ· ID
+     * ÆôÓÃÓÃ»§
+     * @param {string} userId - ÓÃ»§ ID
      * @returns {Promise<ApiResponse>}
      */
     async enableUser(userId) {
@@ -279,8 +279,8 @@ class nexusRealSDK {
     }
 
     /**
-     * ç¦ç”¨ç”¨æˆ·
-     * @param {string} userId - ç”¨æˆ· ID
+     * ½ûÓÃÓÃ»§
+     * @param {string} userId - ÓÃ»§ ID
      * @returns {Promise<ApiResponse>}
      */
     async disableUser(userId) {
@@ -288,25 +288,25 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–æƒé™åˆ—è¡¨
+     * »ñÈ¡È¨ÏŞÁĞ±í
      * @returns {Promise<ApiResponse>}
      */
     async getPermissions() {
         return {
             status: 'success',
-            message: 'è·å–æƒé™åˆ—è¡¨æˆåŠŸ',
+            message: '»ñÈ¡È¨ÏŞÁĞ±í³É¹¦',
             data: {
-                personal: ['æŸ¥çœ‹ä»ªè¡¨ç›˜', 'ç®¡ç†ç»ˆç«¯', 'æŸ¥çœ‹ç½‘ç»œçŠ¶æ€'],
-                home: ['æŸ¥çœ‹ä»ªè¡¨ç›˜', 'ç®¡ç†ç»ˆç«¯', 'æŸ¥çœ‹ç½‘ç»œçŠ¶æ€', 'ç®¡ç†ç½‘ç»œè®¾ç½®'],
-                enterprise: ['æŸ¥çœ‹ä»ªè¡¨ç›˜', 'ç®¡ç†ç»ˆç«¯', 'æŸ¥çœ‹ç½‘ç»œçŠ¶æ€', 'ç®¡ç†ç½‘ç»œè®¾ç½®', 'ç®¡ç†ç”¨æˆ·', 'ä¿®æ”¹ç³»ç»Ÿé…ç½®', 'æŸ¥çœ‹ç³»ç»Ÿæ—¥å¿—']
+                personal: ['²é¿´ÒÇ±íÅÌ', '¹ÜÀíÖÕ¶Ë', '²é¿´ÍøÂç×´Ì¬'],
+                home: ['²é¿´ÒÇ±íÅÌ', '¹ÜÀíÖÕ¶Ë', '²é¿´ÍøÂç×´Ì¬', '¹ÜÀíÍøÂçÉèÖÃ'],
+                enterprise: ['²é¿´ÒÇ±íÅÌ', '¹ÜÀíÖÕ¶Ë', '²é¿´ÍøÂç×´Ì¬', '¹ÜÀíÍøÂçÉèÖÃ', '¹ÜÀíÓÃ»§', 'ĞŞ¸ÄÏµÍ³ÅäÖÃ', '²é¿´ÏµÍ³ÈÕÖ¾']
             },
             timestamp: Date.now()
         };
     }
 
     /**
-     * ä¿å­˜æƒé™è®¾ç½®
-     * @param {Object} permissions - æƒé™è®¾ç½®
+     * ±£´æÈ¨ÏŞÉèÖÃ
+     * @param {Object} permissions - È¨ÏŞÉèÖÃ
      * @returns {Promise<ApiResponse>}
      */
     async savePermissions(permissions) {
@@ -314,7 +314,7 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–å®‰å…¨è®¾ç½®
+     * »ñÈ¡°²È«ÉèÖÃ
      * @returns {Promise<ApiResponse>}
      */
     async getSecuritySettings() {
@@ -322,8 +322,8 @@ class nexusRealSDK {
     }
 
     /**
-     * ä¿å­˜å®‰å…¨è®¾ç½®
-     * @param {Object} settings - å®‰å…¨è®¾ç½®
+     * ±£´æ°²È«ÉèÖÃ
+     * @param {Object} settings - °²È«ÉèÖÃ
      * @returns {Promise<ApiResponse>}
      */
     async saveSecuritySettings(settings) {
@@ -331,18 +331,18 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–å®‰å…¨æ—¥å¿—
-     * @param {SearchParams} [params] - æœç´¢å‚æ•°
+     * »ñÈ¡°²È«ÈÕÖ¾
+     * @param {SearchParams} [params] - ËÑË÷²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async getSecurityLogs(params = {}) {
         return await this._request('GET', `/mcp/log/list?limit=${params.limit || 50}`);
     }
 
-    // ==================== Health Check æ¨¡å— ====================
+    // ==================== Health Check Ä£¿é ====================
 
     /**
-     * è·å–å¥åº·æ£€æŸ¥æ•°æ®
+     * »ñÈ¡½¡¿µ¼ì²éÊı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async getHealthData() {
@@ -350,8 +350,8 @@ class nexusRealSDK {
     }
 
     /**
-     * è¿è¡Œå¥åº·æ£€æŸ¥
-     * @param {Object} params - æ£€æŸ¥å‚æ•°
+     * ÔËĞĞ½¡¿µ¼ì²é
+     * @param {Object} params - ¼ì²é²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async runHealthCheck(params = {}) {
@@ -359,47 +359,47 @@ class nexusRealSDK {
     }
 
     /**
-     * å¯¼å‡ºå¥åº·æŠ¥å‘Š
+     * µ¼³ö½¡¿µ±¨¸æ
      * @returns {Promise<ApiResponse>}
      */
     async exportHealthReport() {
         const response = await this.getHealthData();
         return {
             status: 'success',
-            message: 'å¥åº·æŠ¥å‘Šå¯¼å‡ºæˆåŠŸ',
+            message: '½¡¿µ±¨¸æµ¼³ö³É¹¦',
             data: response.data,
             timestamp: Date.now()
         };
     }
 
     /**
-     * è®¾ç½®å®šæ—¶å¥åº·æ£€æŸ¥
-     * @param {Object} params - å®šæ—¶å‚æ•°
+     * ÉèÖÃ¶¨Ê±½¡¿µ¼ì²é
+     * @param {Object} params - ¶¨Ê±²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async scheduleHealthCheck(params = {}) {
         return {
             status: 'success',
-            message: 'å®šæ—¶æ£€æŸ¥è®¾ç½®æˆåŠŸ',
+            message: '¶¨Ê±¼ì²éÉèÖÃ³É¹¦',
             data: params,
             timestamp: Date.now()
         };
     }
 
     /**
-     * æ£€æŸ¥æœåŠ¡çŠ¶æ€
-     * @param {string} serviceName - æœåŠ¡åç§°
+     * ¼ì²é·şÎñ×´Ì¬
+     * @param {string} serviceName - ·şÎñÃû³Æ
      * @returns {Promise<ApiResponse>}
      */
     async checkService(serviceName) {
         return await this._request('GET', `/api/system/services/${serviceName}`);
     }
 
-    // ==================== End Agent Management æ¨¡å— ====================
+    // ==================== End Agent Management Ä£¿é ====================
 
     /**
-     * è·å–ç»ˆç«¯åˆ—è¡¨
-     * @param {SearchParams} [params] - æœç´¢å‚æ•°
+     * »ñÈ¡ÖÕ¶ËÁĞ±í
+     * @param {SearchParams} [params] - ËÑË÷²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async getEndAgents(params = {}) {
@@ -407,8 +407,8 @@ class nexusRealSDK {
     }
 
     /**
-     * æ·»åŠ ç»ˆç«¯
-     * @param {Object} agentData - ç»ˆç«¯æ•°æ®
+     * Ìí¼ÓÖÕ¶Ë
+     * @param {Object} agentData - ÖÕ¶ËÊı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async addEndAgent(agentData) {
@@ -416,9 +416,9 @@ class nexusRealSDK {
     }
 
     /**
-     * ç¼–è¾‘ç»ˆç«¯
-     * @param {string} agentId - ç»ˆç«¯ ID
-     * @param {Object} agentData - ç»ˆç«¯æ•°æ®
+     * ±à¼­ÖÕ¶Ë
+     * @param {string} agentId - ÖÕ¶Ë ID
+     * @param {Object} agentData - ÖÕ¶ËÊı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async editEndAgent(agentId, agentData) {
@@ -426,8 +426,8 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ é™¤ç»ˆç«¯
-     * @param {string} agentId - ç»ˆç«¯ ID
+     * É¾³ıÖÕ¶Ë
+     * @param {string} agentId - ÖÕ¶Ë ID
      * @returns {Promise<ApiResponse>}
      */
     async deleteEndAgent(agentId) {
@@ -435,8 +435,8 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–ç»ˆç«¯è¯¦æƒ…
-     * @param {string} agentId - ç»ˆç«¯ ID
+     * »ñÈ¡ÖÕ¶ËÏêÇé
+     * @param {string} agentId - ÖÕ¶Ë ID
      * @returns {Promise<ApiResponse>}
      */
     async getEndAgentDetails(agentId) {
@@ -444,7 +444,7 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ·æ–°ç»ˆç«¯åˆ—è¡¨
+     * Ë¢ĞÂÖÕ¶ËÁĞ±í
      * @returns {Promise<ApiResponse>}
      */
     async refreshEndAgents() {
@@ -452,44 +452,44 @@ class nexusRealSDK {
     }
 
     /**
-     * æœç´¢ç»ˆç«¯
-     * @param {SearchParams} params - æœç´¢å‚æ•°
+     * ËÑË÷ÖÕ¶Ë
+     * @param {SearchParams} params - ËÑË÷²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async searchEndAgents(params = {}) {
         return await this._request('GET', `/mcp/endagent/list?keyword=${params.keyword || ''}`);
     }
 
-    // ==================== Protocol Management æ¨¡å— ====================
+    // ==================== Protocol Management Ä£¿é ====================
 
     /**
-     * è·å–åè®®å¤„ç†å™¨åˆ—è¡¨
-     * @param {SearchParams} [params] - æœç´¢å‚æ•°
+     * »ñÈ¡Ğ­Òé´¦ÀíÆ÷ÁĞ±í
+     * @param {SearchParams} [params] - ËÑË÷²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async getProtocolHandlers(params = {}) {
         return {
             status: 'success',
-            message: 'è·å–åè®®å¤„ç†å™¨åˆ—è¡¨æˆåŠŸ',
+            message: '»ñÈ¡Ğ­Òé´¦ÀíÆ÷ÁĞ±í³É¹¦',
             data: [
                 {
                     commandType: "MCP_REGISTER",
-                    name: "æ³¨å†Œå‘½ä»¤å¤„ç†å™¨",
-                    description: "å¤„ç†Nexusæ³¨å†Œå‘½ä»¤",
+                    name: "×¢²áÃüÁî´¦ÀíÆ÷",
+                    description: "´¦ÀíNexus×¢²áÃüÁî",
                     registeredTime: new Date().toISOString(),
                     status: "active"
                 },
                 {
                     commandType: "MCP_DEREGISTER",
-                    name: "æ³¨é”€å‘½ä»¤å¤„ç†å™¨",
-                    description: "å¤„ç†Nexusæ³¨é”€å‘½ä»¤",
+                    name: "×¢ÏúÃüÁî´¦ÀíÆ÷",
+                    description: "´¦ÀíNexus×¢ÏúÃüÁî",
                     registeredTime: new Date().toISOString(),
                     status: "active"
                 },
                 {
                     commandType: "MCP_HEARTBEAT",
-                    name: "å¿ƒè·³å‘½ä»¤å¤„ç†å™¨",
-                    description: "å¤„ç†Nexuså¿ƒè·³å‘½ä»¤",
+                    name: "ĞÄÌøÃüÁî´¦ÀíÆ÷",
+                    description: "´¦ÀíNexusĞÄÌøÃüÁî",
                     registeredTime: new Date().toISOString(),
                     status: "active"
                 }
@@ -499,8 +499,8 @@ class nexusRealSDK {
     }
 
     /**
-     * æ³¨å†Œåè®®å¤„ç†å™¨
-     * @param {Object} handlerData - å¤„ç†å™¨æ•°æ®
+     * ×¢²áĞ­Òé´¦ÀíÆ÷
+     * @param {Object} handlerData - ´¦ÀíÆ÷Êı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async registerProtocolHandler(handlerData) {
@@ -511,8 +511,8 @@ class nexusRealSDK {
     }
 
     /**
-     * ç§»é™¤åè®®å¤„ç†å™¨
-     * @param {string} commandType - å‘½ä»¤ç±»å‹
+     * ÒÆ³ıĞ­Òé´¦ÀíÆ÷
+     * @param {string} commandType - ÃüÁîÀàĞÍ
      * @returns {Promise<ApiResponse>}
      */
     async removeProtocolHandler(commandType) {
@@ -523,8 +523,8 @@ class nexusRealSDK {
     }
 
     /**
-     * å¤„ç†åè®®å‘½ä»¤
-     * @param {Object} commandData - å‘½ä»¤æ•°æ®
+     * ´¦ÀíĞ­ÒéÃüÁî
+     * @param {Object} commandData - ÃüÁîÊı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async handleProtocolCommand(commandData) {
@@ -532,7 +532,7 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ·æ–°åè®®å¤„ç†å™¨åˆ—è¡¨
+     * Ë¢ĞÂĞ­Òé´¦ÀíÆ÷ÁĞ±í
      * @returns {Promise<ApiResponse>}
      */
     async refreshProtocolHandlers() {
@@ -540,19 +540,19 @@ class nexusRealSDK {
     }
 
     /**
-     * æœç´¢åè®®å¤„ç†å™¨
-     * @param {SearchParams} params - æœç´¢å‚æ•°
+     * ËÑË÷Ğ­Òé´¦ÀíÆ÷
+     * @param {SearchParams} params - ËÑË÷²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async searchProtocolHandlers(params = {}) {
         return await this.getProtocolHandlers();
     }
 
-    // ==================== Log Management æ¨¡å— ====================
+    // ==================== Log Management Ä£¿é ====================
 
     /**
-     * è·å–æ—¥å¿—åˆ—è¡¨
-     * @param {SearchParams} [params] - æœç´¢å‚æ•°
+     * »ñÈ¡ÈÕÖ¾ÁĞ±í
+     * @param {SearchParams} [params] - ËÑË÷²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async getLogs(params = {}) {
@@ -560,7 +560,7 @@ class nexusRealSDK {
     }
 
     /**
-     * åˆ·æ–°æ—¥å¿—
+     * Ë¢ĞÂÈÕÖ¾
      * @returns {Promise<ApiResponse>}
      */
     async refreshLogs() {
@@ -568,22 +568,22 @@ class nexusRealSDK {
     }
 
     /**
-     * å¯¼å‡ºæ—¥å¿—
-     * @param {Object} params - å¯¼å‡ºå‚æ•°
+     * µ¼³öÈÕÖ¾
+     * @param {Object} params - µ¼³ö²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async exportLogs(params = {}) {
         const response = await this.getLogs(params);
         return {
             status: 'success',
-            message: 'æ—¥å¿—å¯¼å‡ºæˆåŠŸ',
+            message: 'ÈÕÖ¾µ¼³ö³É¹¦',
             data: response.data,
             timestamp: Date.now()
         };
     }
 
     /**
-     * æ¸…ç©ºæ—¥å¿—
+     * Çå¿ÕÈÕÖ¾
      * @returns {Promise<ApiResponse>}
      */
     async clearLogs() {
@@ -591,8 +591,8 @@ class nexusRealSDK {
     }
 
     /**
-     * è¿‡æ»¤æ—¥å¿—
-     * @param {Object} filters - è¿‡æ»¤æ¡ä»¶
+     * ¹ıÂËÈÕÖ¾
+     * @param {Object} filters - ¹ıÂËÌõ¼ş
      * @returns {Promise<ApiResponse>}
      */
     async filterLogs(filters = {}) {
@@ -604,24 +604,24 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–æ—¥å¿—è¯¦æƒ…
-     * @param {string} logId - æ—¥å¿— ID
+     * »ñÈ¡ÈÕÖ¾ÏêÇé
+     * @param {string} logId - ÈÕÖ¾ ID
      * @returns {Promise<ApiResponse>}
      */
     async getLogDetails(logId) {
         return await this._request('GET', `/mcp/log/${logId}`);
     }
 
-    // ==================== Config Management æ¨¡å— ====================
+    // ==================== Config Management Ä£¿é ====================
 
     /**
-     * è·å–é…ç½®åˆ—è¡¨
+     * »ñÈ¡ÅäÖÃÁĞ±í
      * @returns {Promise<ApiResponse>}
      */
     async getConfigs() {
         return {
             status: 'success',
-            message: 'è·å–é…ç½®åˆ—è¡¨æˆåŠŸ',
+            message: '»ñÈ¡ÅäÖÃÁĞ±í³É¹¦',
             data: {
                 system: await this.getSystemConfig(),
                 network: await this.getNetworkConfig(),
@@ -633,7 +633,7 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–ç³»ç»Ÿé…ç½®
+     * »ñÈ¡ÏµÍ³ÅäÖÃ
      * @returns {Promise<ApiResponse>}
      */
     async getSystemConfig() {
@@ -641,7 +641,7 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–ç½‘ç»œé…ç½®
+     * »ñÈ¡ÍøÂçÅäÖÃ
      * @returns {Promise<ApiResponse>}
      */
     async getNetworkConfig() {
@@ -649,13 +649,13 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–ç»ˆç«¯é…ç½®
+     * »ñÈ¡ÖÕ¶ËÅäÖÃ
      * @returns {Promise<ApiResponse>}
      */
     async getTerminalConfig() {
         return {
             status: 'success',
-            message: 'è·å–ç»ˆç«¯é…ç½®æˆåŠŸ',
+            message: '»ñÈ¡ÖÕ¶ËÅäÖÃ³É¹¦',
             data: {
                 maxTerminals: 100,
                 terminalTimeout: 300,
@@ -667,13 +667,13 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–æœåŠ¡é…ç½®
+     * »ñÈ¡·şÎñÅäÖÃ
      * @returns {Promise<ApiResponse>}
      */
     async getServiceConfig() {
         return {
             status: 'success',
-            message: 'è·å–æœåŠ¡é…ç½®æˆåŠŸ',
+            message: '»ñÈ¡·şÎñÅäÖÃ³É¹¦',
             data: {
                 apiPort: 8081,
                 webConsolePort: 8082,
@@ -685,8 +685,8 @@ class nexusRealSDK {
     }
 
     /**
-     * ä¿å­˜é…ç½®
-     * @param {Object} configData - é…ç½®æ•°æ®
+     * ±£´æÅäÖÃ
+     * @param {Object} configData - ÅäÖÃÊı¾İ
      * @returns {Promise<ApiResponse>}
      */
     async saveConfig(configData) {
@@ -694,23 +694,23 @@ class nexusRealSDK {
     }
 
     /**
-     * å¯¼å‡ºé…ç½®
-     * @param {Object} params - å¯¼å‡ºå‚æ•°
+     * µ¼³öÅäÖÃ
+     * @param {Object} params - µ¼³ö²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async exportConfig(params = {}) {
         const response = await this.getConfigs();
         return {
             status: 'success',
-            message: 'é…ç½®å¯¼å‡ºæˆåŠŸ',
+            message: 'ÅäÖÃµ¼³ö³É¹¦',
             data: response.data,
             timestamp: Date.now()
         };
     }
 
     /**
-     * å¯¼å…¥é…ç½®
-     * @param {Object} params - å¯¼å…¥å‚æ•°
+     * µ¼ÈëÅäÖÃ
+     * @param {Object} params - µ¼Èë²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async importConfig(params = {}) {
@@ -718,7 +718,7 @@ class nexusRealSDK {
     }
 
     /**
-     * é‡ç½®é…ç½®
+     * ÖØÖÃÅäÖÃ
      * @returns {Promise<ApiResponse>}
      */
     async resetConfig() {
@@ -726,21 +726,21 @@ class nexusRealSDK {
     }
 
     /**
-     * è·å–é…ç½®å†å²
-     * @param {PaginationParams} [params] - åˆ†é¡µå‚æ•°
+     * »ñÈ¡ÅäÖÃÀúÊ·
+     * @param {PaginationParams} [params] - ·ÖÒ³²ÎÊı
      * @returns {Promise<ApiResponse>}
      */
     async getConfigHistory(params = {}) {
         return {
             status: 'success',
-            message: 'è·å–é…ç½®å†å²æˆåŠŸ',
+            message: '»ñÈ¡ÅäÖÃÀúÊ·³É¹¦',
             data: [
                 {
                     id: 1,
                     timestamp: new Date(Date.now() - 3600000).toISOString(),
                     user: "admin",
-                    action: "ä¿®æ”¹",
-                    details: "æ›´æ–°ç½‘ç»œé…ç½®ï¼šUDPç«¯å£ä»8080æ”¹ä¸º8081"
+                    action: "ĞŞ¸Ä",
+                    details: "¸üĞÂÍøÂçÅäÖÃ£ºUDP¶Ë¿Ú´Ó8080¸ÄÎª8081"
                 }
             ],
             timestamp: Date.now()
@@ -748,25 +748,25 @@ class nexusRealSDK {
     }
 
     /**
-     * åº”ç”¨é…ç½®å†å²
-     * @param {string} historyId - å†å² ID
+     * Ó¦ÓÃÅäÖÃÀúÊ·
+     * @param {string} historyId - ÀúÊ· ID
      * @returns {Promise<ApiResponse>}
      */
     async applyConfigHistory(historyId) {
         return {
             status: 'success',
-            message: 'é…ç½®å†å²åº”ç”¨æˆåŠŸ',
+            message: 'ÅäÖÃÀúÊ·Ó¦ÓÃ³É¹¦',
             data: { historyId },
             timestamp: Date.now()
         };
     }
 
-    // ==================== é€šç”¨æ–¹æ³• ====================
+    // ==================== Í¨ÓÃ·½·¨ ====================
 
     /**
-     * æ ¼å¼åŒ–æ—¶é—´æˆ³
-     * @param {number} timestamp - æ—¶é—´æˆ³
-     * @returns {string} æ ¼å¼åŒ–åçš„æ—¶é—´å­—ç¬¦ä¸²
+     * ¸ñÊ½»¯Ê±¼ä´Á
+     * @param {number} timestamp - Ê±¼ä´Á
+     * @returns {string} ¸ñÊ½»¯ºóµÄÊ±¼ä×Ö·û´®
      */
     formatTimestamp(timestamp) {
         const date = new Date(timestamp);
@@ -780,24 +780,24 @@ class nexusRealSDK {
     }
 
     /**
-     * æ ¼å¼åŒ–æ•°å­—
-     * @param {number} number - æ•°å­—
-     * @returns {string} æ ¼å¼åŒ–åçš„æ•°å­—å­—ç¬¦ä¸²
+     * ¸ñÊ½»¯Êı×Ö
+     * @param {number} number - Êı×Ö
+     * @returns {string} ¸ñÊ½»¯ºóµÄÊı×Ö×Ö·û´®
      */
     formatNumber(number) {
         return new Intl.NumberFormat('zh-CN').format(number);
     }
 
     /**
-     * éªŒè¯ API å“åº”
-     * @param {ApiResponse} response - API å“åº”
-     * @returns {ApiResponse} éªŒè¯åçš„å“åº”
+     * ÑéÖ¤ API ÏìÓ¦
+     * @param {ApiResponse} response - API ÏìÓ¦
+     * @returns {ApiResponse} ÑéÖ¤ºóµÄÏìÓ¦
      */
     validateApiResponse(response) {
         if (!response) {
             return {
                 status: 'error',
-                message: 'å“åº”ä¸ºç©º',
+                message: 'ÏìÓ¦Îª¿Õ',
                 code: 'EMPTY_RESPONSE',
                 timestamp: Date.now()
             };
@@ -810,7 +810,7 @@ class nexusRealSDK {
         if (!response.data && response.status !== 'success') {
             return {
                 status: 'error',
-                message: response.message || 'å“åº”æ ¼å¼é”™è¯¯',
+                message: response.message || 'ÏìÓ¦¸ñÊ½´íÎó',
                 code: 'INVALID_RESPONSE',
                 timestamp: Date.now()
             };
@@ -821,7 +821,7 @@ class nexusRealSDK {
 }
 
 /**
- * å¯¼å‡º Real SDK
+ * µ¼³ö Real SDK
  */
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = nexusRealSDK;
