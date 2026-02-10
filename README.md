@@ -1212,8 +1212,17 @@ tar -czpf backup.tar.gz ./storage/ ./config/
 ### 12.1 获取帮助
 
 - 📖 **文档**：https://github.com/oodercn/ooder-Nexus/wiki
+- 📋 **更新日志**：[CHANGELOG.md](CHANGELOG.md)
+- 🚀 **CI/CD状态**：![CI/CD](https://github.com/oodercn/ooder-Nexus/workflows/CI/CD%20Pipeline/badge.svg)
 - 🐛 **Issue**：https://github.com/oodercn/ooder-Nexus/issues
 - 💬 **讨论**：https://github.com/oodercn/ooder-Nexus/discussions
+
+### 12.2 开发文档
+
+- 🛠️ **开发指南**：`docs/development/DEVELOPMENT_GUIDE.md`（开发中）
+- 📦 **SDK文档**：`docs/sdk/SKILL_SDK.md`（开发中）
+- 🔧 **调试工具**：`docs/tools/DEBUGGING_TOOLS.md`（开发中）
+- 📈 **优化路线图**：`docs/optimization/ROADMAP.md`
 
 ### 12.2 贡献代码
 
