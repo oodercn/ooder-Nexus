@@ -1,33 +1,25 @@
 @echo off
 chcp 65001 >nul
 echo ==========================================
-echo    Ooder Nexus 2.0 - OpenWrt 预览版
-echo    版本: 2.0.0-OpenWrt-Preview
+echo   ooderNexus 2.0.0-openwrt-preview
+echo   Windows 启动脚本
 echo ==========================================
 echo.
-echo 正在启动 Ooder Nexus...
-echo.
 
-REM 检查Java环境
+:: 检查 Java 环境
 java -version >nul 2>&1
 if errorlevel 1 (
-    echo [错误] 未检测到Java环境，请先安装Java 8或更高版本
+    echo [错误] 未检测到 Java 环境，请先安装 Java 8 或更高版本
     pause
     exit /b 1
 )
 
-echo [信息] Java环境检测通过
-echo [信息] 启动模式: OpenWrt 真实设备模式 (Mock已关闭)
-echo [信息] 服务端口: 8081
-echo.
-echo 启动后请访问: http://localhost:8081/console/index.html
-echo.
-echo 提示: 请确保您的OpenWrt设备已开启SSH访问权限
-echo.
-echo ==========================================
+echo [信息] Java 环境检测通过
+echo [信息] 正在启动 ooderNexus 服务...
+echo [信息] 访问地址: http://localhost:8081/console/index.html
 echo.
 
-REM 启动服务
-java -jar ooder-nexus-2.0.0-preview.jar
+:: 启动服务
+java -jar ooder-nexus-2.0.0-openwrt-preview.jar
 
 pause
