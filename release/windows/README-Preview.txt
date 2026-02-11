@@ -4,7 +4,7 @@
 
 版本信息
 --------
-版本号: 2.0.0-OpenWrt-Preview
+版本号: 2.0-OpenWrt-Preview
 发布日期: 2026-02-11
 状态: OpenWrt 预览版 (OpenWrt Preview Release)
 

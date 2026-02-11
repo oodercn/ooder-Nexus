@@ -18,7 +18,7 @@
 
 ---
 
-## [2.0.0-openwrt-preview] - 2026-02-11
+## [2.0-openwrt-preview]（当前版本）- 2026-02-11
 
 ### 🎉 新增功能
 
@@ -73,10 +73,10 @@
 
 | 文件 | 大小 | 说明 |
 |------|------|------|
-| `ooder-nexus-2.0.0-openwrt-preview-windows.zip` | 40.7 MB | Windows安装包 |
-| `ooder-nexus-2.0.0-preview.jar` | 44.7 MB | 可执行JAR包 |
-| `README-Preview.txt` | 3.4 KB | 详细说明文档 |
-| `start.bat` | 827 B | Windows启动脚本 |
+| `ooder-nexus-2.0-openwrt-preview-windows.zip` | ~40 MB | Windows 安装包（推荐） |
+| `ooder-nexus-2.0-preview.jar` | ~45 MB | 可执行 JAR 包 |
+| `README-Preview.txt` | ~3 KB | 详细说明文档 |
+| `start.bat` | ~1 KB | Windows 启动脚本 |
 
 ### 🔗 下载地址
 
@@ -85,7 +85,7 @@
 
 ---
 
-## [2.0.0] - 2025-02-10
+## [2.0] - 2025-02-10
 
 ### 🎉 新增功能
 

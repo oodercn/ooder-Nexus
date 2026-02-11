@@ -12,7 +12,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # 配置
-VERSION="2.0.0"
+VERSION="2.0"
 INSTALL_DIR="/opt/ooder-nexus"
 DATA_DIR="$INSTALL_DIR/data"
 LOGS_DIR="$INSTALL_DIR/logs"

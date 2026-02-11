@@ -15,7 +15,7 @@ ooderNexus 是一个基于 Ooder Agent 架构的 **P2P AI 能力分发枢纽**�
 
 ### 1.2 版本信息
 
-**当前版本：2.0.0-openwrt-preview**（OpenWrt 预览版）
+**当前版本：2.0-openwrt-preview**（OpenWrt 预览版）
 
 > ⚠️ **预览版声明**：此版本为 OpenWrt 路由器管理功能的预览版，主要用于测试和评估。
 
@@ -48,11 +48,11 @@ ooderNexus 是一个基于 Ooder Agent 架构的 **P2P AI 能力分发枢纽**�
 
 ### 2.1 功能概览
 
-ooderNexus 2.0.0-openwrt-preview 包含以下核心功能模块：
+ooderNexus 2.0-openwrt-preview 包含以下核心功能模块：
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│              ooderNexus 2.0.0-openwrt-preview               │
+│              ooderNexus 2.0-openwrt-preview               │
 ├─────────────┬─────────────┬─────────────┬───────────────────┤
 │  P2P 网络   │  AI 技能    │  OpenWrt   │   协议仿真        │
 │   管理      │   中心      │   集成     │   调试           │
@@ -193,11 +193,11 @@ ooderNexus 基于 Ooder Agent SDK 构建，两者的关系如下：
 
 ```bash
 # 1. 下载安装包
-wget https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/ooder-nexus-2.0.0-openwrt-preview.tar.gz
+wget https://github.com/oodercn/ooder-Nexus/releases/download/v2.0-openwrt-preview/ooder-nexus-2.0-openwrt-preview.tar.gz
 
 # 2. 解压
-tar -xzf ooder-nexus-2.0.0-openwrt-preview.tar.gz
-cd ooder-nexus-2.0.0-openwrt-preview
+tar -xzf ooder-nexus-2.0-openwrt-preview.tar.gz
+cd ooder-nexus-2.0-openwrt-preview
 
 # 3. 启动
 ./bin/start.sh
@@ -211,7 +211,7 @@ cd ooder-nexus-2.0.0-openwrt-preview
 
 ```bash
 # 1. 下载 Windows OpenWrt 预览版
-https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/ooder-nexus-2.0.0-openwrt-preview-windows.zip
+https://github.com/oodercn/ooder-Nexus/releases/download/v2.0-openwrt-preview/ooder-nexus-2.0-openwrt-preview-windows.zip
 
 # 2. 解压到任意目录
 
@@ -227,8 +227,8 @@ https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/
 适用于 OpenWrt 路由器：
 
 ```bash
-# 在路由器上执行
-wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/install-openwrt.sh
+# 一键安装（推荐）
+wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0-openwrt-preview/install-openwrt.sh
 chmod +x /tmp/install.sh
 /tmp/install.sh
 ```
@@ -243,7 +243,7 @@ docker run -d \
   -p 8091:8091 \
   -p 9876:9876 \
   -v ./data:/app/data \
-  oodercn/ooder-nexus:2.0.0
+  oodercn/ooder-nexus:2.0
 ```
 
 ### 4.3 首次使用
@@ -1162,7 +1162,7 @@ tar -czpf backup.tar.gz ./storage/ ./config/
 
 ## 11. 版本历史
 
-### v2.0.0-openwrt-preview（当前版本）- 2026-02-11
+### v2.0-openwrt-preview（当前版本）- 2026-02-11
 
 > ⚠️ **预览版说明**：此版本专注于 OpenWrt 路由器管理功能，为预览测试版本。
 
@@ -1208,7 +1208,7 @@ tar -czpf backup.tar.gz ./storage/ ./config/
 | `README-Preview.txt` | ~3 KB | 详细说明文档 |
 | `start.bat` | ~1 KB | Windows 启动脚本 |
 
-### v2.0.0 - 2025-02-10（计划中）
+### v2.0 - 2025-02-10（计划中）
 - 🎯 OpenWrt 集成正式版
 - 🎯 完整的 P2P AI 能力分发
 - 🎯 企业级稳定性和安全性

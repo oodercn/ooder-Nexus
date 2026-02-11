@@ -1,4 +1,4 @@
-ooderNexus 2.0.0-openwrt-preview
+ooderNexus 2.0-openwrt-preview
 Windows 版本
 
 ============================================
@@ -22,7 +22,7 @@ Windows 版本
 ============================================
 文件说明
 ============================================
-- ooder-nexus-2.0.0-openwrt-preview.jar  主程序
+- ooder-nexus-2.0-openwrt-preview.jar  主程序
 - start.bat                              Windows启动脚本
 - README.md                              项目说明文档
 - CHANGELOG.md                           更新日志
