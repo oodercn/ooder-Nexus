@@ -3,265 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黑名单管理 - OpenWrt - Nexus</title>
+    <title>黑名单管理 - OpenWrt - Nexus Console</title>
+    
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
-    <script src="/console/js/common.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
 </head>
 <body>
-    <div class="container">
-        <!-- 侧边导航栏 -->
-        <div class="sidebar">
-            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+    <div class="nx-page">
+        <aside class="nx-page__sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
-        </div>
+        </aside>
         
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <!-- 头部 -->
-            <div class="header">
-                <h1><i class="ri-shield-cross-line"></i> 黑名单管理</h1>
-                <div class="header-actions">
-                    <button class="btn btn-secondary" onclick="history.back()">
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">黑名单管理</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
+                    <button class="nx-btn nx-btn--secondary" onclick="history.back()">
                         <i class="ri-arrow-left-line"></i> 返回
                     </button>
-                    <button class="btn btn-primary" onclick="showAddBlacklistModal()">
-                        <i class="ri-add-line"></i> 添加黑名单
+                    <button class="nx-btn nx-btn--primary" onclick="showAddModal()">
+                        <i class="ri-add-line"></i> 添加
                     </button>
                 </div>
-            </div>
+            </header>
             
-            <!-- 统计卡片 -->
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
-                <div class="card status-card">
-                    <div class="status-icon" style="background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);">
-                        <i class="ri-shield-cross-line"></i>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="nx-grid nx-grid-cols-3 nx-mb-6">
+                        <div class="nx-stat-card">
+                            <div class="nx-stat-card__icon nx-stat-card__icon--danger">
+                                <i class="ri-forbid-line"></i>
+                            </div>
+                            <div class="nx-stat-card__content">
+                                <div class="nx-stat-card__label">黑名单条目</div>
+                                <div class="nx-stat-card__value" id="blacklistCount">0</div>
+                            </div>
+                        </div>
+                        <div class="nx-stat-card">
+                            <div class="nx-stat-card__icon nx-stat-card__icon--warning">
+                                <i class="ri-shield-user-line"></i>
+                            </div>
+                            <div class="nx-stat-card__content">
+                                <div class="nx-stat-card__label">MAC黑名单</div>
+                                <div class="nx-stat-card__value" id="macCount">0</div>
+                            </div>
+                        </div>
+                        <div class="nx-stat-card">
+                            <div class="nx-stat-card__icon nx-stat-card__icon--primary">
+                                <i class="ri-global-line"></i>
+                            </div>
+                            <div class="nx-stat-card__content">
+                                <div class="nx-stat-card__label">域名黑名单</div>
+                                <div class="nx-stat-card__value" id="domainCount">0</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="status-value" id="blacklistCount">0</div>
-                    <div class="status-label">黑名单数量</div>
-                </div>
-                <div class="card status-card">
-                    <div class="status-icon" style="background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);">
-                        <i class="ri-shield-check-line"></i>
+                    
+                    <div class="nx-card nx-mb-6">
+                        <div class="nx-card__header">
+                            <h3 class="nx-card__title">MAC地址黑名单</h3>
+                        </div>
+                        <div class="nx-card__body">
+                            <table class="nx-table">
+                                <thead>
+                                    <tr>
+                                        <th>MAC地址</th>
+                                        <th>备注</th>
+                                        <th>添加时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="macBlacklistTable">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="status-value" id="enabledCount">0</div>
-                    <div class="status-label">已启用</div>
+                    
+                    <div class="nx-card">
+                        <div class="nx-card__header">
+                            <h3 class="nx-card__title">域名黑名单</h3>
+                        </div>
+                        <div class="nx-card__body">
+                            <table class="nx-table">
+                                <thead>
+                                    <tr>
+                                        <th>域名</th>
+                                        <th>备注</th>
+                                        <th>添加时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="domainBlacklistTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <!-- 黑名单列表 -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="ri-list-check"></i> 黑名单列表</h2>
-                    <button class="btn btn-secondary" onclick="loadBlacklist()">
-                        <i class="ri-refresh-line"></i> 刷新
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table" id="blacklistTable">
-                            <thead>
-                                <tr>
-                                    <th>IP 地址</th>
-                                    <th>名称</th>
-                                    <th>来源</th>
-                                    <th>状态</th>
-                                    <th>创建时间</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="blacklistTableBody">
-                                <!-- 动态生成 -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <!-- 添加黑名单模态框 -->
-    <div id="addBlacklistModal" class="modal" style="display: none;">
-        <div class="modal-content" style="max-width: 400px;">
+    <div id="addModal" class="modal" style="display: none;">
+        <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">添加黑名单</h3>
-                <button class="modal-close" onclick="hideAddBlacklistModal()">&times;</button>
+                <h3>添加黑名单</h3>
+                <button class="modal-close" onclick="closeAddModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">IP 地址</label>
-                    <input type="text" id="blacklistIp" class="form-input" placeholder="192.168.1.200">
+                    <label>类型</label>
+                    <select id="bl-type" class="form-control">
+                        <option value="mac">MAC地址</option>
+                        <option value="domain">域名</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">名称</label>
-                    <input type="text" id="blacklistName" class="form-input" placeholder="例如：可疑设备">
+                    <label id="bl-value-label">MAC地址</label>
+                    <input type="text" id="bl-value" class="form-control" placeholder="输入值">
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <input type="text" id="bl-note" class="form-control" placeholder="输入备注（可选）">
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="hideAddBlacklistModal()">取消</button>
-                <button class="btn btn-primary" onclick="addBlacklist()">添加</button>
+                <button class="nx-btn nx-btn--secondary" onclick="closeAddModal()">取消</button>
+                <button class="nx-btn nx-btn--primary" onclick="addBlacklistItem()">确定</button>
             </div>
         </div>
     </div>
-
-    <script src="/console/common/api-client.js"></script>
-    <script src="/console/common/button-manager.js"></script>
-    <script src="/console/common/utils.js"></script>
+    
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
     <script>
-        // API 客户端实例
-        const openwrtApi = new ApiClient('/api/openwrt');
-
-        // 页面初始化
+        let macBlacklist = [];
+        let domainBlacklist = [];
+        
         window.onPageInit = function() {
-            loadBlacklist();
+            console.log('黑名单管理页面初始化完成');
+            loadData();
         };
 
-        // 加载黑名单列表
-        async function loadBlacklist() {
-            try {
-                const data = await openwrtApi.get('/blacklist');
-
-                if (data.status === 'success') {
-                    renderBlacklistTable(data.data || []);
-                    updateStats(data.data || []);
-                }
-            } catch (error) {
-                console.error('加载黑名单失败:', error);
-                showToast('加载黑名单失败', 'error');
+        document.getElementById('bl-type').addEventListener('change', function() {
+            const label = document.getElementById('bl-value-label');
+            const input = document.getElementById('bl-value');
+            if (this.value === 'mac') {
+                label.textContent = 'MAC地址';
+                input.placeholder = '如: 00:11:22:33:44:55';
+            } else {
+                label.textContent = '域名';
+                input.placeholder = '如: example.com';
             }
+        });
+        
+        function loadData() {
+            document.getElementById('blacklistCount').textContent = macBlacklist.length + domainBlacklist.length;
+            document.getElementById('macCount').textContent = macBlacklist.length;
+            document.getElementById('domainCount').textContent = domainBlacklist.length;
+            renderMacBlacklist();
+            renderDomainBlacklist();
         }
-
-        // 渲染黑名单表格
-        function renderBlacklistTable(blacklist) {
-            const tbody = document.getElementById('blacklistTableBody');
+        
+        function renderMacBlacklist() {
+            const tbody = document.getElementById('macBlacklistTable');
             tbody.innerHTML = '';
-
-            if (!blacklist || blacklist.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">暂无黑名单</td></tr>';
+            if (macBlacklist.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">暂无MAC黑名单</td></tr>';
                 return;
             }
-
-            blacklist.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${item.ip || '-'}</td>
-                    <td>${item.name || '-'}</td>
-                    <td>${item.source || '*'}</td>
+            macBlacklist.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.mac}</td>
+                    <td>${item.note}</td>
+                    <td>${item.addedAt}</td>
                     <td>
-                        <span class="badge ${item.enabled ? 'badge-success' : 'badge-secondary'}">
-                            ${item.enabled ? '已启用' : '已禁用'}
-                        </span>
-                    </td>
-                    <td>${formatDate(item.created)}</td>
-                    <td>
-                        <button class="btn btn-sm btn-danger" onclick="removeBlacklist('${item.id}')">
-                            <i class="ri-delete-bin-line"></i> 移除
-                        </button>
+                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="removeMac(${index})">删除</button>
                     </td>
                 `;
-                tbody.appendChild(tr);
+                tbody.appendChild(row);
+            });
+        }
+        
+        function renderDomainBlacklist() {
+            const tbody = document.getElementById('domainBlacklistTable');
+            tbody.innerHTML = '';
+            if (domainBlacklist.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">暂无域名黑名单</td></tr>';
+                return;
+            }
+            domainBlacklist.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.domain}</td>
+                    <td>${item.note}</td>
+                    <td>${item.addedAt}</td>
+                    <td>
+                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="removeDomain(${index})">删除</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
             });
         }
 
-        // 更新统计
-        function updateStats(blacklist) {
-            document.getElementById('blacklistCount').textContent = blacklist.length;
-            document.getElementById('enabledCount').textContent = blacklist.filter(item => item.enabled).length;
+        function showAddModal() {
+            document.getElementById('addModal').style.display = 'flex';
+            document.getElementById('bl-type').value = 'mac';
+            document.getElementById('bl-value-label').textContent = 'MAC地址';
+            document.getElementById('bl-value').value = '';
+            document.getElementById('bl-value').placeholder = '如: 00:11:22:33:44:55';
+            document.getElementById('bl-note').value = '';
         }
 
-        // 格式化日期
-        function formatDate(timestamp) {
-            if (!timestamp) return '-';
-            const date = new Date(timestamp);
-            return date.toLocaleString('zh-CN');
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
         }
-
-        // 显示添加黑名单模态框
-        function showAddBlacklistModal() {
-            document.getElementById('addBlacklistModal').style.display = 'flex';
-        }
-
-        // 隐藏添加黑名单模态框
-        function hideAddBlacklistModal() {
-            document.getElementById('addBlacklistModal').style.display = 'none';
-            document.getElementById('blacklistIp').value = '';
-            document.getElementById('blacklistName').value = '';
-        }
-
-        // 添加黑名单
-        async function addBlacklist() {
-            const ip = document.getElementById('blacklistIp').value;
-            const name = document.getElementById('blacklistName').value;
-
-            if (!ip) {
-                showToast('请填写 IP 地址', 'warning');
+        
+        function addBlacklistItem() {
+            const type = document.getElementById('bl-type').value;
+            const value = document.getElementById('bl-value').value.trim();
+            const note = document.getElementById('bl-note').value.trim();
+            
+            if (!value) {
+                alert('请输入值');
                 return;
             }
-
-            try {
-                const data = await openwrtApi.post('/blacklist', {
-                    ip: ip,
-                    name: name || 'Blocked Device'
-                });
-
-                if (data.status === 'success') {
-                    showToast('黑名单添加成功', 'success');
-                    hideAddBlacklistModal();
-                    loadBlacklist();
-                } else {
-                    showToast('添加失败: ' + data.message, 'error');
-                }
-            } catch (error) {
-                console.error('添加黑名单失败:', error);
-                showToast('添加失败', 'error');
+            
+            const now = new Date().toLocaleString('zh-CN');
+            
+            if (type === 'mac') {
+                macBlacklist.push({ mac: value, note: note, addedAt: now });
+            } else {
+                domainBlacklist.push({ domain: value, note: note, addedAt: now });
             }
+            
+            closeAddModal();
+            loadData();
         }
-
-        // 移除黑名单
-        async function removeBlacklist(id) {
-            if (!confirm('确定要移除此黑名单吗？')) {
-                return;
-            }
-
-            try {
-                const data = await openwrtApi.delete(`/blacklist/${id}`);
-
-                if (data.status === 'success') {
-                    showToast('移除成功', 'success');
-                    loadBlacklist();
-                } else {
-                    showToast('移除失败: ' + data.message, 'error');
-                }
-            } catch (error) {
-                console.error('移除黑名单失败:', error);
-                showToast('移除失败', 'error');
-            }
+        
+        function removeMac(index) {
+            macBlacklist.splice(index, 1);
+            loadData();
         }
-
-        // 显示提示消息
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            toast.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 12px 24px;
-                border-radius: 4px;
-                color: white;
-                font-size: 14px;
-                z-index: 9999;
-                animation: slideIn 0.3s ease-out;
-                background: ${type === 'success' ? '#52c41a' : type === 'error' ? '#ff4d4f' : type === 'warning' ? '#faad14' : '#1890ff'};
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.animation = 'slideOut 0.3s ease-in';
-                setTimeout(() => document.body.removeChild(toast), 300);
-            }, 3000);
+        
+        function removeDomain(index) {
+            domainBlacklist.splice(index, 1);
+            loadData();
         }
     </script>
 </body>

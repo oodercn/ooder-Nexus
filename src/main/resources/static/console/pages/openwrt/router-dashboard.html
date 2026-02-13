@@ -3,162 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenWrt 路由器管理 - Nexus</title>
+    <title>OpenWrt 路由器管理 - Nexus Console</title>
+    
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
-    <script src="/console/js/common.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
 </head>
 <body>
-    <div class="container">
-        <!-- 侧边导航栏 -->
-        <div class="sidebar">
-            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+    <div class="nx-page">
+        <aside class="nx-page__sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
-        </div>
+        </aside>
         
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <!-- 头部 -->
-            <div class="header">
-                <h1><i class="ri-router-line"></i> OpenWrt 路由器管理</h1>
-                <div class="header-actions">
-                    <button id="mockToggleBtn" class="btn btn-secondary" onclick="toggleMockMode()">
-                        <i class="ri-bug-line"></i> 模拟模式
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
                     </button>
-                    <button class="theme-toggle-btn btn btn-secondary">
-                        <i class="ri-sun-line"></i> 浅色模式
+                    <h2 class="nx-text-lg nx-font-semibold">OpenWrt 路由器管理</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
                     </button>
-                    <button id="refresh-btn" class="btn btn-primary" onclick="refreshData()">
+                    <button class="nx-btn nx-btn--primary" onclick="refreshData()">
                         <i class="ri-refresh-line"></i> 刷新数据
                     </button>
                 </div>
-            </div>
+            </header>
             
-            <!-- 连接状态卡片 -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="ri-router-line"></i> 路由器连接状态</h2>
-                    <span id="connectionStatus" class="status-badge status-offline">未连接</span>
-                </div>
-                <div id="routerInfo" style="display: none;">
-                    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 15px;">
-                        <div class="info-item">
-                            <span class="info-label">设备地址</span>
-                            <span id="routerHost" class="info-value">-</span>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="nx-card nx-mb-6">
+                        <div class="nx-card__header">
+                            <h3 class="nx-card__title">路由器连接状态</h3>
+                            <span id="connectionStatus" class="nx-text-danger">未连接</span>
                         </div>
-                        <div class="info-item">
-                            <span class="info-label">固件版本</span>
-                            <span id="firmwareVersion" class="info-value">-</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">运行时间</span>
-                            <span id="uptime" class="info-value">-</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">设备型号</span>
-                            <span id="deviceModel" class="info-value">-</span>
+                        <div class="nx-card__body">
+                            <div class="nx-grid nx-grid-cols-4 nx-gap-4 nx-mb-4" id="routerInfo">
+                                <div>
+                                    <p class="nx-text-secondary nx-text-sm nx-mb-1">设备地址</p>
+                                    <p class="nx-text-xl nx-font-bold" id="routerHost">-</p>
+                                </div>
+                                <div>
+                                    <p class="nx-text-secondary nx-text-sm nx-mb-1">固件版本</p>
+                                    <p class="nx-text-xl nx-font-bold" id="firmwareVersion">-</p>
+                                </div>
+                                <div>
+                                    <p class="nx-text-secondary nx-text-sm nx-mb-1">运行时间</p>
+                                    <p class="nx-text-xl nx-font-bold" id="uptime">-</p>
+                                </div>
+                                <div>
+                                    <p class="nx-text-secondary nx-text-sm nx-mb-1">设备型号</p>
+                                    <p class="nx-text-xl nx-font-bold" id="deviceModel">-</p>
+                                </div>
+                            </div>
+                            <div class="nx-flex nx-gap-3">
+                                <button class="nx-btn nx-btn--primary" onclick="showConnectModal()">
+                                    <i class="ri-link"></i> 连接路由器
+                                </button>
+                                <button class="nx-btn nx-btn--danger" onclick="disconnectRouter()" id="disconnectBtn" style="display: none;">
+                                    <i class="ri-unlink"></i> 断开连接
+                                </button>
+                                <button class="nx-btn nx-btn--secondary" onclick="rebootRouter()" id="rebootBtn" style="display: none;">
+                                    <i class="ri-restart-line"></i> 重启路由器
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="action-buttons" style="margin-top: 20px; display: flex; gap: 10px;">
-                    <button id="connectBtn" class="btn btn-primary" onclick="showConnectModal()">
-                        <i class="ri-link"></i> 连接路由器
-                    </button>
-                    <button id="disconnectBtn" class="btn btn-danger" onclick="disconnectRouter()" style="display: none;">
-                        <i class="ri-unlink"></i> 断开连接
-                    </button>
-                    <button id="rebootBtn" class="btn btn-warning" onclick="rebootRouter()" style="display: none;">
-                        <i class="ri-restart-line"></i> 重启路由器
-                    </button>
+                    
+                    <h3 class="nx-text-lg nx-font-semibold nx-mb-4">快捷操作</h3>
+                    <div class="nx-grid nx-grid-cols-3 nx-gap-4">
+                        <div class="nx-card" onclick="navigateTo('network-settings')" style="cursor: pointer;">
+                            <div class="nx-card__body nx-text-center">
+                                <i class="ri-wifi-settings-line" style="font-size: 32px; color: var(--nx-primary);"></i>
+                                <h4 class="nx-mt-3">网络设置</h4>
+                                <p class="nx-text-secondary nx-text-sm">配置网络参数</p>
+                            </div>
+                        </div>
+                        <div class="nx-card" onclick="navigateTo('ip-management')" style="cursor: pointer;">
+                            <div class="nx-card__body nx-text-center">
+                                <i class="ri-ip-line" style="font-size: 32px; color: var(--nx-success);"></i>
+                                <h4 class="nx-mt-3">IP 管理</h4>
+                                <p class="nx-text-secondary nx-text-sm">管理 IP 地址</p>
+                            </div>
+                        </div>
+                        <div class="nx-card" onclick="navigateTo('blacklist')" style="cursor: pointer;">
+                            <div class="nx-card__body nx-text-center">
+                                <i class="ri-shield-cross-line" style="font-size: 32px; color: var(--nx-warning);"></i>
+                                <h4 class="nx-mt-3">黑名单</h4>
+                                <p class="nx-text-secondary nx-text-sm">管理访问控制</p>
+                            </div>
+                        </div>
+                        <div class="nx-card" onclick="navigateTo('config-files')" style="cursor: pointer;">
+                            <div class="nx-card__body nx-text-center">
+                                <i class="ri-file-settings-line" style="font-size: 32px; color: var(--nx-info);"></i>
+                                <h4 class="nx-mt-3">配置文件</h4>
+                                <p class="nx-text-secondary nx-text-sm">编辑配置文件</p>
+                            </div>
+                        </div>
+                        <div class="nx-card" onclick="navigateTo('system-status')" style="cursor: pointer;">
+                            <div class="nx-card__body nx-text-center">
+                                <i class="ri-dashboard-line" style="font-size: 32px; color: var(--nx-danger);"></i>
+                                <h4 class="nx-mt-3">系统状态</h4>
+                                <p class="nx-text-secondary nx-text-sm">查看系统信息</p>
+                            </div>
+                        </div>
+                        <div class="nx-card" onclick="navigateTo('command')" style="cursor: pointer;">
+                            <div class="nx-card__body nx-text-center">
+                                <i class="ri-terminal-line" style="font-size: 32px; color: var(--nx-primary);"></i>
+                                <h4 class="nx-mt-3">命令执行</h4>
+                                <p class="nx-text-secondary nx-text-sm">执行系统命令</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <!-- 快捷操作 -->
-            <h3 style="margin: 30px 0 15px; color: var(--nexus-text);">快捷操作</h3>
-            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                <div class="card status-card" onclick="navigateTo('network-settings')" style="cursor: pointer;">
-                    <div class="status-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                        <i class="ri-wifi-settings-line"></i>
-                    </div>
-                    <div class="status-value">网络设置</div>
-                    <div class="status-label">配置网络参数</div>
+        </main>
+    </div>
+
+    <div id="connectModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="nx-card" style="width: 400px; max-width: 90%;">
+            <div class="nx-card__header">
+                <h3 class="nx-card__title">连接 OpenWrt 路由器</h3>
+                <button class="nx-btn nx-btn--ghost nx-btn--icon" onclick="hideConnectModal()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="nx-card__body">
+                <div class="nx-form-group nx-mb-4">
+                    <label class="nx-form-label">路由器地址</label>
+                    <input type="text" class="nx-input" id="hostInput" value="192.168.1.1">
                 </div>
-                <div class="card status-card" onclick="navigateTo('ip-management')" style="cursor: pointer;">
-                    <div class="status-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                        <i class="ri-ip-line"></i>
-                    </div>
-                    <div class="status-value">IP 管理</div>
-                    <div class="status-label">管理 IP 地址</div>
+                <div class="nx-form-group nx-mb-4">
+                    <label class="nx-form-label">用户名</label>
+                    <input type="text" class="nx-input" id="usernameInput" value="root">
                 </div>
-                <div class="card status-card" onclick="navigateTo('blacklist')" style="cursor: pointer;">
-                    <div class="status-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                        <i class="ri-shield-cross-line"></i>
-                    </div>
-                    <div class="status-value">黑名单</div>
-                    <div class="status-label">管理访问控制</div>
+                <div class="nx-form-group nx-mb-4">
+                    <label class="nx-form-label">密码</label>
+                    <input type="password" class="nx-input" id="passwordInput">
                 </div>
-                <div class="card status-card" onclick="navigateTo('config-files')" style="cursor: pointer;">
-                    <div class="status-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                        <i class="ri-file-settings-line"></i>
-                    </div>
-                    <div class="status-value">配置文件</div>
-                    <div class="status-label">编辑配置文件</div>
-                </div>
-                <div class="card status-card" onclick="navigateTo('system-status')" style="cursor: pointer;">
-                    <div class="status-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                        <i class="ri-dashboard-line"></i>
-                    </div>
-                    <div class="status-value">系统状态</div>
-                    <div class="status-label">查看系统信息</div>
-                </div>
-                <div class="card status-card" onclick="navigateTo('command')" style="cursor: pointer;">
-                    <div class="status-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
-                        <i class="ri-terminal-line"></i>
-                    </div>
-                    <div class="status-value">命令执行</div>
-                    <div class="status-label">执行系统命令</div>
-                </div>
+            </div>
+            <div class="nx-card__footer nx-flex nx-gap-3 nx-justify-end">
+                <button class="nx-btn nx-btn--secondary" onclick="hideConnectModal()">取消</button>
+                <button class="nx-btn nx-btn--primary" onclick="connectRouter()">连接</button>
             </div>
         </div>
     </div>
-
-    <!-- 连接模态框 -->
-    <div id="connectModal" class="modal" style="display: none;">
-        <div class="modal-content" style="max-width: 400px;">
-            <div class="modal-header">
-                <h3 class="modal-title">连接 OpenWrt 路由器</h3>
-                <button class="modal-close" onclick="hideConnectModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">路由器地址</label>
-                    <input type="text" id="hostInput" class="form-input" placeholder="192.168.1.1" value="192.168.1.1">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">用户名</label>
-                    <input type="text" id="usernameInput" class="form-input" placeholder="root" value="root">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">密码</label>
-                    <input type="password" id="passwordInput" class="form-input" placeholder="密码">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="hideConnectModal()">取消</button>
-                <button class="btn btn-primary" onclick="connectRouter()">连接</button>
-            </div>
-        </div>
-    </div>
-
+    
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
     <script>
-        // OpenWrt API 封装
         const openwrtApi = {
             baseUrl: '/api/openwrt',
             async get(endpoint) {
                 const response = await fetch(`${this.baseUrl}${endpoint}`);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 return await response.json();
             },
             async post(endpoint, data = {}) {
@@ -167,18 +172,15 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 return await response.json();
             }
         };
-
-        // 页面自定义初始化
+        
         window.onPageInit = function() {
+            console.log('OpenWrt 路由器管理页面初始化完成');
             checkConnectionStatus();
-            checkMockStatus();
         };
-
-        // 检查连接状态
+        
         async function checkConnectionStatus() {
             try {
                 const data = await openwrtApi.get('/status');
@@ -193,167 +195,86 @@
                 updateConnectionUI(false);
             }
         }
-
-        // 检查 Mock 状态
-        async function checkMockStatus() {
-            try {
-                const data = await openwrtApi.get('/mock/status');
-                updateMockStatusUI(data.mockEnabled);
-            } catch (error) {
-                console.error('检查 Mock 状态失败:', error);
-            }
-        }
-
-        // 更新连接状态 UI
+        
         function updateConnectionUI(connected) {
             const statusBadge = document.getElementById('connectionStatus');
-            const routerInfo = document.getElementById('routerInfo');
-            const connectBtn = document.getElementById('connectBtn');
+            const connectBtn = document.querySelector('button[onclick="showConnectModal()"]');
             const disconnectBtn = document.getElementById('disconnectBtn');
             const rebootBtn = document.getElementById('rebootBtn');
-
+            
             if (connected) {
                 statusBadge.textContent = '已连接';
-                statusBadge.className = 'status-badge status-online';
-                routerInfo.style.display = 'block';
+                statusBadge.className = 'nx-text-success';
                 connectBtn.style.display = 'none';
                 disconnectBtn.style.display = 'inline-flex';
                 rebootBtn.style.display = 'inline-flex';
             } else {
                 statusBadge.textContent = '未连接';
-                statusBadge.className = 'status-badge status-offline';
-                routerInfo.style.display = 'none';
+                statusBadge.className = 'nx-text-danger';
                 connectBtn.style.display = 'inline-flex';
                 disconnectBtn.style.display = 'none';
                 rebootBtn.style.display = 'none';
             }
         }
-
-        // 更新 Mock 状态 UI
-        function updateMockStatusUI(enabled) {
-            const statusBadge = document.getElementById('connectionStatus');
-            const mockBtn = document.getElementById('mockToggleBtn');
-
-            if (enabled) {
-                mockBtn.innerHTML = '<i class="ri-bug-line"></i> 模拟模式 (开)';
-                mockBtn.style.background = '#fa8c16';
-                mockBtn.style.color = 'white';
-                if (statusBadge.textContent === '未连接') {
-                    statusBadge.textContent = '模拟模式';
-                    statusBadge.className = 'status-badge';
-                    statusBadge.style.background = '#fff7e6';
-                    statusBadge.style.color = '#fa8c16';
-                }
-            } else {
-                mockBtn.innerHTML = '<i class="ri-bug-line"></i> 模拟模式';
-                mockBtn.style.background = '';
-                mockBtn.style.color = '';
-            }
-        }
-
-        // 显示连接模态框
+        
         function showConnectModal() {
             document.getElementById('connectModal').style.display = 'flex';
         }
-
-        // 隐藏连接模态框
+        
         function hideConnectModal() {
             document.getElementById('connectModal').style.display = 'none';
         }
-
-        // 连接路由器
+        
         async function connectRouter() {
             const host = document.getElementById('hostInput').value;
             const username = document.getElementById('usernameInput').value;
             const password = document.getElementById('passwordInput').value;
-
+            
             try {
                 const data = await openwrtApi.post('/connect', { host, username, password });
-
                 if (data.connected) {
                     hideConnectModal();
                     updateConnectionUI(true);
                     loadSystemStatus();
-                    showToast('连接成功', 'success');
+                    alert('连接成功');
                 } else {
-                    showToast('连接失败: ' + data.message, 'error');
+                    alert('连接失败: ' + data.message);
                 }
             } catch (error) {
-                console.error('连接路由器失败:', error);
-                showToast('连接失败', 'error');
+                alert('连接失败');
             }
         }
-
-        // 断开连接
+        
         async function disconnectRouter() {
             try {
                 await openwrtApi.post('/disconnect');
                 updateConnectionUI(false);
-                showToast('已断开连接', 'success');
+                alert('已断开连接');
             } catch (error) {
-                console.error('断开连接失败:', error);
-                showToast('断开连接失败', 'error');
+                alert('断开连接失败');
             }
         }
-
-        // 重启路由器
+        
         async function rebootRouter() {
-            if (!confirm('确定要重启路由器吗？这将导致短暂断网。')) {
-                return;
-            }
-
+            if (!confirm('确定要重启路由器吗？')) return;
             try {
-                const data = await openwrtApi.post('/reboot');
-
-                if (data.status === 'success') {
-                    showToast('重启命令已发送，请等待路由器重启', 'success');
-                    setTimeout(() => {
-                        updateConnectionUI(false);
-                    }, 5000);
-                } else {
-                    showToast('重启失败: ' + data.message, 'error');
-                }
+                await openwrtApi.post('/reboot');
+                alert('重启命令已发送');
+                setTimeout(() => updateConnectionUI(false), 5000);
             } catch (error) {
-                console.error('重启路由器失败:', error);
-                showToast('重启失败', 'error');
+                alert('重启失败');
             }
         }
-
-        // 切换 Mock 模式
-        async function toggleMockMode() {
-            try {
-                const statusData = await openwrtApi.get('/mock/status');
-                const newMode = !statusData.mockEnabled;
-                const endpoint = newMode ? '/mock/enable' : '/mock/disable';
-
-                const data = await openwrtApi.post(endpoint);
-
-                if (data.status === 'success') {
-                    updateMockStatusUI(newMode);
-                    showToast(newMode ? '已切换到模拟模式' : '已切换到真实模式', 'success');
-                    checkConnectionStatus();
-                }
-            } catch (error) {
-                console.error('切换 Mock 模式失败:', error);
-                showToast('切换失败', 'error');
-            }
-        }
-
-        // 加载系统状态
+        
         async function loadSystemStatus() {
             try {
                 const data = await openwrtApi.get('/system-status');
-
                 if (data.status === 'success' && data.data) {
-                    const status = data.data;
-                    document.getElementById('firmwareVersion').textContent = status.firmwareVersion || '-';
-                    document.getElementById('uptime').textContent = status.uptime || '-';
-                    document.getElementById('deviceModel').textContent = status.deviceModel || '-';
+                    document.getElementById('firmwareVersion').textContent = data.data.firmwareVersion || '-';
+                    document.getElementById('uptime').textContent = data.data.uptime || '-';
+                    document.getElementById('deviceModel').textContent = data.data.deviceModel || '-';
                 }
-
-                // 获取版本信息
                 const versionData = await openwrtApi.get('/version');
-
                 if (versionData.status === 'success' && versionData.data) {
                     document.getElementById('routerHost').textContent = versionData.data.deviceInfo || '-';
                 }
@@ -361,17 +282,12 @@
                 console.error('加载系统状态失败:', error);
             }
         }
-
-        // 刷新数据
+        
         function refreshData() {
             checkConnectionStatus();
-            if (document.getElementById('connectionStatus').textContent === '已连接') {
-                loadSystemStatus();
-            }
-            showToast('数据已刷新', 'success');
+            alert('数据已刷新');
         }
-
-        // 页面导航
+        
         function navigateTo(page) {
             const pages = {
                 'network-settings': 'network-settings.html',
@@ -381,40 +297,8 @@
                 'system-status': 'system-status.html',
                 'command': 'command.html'
             };
-
             if (pages[page]) {
                 window.location.href = pages[page];
-            }
-        }
-
-        // 主题切换由 theme-manager.js 统一处理，使用 window.toggleTheme() 调用
-
-        // 显示提示消息
-        function showToast(message, type = 'info') {
-            if (typeof showMessage === 'function') {
-                showMessage(message, type);
-            } else {
-                // 简单的 toast 实现
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                toast.textContent = message;
-                toast.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    padding: 12px 24px;
-                    border-radius: 4px;
-                    color: white;
-                    font-size: 14px;
-                    z-index: 9999;
-                    animation: slideIn 0.3s ease-out;
-                    background: ${type === 'success' ? '#52c41a' : type === 'error' ? '#ff4d4f' : '#1890ff'};
-                `;
-                document.body.appendChild(toast);
-                setTimeout(() => {
-                    toast.style.animation = 'slideOut 0.3s ease-in';
-                    setTimeout(() => document.body.removeChild(toast), 300);
-                }, 3000);
             }
         }
     </script>

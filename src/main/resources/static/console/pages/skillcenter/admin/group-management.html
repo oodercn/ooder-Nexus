@@ -5,29 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>群组管理 - Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/dashboard.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+
+    <!-- 必须引入的脚本文件 -->
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
+    <div class="nx-page">
+        <aside class="nx-page__sidebar" id="sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
-        <main class="main-content">
-            <header class="header">
-                <h1>群组管理</h1>
-                <div class="header-actions">
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">群组管理</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
                     <button class="btn btn-primary" onclick="showCreateGroupModal()">
                         <i class="ri-add-line"></i> 创建群组
                     </button>
                 </div>
             </header>
-            <div class="content">
-                <div class="group-list" id="group-list">
-                    <div class="loading">加载中...</div>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="group-list" id="group-list">
+                        <div class="loading">加载中...</div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -65,6 +81,31 @@
         </div>
     </div>
 
+    <!-- 编辑群组模态框 -->
+    <div class="modal" id="edit-group-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑群组</h3>
+                <button class="modal-close" onclick="closeEditGroupModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-group-id">
+                <div class="form-group">
+                    <label>群组名称</label>
+                    <input type="text" id="edit-group-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>群组描述</label>
+                    <textarea id="edit-group-description" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="submitEditGroup()">保存</button>
+                <button class="btn btn-secondary" onclick="closeEditGroupModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="group-detail-modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
@@ -95,8 +136,7 @@
     <script>
         let currentGroupId = null;
 
-        window.onload = function() {
-            initMenu();
+        window.onPageInit = function() {
             loadGroups();
         };
 
@@ -105,22 +145,17 @@
                 const groupList = document.getElementById('group-list');
                 groupList.innerHTML = '<div class="loading">加载中...</div>';
                 
-                const response = await fetch('/api/admin/groups');
+                const response = await fetch('/api/admin/groups/list', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const rs = await response.json();
                 
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
+                if (rs.requestStatus === 200 && rs.data) {
+                    renderGroupList(rs.data);
                 } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    renderGroupList(result.data || []);
-                } else {
-                    throw new Error('响应数据格式错误');
+                    throw new Error(rs.message || '响应数据格式错误');
                 }
             } catch (error) {
                 console.error('加载群组列表错误:', error);
@@ -218,8 +253,62 @@
             }
         }
 
-        function editGroup(groupId) {
-            showError('编辑群组功能开发中...');
+        async function editGroup(groupId) {
+            try {
+                const response = await fetch('/api/admin/groups/get', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: groupId })
+                });
+                const rs = await response.json();
+                
+                if (rs.requestStatus === 200 && rs.data) {
+                    document.getElementById('edit-group-id').value = rs.data.id;
+                    document.getElementById('edit-group-name').value = rs.data.name || '';
+                    document.getElementById('edit-group-description').value = rs.data.description || '';
+                    document.getElementById('edit-group-modal').style.display = 'flex';
+                } else {
+                    showError(rs.message || '获取群组信息失败');
+                }
+            } catch (error) {
+                console.error('获取群组信息错误:', error);
+                showError('获取群组信息失败');
+            }
+        }
+
+        function closeEditGroupModal() {
+            document.getElementById('edit-group-modal').style.display = 'none';
+        }
+
+        async function submitEditGroup() {
+            const id = document.getElementById('edit-group-id').value;
+            const name = document.getElementById('edit-group-name').value;
+            const description = document.getElementById('edit-group-description').value;
+            
+            if (!name) {
+                showError('请填写群组名称');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/groups/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, name, description })
+                });
+                const rs = await response.json();
+                
+                if (rs.requestStatus === 200) {
+                    closeEditGroupModal();
+                    showSuccess('群组更新成功');
+                    loadGroups();
+                } else {
+                    showError(rs.message || '群组更新失败');
+                }
+            } catch (error) {
+                console.error('更新群组错误:', error);
+                showError('群组更新失败');
+            }
         }
 
         async function showGroupDetail(groupId) {
@@ -229,36 +318,22 @@
                 const content = document.getElementById('group-detail-content');
                 content.innerHTML = '<div class="loading">加载中...</div>';
                 
-                const response = await fetch(`/api/admin/groups/${groupId}`);
+                const response = await fetch('/api/admin/groups/get', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: groupId })
+                });
+                const rs = await response.json();
                 
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    const group = result.data;
+                if (rs.requestStatus === 200 && rs.data) {
+                    const group = rs.data;
                     content.innerHTML = `
                         <div class="group-detail">
                             <h4>群组信息</h4>
                             <p><strong>名称:</strong> ${group.name}</p>
                             <p><strong>描述:</strong> ${group.description || '暂无描述'}</p>
-                            <p><strong>类型:</strong> ${group.type === 'public' ? '公开' : '私有'}</p>
-                            <h4>成员列表</h4>
-                            <ul class="member-list">
-                                ${group.members && group.members.length > 0 ? group.members.map(member => `
-                                    <li>
-                                        <span>${member.name}</span>
-                                        <span class="member-role">${member.role === 'admin' ? '管理员' : '成员'}</span>
-                                        <button class="btn btn-danger btn-sm" onclick="removeMember('${member.id}')">移除</button>
-                                    </li>
-                                `).join('') : '<li>暂无成员</li>'}
-                            </ul>
+                            <p><strong>成员数:</strong> ${group.memberCount || 0}</p>
+                            <p><strong>状态:</strong> ${group.status === 'active' ? '活跃' : '禁用'}</p>
                         </div>
                     `;
                     document.getElementById('group-detail-modal').style.display = 'block';

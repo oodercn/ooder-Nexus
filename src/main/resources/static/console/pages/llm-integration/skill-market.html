@@ -5,17 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>技能市场 - Nexus</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/llm-integration.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
-    <script src="/console/js/common.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
     <style>
         .skill-market-container {
-            padding: 24px;
+            padding: 0;
         }
-        
+        .skill-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: var(--ns-card-bg);
+            border-radius: var(--ns-radius);
+            border: 1px solid var(--ns-border);
+        }
+        .skill-stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .skill-stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ns-dark);
+        }
+        .skill-stat-label {
+            font-size: 13px;
+            color: var(--ns-secondary);
+        }
         .skill-market-header {
             display: flex;
             justify-content: space-between;
@@ -24,637 +44,216 @@
             flex-wrap: wrap;
             gap: 16px;
         }
-        
         .skill-market-filters {
             display: flex;
             gap: 16px;
             align-items: center;
             flex-wrap: wrap;
         }
-        
         .search-box {
             position: relative;
             width: 300px;
         }
-        
         .search-box input {
             width: 100%;
             padding: 10px 40px 10px 16px;
-            border: 1px solid var(--nexus-border);
-            border-radius: var(--nexus-radius);
-            background: var(--nexus-bg);
-            color: var(--nexus-text-primary);
+            border: 1px solid var(--ns-border);
+            border-radius: var(--ns-radius);
+            background: var(--ns-input-bg);
+            color: var(--ns-dark);
         }
-        
         .search-box .search-icon {
             position: absolute;
             right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--nexus-text-secondary);
+            color: var(--ns-secondary);
         }
-        
         .skill-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 24px;
         }
-        
         .skill-card {
-            background: var(--nexus-card-bg);
-            border: 2px solid var(--nexus-border);
-            border-radius: var(--nexus-radius);
+            background: var(--ns-card-bg);
+            border: 1px solid var(--ns-border);
+            border-radius: var(--ns-radius);
             padding: 24px;
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            position: relative;
-            overflow: hidden;
         }
-        
-        .skill-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--skill-color, var(--nexus-primary));
-        }
-        
         .skill-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-            border-color: var(--skill-color, var(--nexus-primary));
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            border-color: var(--nx-primary);
         }
-        
         .skill-card-header {
             display: flex;
             align-items: flex-start;
             gap: 16px;
             margin-bottom: 16px;
         }
-        
         .skill-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, var(--skill-color, var(--nexus-primary)), var(--skill-color-light, var(--nexus-secondary)));
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--nx-primary), var(--ns-secondary));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 28px;
             color: white;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        
         .skill-info {
             flex: 1;
         }
-        
         .skill-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            color: var(--nexus-text-primary);
-            margin-bottom: 6px;
+            color: var(--ns-dark);
+            margin-bottom: 4px;
         }
-        
         .skill-category {
             font-size: 12px;
-            font-weight: 500;
-            color: var(--skill-color, var(--nexus-primary));
-            background: var(--skill-bg, rgba(59, 130, 246, 0.1));
-            padding: 4px 10px;
-            border-radius: 20px;
-            display: inline-block;
-            border: 1px solid var(--skill-color-light, var(--nexus-primary));
+            color: var(--nx-primary);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
         }
-        
         .skill-description {
-            color: var(--nexus-text-secondary);
+            color: var(--ns-secondary);
             font-size: 14px;
             line-height: 1.6;
             margin-bottom: 16px;
             flex: 1;
         }
-        
         .skill-meta {
             display: flex;
             gap: 16px;
             margin-bottom: 16px;
             font-size: 13px;
-            color: var(--nexus-text-secondary);
+            color: var(--ns-secondary);
         }
-        
         .skill-meta span {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        
-        .skill-meta i {
-            color: var(--skill-color, var(--nexus-primary));
-        }
-        
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        
-        .skill-tag {
-            font-size: 12px;
-            color: var(--nexus-text-secondary);
-            background: var(--nexus-bg);
-            padding: 4px 10px;
-            border-radius: 4px;
-            border: 1px solid var(--nexus-border);
-        }
-        
         .skill-actions {
             display: flex;
             gap: 12px;
         }
-        
         .skill-actions .btn {
             flex: 1;
         }
-        
-        .skill-actions .btn-primary {
-            background: var(--skill-color, var(--nexus-primary));
-            border-color: var(--skill-color, var(--nexus-primary));
-        }
-        
-        .skill-actions .btn-primary:hover {
-            background: var(--skill-color-light, var(--nexus-secondary));
-            border-color: var(--skill-color-light, var(--nexus-secondary));
-        }
-        
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: var(--nexus-text-secondary);
+            color: var(--ns-secondary);
         }
-        
         .empty-state i {
             font-size: 64px;
             margin-bottom: 16px;
             opacity: 0.5;
         }
-        
-        /* 分类色系定义 */
-        .skill-card[data-category="网络管理"] {
-            --skill-color: #3b82f6;
-            --skill-color-light: #60a5fa;
-            --skill-bg: rgba(59, 130, 246, 0.1);
-        }
-        
-        .skill-card[data-category="家庭安全"] {
-            --skill-color: #10b981;
-            --skill-color-light: #34d399;
-            --skill-bg: rgba(16, 185, 129, 0.1);
-        }
-        
-        .skill-card[data-category="网络优化"] {
-            --skill-color: #f59e0b;
-            --skill-color-light: #fbbf24;
-            --skill-bg: rgba(245, 158, 11, 0.1);
-        }
-        
-        .skill-card[data-category="网络安全"] {
-            --skill-color: #ef4444;
-            --skill-color-light: #f87171;
-            --skill-bg: rgba(239, 68, 68, 0.1);
-        }
-        
-        .skill-card[data-category="设备管理"] {
-            --skill-color: #8b5cf6;
-            --skill-color-light: #a78bfa;
-            --skill-bg: rgba(139, 92, 246, 0.1);
-        }
-        
-        .skill-card[data-category="网络监控"] {
-            --skill-color: #06b6d4;
-            --skill-color-light: #22d3ee;
-            --skill-bg: rgba(6, 182, 212, 0.1);
-        }
-        
-        .skill-card[data-category="网络工具"] {
-            --skill-color: #64748b;
-            --skill-color-light: #94a3b8;
-            --skill-bg: rgba(100, 116, 139, 0.1);
-        }
-        
-        .skill-card[data-category="系统核心"] {
-            --skill-color: #ec4899;
-            --skill-color-light: #f472b6;
-            --skill-bg: rgba(236, 72, 153, 0.1);
-        }
-        
-        .skill-card[data-category="智能家居"] {
-            --skill-color: #14b8a6;
-            --skill-color-light: #2dd4bf;
-            --skill-bg: rgba(20, 184, 166, 0.1);
-        }
-        
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: var(--nexus-card-bg);
-            border: 1px solid var(--nexus-border);
-            border-radius: var(--nexus-radius);
-            width: 90%;
-            max-width: 700px;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        
-        .modal-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--skill-color, var(--nexus-primary));
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px;
-            border-bottom: 1px solid var(--nexus-border);
-        }
-        
-        .modal-header h3 {
-            margin: 0;
-            font-size: 20px;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--nexus-text-secondary);
-            font-size: 24px;
-            cursor: pointer;
-            padding: 0;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-        
-        .modal-close:hover {
-            background: var(--nexus-bg);
-            color: var(--nexus-text-primary);
-        }
-        
-        .modal-body {
-            padding: 24px;
-        }
-        
-        .modal-footer {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            padding: 20px 24px;
-            border-top: 1px solid var(--nexus-border);
-        }
-        
-        .skill-preview-header {
-            display: flex;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-        
-        .skill-preview-icon {
-            width: 88px;
-            height: 88px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, var(--skill-color, var(--nexus-primary)), var(--skill-color-light, var(--nexus-secondary)));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 44px;
-            color: white;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-        
-        .skill-preview-info h2 {
-            margin: 0 0 10px 0;
-            font-size: 26px;
-        }
-        
-        .skill-preview-meta {
-            display: flex;
-            gap: 20px;
-            color: var(--nexus-text-secondary);
-            font-size: 14px;
-            flex-wrap: wrap;
-        }
-        
-        .skill-preview-category-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .skill-preview-category {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--skill-color, var(--nexus-primary));
-            background: var(--skill-bg, rgba(59, 130, 246, 0.1));
-            padding: 2px 8px;
-            border-radius: 12px;
-            border: 1px solid var(--skill-color-light, var(--nexus-primary));
-        }
-        
-        .skill-capabilities {
-            margin-top: 24px;
-            padding: 20px;
-            background: var(--nexus-bg);
-            border-radius: 12px;
-            border: 1px solid var(--nexus-border);
-        }
-        
-        .skill-capabilities h4 {
-            margin-bottom: 16px;
-            color: var(--nexus-text-primary);
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .skill-capabilities h4::before {
-            content: '';
-            width: 4px;
-            height: 18px;
-            background: var(--skill-color, var(--nexus-primary));
-            border-radius: 2px;
-        }
-        
-        .skill-capabilities ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 10px;
-        }
-        
-        .skill-capabilities li {
-            padding: 10px 12px;
-            padding-left: 32px;
-            position: relative;
-            color: var(--nexus-text-secondary);
-            background: var(--nexus-card-bg);
-            border-radius: 8px;
-            border: 1px solid var(--nexus-border);
-        }
-        
-        .skill-capabilities li::before {
-            content: "✓";
-            position: absolute;
-            left: 12px;
-            color: var(--skill-color, var(--nexus-success));
-            font-weight: bold;
-            font-size: 14px;
-        }
-        
         .loading {
             text-align: center;
             padding: 60px;
-            color: var(--nexus-text-secondary);
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 16px 24px;
-            border-radius: var(--nexus-radius);
-            color: white;
-            font-weight: 500;
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
-        }
-        
-        .notification-success {
-            background: var(--nexus-success);
-        }
-        
-        .notification-error {
-            background: var(--nexus-danger);
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        /* 分类筛选器样式 */
-        .category-filter-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--nexus-border);
-            background: var(--nexus-card-bg);
-            color: var(--nexus-text-secondary);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 13px;
-        }
-        
-        .category-filter-btn:hover,
-        .category-filter-btn.active {
-            background: var(--nexus-primary);
-            color: white;
-            border-color: var(--nexus-primary);
-        }
-        
-        /* 统计信息 */
-        .skill-stats {
-            display: flex;
-            gap: 24px;
-            margin-bottom: 24px;
-            padding: 16px 20px;
-            background: var(--nexus-card-bg);
-            border-radius: 12px;
-            border: 1px solid var(--nexus-border);
-        }
-        
-        .skill-stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .skill-stat-value {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--nexus-text-primary);
-        }
-        
-        .skill-stat-label {
-            font-size: 13px;
-            color: var(--nexus-text-secondary);
+            color: var(--ns-secondary);
         }
     </style>
 </head>
 <body>
-    <div class="llm-integration-container">
-        <aside class="sidebar" id="sidebar">
+    <div class="nx-page">
+        <aside class="nx-page__sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
-        <main class="main-content">
-            <div class="content-header">
-                <h1><i class="ri-store-line"></i> 技能市场</h1>
-                <div class="content-actions">
-                    <button class="btn btn-secondary" onclick="refreshSkillMarket()">
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">技能市场</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
+                    <button class="nx-btn nx-btn--secondary" onclick="refreshSkillMarket()">
                         <i class="ri-refresh-line"></i> 刷新
                     </button>
                 </div>
-            </div>
-            
-            <div class="skill-market-container">
-                <!-- 统计信息 -->
-                <div class="skill-stats" id="skill-stats">
-                    <div class="skill-stat-item">
-                        <i class="ri-apps-line" style="font-size: 24px; color: var(--nexus-primary);"></i>
-                        <div>
-                            <div class="skill-stat-value" id="total-skills">0</div>
-                            <div class="skill-stat-label">可用技能</div>
+            </header>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="skill-market-container">
+                        <!-- 统计信息 -->
+                        <div class="skill-stats" id="skill-stats">
+                            <div class="skill-stat-item">
+                                <i class="ri-apps-line" style="font-size: 24px; color: var(--nx-primary);"></i>
+                                <div>
+                                    <div class="skill-stat-value" id="total-skills">0</div>
+                                    <div class="skill-stat-label">可用技能</div>
+                                </div>
+                            </div>
+                            <div class="skill-stat-item">
+                                <i class="ri-download-line" style="font-size: 24px; color: var(--ns-success);"></i>
+                                <div>
+                                    <div class="skill-stat-value" id="total-downloads">0</div>
+                                    <div class="skill-stat-label">总下载量</div>
+                                </div>
+                            </div>
+                            <div class="skill-stat-item">
+                                <i class="ri-star-fill" style="font-size: 24px; color: #f59e0b;"></i>
+                                <div>
+                                    <div class="skill-stat-value" id="avg-rating">0.0</div>
+                                    <div class="skill-stat-label">平均评分</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="skill-stat-item">
-                        <i class="ri-download-line" style="font-size: 24px; color: var(--nexus-success);"></i>
-                        <div>
-                            <div class="skill-stat-value" id="total-downloads">0</div>
-                            <div class="skill-stat-label">总下载量</div>
+
+                        <div class="skill-market-header">
+                            <div class="skill-market-filters">
+                                <div class="search-box">
+                                    <input type="text" id="search-input" placeholder="搜索技能...">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                                <select id="category-filter" class="form-input" style="width: 160px;">
+                                    <option value="">所有分类</option>
+                                    <option value="网络管理">网络管理</option>
+                                    <option value="家庭安全">家庭安全</option>
+                                    <option value="网络优化">网络优化</option>
+                                    <option value="网络安全">网络安全</option>
+                                    <option value="设备管理">设备管理</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="skill-stat-item">
-                        <i class="ri-star-fill" style="font-size: 24px; color: #f59e0b;"></i>
-                        <div>
-                            <div class="skill-stat-value" id="avg-rating">0.0</div>
-                            <div class="skill-stat-label">平均评分</div>
+
+                        <div class="skill-grid" id="skill-market-grid">
+                            <div class="loading">
+                                <i class="ri-loader-4-line ri-spin" style="font-size: 32px;"></i>
+                                <p>加载中...</p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="skill-market-header">
-                    <div class="skill-market-filters">
-                        <div class="search-box">
-                            <input type="text" id="search-input" placeholder="搜索技能...">
-                            <i class="ri-search-line search-icon"></i>
-                        </div>
-                        <select id="category-filter" class="form-input" style="width: 160px;">
-                            <option value="">所有分类</option>
-                            <option value="网络管理">网络管理</option>
-                            <option value="家庭安全">家庭安全</option>
-                            <option value="网络优化">网络优化</option>
-                            <option value="网络安全">网络安全</option>
-                            <option value="设备管理">设备管理</option>
-                            <option value="网络监控">网络监控</option>
-                            <option value="网络工具">网络工具</option>
-                            <option value="系统核心">系统核心</option>
-                            <option value="智能家居">智能家居</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="skill-grid" id="skill-market-grid">
-                    <div class="loading">
-                        <i class="ri-loader-4-line ri-spin" style="font-size: 32px;"></i>
-                        <p>加载中...</p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Skill Preview Modal -->
-    <div class="modal" id="skill-preview-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>技能详情</h3>
-                <button class="modal-close" onclick="closeModal('skill-preview-modal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="skill-preview-header">
-                    <div class="skill-preview-icon">
-                        <i id="preview-skill-icon" class="ri-code-line"></i>
-                    </div>
-                    <div class="skill-preview-info">
-                        <h2 id="preview-skill-name">技能名称</h2>
-                        <div class="skill-preview-meta">
-                            <span><i class="ri-user-line"></i> <span id="preview-skill-author">作者</span></span>
-                            <span class="skill-preview-category-wrapper">
-                                <i class="ri-folder-line" style="color: var(--skill-color, var(--nexus-primary));"></i> 
-                                <span id="preview-skill-category" class="skill-preview-category">分类</span>
-                            </span>
-                            <span><i class="ri-star-fill" style="color: #f59e0b;"></i> <span id="preview-skill-rating">评分</span></span>
-                            <span><i class="ri-download-line"></i> <span id="preview-skill-downloads">下载</span></span>
-                        </div>
-                    </div>
-                </div>
-                <p id="preview-skill-description" style="color: var(--nexus-text-secondary); line-height: 1.6;"></p>
-                <div class="skill-capabilities">
-                    <h4>功能特性</h4>
-                    <ul id="preview-skill-capabilities"></ul>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" onclick="installSkillFromPreview()">
-                    <i class="ri-download-line"></i> 安装技能
-                </button>
-                <button class="btn btn-secondary" onclick="closeModal('skill-preview-modal')">关闭</button>
-            </div>
-        </div>
-    </div>
-
     <script src="/console/js/llm-integration-api.js"></script>
     <script src="/console/js/skill-market.js"></script>
     <script>
-        // 设置当前角色并初始化菜单
-        localStorage.setItem('currentRole', 'home');
-        
-        window.onload = async function() {
-            try {
-                await initMenu();
-                console.log('Skill Market: 菜单初始化完成');
-            } catch (error) {
-                console.error('Skill Market: 菜单初始化失败:', error);
-            }
+        window.onPageInit = function() {
+            // 页面特定的初始化代码
         };
     </script>
 </body>

@@ -5,29 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的群组 - Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/dashboard.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+
+    <!-- 必须引入的脚本文件 -->
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
+    <div class="nx-page">
+        <aside class="nx-page__sidebar" id="sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
-        <main class="main-content">
-            <header class="header">
-                <h1>我的群组</h1>
-                <div class="header-actions">
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">我的群组</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
                     <button class="btn btn-primary" onclick="showCreateGroupModal()">
                         <i class="ri-add-line"></i> 创建群组
                     </button>
                 </div>
             </header>
-            <div class="content">
-                <div class="group-list" id="group-list">
-                    <div class="loading">加载中...</div>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="group-list" id="group-list">
+                        <div class="loading">加载中...</div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -81,27 +97,26 @@
     <script>
         let currentGroupId = null;
 
-        window.onload = function() {
-            initMenu();
+        window.onPageInit = function() {
             loadGroups();
         };
 
         async function loadGroups() {
             try {
-                const response = await fetch('/api/personal/groups');
+                const response = await fetch('/api/personal/groups/list', { method: 'POST' });
                 
                 const contentType = response.headers.get('content-type');
-                let result;
+                let rs;
                 
                 if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
+                    rs = await response.json();
                 } else {
                     const text = await response.text();
                     throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
                 }
                 
-                if (result.status === 'success') {
-                    renderGroupList(result.data);
+                if (rs.requestStatus === 200 || rs.status === 'success') {
+                    renderGroupList(rs.data);
                 } else {
                     showError('加载群组列表失败');
                 }

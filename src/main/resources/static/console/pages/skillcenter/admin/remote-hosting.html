@@ -5,52 +5,166 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>远程托管 - Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/dashboard.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+
+    <!-- 必须引入的脚本文件 -->
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
+    <div class="nx-page">
+        <aside class="nx-page__sidebar" id="sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
-        <main class="main-content">
-            <header class="header">
-                <h1>远程托管</h1>
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">远程托管</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
+                </div>
             </header>
-            <div class="content">
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('skills')">远程技能</button>
-                    <button class="tab-btn" onclick="switchTab('hosting')">技能托管</button>
-                    <button class="tab-btn" onclick="switchTab('monitoring')">远程监控</button>
-                </div>
-                
-                <div class="tab-content" id="skills-tab">
-                    <div class="skill-list" id="remote-skills">
-                        <div class="loading">加载中...</div>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('skills')">远程技能</button>
+                        <button class="tab-btn" onclick="switchTab('hosting')">技能托管</button>
+                        <button class="tab-btn" onclick="switchTab('monitoring')">远程监控</button>
                     </div>
-                </div>
-                
-                <div class="tab-content" id="hosting-tab" style="display: none;">
-                    <div class="hosting-list" id="hosting-list">
-                        <div class="loading">加载中...</div>
+                    
+                    <div class="tab-content" id="skills-tab">
+                        <div class="skill-list" id="remote-skills">
+                            <div class="loading">加载中...</div>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="tab-content" id="monitoring-tab" style="display: none;">
-                    <div class="monitoring-list" id="monitoring-list">
-                        <div class="loading">加载中...</div>
+                    
+                    <div class="tab-content" id="hosting-tab" style="display: none;">
+                        <div class="hosting-list" id="hosting-list">
+                            <div class="loading">加载中...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="monitoring-tab" style="display: none;">
+                        <div class="monitoring-list" id="monitoring-list">
+                            <div class="loading">加载中...</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- 查看技能模态框 -->
+    <div class="modal" id="view-skill-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>技能详情</h3>
+                <button class="modal-close" onclick="closeViewSkillModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <label>技能名称：</label>
+                    <span id="view-skill-name"></span>
+                </div>
+                <div class="detail-row">
+                    <label>分类：</label>
+                    <span id="view-skill-category"></span>
+                </div>
+                <div class="detail-row">
+                    <label>状态：</label>
+                    <span id="view-skill-status"></span>
+                </div>
+                <div class="detail-row">
+                    <label>最后同步：</label>
+                    <span id="view-skill-lastSync"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeViewSkillModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看托管模态框 -->
+    <div class="modal" id="view-hosting-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>托管详情</h3>
+                <button class="modal-close" onclick="closeViewHostingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <label>托管名称：</label>
+                    <span id="view-hosting-name"></span>
+                </div>
+                <div class="detail-row">
+                    <label>提供商：</label>
+                    <span id="view-hosting-provider"></span>
+                </div>
+                <div class="detail-row">
+                    <label>状态：</label>
+                    <span id="view-hosting-status"></span>
+                </div>
+                <div class="detail-row">
+                    <label>区域：</label>
+                    <span id="view-hosting-region"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeViewHostingModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看监控模态框 -->
+    <div class="modal" id="view-monitoring-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>监控详情</h3>
+                <button class="modal-close" onclick="closeViewMonitoringModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <label>监控名称：</label>
+                    <span id="view-monitoring-name"></span>
+                </div>
+                <div class="detail-row">
+                    <label>类型：</label>
+                    <span id="view-monitoring-type"></span>
+                </div>
+                <div class="detail-row">
+                    <label>状态：</label>
+                    <span id="view-monitoring-status"></span>
+                </div>
+                <div class="detail-row">
+                    <label>得分：</label>
+                    <span id="view-monitoring-score"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeViewMonitoringModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        window.onload = function() {
-            initMenu();
+        let remoteSkillsData = [];
+        let hostingData = [];
+        let monitoringData = [];
+
+        window.onPageInit = function() {
             loadRemoteSkills();
             loadHostingList();
             loadMonitoringList();
@@ -61,22 +175,17 @@
                 const remoteSkills = document.getElementById('remote-skills');
                 remoteSkills.innerHTML = '<div class="loading">加载中...</div>';
                 
-                const response = await fetch('/api/admin/remote/skills');
+                const response = await fetch('/api/admin/remote/skills/list', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const rs = await response.json();
                 
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
+                if (rs.requestStatus === 200 && rs.data) {
+                    renderRemoteSkills(rs.data);
                 } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    renderRemoteSkills(result.data || []);
-                } else {
-                    throw new Error('响应数据格式错误');
+                    throw new Error(rs.message || '响应数据格式错误');
                 }
             } catch (error) {
                 console.error('加载远程技能列表错误:', error);
@@ -86,6 +195,7 @@
         }
 
         function renderRemoteSkills(skills) {
+            remoteSkillsData = skills;
             const skillList = document.getElementById('remote-skills');
             skillList.innerHTML = '';
             
@@ -126,22 +236,17 @@
                 const hostingList = document.getElementById('hosting-list');
                 hostingList.innerHTML = '<div class="loading">加载中...</div>';
                 
-                const response = await fetch('/api/admin/remote/hosting');
+                const response = await fetch('/api/admin/remote/hosting/list', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const rs = await response.json();
                 
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
+                if (rs.requestStatus === 200 && rs.data) {
+                    renderHostingList(rs.data);
                 } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    renderHostingList(result.data || []);
-                } else {
-                    throw new Error('响应数据格式错误');
+                    throw new Error(rs.message || '响应数据格式错误');
                 }
             } catch (error) {
                 console.error('加载托管列表错误:', error);
@@ -151,6 +256,7 @@
         }
 
         function renderHostingList(hostingList) {
+            hostingData = hostingList;
             const list = document.getElementById('hosting-list');
             list.innerHTML = '';
             
@@ -190,22 +296,17 @@
                 const monitoringList = document.getElementById('monitoring-list');
                 monitoringList.innerHTML = '<div class="loading">加载中...</div>';
                 
-                const response = await fetch('/api/admin/remote/monitoring');
+                const response = await fetch('/api/admin/remote/monitoring/list', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const rs = await response.json();
                 
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
+                if (rs.requestStatus === 200 && rs.data) {
+                    renderMonitoringList(rs.data);
                 } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    renderMonitoringList(result.data || []);
-                } else {
-                    throw new Error('响应数据格式错误');
+                    throw new Error(rs.message || '响应数据格式错误');
                 }
             } catch (error) {
                 console.error('加载监控列表错误:', error);
@@ -215,6 +316,7 @@
         }
 
         function renderMonitoringList(monitoringList) {
+            monitoringData = monitoringList;
             const list = document.getElementById('monitoring-list');
             list.innerHTML = '';
             
@@ -270,7 +372,18 @@
         }
 
         function viewSkill(skillId) {
-            showError('查看技能功能开发中...');
+            const skill = remoteSkillsData.find(s => s.id === skillId);
+            if (skill) {
+                document.getElementById('view-skill-name').textContent = skill.name || '-';
+                document.getElementById('view-skill-category').textContent = getCategoryName(skill.category);
+                document.getElementById('view-skill-status').textContent = skill.status || '-';
+                document.getElementById('view-skill-lastSync').textContent = skill.lastSync || '-';
+                document.getElementById('view-skill-modal').style.display = 'flex';
+            }
+        }
+
+        function closeViewSkillModal() {
+            document.getElementById('view-skill-modal').style.display = 'none';
         }
 
         async function syncSkill(skillId) {
@@ -334,7 +447,18 @@
         }
 
         function viewHosting(hostingId) {
-            showError('查看托管功能开发中...');
+            const hosting = hostingData.find(h => h.id === hostingId);
+            if (hosting) {
+                document.getElementById('view-hosting-name').textContent = hosting.name || '-';
+                document.getElementById('view-hosting-provider').textContent = hosting.provider || '-';
+                document.getElementById('view-hosting-status').textContent = hosting.status || '-';
+                document.getElementById('view-hosting-region').textContent = hosting.region || '-';
+                document.getElementById('view-hosting-modal').style.display = 'flex';
+            }
+        }
+
+        function closeViewHostingModal() {
+            document.getElementById('view-hosting-modal').style.display = 'none';
         }
 
         async function toggleHosting(hostingId) {
@@ -398,7 +522,18 @@
         }
 
         function viewMonitoring(monitoringId) {
-            showError('查看监控功能开发中...');
+            const monitoring = monitoringData.find(m => m.id === monitoringId);
+            if (monitoring) {
+                document.getElementById('view-monitoring-name').textContent = monitoring.name || '-';
+                document.getElementById('view-monitoring-type').textContent = monitoring.type || '-';
+                document.getElementById('view-monitoring-status').textContent = monitoring.status || '-';
+                document.getElementById('view-monitoring-score').textContent = monitoring.score || '-';
+                document.getElementById('view-monitoring-modal').style.display = 'flex';
+            }
+        }
+
+        function closeViewMonitoringModal() {
+            document.getElementById('view-monitoring-modal').style.display = 'none';
         }
 
         async function checkMonitoring(monitoringId) {

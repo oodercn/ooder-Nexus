@@ -5,316 +5,328 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网络配置 - Nexus</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
-    <script src="/console/js/common.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
+    <style>
+        .config-section {
+            background: var(--ns-card-bg);
+            border: 1px solid var(--ns-border);
+            border-radius: var(--ns-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .config-section h3 {
+            margin: 0 0 20px 0;
+            color: var(--ns-dark);
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .config-section h3 i {
+            color: var(--nx-primary);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .form-group {
+            margin-bottom: 0;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--ns-dark);
+            font-size: 14px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--ns-border);
+            border-radius: var(--ns-radius);
+            background-color: var(--ns-input-bg);
+            color: var(--ns-dark);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--nx-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-hint {
+            font-size: 12px;
+            color: var(--ns-secondary);
+            margin-top: 4px;
+        }
+        .switch-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--ns-border);
+        }
+        .switch-group:last-child {
+            border-bottom: none;
+        }
+        .switch-label {
+            display: flex;
+            flex-direction: column;
+        }
+        .switch-label-text {
+            font-weight: 500;
+            color: var(--ns-dark);
+        }
+        .switch-label-hint {
+            font-size: 12px;
+            color: var(--ns-secondary);
+            margin-top: 4px;
+        }
+        .switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--ns-border);
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+        .switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        .switch input:checked + .switch-slider {
+            background-color: var(--nx-primary);
+        }
+        .switch input:checked + .switch-slider:before {
+            transform: translateX(24px);
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 侧边导航栏 -->
-        <div class="sidebar">
-            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+    <div class="nx-page">
+        <aside class="nx-page__sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
-        </div>
-        
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <!-- 头部 -->
-            <div class="header">
-                <h1><i class="ri-settings-3-line"></i> 网络配置</h1>
-                <div class="header-actions">
-                    <button class="btn btn-secondary" onclick="history.back()">
-                        <i class="ri-arrow-left-line"></i> 返回
+        </aside>
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
                     </button>
-                    <button class="btn btn-primary" onclick="saveAllSettings()">
-                        <i class="ri-save-line"></i> 保存所有设置
+                    <h2 class="nx-text-lg nx-font-semibold">网络配置</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
                     </button>
                 </div>
-            </div>
-            
-            <!-- 基本设置 -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="ri-settings-3-line"></i> 基本设置</h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">网络名称</label>
-                            <input type="text" id="networkName" class="form-input" placeholder="Home Network">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">域名</label>
-                            <input type="text" id="domainName" class="form-input" placeholder="home.local">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">时区</label>
-                            <select id="timezone" class="form-input">
-                                <option value="Asia/Shanghai">Asia/Shanghai (北京时间)</option>
-                                <option value="Asia/Hong_Kong">Asia/Hong_Kong (香港时间)</option>
-                                <option value="Asia/Taipei">Asia/Taipei (台北时间)</option>
-                                <option value="Asia/Tokyo">Asia/Tokyo (东京时间)</option>
-                                <option value="America/New_York">America/New_York (纽约时间)</option>
-                                <option value="Europe/London">Europe/London (伦敦时间)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">NTP 服务器</label>
-                            <input type="text" id="ntpServer" class="form-input" placeholder="pool.ntp.org">
+            </header>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <!-- LAN 配置 -->
+                    <div class="config-section">
+                        <h3><i class="ri-router-line"></i> LAN 配置</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">IP 地址</label>
+                                <input type="text" class="form-input" value="192.168.1.1">
+                                <span class="form-hint">路由器 LAN 口 IP 地址</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">子网掩码</label>
+                                <input type="text" class="form-input" value="255.255.255.0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">DHCP 起始地址</label>
+                                <input type="text" class="form-input" value="192.168.1.100">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">DHCP 结束地址</label>
+                                <input type="text" class="form-input" value="192.168.1.200">
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- DNS 设置 -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="ri-dns-line"></i> DNS 设置</h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">主 DNS</label>
-                            <input type="text" id="primaryDns" class="form-input" placeholder="8.8.8.8">
+
+                    <!-- WAN 配置 -->
+                    <div class="config-section">
+                        <h3><i class="ri-global-line"></i> WAN 配置</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">连接类型</label>
+                                <select class="form-input">
+                                    <option value="dhcp" selected>DHCP (动态IP)</option>
+                                    <option value="pppoe">PPPoE (拨号)</option>
+                                    <option value="static">静态 IP</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">MTU</label>
+                                <input type="number" class="form-input" value="1500">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">DNS 服务器 1</label>
+                                <input type="text" class="form-input" value="8.8.8.8">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">DNS 服务器 2</label>
+                                <input type="text" class="form-input" value="8.8.4.4">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">备用 DNS</label>
-                            <input type="text" id="secondaryDns" class="form-input" placeholder="8.8.4.4">
+                    </div>
+
+                    <!-- 无线配置 -->
+                    <div class="config-section">
+                        <h3><i class="ri-wifi-line"></i> 无线配置</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">SSID (2.4GHz)</label>
+                                <input type="text" class="form-input" value="Nexus-2.4G">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">SSID (5GHz)</label>
+                                <input type="text" class="form-input" value="Nexus-5G">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">加密方式</label>
+                                <select class="form-input">
+                                    <option value="wpa2" selected>WPA2-PSK</option>
+                                    <option value="wpa3">WPA3-PSK</option>
+                                    <option value="wpa2wpa3">WPA2/WPA3 混合</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">密码</label>
+                                <input type="password" class="form-input" value="password123">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">DNS 后缀</label>
-                            <input type="text" id="dnsSuffix" class="form-input" placeholder="home.local">
+
+                        <div style="margin-top: 20px;">
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <span class="switch-label-text">启用 2.4GHz 无线</span>
+                                    <span class="switch-label-hint">开启或关闭 2.4GHz 无线网络</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <span class="switch-label-text">启用 5GHz 无线</span>
+                                    <span class="switch-label-hint">开启或关闭 5GHz 无线网络</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                            <div class="switch-group">
+                                <div class="switch-label">
+                                    <span class="switch-label-text">隐藏 SSID</span>
+                                    <span class="switch-label-hint">隐藏无线网络名称</span>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">
-                                <input type="checkbox" id="dnsCacheEnabled"> 启用 DNS 缓存
+                    </div>
+
+                    <!-- 高级设置 -->
+                    <div class="config-section">
+                        <h3><i class="ri-settings-3-line"></i> 高级设置</h3>
+                        <div class="switch-group">
+                            <div class="switch-label">
+                                <span class="switch-label-text">启用 NAT</span>
+                                <span class="switch-label-hint">网络地址转换功能</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="switch-group">
+                            <div class="switch-label">
+                                <span class="switch-label-text">启用 UPnP</span>
+                                <span class="switch-label-hint">通用即插即用协议</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="switch-group">
+                            <div class="switch-label">
+                                <span class="switch-label-text">启用 IPv6</span>
+                                <span class="switch-label-hint">IPv6 协议支持</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="switch-slider"></span>
                             </label>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- DHCP 设置 -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="ri-server-line"></i> DHCP 设置</h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <input type="checkbox" id="dhcpEnabled" checked> 启用 DHCP 服务
-                        </label>
-                    </div>
-                    <div class="form-grid" id="dhcpSettings">
-                        <div class="form-group">
-                            <label class="form-label">起始 IP</label>
-                            <input type="text" id="startIp" class="form-input" placeholder="192.168.1.100">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">结束 IP</label>
-                            <input type="text" id="endIp" class="form-input" placeholder="192.168.1.200">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">租约时间 (秒)</label>
-                            <input type="number" id="leaseTime" class="form-input" placeholder="86400">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">网关</label>
-                            <input type="text" id="gateway" class="form-input" placeholder="192.168.1.1">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">子网掩码</label>
-                            <input type="text" id="subnetMask" class="form-input" placeholder="255.255.255.0">
-                        </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="resetConfig()">重置</button>
+                        <button class="btn btn-primary" onclick="saveConfig()">保存配置</button>
                     </div>
                 </div>
             </div>
-            
-            <!-- WiFi 设置 -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="ri-wifi-line"></i> WiFi 设置</h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">SSID</label>
-                            <input type="text" id="ssid" class="form-input" placeholder="HomeWiFi">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">密码</label>
-                            <input type="password" id="wifiPassword" class="form-input" placeholder="WiFi 密码">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">信道</label>
-                            <select id="channel" class="form-input">
-                                <option value="auto">自动</option>
-                                <option value="1">1</option>
-                                <option value="6">6</option>
-                                <option value="11">11</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">模式</label>
-                            <select id="mode" class="form-input">
-                                <option value="802.11n">802.11n</option>
-                                <option value="802.11ac">802.11ac</option>
-                                <option value="802.11ax">802.11ax (WiFi 6)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">安全类型</label>
-                            <select id="security" class="form-input">
-                                <option value="WPA2-PSK">WPA2-PSK</option>
-                                <option value="WPA3-PSK">WPA3-PSK</option>
-                                <option value="WPA2/WPA3-PSK">WPA2/WPA3-PSK</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">
-                                <input type="checkbox" id="hidden"> 隐藏 SSID
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
-    <script src="/console/common/api-client.js"></script>
-    <script src="/console/common/button-manager.js"></script>
-    <script src="/console/common/utils.js"></script>
     <script>
-        // API 客户端实例
-        const networkApi = new ApiClient('/api/network');
+        function saveConfig() {
+            alert('网络配置保存成功！');
+        }
 
-        // 页面初始化
+        function resetConfig() {
+            if (confirm('确定要重置网络配置吗？')) {
+                alert('网络配置已重置为默认值');
+            }
+        }
+
         window.onPageInit = function() {
-            loadSettings();
+            // 页面特定的初始化代码
         };
-
-        // 加载设置
-        async function loadSettings() {
-            try {
-                // 加载基本设置
-                const basicData = await networkApi.get('/settings/basic');
-                if (basicData.status === 'success' && basicData.data) {
-                    const data = basicData.data;
-                    document.getElementById('networkName').value = data.networkName || '';
-                    document.getElementById('domainName').value = data.domainName || '';
-                    document.getElementById('timezone').value = data.timezone || 'Asia/Shanghai';
-                    document.getElementById('ntpServer').value = data.ntpServer || '';
-                }
-
-                // 加载 DNS 设置
-                const dnsData = await networkApi.get('/settings/dns');
-                if (dnsData.status === 'success' && dnsData.data) {
-                    const data = dnsData.data;
-                    document.getElementById('primaryDns').value = data.primaryDns || '';
-                    document.getElementById('secondaryDns').value = data.secondaryDns || '';
-                    document.getElementById('dnsSuffix').value = data.dnsSuffix || '';
-                    document.getElementById('dnsCacheEnabled').checked = data.dnsCacheEnabled || false;
-                }
-
-                // 加载 DHCP 设置
-                const dhcpData = await networkApi.get('/settings/dhcp');
-                if (dhcpData.status === 'success' && dhcpData.data) {
-                    const data = dhcpData.data;
-                    document.getElementById('dhcpEnabled').checked = data.dhcpEnabled !== false;
-                    document.getElementById('startIp').value = data.startIp || '';
-                    document.getElementById('endIp').value = data.endIp || '';
-                    document.getElementById('leaseTime').value = data.leaseTime || '';
-                    document.getElementById('gateway').value = data.gateway || '';
-                    document.getElementById('subnetMask').value = data.subnetMask || '';
-                }
-
-                // 加载 WiFi 设置
-                const wifiData = await networkApi.get('/settings/wifi');
-                if (wifiData.status === 'success' && wifiData.data) {
-                    const data = wifiData.data;
-                    document.getElementById('ssid').value = data.ssid || '';
-                    document.getElementById('wifiPassword').value = data.password || '';
-                    document.getElementById('channel').value = data.channel || 'auto';
-                    document.getElementById('mode').value = data.mode || '802.11ac';
-                    document.getElementById('security').value = data.security || 'WPA2-PSK';
-                    document.getElementById('hidden').checked = data.hidden || false;
-                }
-            } catch (error) {
-                console.error('加载设置失败:', error);
-                showToast('加载设置失败', 'error');
-            }
-        }
-
-        // 保存所有设置
-        async function saveAllSettings() {
-            try {
-                // 保存基本设置
-                await networkApi.put('/settings/basic', {
-                    networkName: document.getElementById('networkName').value,
-                    domainName: document.getElementById('domainName').value,
-                    timezone: document.getElementById('timezone').value,
-                    ntpServer: document.getElementById('ntpServer').value
-                });
-
-                // 保存 DNS 设置
-                await networkApi.put('/settings/dns', {
-                    primaryDns: document.getElementById('primaryDns').value,
-                    secondaryDns: document.getElementById('secondaryDns').value,
-                    dnsSuffix: document.getElementById('dnsSuffix').value,
-                    dnsCacheEnabled: document.getElementById('dnsCacheEnabled').checked
-                });
-
-                // 保存 DHCP 设置
-                await networkApi.put('/settings/dhcp', {
-                    dhcpEnabled: document.getElementById('dhcpEnabled').checked,
-                    startIp: document.getElementById('startIp').value,
-                    endIp: document.getElementById('endIp').value,
-                    leaseTime: parseInt(document.getElementById('leaseTime').value),
-                    gateway: document.getElementById('gateway').value,
-                    subnetMask: document.getElementById('subnetMask').value
-                });
-
-                // 保存 WiFi 设置
-                await networkApi.put('/settings/wifi', {
-                    ssid: document.getElementById('ssid').value,
-                    password: document.getElementById('wifiPassword').value,
-                    channel: document.getElementById('channel').value,
-                    mode: document.getElementById('mode').value,
-                    security: document.getElementById('security').value,
-                    hidden: document.getElementById('hidden').checked
-                });
-
-                showToast('设置保存成功', 'success');
-            } catch (error) {
-                console.error('保存设置失败:', error);
-                showToast('保存设置失败', 'error');
-            }
-        }
-
-        // 显示提示消息
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            toast.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 12px 24px;
-                border-radius: 4px;
-                color: white;
-                font-size: 14px;
-                z-index: 9999;
-                animation: slideIn 0.3s ease-out;
-                background: ${type === 'success' ? '#52c41a' : type === 'error' ? '#ff4d4f' : '#1890ff'};
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.animation = 'slideOut 0.3s ease-in';
-                setTimeout(() => document.body.removeChild(toast), 300);
-            }, 3000);
-        }
     </script>
 </body>
 </html>

@@ -5,41 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>市场管理 - Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/dashboard.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+
+    <!-- 必须引入的脚本文件 -->
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
+    <div class="nx-page">
+        <aside class="nx-page__sidebar" id="sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
-        <main class="main-content">
-            <header class="header">
-                <h1>市场管理</h1>
-                <div class="header-actions">
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">市场管理</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
                     <button class="btn btn-primary" onclick="showImportModal()">
                         <i class="ri-upload-cloud-line"></i> API导入
                     </button>
                 </div>
             </header>
-            <div class="content">
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('market')">市场技能</button>
-                    <button class="tab-btn" onclick="switchTab('enterprise')">企业级接口</button>
-                </div>
-                
-                <div class="tab-content" id="market-tab">
-                    <div class="skill-list" id="market-skills">
-                        <div class="loading">加载中...</div>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('market')">市场技能</button>
+                        <button class="tab-btn" onclick="switchTab('enterprise')">企业级接口</button>
                     </div>
-                </div>
-                
-                <div class="tab-content" id="enterprise-tab" style="display: none;">
-                    <div class="skill-list" id="enterprise-apis">
-                        <div class="loading">加载中...</div>
+                    
+                    <div class="tab-content" id="market-tab">
+                        <div class="skill-list" id="market-skills">
+                            <div class="loading">加载中...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="enterprise-tab" style="display: none;">
+                        <div class="skill-list" id="enterprise-apis">
+                            <div class="loading">加载中...</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,9 +95,75 @@
         </div>
     </div>
 
+    <!-- 查看API模态框 -->
+    <div class="modal" id="view-api-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>API详情</h3>
+                <button class="modal-close" onclick="closeViewAPIModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <label>API名称：</label>
+                    <span id="view-api-name"></span>
+                </div>
+                <div class="detail-row">
+                    <label>类型：</label>
+                    <span id="view-api-type"></span>
+                </div>
+                <div class="detail-row">
+                    <label>状态：</label>
+                    <span id="view-api-status"></span>
+                </div>
+                <div class="detail-row">
+                    <label>日调用量：</label>
+                    <span id="view-api-calls"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeViewAPIModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑API模态框 -->
+    <div class="modal" id="edit-api-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑API</h3>
+                <button class="modal-close" onclick="closeEditAPIModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-api-id">
+                <div class="form-group">
+                    <label>API名称</label>
+                    <input type="text" id="edit-api-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>类型</label>
+                    <select id="edit-api-type" class="form-control">
+                        <option value="sync">数据同步</option>
+                        <option value="batch">批量处理</option>
+                        <option value="monitor">实时监控</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select id="edit-api-status" class="form-control">
+                        <option value="active">启用</option>
+                        <option value="inactive">禁用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="submitEditAPI()">保存</button>
+                <button class="btn btn-secondary" onclick="closeEditAPIModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        window.onload = function() {
-            initMenu();
+        window.onPageInit = function() {
             loadMarketSkills();
             loadEnterpriseAPIs();
         };
@@ -91,22 +173,17 @@
                 const marketSkills = document.getElementById('market-skills');
                 marketSkills.innerHTML = '<div class="loading">加载中...</div>';
                 
-                const response = await fetch('/api/admin/market/skills');
+                const response = await fetch('/api/admin/market/skills/list', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const rs = await response.json();
                 
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
+                if (rs.requestStatus === 200 && rs.data) {
+                    renderMarketSkills(rs.data);
                 } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    renderMarketSkills(result.data || []);
-                } else {
-                    throw new Error('响应数据格式错误');
+                    throw new Error(rs.message || '响应数据格式错误');
                 }
             } catch (error) {
                 console.error('加载市场技能列表错误:', error);
@@ -153,22 +230,17 @@
                 const enterpriseAPIs = document.getElementById('enterprise-apis');
                 enterpriseAPIs.innerHTML = '<div class="loading">加载中...</div>';
                 
-                const response = await fetch('/api/admin/market/enterprise');
+                const response = await fetch('/api/admin/market/enterprise/list', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const rs = await response.json();
                 
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
+                if (rs.requestStatus === 200 && rs.data) {
+                    renderEnterpriseAPIs(rs.data);
                 } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    renderEnterpriseAPIs(result.data || []);
-                } else {
-                    throw new Error('响应数据格式错误');
+                    throw new Error(rs.message || '响应数据格式错误');
                 }
             } catch (error) {
                 console.error('加载企业级接口列表错误:', error);
@@ -323,12 +395,92 @@
             }
         }
 
-        function viewAPI(apiId) {
-            showError('查看API功能开发中...');
+        async function viewAPI(apiId) {
+            try {
+                const response = await fetch('/api/admin/market/enterprise/get', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: apiId })
+                });
+                const rs = await response.json();
+                
+                if (rs.requestStatus === 200 && rs.data) {
+                    document.getElementById('view-api-name').textContent = rs.data.name || '-';
+                    document.getElementById('view-api-type').textContent = rs.data.type || '-';
+                    document.getElementById('view-api-status').textContent = rs.data.status || '-';
+                    document.getElementById('view-api-calls').textContent = rs.data.dailyCalls || 0;
+                    document.getElementById('view-api-modal').style.display = 'flex';
+                } else {
+                    showError(rs.message || '获取API信息失败');
+                }
+            } catch (error) {
+                console.error('获取API信息错误:', error);
+                showError('获取API信息失败');
+            }
         }
 
-        function editAPI(apiId) {
-            showError('编辑API功能开发中...');
+        function closeViewAPIModal() {
+            document.getElementById('view-api-modal').style.display = 'none';
+        }
+
+        async function editAPI(apiId) {
+            try {
+                const response = await fetch('/api/admin/market/enterprise/get', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: apiId })
+                });
+                const rs = await response.json();
+                
+                if (rs.requestStatus === 200 && rs.data) {
+                    document.getElementById('edit-api-id').value = rs.data.id;
+                    document.getElementById('edit-api-name').value = rs.data.name || '';
+                    document.getElementById('edit-api-type').value = rs.data.type || 'sync';
+                    document.getElementById('edit-api-status').value = rs.data.status || 'active';
+                    document.getElementById('edit-api-modal').style.display = 'flex';
+                } else {
+                    showError(rs.message || '获取API信息失败');
+                }
+            } catch (error) {
+                console.error('获取API信息错误:', error);
+                showError('获取API信息失败');
+            }
+        }
+
+        function closeEditAPIModal() {
+            document.getElementById('edit-api-modal').style.display = 'none';
+        }
+
+        async function submitEditAPI() {
+            const id = document.getElementById('edit-api-id').value;
+            const name = document.getElementById('edit-api-name').value;
+            const type = document.getElementById('edit-api-type').value;
+            const status = document.getElementById('edit-api-status').value;
+            
+            if (!name) {
+                showError('请填写API名称');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/market/enterprise/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, name, type, status })
+                });
+                const rs = await response.json();
+                
+                if (rs.requestStatus === 200) {
+                    closeEditAPIModal();
+                    showSuccess('API更新成功');
+                    loadEnterpriseAPIs();
+                } else {
+                    showError(rs.message || 'API更新失败');
+                }
+            } catch (error) {
+                console.error('更新API错误:', error);
+                showError('API更新失败');
+            }
         }
 
         async function deleteAPI(apiId) {
@@ -336,31 +488,7 @@
                 return;
             }
             
-            try {
-                const response = await fetch(`/api/admin/market/enterprise/${apiId}`, {
-                    method: 'DELETE'
-                });
-                
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    showSuccess('API删除成功');
-                    loadEnterpriseAPIs();
-                } else {
-                    showError('API删除失败');
-                }
-            } catch (error) {
-                console.error('删除API错误:', error);
-                showError('API删除失败');
-            }
+            showError('删除API功能暂未实现');
         }
 
         function showError(message) {

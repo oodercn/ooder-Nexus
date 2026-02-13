@@ -4,213 +4,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>同步状态 - Nexus</title>
+
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/dashboard.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
-    <link rel="stylesheet" href="/console/css/llm-integration.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+    <style>
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .content-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ns-dark);
+        }
+        .content-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .sync-summary {
+            display: flex;
+            gap: 24px;
+            padding: 20px;
+            background: var(--ns-card-bg);
+            border: 1px solid var(--ns-border);
+            border-radius: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .summary-label {
+            color: var(--ns-secondary);
+            font-size: 14px;
+        }
+        .summary-value {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--ns-dark);
+        }
+        .summary-value.success { color: var(--ns-success); }
+        .summary-value.error { color: var(--ns-danger); }
+        .summary-value.pending { color: var(--ns-warning); }
+        .summary-value.in-progress { color: var(--nx-primary); }
+        .sync-task-item {
+            background: var(--ns-card-bg);
+            border: 1px solid var(--ns-border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .task-name {
+            font-weight: 600;
+            color: var(--ns-dark);
+        }
+        .task-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .task-status.pending { background: rgba(245, 158, 11, 0.2); color: var(--ns-warning); }
+        .task-status.in-progress { background: rgba(59, 130, 246, 0.2); color: var(--nx-primary); }
+        .task-status.completed { background: rgba(34, 197, 94, 0.2); color: var(--ns-success); }
+        .task-status.failed { background: rgba(239, 68, 68, 0.2); color: var(--ns-danger); }
+        .task-status.cancelled { background: rgba(148, 163, 184, 0.2); color: var(--ns-secondary); }
+        .task-error {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--ns-danger);
+            margin-bottom: 12px;
+        }
+        .task-time {
+            font-size: 13px;
+            color: var(--ns-secondary);
+            display: flex;
+            gap: 16px;
+        }
+        .loading, .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--ns-secondary);
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+        }
+        .notification.show { transform: translateX(0); }
+        .notification.success { background: rgba(34, 197, 94, 0.9); color: white; }
+        .notification.error { background: rgba(239, 68, 68, 0.9); color: white; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
+    <div class="nx-page">
+        <aside class="nx-page__sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
-        <main class="main-content">
-            <div class="content-header">
-                <h1>同步状态</h1>
-                <div class="content-actions">
-                    <button class="btn btn-secondary" onclick="refreshSyncStatus()">
-                        <i class="ri-refresh-line"></i>
-                        刷新
+
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
                     </button>
-                    <button class="btn btn-secondary" onclick="cancelAllSync()">
-                        <i class="ri-close-line"></i>
-                        取消全部
+                    <h2 class="nx-text-lg nx-font-semibold">同步状态</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
                     </button>
                 </div>
-            </div>
-            <div class="sync-status-list" id="sync-status-list">
-                <div class="loading">加载中...</div>
+            </header>
+
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="content-header">
+                        <h1>同步状态</h1>
+                        <div class="content-actions">
+                            <button class="nx-btn nx-btn--secondary" onclick="refreshSyncStatus()">
+                                <i class="ri-refresh-line"></i> 刷新
+                            </button>
+                            <button class="nx-btn nx-btn--secondary" onclick="cancelAllSync()">
+                                <i class="ri-close-line"></i> 取消全部
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sync-status-list" id="sync-status-list">
+                        <div class="loading">加载中...</div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
-    <script src="/console/js/common/ApiClient.js"></script>
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/common/api-client.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
     <script src="/console/js/skillcenter-sync-api.js"></script>
     <script>
-        class SyncStatusPage {
-            constructor() {
-                this.syncAPI = new SkillCenterSyncAPI();
-                this.syncStatus = null;
-            }
+        let syncAPI = null;
+        let syncStatus = null;
 
-            async init() {
-                try {
-                    await this.loadSyncStatus();
-                    this.bindEvents();
-                } catch (error) {
-                    console.error('初始化错误:', error);
-                    this.showError('初始化失败');
-                }
-            }
+        window.onPageInit = function() {
+            console.log('同步状态页面初始化完成');
+            syncAPI = new SkillCenterSyncAPI();
+            loadSyncStatus();
+        };
 
-            async loadSyncStatus() {
-                try {
-                    const response = await this.syncAPI.getSyncStatus();
-                    if (response.success) {
-                        this.syncStatus = response.data;
-                        this.renderSyncStatus();
-                    } else {
-                        this.showError(response.message || '加载同步状态失败');
-                        document.getElementById('sync-status-list').innerHTML = '<div class="empty-state">加载失败</div>';
-                    }
-                } catch (error) {
-                    console.error('加载同步状态错误:', error);
-                    this.showError('加载同步状态失败');
+        async function loadSyncStatus() {
+            try {
+                const response = await syncAPI.getSyncStatus();
+                if (response.success) {
+                    syncStatus = response.data;
+                    renderSyncStatus();
+                } else {
+                    showError(response.message || '加载同步状态失败');
                     document.getElementById('sync-status-list').innerHTML = '<div class="empty-state">加载失败</div>';
                 }
-            }
-
-            renderSyncStatus() {
-                const syncStatusList = document.getElementById('sync-status-list');
-                let html = '';
-
-                if (!this.syncStatus || !this.syncStatus.tasks || this.syncStatus.tasks.length === 0) {
-                    syncStatusList.innerHTML = '<div class="empty-state">暂无同步任务</div>';
-                    return;
-                }
-
-                html += `<div class="sync-summary">`;
-                html += `<div class="summary-item">`;
-                html += `<span class="summary-label">总任务数：</span>`;
-                html += `<span class="summary-value">${this.syncStatus.totalSkills}</span>`;
-                html += `</div>`;
-                html += `<div class="summary-item">`;
-                html += `<span class="summary-label">已完成：</span>`;
-                html += `<span class="summary-value success">${this.syncStatus.completedSkills}</span>`;
-                html += `</div>`;
-                html += `<div class="summary-item">`;
-                html += `<span class="summary-label">失败：</span>`;
-                html += `<span class="summary-value error">${this.syncStatus.failedSkills}</span>`;
-                html += `</div>`;
-                html += `<div class="summary-item">`;
-                html += `<span class="summary-label">状态：</span>`;
-                html += `<span class="summary-value ${this.getStateClass(this.syncStatus.state)}">${this.getStateText(this.syncStatus.state)}</span>`;
-                html += `</div>`;
-                html += `</div>`;
-
-                html += `<h3>同步任务详情</h3>`;
-                this.syncStatus.tasks.forEach(task => {
-                    html += `<div class="sync-task-item">`;
-                    html += `<div class="task-header">`;
-                    html += `<span class="task-name">${task.skillName || task.skillId}</span>`;
-                    html += `<span class="task-status ${this.getTaskStateClass(task.state)}">${this.getTaskStateText(task.state)}</span>`;
-                    html += `</div>`;
-                    if (task.errorMessage) {
-                        html += `<div class="task-error">`;
-                        html += `<strong>错误信息：</strong>${task.errorMessage}`;
-                        html += `</div>`;
-                    }
-                    html += `<div class="task-time">`;
-                    html += `<span>开始时间：${new Date(task.startTime).toLocaleString('zh-CN')}</span>`;
-                    if (task.endTime) {
-                        html += `<span>结束时间：${new Date(task.endTime).toLocaleString('zh-CN')}</span>`;
-                    }
-                    html += `</div>`;
-                    html += `</div>`;
-                });
-
-                syncStatusList.innerHTML = html;
-            }
-
-            getStateText(state) {
-                const stateMap = {
-                    'PENDING': '等待中',
-                    'IN_PROGRESS': '进行中',
-                    'COMPLETED': '已完成',
-                    'FAILED': '失败',
-                    'CANCELLED': '已取消'
-                };
-                return stateMap[state] || state;
-            }
-
-            getStateClass(state) {
-                const classMap = {
-                    'PENDING': 'pending',
-                    'IN_PROGRESS': 'in-progress',
-                    'COMPLETED': 'completed',
-                    'FAILED': 'failed',
-                    'CANCELLED': 'cancelled'
-                };
-                return classMap[state] || '';
-            }
-
-            getTaskStateText(state) {
-                const stateMap = {
-                    'PENDING': '等待中',
-                    'IN_PROGRESS': '进行中',
-                    'COMPLETED': '已完成',
-                    'FAILED': '失败',
-                    'CANCELLED': '已取消'
-                };
-                return stateMap[state] || state;
-            }
-
-            getTaskStateClass(state) {
-                const classMap = {
-                    'PENDING': 'pending',
-                    'IN_PROGRESS': 'in-progress',
-                    'COMPLETED': 'completed',
-                    'FAILED': 'failed',
-                    'CANCELLED': 'cancelled'
-                };
-                return classMap[state] || '';
-            }
-
-            bindEvents() {
-                // 菜单事件由menu-loader.js处理
-            }
-
-            showSuccess(message) {
-                this.showNotification(message, 'success');
-            }
-
-            showError(message) {
-                this.showNotification(message, 'error');
-            }
-
-            showNotification(message, type) {
-                const notification = document.createElement('div');
-                notification.className = `notification notification-${type}`;
-                notification.textContent = message;
-                document.body.appendChild(notification);
-                setTimeout(() => notification.remove(), 3000);
+            } catch (error) {
+                console.error('加载同步状态错误:', error);
+                showError('加载同步状态失败');
+                document.getElementById('sync-status-list').innerHTML = '<div class="empty-state">加载失败</div>';
             }
         }
 
-        const syncStatusPage = new SyncStatusPage();
-        syncStatusPage.init();
+        function renderSyncStatus() {
+            const syncStatusList = document.getElementById('sync-status-list');
+            let html = '';
+
+            if (!syncStatus || !syncStatus.tasks || syncStatus.tasks.length === 0) {
+                syncStatusList.innerHTML = '<div class="empty-state">暂无同步任务</div>';
+                return;
+            }
+
+            html += `<div class="sync-summary">`;
+            html += `<div class="summary-item"><span class="summary-label">总任务数：</span><span class="summary-value">${syncStatus.totalSkills}</span></div>`;
+            html += `<div class="summary-item"><span class="summary-label">已完成：</span><span class="summary-value success">${syncStatus.completedSkills}</span></div>`;
+            html += `<div class="summary-item"><span class="summary-label">失败：</span><span class="summary-value error">${syncStatus.failedSkills}</span></div>`;
+            html += `<div class="summary-item"><span class="summary-label">状态：</span><span class="summary-value ${getStateClass(syncStatus.state)}">${getStateText(syncStatus.state)}</span></div>`;
+            html += `</div>`;
+
+            html += `<h3 style="margin-bottom: 16px; color: var(--ns-dark);">同步任务详情</h3>`;
+            syncStatus.tasks.forEach(task => {
+                html += `<div class="sync-task-item">`;
+                html += `<div class="task-header">`;
+                html += `<span class="task-name">${task.skillName || task.skillId}</span>`;
+                html += `<span class="task-status ${getTaskStateClass(task.state)}">${getTaskStateText(task.state)}</span>`;
+                html += `</div>`;
+                if (task.errorMessage) {
+                    html += `<div class="task-error"><strong>错误信息：</strong>${task.errorMessage}</div>`;
+                }
+                html += `<div class="task-time">`;
+                html += `<span>开始时间：${new Date(task.startTime).toLocaleString('zh-CN')}</span>`;
+                if (task.endTime) {
+                    html += `<span>结束时间：${new Date(task.endTime).toLocaleString('zh-CN')}</span>`;
+                }
+                html += `</div>`;
+                html += `</div>`;
+            });
+
+            syncStatusList.innerHTML = html;
+        }
+
+        function getStateText(state) {
+            const stateMap = { 'PENDING': '等待中', 'IN_PROGRESS': '进行中', 'COMPLETED': '已完成', 'FAILED': '失败', 'CANCELLED': '已取消' };
+            return stateMap[state] || state;
+        }
+
+        function getStateClass(state) {
+            const classMap = { 'PENDING': 'pending', 'IN_PROGRESS': 'in-progress', 'COMPLETED': 'completed', 'FAILED': 'failed', 'CANCELLED': 'cancelled' };
+            return classMap[state] || '';
+        }
+
+        function getTaskStateText(state) {
+            return getStateText(state);
+        }
+
+        function getTaskStateClass(state) {
+            return getStateClass(state);
+        }
 
         async function refreshSyncStatus() {
             document.getElementById('sync-status-list').innerHTML = '<div class="loading">加载中...</div>';
-            await syncStatusPage.loadSyncStatus();
+            await loadSyncStatus();
         }
 
         async function cancelAllSync() {
-            try {
-                alert('取消全部同步功能开发中...');
-            } catch (error) {
-                console.error('取消同步错误:', error);
-                syncStatusPage.showError('取消同步失败');
-            }
+            alert('取消全部同步功能开发中...');
         }
-    </script>
-    <script>
-        window.onload = function() {
-            initMenu();
-        };
+
+        function showSuccess(message) { showNotification(message, 'success'); }
+        function showError(message) { showNotification(message, 'error'); }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 10);
+            setTimeout(() => notification.remove(), 3000);
+        }
     </script>
 </body>
 </html>

@@ -3,241 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LLM交互管理 - Nexus</title>
-    <link rel="stylesheet" href="../../css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="../../css/theme.css">
-    <link rel="stylesheet" href="../../css/dashboard.css">
-    <script src="../../js/theme-manager.js"></script>
+    <title>LLM交互管理 - Nexus Console</title>
+    
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/nexus.css">
 </head>
 <body>
-    <div class="container">
-        <!-- 侧边导航栏 -->
-        <div class="sidebar">
-            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+    <div class="nx-page">
+        <aside class="nx-page__sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
-        </div>
+        </aside>
         
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <div class="header">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h1><i class="ri-robot-line"></i> LLM交互管理</h1>
-                    <button class="theme-toggle-btn btn btn-secondary" style="padding: 8px 16px; font-size: 14px;">
-                        <i class="ri-sun-line"></i> 浅色模式
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">LLM交互管理</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
+                    <button class="nx-btn nx-btn--primary" onclick="addLlmProvider()">
+                        <i class="ri-add-line"></i> 添加LLM提供者
                     </button>
                 </div>
-                <div class="subtitle">
-                    <span class="badge dashboard-badge" style="background-color: var(--nexus-primary); color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin-right: 16px;">Nexus</span>
-                    <span>管理LLM提供者和交互</span>
+            </header>
+            
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="nx-card nx-mb-6">
+                        <div class="nx-card__header">
+                            <h3 class="nx-card__title">LLM提供者管理</h3>
+                        </div>
+                        <div class="nx-card__body">
+                            <table class="nx-table">
+                                <thead>
+                                    <tr>
+                                        <th>提供者ID</th>
+                                        <th>名称</th>
+                                        <th>类型</th>
+                                        <th>状态</th>
+                                        <th>版本</th>
+                                        <th>创建时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="llmProvidersTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="nx-card">
+                        <div class="nx-card__header">
+                            <h3 class="nx-card__title">LLM请求管理</h3>
+                            <button class="nx-btn nx-btn--secondary" onclick="refreshLlmRequests()">
+                                <i class="ri-refresh-line"></i> 刷新
+                            </button>
+                        </div>
+                        <div class="nx-card__body">
+                            <table class="nx-table">
+                                <thead>
+                                    <tr>
+                                        <th>请求ID</th>
+                                        <th>提供者</th>
+                                        <th>类型</th>
+                                        <th>状态</th>
+                                        <th>创建时间</th>
+                                        <th>响应时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="llmRequestsTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!-- LLM提供者管理 -->
-            <section class="llm-providers">
-                <div class="section-header">
-                    <h3>LLM提供者管理</h3>
-                    <button class="btn-primary" onclick="addLlmProvider()">
-                        <i class="ri-add-line"></i>
-                        添加LLM提供者
-                    </button>
-                </div>
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>提供者ID</th>
-                                <th>名称</th>
-                                <th>类型</th>
-                                <th>状态</th>
-                                <th>版本</th>
-                                <th>创建时间</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="llmProvidersTableBody">
-                            <!-- LLM提供者数据将通过JavaScript动态填充 -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- LLM请求管理 -->
-            <section class="llm-requests">
-                <div class="section-header">
-                    <h3>LLM请求管理</h3>
-                    <button class="btn-secondary" onclick="refreshLlmRequests()">
-                        <i class="ri-refresh-line"></i>
-                        刷新
-                    </button>
-                </div>
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>请求ID</th>
-                                <th>提供者</th>
-                                <th>类型</th>
-                                <th>状态</th>
-                                <th>创建时间</th>
-                                <th>响应时间</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="llmRequestsTableBody">
-                            <!-- LLM请求数据将通过JavaScript动态填充 -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </div>
+        </main>
     </div>
-
-    <!-- LLM提供者添加模态框 -->
-    <div id="addLlmProviderModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>添加LLM提供者</h3>
-                <button class="close-btn" onclick="closeAddLlmProviderModal()">
-                    <i class="ri-close-line"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addLlmProviderForm">
-                    <div class="form-group">
-                        <label for="providerId">提供者ID</label>
-                        <input type="text" id="providerId" required placeholder="请输入提供者ID">
-                    </div>
-                    <div class="form-group">
-                        <label for="providerName">名称</label>
-                        <input type="text" id="providerName" required placeholder="请输入提供者名称">
-                    </div>
-                    <div class="form-group">
-                        <label for="providerType">类型</label>
-                        <select id="providerType" required>
-                            <option value="openai">OpenAI</option>
-                            <option value="anthropic">Anthropic</option>
-                            <option value="google">Google</option>
-                            <option value="azure">Azure</option>
-                            <option value="custom">自定义</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="providerVersion">版本</label>
-                        <input type="text" id="providerVersion" required placeholder="请输入版本号">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeAddLlmProviderModal()">取消</button>
-                <button class="btn-primary" onclick="submitAddLlmProvider()">添加</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 公共JS模块 -->
-    <script src="../../js/menu-loader.js"></script>
-    <script src="../../common/api-client.js"></script>
-    <script src="../../common/utils.js"></script>
+    
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
     <script>
-        window.onload = function() {
-            initMenu();
+        const llmProviders = [
+            { id: 'openai-1', name: 'OpenAI GPT-4', type: 'openai', status: 'active', version: 'v4.0', createdAt: '2024-01-01' },
+            { id: 'anthropic-1', name: 'Anthropic Claude', type: 'anthropic', status: 'active', version: 'v3.5', createdAt: '2024-01-02' }
+        ];
+        
+        const llmRequests = [
+            { id: 'req-1', provider: 'openai-1', type: 'completion', status: 'success', createdAt: '2024-01-10 10:00', responseTime: '2.5s' },
+            { id: 'req-2', provider: 'anthropic-1', type: 'chat', status: 'success', createdAt: '2024-01-10 10:05', responseTime: '1.8s' }
+        ];
+        
+        window.onPageInit = function() {
+            console.log('LLM交互管理页面初始化完成');
             loadLlmProviders();
             loadLlmRequests();
         };
-
+        
         function loadLlmProviders() {
-            // 模拟加载LLM提供者数据
-            const tableBody = document.getElementById('llmProvidersTableBody');
-            tableBody.innerHTML = `
-                <tr>
-                    <td>openai-1</td>
-                    <td>OpenAI GPT-4</td>
-                    <td>openai</td>
-                    <td><span class="status-active">活跃</span></td>
-                    <td>v4.0</td>
-                    <td>2024-01-01</td>
+            const tbody = document.getElementById('llmProvidersTableBody');
+            tbody.innerHTML = '';
+            llmProviders.forEach(provider => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${provider.id}</td>
+                    <td>${provider.name}</td>
+                    <td>${provider.type}</td>
+                    <td><span class="${provider.status === 'active' ? 'nx-text-success' : 'nx-text-danger'}">${provider.status === 'active' ? '活跃' : '禁用'}</span></td>
+                    <td>${provider.version}</td>
+                    <td>${provider.createdAt}</td>
                     <td>
-                        <button class="btn-edit" onclick="editLlmProvider('openai-1')">编辑</button>
-                        <button class="btn-delete" onclick="deleteLlmProvider('openai-1')">删除</button>
+                        <button class="nx-btn nx-btn--sm nx-btn--secondary" onclick="editLlmProvider('${provider.id}')">编辑</button>
+                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="deleteLlmProvider('${provider.id}')">删除</button>
                     </td>
-                </tr>
-                <tr>
-                    <td>anthropic-1</td>
-                    <td>Anthropic Claude</td>
-                    <td>anthropic</td>
-                    <td><span class="status-active">活跃</span></td>
-                    <td>v3.5</td>
-                    <td>2024-01-02</td>
-                    <td>
-                        <button class="btn-edit" onclick="editLlmProvider('anthropic-1')">编辑</button>
-                        <button class="btn-delete" onclick="deleteLlmProvider('anthropic-1')">删除</button>
-                    </td>
-                </tr>
-            `;
+                `;
+                tbody.appendChild(row);
+            });
         }
-
+        
         function loadLlmRequests() {
-            // 模拟加载LLM请求数据
-            const tableBody = document.getElementById('llmRequestsTableBody');
-            tableBody.innerHTML = `
-                <tr>
-                    <td>req-1</td>
-                    <td>openai-1</td>
-                    <td>completion</td>
-                    <td><span class="status-active">成功</span></td>
-                    <td>2024-01-10 10:00</td>
-                    <td>2.5s</td>
+            const tbody = document.getElementById('llmRequestsTableBody');
+            tbody.innerHTML = '';
+            llmRequests.forEach(request => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${request.id}</td>
+                    <td>${request.provider}</td>
+                    <td>${request.type}</td>
+                    <td><span class="${request.status === 'success' ? 'nx-text-success' : 'nx-text-danger'}">${request.status === 'success' ? '成功' : '失败'}</span></td>
+                    <td>${request.createdAt}</td>
+                    <td>${request.responseTime}</td>
                     <td>
-                        <button class="btn-edit" onclick="viewLlmRequest('req-1')">查看</button>
+                        <button class="nx-btn nx-btn--sm nx-btn--secondary" onclick="viewLlmRequest('${request.id}')">查看</button>
                     </td>
-                </tr>
-                <tr>
-                    <td>req-2</td>
-                    <td>anthropic-1</td>
-                    <td>chat</td>
-                    <td><span class="status-active">成功</span></td>
-                    <td>2024-01-10 10:05</td>
-                    <td>1.8s</td>
-                    <td>
-                        <button class="btn-edit" onclick="viewLlmRequest('req-2')">查看</button>
-                    </td>
-                </tr>
-            `;
+                `;
+                tbody.appendChild(row);
+            });
         }
-
+        
         function addLlmProvider() {
-            document.getElementById('addLlmProviderModal').classList.add('show');
+            alert('添加LLM提供者功能开发中...');
         }
-
-        function closeAddLlmProviderModal() {
-            document.getElementById('addLlmProviderModal').classList.remove('show');
-        }
-
-        function submitAddLlmProvider() {
-            // 模拟添加LLM提供者
-            document.getElementById('addLlmProviderModal').classList.remove('show');
-            loadLlmProviders();
-        }
-
+        
         function editLlmProvider(providerId) {
-            // 模拟编辑LLM提供者
-            alert('编辑LLM提供者: ' + providerId);
+            alert(`编辑LLM提供者: ${providerId}`);
         }
-
+        
         function deleteLlmProvider(providerId) {
-            // 模拟删除LLM提供者
             if (confirm('确定要删除此LLM提供者吗？')) {
-                loadLlmProviders();
+                alert(`删除LLM提供者: ${providerId}`);
             }
         }
-
+        
         function viewLlmRequest(requestId) {
-            // 模拟查看LLM请求
-            alert('查看LLM请求: ' + requestId);
+            alert(`查看LLM请求: ${requestId}`);
         }
-
+        
         function refreshLlmRequests() {
-            // 模拟刷新LLM请求
             loadLlmRequests();
         }
     </script>

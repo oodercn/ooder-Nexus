@@ -3,118 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网络设备管理 - Nexus</title>
-    <link rel="stylesheet" href="../../css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/dashboard.css">
-    <script src="/console/js/theme-manager.js"></script>
+    <title>网络设备管理 - Nexus Console</title>
+    
+    <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="/console/css/nexus.css">
 </head>
 <body>
-    <div class="container">
-        <!-- 侧边导航栏 -->
-        <div class="sidebar">
-            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+    <div class="nx-page">
+        <aside class="nx-page__sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
-        </div>
+        </aside>
         
-        <!-- 主内容区 -->
-        <div class="main-content">
-        <!-- 头部 -->
-        <div class="header">
-            <h1><i class="ri-list-check"></i> 网络设备列表</h1>
-            <div class="header-actions">
-                <button class="btn btn-secondary theme-toggle-btn">
-                    <i class="ri-sun-line"></i> 浅色模式
-                </button>
-                <button class="btn btn-primary" onclick="addDevice()">
-                    <i class="ri-add-line"></i> 添加设备
-                </button>
-            </div>
-        </div>
-        
-        <!-- 搜索和过滤 -->
-        <div class="search-filter">
-            <div class="search-box">
-                <input type="text" class="search-input" placeholder="搜索设备名称、IP、MAC..." id="searchInput">
-                <button class="btn btn-secondary" onclick="searchDevices()">
-                    <i class="ri-search-line"></i> 搜索
-                </button>
-            </div>
-            <div>
-                <select class="filter-select" id="statusFilter">
-                    <option value="all">所有状态</option>
-                    <option value="online">在线</option>
-                    <option value="offline">离线</option>
-                    <option value="warning">警告</option>
-                </select>
-                <select class="filter-select" id="typeFilter">
-                    <option value="all">所有类型</option>
-                    <option value="router">路由器</option>
-                    <option value="switch">交换机</option>
-                    <option value="pc">电脑</option>
-                    <option value="printer">打印机</option>
-                    <option value="nas">NAS</option>
-                    <option value="other">其他</option>
-                </select>
-            </div>
-        </div>
-        
-        <!-- 设备表格 -->
-        <div class="card">
-            <div class="table-container">
-                <table id="deviceTable">
-                    <thead>
-                        <tr>
-                            <th>设备名称</th>
-                            <th>类型</th>
-                            <th>IP地址</th>
-                            <th>MAC地址</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="deviceTableBody">
-                        <!-- 设备数据将通过JavaScript动态生成 -->
-                    </tbody>
-                </table>
-            </div>
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">网络设备列表</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
+                    <button class="nx-btn nx-btn--primary" onclick="addDevice()">
+                        <i class="ri-add-line"></i> 添加设备
+                    </button>
+                </div>
+            </header>
             
-            <!-- 分页 -->
-            <div class="pagination">
-                <button class="page-btn" onclick="changePage(1)">首页</button>
-                <button class="page-btn" onclick="changePage(currentPage - 1)">上一页</button>
-                <button class="page-btn active" id="page1">1</button>
-                <button class="page-btn" id="page2">2</button>
-                <button class="page-btn" id="page3">3</button>
-                <button class="page-btn" onclick="changePage(currentPage + 1)">下一页</button>
-                <button class="page-btn" onclick="changePage(3)">末页</button>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="nx-flex nx-gap-3 nx-mb-4">
+                        <input type="text" class="nx-input" placeholder="搜索设备名称、IP、MAC..." id="searchInput" style="width: 300px;">
+                        <select class="nx-input" id="statusFilter" style="width: 150px;">
+                            <option value="all">所有状态</option>
+                            <option value="online">在线</option>
+                            <option value="offline">离线</option>
+                            <option value="warning">警告</option>
+                        </select>
+                        <select class="nx-input" id="typeFilter" style="width: 150px;">
+                            <option value="all">所有类型</option>
+                            <option value="router">路由器</option>
+                            <option value="switch">交换机</option>
+                            <option value="pc">电脑</option>
+                            <option value="printer">打印机</option>
+                            <option value="nas">NAS</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    
+                    <div class="nx-card">
+                        <div class="nx-card__body">
+                            <table class="nx-table" id="deviceTable">
+                                <thead>
+                                    <tr>
+                                        <th>设备名称</th>
+                                        <th>类型</th>
+                                        <th>IP地址</th>
+                                        <th>MAC地址</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="deviceTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 编辑设备模态框 -->
+    <div class="modal" id="edit-device-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑设备</h3>
+                <button class="modal-close" onclick="closeEditDeviceModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-device-id">
+                <div class="nx-form-group nx-mb-4">
+                    <label class="nx-form-label">设备名称</label>
+                    <input type="text" id="edit-device-name" class="nx-input" required>
+                </div>
+                <div class="nx-form-group nx-mb-4">
+                    <label class="nx-form-label">设备类型</label>
+                    <select id="edit-device-type" class="nx-input">
+                        <option value="router">路由器</option>
+                        <option value="switch">交换机</option>
+                        <option value="pc">电脑</option>
+                        <option value="printer">打印机</option>
+                        <option value="nas">NAS</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div class="nx-form-group">
+                    <label class="nx-form-label">位置</label>
+                    <input type="text" id="edit-device-location" class="nx-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="nx-btn nx-btn--secondary" onclick="closeEditDeviceModal()">取消</button>
+                <button class="nx-btn nx-btn--primary" onclick="submitEditDevice()">保存</button>
             </div>
         </div>
     </div>
     
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
     <script>
-        // 设备数据存储
         let allDevices = [];
         let currentPage = 1;
         const pageSize = 10;
         let filteredDevices = [];
         
-        // 初始化页面
         async function init() {
             await loadDevicesFromApi();
         }
         
-        // 从后台API加载设备数据
         async function loadDevicesFromApi() {
             try {
                 const tableBody = document.getElementById('deviceTableBody');
                 tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;"><i class="ri-loader-4-line ri-spin"></i> 加载中...</td></tr>';
                 
-                const response = await fetch('/api/devices/list');
-                const result = await response.json();
+                const response = await fetch('/api/devices/list', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const rs = await response.json();
                 
-                if (result.code === 200 && result.data) {
-                    allDevices = result.data.devices.map(device => ({
+                if ((rs.requestStatus === 200 || rs.code === 200) && rs.data) {
+                    allDevices = rs.data.devices.map(device => ({
                         id: device.id,
                         name: device.name,
                         type: device.type,
@@ -126,7 +155,7 @@
                     filteredDevices = [...allDevices];
                     renderDevices();
                 } else {
-                    showError('加载设备数据失败: ' + (result.message || '未知错误'));
+                    showError('加载设备数据失败: ' + (rs.message || '未知错误'));
                 }
             } catch (error) {
                 console.error('加载设备数据失败:', error);
@@ -134,20 +163,17 @@
             }
         }
         
-        // 显示错误信息
         function showError(message) {
             const tableBody = document.getElementById('deviceTableBody');
-            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--nexus-danger);"><i class="ri-error-warning-line"></i> ${message}</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--nx-danger);"><i class="ri-error-warning-line"></i> ${message}</td></tr>`;
         }
         
-        // 渲染设备列表
         function renderDevices() {
             const tableBody = document.getElementById('deviceTableBody');
             tableBody.innerHTML = '';
             
             if (filteredDevices.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">暂无设备数据</td></tr>';
-                updatePagination();
                 return;
             }
             
@@ -158,35 +184,21 @@
             pageDevices.forEach(device => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>
-                        <i class="ri-${getDeviceIcon(device.type)} device-icon"></i>
-                        ${device.name}
-                    </td>
+                    <td><i class="ri-${getDeviceIcon(device.type)}"></i> ${device.name}</td>
                     <td>${getDeviceTypeName(device.type)}</td>
                     <td>${device.ip}</td>
                     <td>${device.mac}</td>
+                    <td><span class="nx-text-${device.status === 'online' ? 'success' : device.status === 'warning' ? 'warning' : 'danger'}">${getStatusText(device.status)}</span></td>
                     <td>
-                        <span class="status-indicator status-${device.status}"></span>
-                        ${getStatusText(device.status)}
-                    </td>
-                    <td>
-                        <button class="btn btn-secondary" onclick="viewDevice('${device.id}')"><i class="ri-eye-line"></i></button>
-                        <button class="btn btn-primary" onclick="editDevice('${device.id}')"><i class="ri-edit-line"></i></button>
-                        <button class="btn btn-danger" onclick="deleteDevice('${device.id}')"><i class="ri-delete-line"></i></button>
+                        <button class="nx-btn nx-btn--sm nx-btn--secondary" onclick="viewDevice('${device.id}')"><i class="ri-eye-line"></i></button>
+                        <button class="nx-btn nx-btn--sm nx-btn--primary" onclick="editDevice('${device.id}')"><i class="ri-edit-line"></i></button>
+                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="deleteDevice('${device.id}')"><i class="ri-delete-line"></i></button>
                     </td>
                 `;
                 tableBody.appendChild(row);
             });
-            
-            updatePagination();
         }
         
-        // 加载设备数据（兼容旧调用）
-        function loadDevices() {
-            renderDevices();
-        }
-        
-        // 获取设备图标
         function getDeviceIcon(type) {
             const iconMap = {
                 router: 'router-wireless-line',
@@ -199,7 +211,6 @@
             return iconMap[type] || 'device-line';
         }
         
-        // 获取设备类型名称
         function getDeviceTypeName(type) {
             const typeMap = {
                 router: '路由器',
@@ -212,7 +223,6 @@
             return typeMap[type] || '其他';
         }
         
-        // 获取状态文本
         function getStatusText(status) {
             const statusMap = {
                 online: '在线',
@@ -222,119 +232,120 @@
             return statusMap[status] || '未知';
         }
         
-        // 更新分页
-        function updatePagination() {
-            const totalPages = Math.ceil(filteredDevices.length / pageSize);
-            
-            // 隐藏/显示分页按钮
-            for (let i = 1; i <= 3; i++) {
-                const pageBtn = document.getElementById(`page${i}`);
-                if (pageBtn) {
-                    if (i <= totalPages) {
-                        pageBtn.style.display = 'inline-block';
-                        pageBtn.textContent = i;
-                        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                    } else {
-                        pageBtn.style.display = 'none';
-                    }
-                }
-            }
-        }
-        
-        // 搜索设备
         async function searchDevices() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const statusFilter = document.getElementById('statusFilter').value;
             const typeFilter = document.getElementById('typeFilter').value;
             
-            const params = new URLSearchParams();
-            if (statusFilter !== 'all') {
-                params.append('status', statusFilter);
-            }
-            if (typeFilter !== 'all') {
-                params.append('type', typeFilter);
-            }
-            
-            try {
-                const url = '/api/devices/list' + (params.toString() ? '?' + params.toString() : '');
-                const response = await fetch(url);
-                const result = await response.json();
-                
-                if (result.code === 200 && result.data) {
-                    allDevices = result.data.devices.map(device => ({
-                        id: device.id,
-                        name: device.name,
-                        type: device.type,
-                        ip: device.ip || 'N/A',
-                        mac: device.mac || 'N/A',
-                        status: device.status,
-                        description: device.description || ''
-                    })).filter(device => {
-                        if (!searchTerm) return true;
-                        return device.name.toLowerCase().includes(searchTerm) || 
-                               device.ip.toLowerCase().includes(searchTerm) ||
-                               device.mac.toLowerCase().includes(searchTerm) ||
-                               device.description.toLowerCase().includes(searchTerm);
-                    });
-                    
-                    filteredDevices = [...allDevices];
-                    currentPage = 1;
-                    renderDevices();
-                }
-            } catch (error) {
-                console.error('搜索设备失败:', error);
-                filteredDevices = allDevices.filter(device => {
-                    const matchesSearch = !searchTerm || 
-                                         device.name.toLowerCase().includes(searchTerm) || 
-                                         device.ip.toLowerCase().includes(searchTerm) ||
-                                         device.mac.toLowerCase().includes(searchTerm) ||
-                                         device.description.toLowerCase().includes(searchTerm);
-                    const matchesStatus = statusFilter === 'all' || device.status === statusFilter;
-                    const matchesType = typeFilter === 'all' || device.type === typeFilter;
-                    return matchesSearch && matchesStatus && matchesType;
-                });
-                currentPage = 1;
-                renderDevices();
-            }
+            filteredDevices = allDevices.filter(device => {
+                const matchesSearch = !searchTerm || 
+                    device.name.toLowerCase().includes(searchTerm) || 
+                    device.ip.toLowerCase().includes(searchTerm) ||
+                    device.mac.toLowerCase().includes(searchTerm);
+                const matchesStatus = statusFilter === 'all' || device.status === statusFilter;
+                const matchesType = typeFilter === 'all' || device.type === typeFilter;
+                return matchesSearch && matchesStatus && matchesType;
+            });
+            currentPage = 1;
+            renderDevices();
         }
         
-        // 切换页面
-        function changePage(page) {
-            const totalPages = Math.ceil(filteredDevices.length / pageSize);
-            if (page >= 1 && page <= totalPages) {
-                currentPage = page;
-                renderDevices();
-            }
-        }
-        
-        // 添加设备
         function addDevice() {
             alert('添加设备功能开发中...');
         }
         
-        // 查看设备
         function viewDevice(id) {
             window.location.href = `device-details.html?id=${id}`;
         }
         
-        // 编辑设备
-        function editDevice(id) {
-            alert(`编辑设备 ID: ${id}`);
+        async function editDevice(id) {
+            try {
+                const response = await fetch('/api/devices/detail', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ deviceId: id })
+                });
+                const rs = await response.json();
+                
+                if (rs.requestStatus === 200 && rs.data) {
+                    document.getElementById('edit-device-id').value = rs.data.id;
+                    document.getElementById('edit-device-name').value = rs.data.name || '';
+                    document.getElementById('edit-device-type').value = rs.data.type || '';
+                    document.getElementById('edit-device-location').value = rs.data.location || '';
+                    document.getElementById('edit-device-modal').style.display = 'flex';
+                } else {
+                    alert(rs.message || '获取设备信息失败');
+                }
+            } catch (error) {
+                console.error('获取设备信息错误:', error);
+                alert('获取设备信息失败');
+            }
         }
-        
-        // 删除设备
-        function deleteDevice(id) {
-            if (confirm('确定要删除此设备吗？')) {
-                alert(`删除设备 ID: ${id}`);
+
+        function closeEditDeviceModal() {
+            document.getElementById('edit-device-modal').style.display = 'none';
+        }
+
+        async function submitEditDevice() {
+            const id = document.getElementById('edit-device-id').value;
+            const name = document.getElementById('edit-device-name').value;
+            const type = document.getElementById('edit-device-type').value;
+            const location = document.getElementById('edit-device-location').value;
+            
+            if (!name) {
+                alert('请填写设备名称');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/devices/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, name, type, location })
+                });
+                const rs = await response.json();
+                
+                if (rs.requestStatus === 200) {
+                    closeEditDeviceModal();
+                    alert('设备更新成功');
+                    loadDevicesFromApi();
+                } else {
+                    alert(rs.message || '设备更新失败');
+                }
+            } catch (error) {
+                console.error('更新设备错误:', error);
+                alert('设备更新失败');
             }
         }
         
-        // 主题切换由 theme-manager.js 统一处理
+        async function deleteDevice(id) {
+            if (!confirm('确定要删除此设备吗？')) return;
+            
+            try {
+                const response = await fetch('/api/devices/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id })
+                });
+                const rs = await response.json();
+                
+                if (rs.requestStatus === 200) {
+                    alert('设备删除成功');
+                    loadDevicesFromApi();
+                } else {
+                    alert(rs.message || '设备删除失败');
+                }
+            } catch (error) {
+                console.error('删除设备错误:', error);
+                alert('设备删除失败');
+            }
+        }
         
-        // 初始化
-        init();
+        window.onPageInit = function() {
+            console.log('网络设备管理页面初始化完成');
+            init();
+        };
         
-        // 绑定事件
         document.getElementById('searchInput').addEventListener('keyup', function(e) {
             if (e.key === 'Enter') {
                 searchDevices();
@@ -343,16 +354,6 @@
         
         document.getElementById('statusFilter').addEventListener('change', searchDevices);
         document.getElementById('typeFilter').addEventListener('change', searchDevices);
-    </script>
-    
-    <!-- 统一菜单加载脚本 -->
-    <script src="/console/js/menu-loader.js"></script>
-    <script src="/console/js/common.js"></script>
-    <script>
-        // 初始化菜单和页面
-        document.addEventListener('DOMContentLoaded', function() {
-            init();
-        });
     </script>
 </body>
 </html>
