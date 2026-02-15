@@ -101,68 +101,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        let p2pConnections = [
-            { id: 'conn-001', localNode: 'mcp-agent-001', remoteNode: 'route-agent-001', type: 'direct', status: 'active' },
-            { id: 'conn-002', localNode: 'mcp-agent-001', remoteNode: 'route-agent-002', type: 'direct', status: 'active' },
-            { id: 'conn-003', localNode: 'route-agent-001', remoteNode: 'end-agent-001', type: 'direct', status: 'active' }
-        ];
-        
-        window.onPageInit = function() {
-            console.log('P2P管理页面初始化完成');
-            renderP2PConnections();
-            updateStatusOverview();
-        };
-        
-        function renderP2PConnections() {
-            const tbody = document.getElementById('p2pConnectionsTableBody');
-            tbody.innerHTML = '';
-            p2pConnections.forEach(conn => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${conn.id}</td>
-                    <td>${conn.localNode}</td>
-                    <td>${conn.remoteNode}</td>
-                    <td>${conn.type === 'direct' ? '直连' : '中继'}</td>
-                    <td><span class="${conn.status === 'active' ? 'nx-text-success' : 'nx-text-danger'}">${conn.status === 'active' ? '活跃' : '非活跃'}</span></td>
-                    <td>
-                        <button class="nx-btn nx-btn--sm nx-btn--secondary" onclick="editConnection('${conn.id}')">编辑</button>
-                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="removeConnection('${conn.id}')">删除</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function updateStatusOverview() {
-            document.getElementById('p2pConnectionCount').textContent = p2pConnections.length;
-            const nodes = new Set();
-            p2pConnections.forEach(conn => {
-                nodes.add(conn.localNode);
-                nodes.add(conn.remoteNode);
-            });
-            document.getElementById('nodeCount').textContent = nodes.size;
-        }
-        
-        function addP2PConnection() {
-            alert('添加P2P连接功能开发中...');
-        }
-        
-        function editConnection(id) {
-            alert(`编辑连接: ${id}`);
-        }
-        
-        function removeConnection(id) {
-            if (confirm('确定要删除该连接吗？')) {
-                p2pConnections = p2pConnections.filter(c => c.id !== id);
-                renderP2PConnections();
-                updateStatusOverview();
-            }
-        }
-        
-        function refreshP2PConnections() {
-            renderP2PConnections();
-        }
-    </script>
+    <script src="/console/js/pages/p2p-management.js"></script>
 </body>
 </html>

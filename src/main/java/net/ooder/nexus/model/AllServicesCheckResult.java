@@ -1,25 +1,24 @@
 package net.ooder.nexus.model;
 
-import net.ooder.nexus.controller.HealthCheckController;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 所有服务检查结果实体Bean
- * 用于HealthCheckController中checkAllServices方法的返回类型
  */
 public class AllServicesCheckResult {
     
-    private List<HealthCheckController.ServiceCheckResult> results;
+    private List<Map<String, Object>> results;
     private int healthyCount;
     private int totalCount;
     private Date checkTime;
 
-    public List<HealthCheckController.ServiceCheckResult> getResults() {
+    public List<Map<String, Object>> getResults() {
         return results;
     }
 
-    public void setResults(List<HealthCheckController.ServiceCheckResult> results) {
+    public void setResults(List<Map<String, Object>> results) {
         this.results = results;
     }
 

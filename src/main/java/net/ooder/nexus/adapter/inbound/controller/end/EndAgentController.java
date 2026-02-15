@@ -32,7 +32,6 @@ public class EndAgentController {
     private NexusServiceFactory serviceFactory;
 
     private final Map<String, EndAgent> endAgents = new ConcurrentHashMap<>();
-
     private volatile boolean discoveryInProgress = false;
     private volatile long lastDiscoveryTime = 0;
 
@@ -46,82 +45,34 @@ public class EndAgentController {
 
     private void initializeDefaultEndAgents() {
         endAgents.put("end-agent-east-01", new EndAgent(
-                "end-agent-east-01",
-                "东部终端-01",
-                "iot",
-                "active",
-                "192.168.1.101",
-                "route-agent-east",
-                "1.0.0",
-                "在线",
-                System.currentTimeMillis() - 3600000,
-                System.currentTimeMillis()
-        ));
+                "end-agent-east-01", "East Terminal 01", "iot", "active",
+                "192.168.1.101", "route-agent-east", "1.0.0", "Online",
+                System.currentTimeMillis() - 3600000, System.currentTimeMillis()));
 
         endAgents.put("end-agent-east-02", new EndAgent(
-                "end-agent-east-02",
-                "东部终端-02",
-                "sensor",
-                "active",
-                "192.168.1.102",
-                "route-agent-east",
-                "1.0.0",
-                "在线",
-                System.currentTimeMillis() - 7200000,
-                System.currentTimeMillis()
-        ));
+                "end-agent-east-02", "East Terminal 02", "sensor", "active",
+                "192.168.1.102", "route-agent-east", "1.0.0", "Online",
+                System.currentTimeMillis() - 7200000, System.currentTimeMillis()));
 
         endAgents.put("end-agent-west-01", new EndAgent(
-                "end-agent-west-01",
-                "西部终端-01",
-                "iot",
-                "active",
-                "192.168.1.201",
-                "route-agent-west",
-                "1.0.0",
-                "在线",
-                System.currentTimeMillis() - 10800000,
-                System.currentTimeMillis()
-        ));
+                "end-agent-west-01", "West Terminal 01", "iot", "active",
+                "192.168.1.201", "route-agent-west", "1.0.0", "Online",
+                System.currentTimeMillis() - 10800000, System.currentTimeMillis()));
 
         endAgents.put("end-agent-west-02", new EndAgent(
-                "end-agent-west-02",
-                "西部终端-02",
-                "camera",
-                "degraded",
-                "192.168.1.202",
-                "route-agent-west",
-                "1.0.0",
-                "性能下降",
-                System.currentTimeMillis() - 14400000,
-                System.currentTimeMillis() - 300000
-        ));
+                "end-agent-west-02", "West Terminal 02", "camera", "degraded",
+                "192.168.1.202", "route-agent-west", "1.0.0", "Performance degraded",
+                System.currentTimeMillis() - 14400000, System.currentTimeMillis() - 300000));
 
         endAgents.put("end-agent-north-01", new EndAgent(
-                "end-agent-north-01",
-                "北部终端-01",
-                "sensor",
-                "active",
-                "192.168.1.301",
-                "route-agent-north",
-                "1.0.0",
-                "在线",
-                System.currentTimeMillis() - 18000000,
-                System.currentTimeMillis()
-        ));
+                "end-agent-north-01", "North Terminal 01", "sensor", "active",
+                "192.168.1.301", "route-agent-north", "1.0.0", "Online",
+                System.currentTimeMillis() - 18000000, System.currentTimeMillis()));
 
         endAgents.put("end-agent-south-01", new EndAgent(
-                "end-agent-south-01",
-                "南部终端-01",
-                "iot",
-                "inactive",
-                "192.168.1.401",
-                "route-agent-south",
-                "1.0.0",
-                "离线",
-                System.currentTimeMillis() - 21600000,
-                System.currentTimeMillis() - 3600000
-        ));
+                "end-agent-south-01", "South Terminal 01", "iot", "inactive",
+                "192.168.1.401", "route-agent-south", "1.0.0", "Offline",
+                System.currentTimeMillis() - 21600000, System.currentTimeMillis() - 3600000));
     }
 
     @GetMapping("/list")
@@ -169,7 +120,6 @@ public class EndAgentController {
             }
 
             agent.setLastUpdated(System.currentTimeMillis());
-
             List<Map<String, Object>> history = generateAgentHistory(agentId);
 
             EndAgentDetailResult result = new EndAgentDetailResult();
@@ -206,10 +156,9 @@ public class EndAgentController {
                     (String) agentData.get("ipAddress"),
                     agentData.containsKey("routeAgentId") ? (String) agentData.get("routeAgentId") : "",
                     agentData.containsKey("version") ? (String) agentData.get("version") : "1.0.0",
-                    "终端初始化中",
+                    "Terminal initializing",
                     System.currentTimeMillis(),
-                    System.currentTimeMillis()
-            );
+                    System.currentTimeMillis());
 
             endAgents.put(agentId, newAgent);
 
@@ -220,10 +169,8 @@ public class EndAgentController {
                     nodeInfo.put("name", agentData.get("name"));
                     nodeInfo.put("type", agentData.get("type"));
                     nodeInfo.put("ipAddress", agentData.get("ipAddress"));
-                    nodeInfo.put("routeAgentId", agentData.containsKey("routeAgentId") ? agentData.get("routeAgentId") : "");
-                    nodeInfo.put("version", agentData.containsKey("version") ? agentData.get("version") : "1.0.0");
                     nodeInfo.put("status", "pending");
-                    nodeInfo.put("description", "终端初始化中");
+                    nodeInfo.put("description", "Terminal initializing");
                     nexusManager.registerNetworkNode(agentId, nodeInfo);
                     log.info("End agent registered with SDK: {}", agentId);
                 } catch (Exception sdkEx) {
@@ -280,56 +227,14 @@ public class EndAgentController {
                 return Result.error("End agent not found: " + agentId);
             }
 
-            if (updateData.containsKey("name")) {
-                agent.setName((String) updateData.get("name"));
-            }
-            if (updateData.containsKey("type")) {
-                agent.setType((String) updateData.get("type"));
-            }
-            if (updateData.containsKey("status")) {
-                agent.setStatus((String) updateData.get("status"));
-            }
-            if (updateData.containsKey("ipAddress")) {
-                agent.setIpAddress((String) updateData.get("ipAddress"));
-            }
-            if (updateData.containsKey("routeAgentId")) {
-                agent.setRouteAgentId((String) updateData.get("routeAgentId"));
-            }
-            if (updateData.containsKey("description")) {
-                agent.setDescription((String) updateData.get("description"));
-            }
+            if (updateData.containsKey("name")) agent.setName((String) updateData.get("name"));
+            if (updateData.containsKey("type")) agent.setType((String) updateData.get("type"));
+            if (updateData.containsKey("status")) agent.setStatus((String) updateData.get("status"));
+            if (updateData.containsKey("ipAddress")) agent.setIpAddress((String) updateData.get("ipAddress"));
+            if (updateData.containsKey("routeAgentId")) agent.setRouteAgentId((String) updateData.get("routeAgentId"));
+            if (updateData.containsKey("description")) agent.setDescription((String) updateData.get("description"));
 
             agent.setLastUpdated(System.currentTimeMillis());
-
-            if (nexusManager != null) {
-                try {
-                    Map<String, Map<String, Object>> nodes = nexusManager.getNetworkNodes();
-                    if (nodes.containsKey(agentId)) {
-                        Map<String, Object> nodeInfo = nodes.get(agentId);
-                        if (updateData.containsKey("name")) {
-                            nodeInfo.put("name", updateData.get("name"));
-                        }
-                        if (updateData.containsKey("type")) {
-                            nodeInfo.put("type", updateData.get("type"));
-                        }
-                        if (updateData.containsKey("status")) {
-                            nodeInfo.put("status", updateData.get("status"));
-                        }
-                        if (updateData.containsKey("ipAddress")) {
-                            nodeInfo.put("ipAddress", updateData.get("ipAddress"));
-                        }
-                        if (updateData.containsKey("routeAgentId")) {
-                            nodeInfo.put("routeAgentId", updateData.get("routeAgentId"));
-                        }
-                        if (updateData.containsKey("description")) {
-                            nodeInfo.put("description", updateData.get("description"));
-                        }
-                        log.info("End agent updated in SDK: {}", agentId);
-                    }
-                } catch (Exception sdkEx) {
-                    log.warn("Failed to update end agent in SDK: {}", sdkEx.getMessage());
-                }
-            }
 
             return Result.success("End agent updated successfully", agent);
         } catch (Exception e) {
@@ -348,12 +253,11 @@ public class EndAgentController {
             }
 
             discoveryInProgress = true;
-
             discoverAgentsAsync();
 
             EndAgentDiscoverResult result = new EndAgentDiscoverResult();
             result.setStatus("discovering");
-            result.setMessage("终端发现正在进行中，请稍后查询结�?");
+            result.setMessage("Discovery in progress, please check results later");
             return Result.success("End agent discovery initiated successfully", result);
         } catch (Exception e) {
             log.error("Error initiating end agent discovery: {}", e.getMessage());
@@ -435,9 +339,7 @@ public class EndAgentController {
     }
 
     private double calculateOnlineRate() {
-        if (endAgents.isEmpty()) {
-            return 0;
-        }
+        if (endAgents.isEmpty()) return 0;
         int activeAgents = (int) endAgents.values().stream().filter(agent -> "active".equals(agent.getStatus())).count();
         return (double) activeAgents / endAgents.size() * 100;
     }
@@ -451,7 +353,7 @@ public class EndAgentController {
             Map<String, Object> dataPoint = new HashMap<>();
             dataPoint.put("timestamp", timestamp);
             dataPoint.put("status", i % 10 == 0 ? "degraded" : "active");
-            dataPoint.put("description", i % 10 == 0 ? "性能下降" : "在线");
+            dataPoint.put("description", i % 10 == 0 ? "Performance degraded" : "Online");
             history.add(dataPoint);
         }
 
@@ -462,38 +364,20 @@ public class EndAgentController {
         new Thread(() -> {
             try {
                 log.info("End agent discovery started");
-
-                if (nexusManager != null) {
-                    try {
-                        Map<String, Map<String, Object>> nodes = nexusManager.getNetworkNodes();
-                        log.info("Retrieved network nodes from SDK: {} nodes", nodes.size());
-                    } catch (Exception sdkEx) {
-                        log.warn("Failed to get network nodes from SDK: {}", sdkEx.getMessage());
-                    }
-                }
-
                 Thread.sleep(3000);
 
                 String newAgentId = "end-agent-discovered-" + System.currentTimeMillis();
                 EndAgent newAgent = new EndAgent(
-                        newAgentId,
-                        "新发现的终端",
-                        "sensor",
-                        "active",
-                        "192.168.1.150",
-                        "route-agent-north",
-                        "1.0.0",
-                        "新发�?",
-                        System.currentTimeMillis(),
-                        System.currentTimeMillis()
-                );
+                        newAgentId, "Discovered Terminal", "sensor", "active",
+                        "192.168.1.150", "route-agent-north", "1.0.0", "Newly discovered",
+                        System.currentTimeMillis(), System.currentTimeMillis());
 
                 endAgents.put(newAgentId, newAgent);
 
                 for (EndAgent agent : endAgents.values()) {
                     if ("pending".equals(agent.getStatus())) {
                         agent.setStatus("active");
-                        agent.setDescription("终端已激�?");
+                        agent.setDescription("Terminal activated");
                         agent.setLastUpdated(System.currentTimeMillis());
                     }
                 }
@@ -516,27 +400,12 @@ public class EndAgentController {
                 EndAgent agent = endAgents.get(agentId);
                 if (agent != null) {
                     agent.setStatus("active");
-                    agent.setDescription("终端�?活成�?");
+                    agent.setDescription("Terminal activated successfully");
                     agent.setLastUpdated(System.currentTimeMillis());
-
-                    if (nexusManager != null) {
-                        try {
-                            Map<String, Map<String, Object>> nodes = nexusManager.getNetworkNodes();
-                            if (nodes.containsKey(agentId)) {
-                                Map<String, Object> nodeInfo = nodes.get(agentId);
-                                nodeInfo.put("status", "active");
-                                nodeInfo.put("description", "终端�?活成�?");
-                            }
-                        } catch (Exception sdkEx) {
-                            log.warn("Failed to update end agent status in SDK: {}", sdkEx.getMessage());
-                        }
-                    }
                 }
             } catch (InterruptedException e) {
                 log.error("End agent activation simulation interrupted: {}", e.getMessage());
             }
         }).start();
     }
-
-
 }

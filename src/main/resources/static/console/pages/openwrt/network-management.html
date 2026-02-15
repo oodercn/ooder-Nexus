@@ -138,7 +138,7 @@
     <div id="portForwardingModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>添加端口映射规则</h3>
+                <h3 id="pf-modal-title">添加端口映射规则</h3>
                 <button class="modal-close" onclick="closePortForwardingModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -178,7 +178,7 @@
     <div id="firewallModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>添加防火墙规则</h3>
+                <h3 id="fw-modal-title">添加防火墙规则</h3>
                 <button class="modal-close" onclick="closeFirewallModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -232,143 +232,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        let portForwardingRules = [];
-        let firewallRules = [];
-        
-        window.onPageInit = function() {
-            console.log('网络管理页面初始化完成');
-            loadNetworkData();
-        };
-        
-        async function loadNetworkData() {
-            document.getElementById('portForwardingCount').textContent = portForwardingRules.length;
-            document.getElementById('upnpCount').textContent = 0;
-            document.getElementById('tunnelCount').textContent = 0;
-            document.getElementById('firewallCount').textContent = firewallRules.length;
-            renderPortForwarding();
-            renderFirewall();
-        }
-        
-        function renderPortForwarding() {
-            const tbody = document.getElementById('portForwardingTable');
-            tbody.innerHTML = '';
-            if (portForwardingRules.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">暂无端口映射规则</td></tr>';
-                return;
-            }
-            portForwardingRules.forEach((rule, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${rule.name}</td>
-                    <td>${rule.protocol}</td>
-                    <td>${rule.externalPort}</td>
-                    <td>${rule.internalIP}</td>
-                    <td>${rule.internalPort}</td>
-                    <td><span class="nx-text-success">活跃</span></td>
-                    <td>
-                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="removePortForwarding(${index})">删除</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function renderFirewall() {
-            const tbody = document.getElementById('firewallTable');
-            tbody.innerHTML = '';
-            if (firewallRules.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">暂无防火墙规则</td></tr>';
-                return;
-            }
-            firewallRules.forEach((rule, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${rule.name}</td>
-                    <td>${rule.sourceZone}</td>
-                    <td>${rule.destZone}</td>
-                    <td>${rule.protocol}</td>
-                    <td>${rule.port}</td>
-                    <td>${rule.action}</td>
-                    <td>
-                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="removeFirewallRule(${index})">删除</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function showPortForwardingModal() {
-            document.getElementById('portForwardingModal').style.display = 'flex';
-            document.getElementById('pf-name').value = '';
-            document.getElementById('pf-protocol').value = 'TCP';
-            document.getElementById('pf-external-port').value = '';
-            document.getElementById('pf-internal-ip').value = '';
-            document.getElementById('pf-internal-port').value = '';
-        }
-
-        function closePortForwardingModal() {
-            document.getElementById('portForwardingModal').style.display = 'none';
-        }
-        
-        function addPortForwarding() {
-            const name = document.getElementById('pf-name').value.trim();
-            if (!name) {
-                alert('请输入规则名称');
-                return;
-            }
-            portForwardingRules.push({
-                name: name,
-                protocol: document.getElementById('pf-protocol').value,
-                externalPort: document.getElementById('pf-external-port').value || '8080',
-                internalIP: document.getElementById('pf-internal-ip').value || '192.168.1.100',
-                internalPort: document.getElementById('pf-internal-port').value || '80'
-            });
-            closePortForwardingModal();
-            loadNetworkData();
-        }
-        
-        function removePortForwarding(index) {
-            portForwardingRules.splice(index, 1);
-            loadNetworkData();
-        }
-
-        function showFirewallModal() {
-            document.getElementById('firewallModal').style.display = 'flex';
-            document.getElementById('fw-name').value = '';
-            document.getElementById('fw-source-zone').value = 'lan';
-            document.getElementById('fw-dest-zone').value = 'wan';
-            document.getElementById('fw-protocol').value = 'TCP';
-            document.getElementById('fw-port').value = '';
-            document.getElementById('fw-action').value = 'ACCEPT';
-        }
-
-        function closeFirewallModal() {
-            document.getElementById('firewallModal').style.display = 'none';
-        }
-        
-        function addFirewallRule() {
-            const name = document.getElementById('fw-name').value.trim();
-            if (!name) {
-                alert('请输入规则名称');
-                return;
-            }
-            firewallRules.push({
-                name: name,
-                sourceZone: document.getElementById('fw-source-zone').value,
-                destZone: document.getElementById('fw-dest-zone').value,
-                protocol: document.getElementById('fw-protocol').value,
-                port: document.getElementById('fw-port').value || '80',
-                action: document.getElementById('fw-action').value
-            });
-            closeFirewallModal();
-            loadNetworkData();
-        }
-        
-        function removeFirewallRule(index) {
-            firewallRules.splice(index, 1);
-            loadNetworkData();
-        }
-    </script>
+    <script src="/console/js/pages/openwrt-network-management.js"></script>
 </body>
 </html>

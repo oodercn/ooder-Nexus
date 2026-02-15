@@ -2,8 +2,11 @@ package net.ooder.nexus.adapter.inbound.controller.admin;
 
 import net.ooder.config.ResultModel;
 import net.ooder.config.ListResultModel;
+import net.ooder.nexus.service.AdminMarketService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -15,131 +18,160 @@ public class AdminMarketController {
 
     private static final Logger log = LoggerFactory.getLogger(AdminMarketController.class);
 
-    private final Map<String, Map<String, Object>> enterpriseAPIs = new LinkedHashMap<>();
+    @Autowired
+    private AdminMarketService adminMarketService;
 
-    public AdminMarketController() {
-        enterpriseAPIs.put("ea-001", createEnterpriseAPI("ea-001", "数据同步API", "sync", "active", 5000));
-        enterpriseAPIs.put("ea-002", createEnterpriseAPI("ea-002", "批量处理API", "batch", "active", 3000));
-        enterpriseAPIs.put("ea-003", createEnterpriseAPI("ea-003", "实时监控API", "monitor", "inactive", 1500));
-    }
-
-    @PostMapping("/skills/list")
+    @PostMapping("/list")
     @ResponseBody
-    public ListResultModel<List<Map<String, Object>>> getMarketSkills() {
-        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<>();
+    public ListResultModel<List<Map<String, Object>>> getList() {
+        log.info("Get market items requested");
+        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<List<Map<String, Object>>>();
         try {
-            List<Map<String, Object>> skills = new ArrayList<>();
-            skills.add(createMarketSkill("ms-001", "数据分析套件", "data", "published", 156, 4.8));
-            skills.add(createMarketSkill("ms-002", "自动化运维工具", "ops", "published", 89, 4.5));
-            skills.add(createMarketSkill("ms-003", "AI图像处理", "ai", "reviewing", 45, 4.2));
-            
-            result.setData(skills);
-            result.setSize(skills.size());
+            List<Map<String, Object>> items = adminMarketService.getAllMarketItems();
+            result.setData(items);
+            result.setSize(items.size());
             result.setRequestStatus(200);
-            result.setMessage("获取成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("获取市场技能列表失败", e);
+            log.error("Error getting market items", e);
             result.setRequestStatus(500);
-            result.setMessage("获取市场技能列表失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
         return result;
     }
 
-    @PostMapping("/enterprise/list")
+    @PostMapping("/get")
     @ResponseBody
-    public ListResultModel<List<Map<String, Object>>> getEnterpriseAPIs() {
-        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<>();
+    public ResultModel<Map<String, Object>> getItem(@RequestBody Map<String, String> request) {
+        log.info("Get market item requested: {}", request.get("id"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
         try {
-            List<Map<String, Object>> apis = new ArrayList<>(enterpriseAPIs.values());
-            result.setData(apis);
-            result.setSize(apis.size());
-            result.setRequestStatus(200);
-            result.setMessage("获取成功");
-        } catch (Exception e) {
-            log.error("获取企业API列表失败", e);
-            result.setRequestStatus(500);
-            result.setMessage("获取企业API列表失败: " + e.getMessage());
-        }
-        return result;
-    }
-
-    @PostMapping("/enterprise/get")
-    @ResponseBody
-    public ResultModel<Map<String, Object>> getEnterpriseAPI(@RequestBody Map<String, String> request) {
-        ResultModel<Map<String, Object>> result = new ResultModel<>();
-        try {
-            String id = request.get("id");
-            Map<String, Object> api = enterpriseAPIs.get(id);
-            if (api == null) {
+            Map<String, Object> item = adminMarketService.getMarketItemById(request.get("id"));
+            if (item == null) {
                 result.setRequestStatus(404);
-                result.setMessage("API不存在");
-                return result;
+                result.setMessage("Item not found");
+            } else {
+                result.setData(item);
+                result.setRequestStatus(200);
+                result.setMessage("Success");
             }
-            result.setData(api);
-            result.setRequestStatus(200);
-            result.setMessage("获取成功");
         } catch (Exception e) {
-            log.error("获取企业API详情失败", e);
+            log.error("Error getting market item", e);
             result.setRequestStatus(500);
-            result.setMessage("获取企业API详情失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
         return result;
     }
 
-    @PostMapping("/enterprise/update")
+    @PostMapping("/featured")
     @ResponseBody
-    public ResultModel<Boolean> updateEnterpriseAPI(@RequestBody Map<String, Object> request) {
-        ResultModel<Boolean> result = new ResultModel<>();
+    public ListResultModel<List<Map<String, Object>>> getFeatured() {
+        log.info("Get featured items requested");
+        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<List<Map<String, Object>>>();
         try {
-            String id = (String) request.get("id");
-            Map<String, Object> api = enterpriseAPIs.get(id);
-            if (api == null) {
-                result.setRequestStatus(404);
-                result.setMessage("API不存在");
-                result.setData(false);
-                return result;
-            }
-            
-            if (request.get("name") != null) {
-                api.put("name", request.get("name"));
-            }
-            if (request.get("type") != null) {
-                api.put("type", request.get("type"));
-            }
-            if (request.get("status") != null) {
-                api.put("status", request.get("status"));
-            }
-            
-            result.setData(true);
+            List<Map<String, Object>> items = adminMarketService.getFeaturedItems();
+            result.setData(items);
+            result.setSize(items.size());
             result.setRequestStatus(200);
-            result.setMessage("更新成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("更新企业API失败", e);
+            log.error("Error getting featured items", e);
             result.setRequestStatus(500);
-            result.setMessage("更新企业API失败: " + e.getMessage());
-            result.setData(false);
+            result.setMessage("Error: " + e.getMessage());
         }
         return result;
     }
 
-    private Map<String, Object> createMarketSkill(String id, String name, String category, String status, int downloads, double rating) {
-        Map<String, Object> skill = new LinkedHashMap<>();
-        skill.put("id", id);
-        skill.put("name", name);
-        skill.put("category", category);
-        skill.put("status", status);
-        skill.put("downloads", downloads);
-        skill.put("rating", rating);
-        return skill;
+    @PostMapping("/categories")
+    @ResponseBody
+    public ListResultModel<List<Map<String, Object>>> getCategories() {
+        log.info("Get market categories requested");
+        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<List<Map<String, Object>>>();
+        try {
+            List<Map<String, Object>> categories = adminMarketService.getCategories();
+            result.setData(categories);
+            result.setSize(categories.size());
+            result.setRequestStatus(200);
+            result.setMessage("Success");
+        } catch (Exception e) {
+            log.error("Error getting categories", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
     }
 
-    private Map<String, Object> createEnterpriseAPI(String id, String name, String type, String status, int calls) {
-        Map<String, Object> api = new LinkedHashMap<>();
-        api.put("id", id);
-        api.put("name", name);
-        api.put("type", type);
-        api.put("status", status);
-        api.put("dailyCalls", calls);
-        return api;
+    @PostMapping("/submit")
+    @ResponseBody
+    public ResultModel<Boolean> submitToMarket(@RequestBody Map<String, Object> request) {
+        log.info("Submit to market requested: {}", request.get("skillId"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+        try {
+            String skillId = (String) request.get("skillId");
+            boolean success = adminMarketService.submitToMarket(skillId, request);
+            result.setData(success);
+            result.setRequestStatus(200);
+            result.setMessage("Submitted successfully");
+        } catch (Exception e) {
+            log.error("Error submitting to market", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public ResultModel<Boolean> updateItem(@RequestBody Map<String, Object> request) {
+        log.info("Update market item requested: {}", request.get("id"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+        try {
+            String itemId = (String) request.get("id");
+            boolean success = adminMarketService.updateMarketItem(itemId, request);
+            result.setData(success);
+            result.setRequestStatus(success ? 200 : 404);
+            result.setMessage(success ? "Updated successfully" : "Item not found");
+        } catch (Exception e) {
+            log.error("Error updating market item", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
+    }
+
+    @PostMapping("/remove")
+    @ResponseBody
+    public ResultModel<Boolean> removeFromMarket(@RequestBody Map<String, String> request) {
+        log.info("Remove from market requested: {}", request.get("id"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+        try {
+            boolean success = adminMarketService.removeFromMarket(request.get("id"));
+            result.setData(success);
+            result.setRequestStatus(success ? 200 : 404);
+            result.setMessage(success ? "Removed successfully" : "Item not found");
+        } catch (Exception e) {
+            log.error("Error removing from market", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
+    }
+
+    @PostMapping("/statistics")
+    @ResponseBody
+    public ResultModel<Map<String, Object>> getStatistics() {
+        log.info("Get market statistics requested");
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
+        try {
+            Map<String, Object> stats = adminMarketService.getMarketStatistics();
+            result.setData(stats);
+            result.setRequestStatus(200);
+            result.setMessage("Success");
+        } catch (Exception e) {
+            log.error("Error getting statistics", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
     }
 }

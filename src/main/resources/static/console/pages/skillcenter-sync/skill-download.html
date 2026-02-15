@@ -181,67 +181,6 @@
     <script src="/console/common/api-client.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
     <script src="/console/js/skillcenter-sync-api.js"></script>
-    <script>
-        let syncAPI = null;
-        let skillList = [];
-        let filter = { category: '', keyword: '' };
-
-        window.onPageInit = function() {
-            console.log('技能下载页面初始化完成');
-            syncAPI = new SkillCenterSyncAPI();
-            loadSkillList();
-            bindEvents();
-        };
-
-        function bindEvents() {
-            document.getElementById('search-input').addEventListener('input', (e) => { filter.keyword = e.target.value; loadSkillList(); });
-            document.getElementById('category-filter').addEventListener('change', (e) => { filter.category = e.target.value; loadSkillList(); });
-        }
-
-        async function loadSkillList() {
-            try {
-                const response = await syncAPI.getSkillList(filter.category, 0, 50);
-                if (response.success) { skillList = response.data; renderSkillList(); }
-                else showError('加载技能列表失败');
-            } catch (error) { console.error('加载技能列表错误:', error); showError('加载技能列表失败'); }
-        }
-
-        function renderSkillList() {
-            const listEl = document.getElementById('skill-list');
-            if (skillList.length === 0) { listEl.innerHTML = '<div class="empty-state">暂无技能</div>'; return; }
-            let html = '';
-            skillList.forEach(skill => {
-                html += `<div class="skill-item"><div class="skill-icon"><i class="${skill.icon || 'ri-file-line'}"></i></div><div class="skill-info"><h3 class="skill-name">${skill.skillName}</h3><p class="skill-description">${skill.description}</p><div class="skill-meta"><span>版本：${skill.version}</span><span>作者：${skill.author || '未知'}</span><span>评分：${skill.rating}</span></div></div><div class="skill-actions"><button class="nx-btn nx-btn--primary" onclick="downloadSkill('${skill.skillId}')"><i class="ri-download-line"></i> 下载</button></div></div>`;
-            });
-            listEl.innerHTML = html;
-        }
-
-        async function downloadSkill(skillId) {
-            try {
-                const blob = await syncAPI.downloadSkill(skillId);
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `skill-${skillId}.zip`;
-                a.click();
-                URL.revokeObjectURL(url);
-                showSuccess('技能下载成功');
-            } catch (error) { console.error('技能下载错误:', error); showError('技能下载失败'); }
-        }
-
-        async function refreshSkillList() { await loadSkillList(); }
-
-        function showSuccess(message) { showNotification(message, 'success'); }
-        function showError(message) { showNotification(message, 'error'); }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.classList.add('show'), 10);
-            setTimeout(() => notification.remove(), 3000);
-        }
-    </script>
+    <script src="/console/js/pages/skill-download.js"></script>
 </body>
 </html>

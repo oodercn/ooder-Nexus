@@ -198,13 +198,6 @@
     <script src="/console/common/button-manager.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
     <script src="/console/js/lan-dashboard.js"></script>
-    <script>
-        window.onPageInit = function() {
-            console.log('LAN Dashboard 页面初始化完成');
-            if (typeof init === 'function') {
-                init();
-            }
-        };
-    </script>
+    <script src="/console/js/pages/lan-dashboard-page.js"></script>
 </body>
 </html>

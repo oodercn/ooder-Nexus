@@ -49,12 +49,30 @@ class StorageAPI {
     }
 
     /**
+     * 更新文件夹
+     */
+    async updateFolder(folderData) {
+        const data = await this.apiClient.put('/folder', folderData);
+        
+        return data;
+    }
+
+    /**
      * 删除文件夹
      */
     async deleteFolder(folderId) {
         const data = await this.apiClient.delete(`/folder/${encodeURIComponent(folderId)}`);
         
         this.cache.delete('storage-space');
+        return data;
+    }
+
+    /**
+     * 重命名文件
+     */
+    async renameFile(renameData) {
+        const data = await this.apiClient.post('/file/rename', renameData);
+        
         return data;
     }
 

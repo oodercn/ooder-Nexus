@@ -79,61 +79,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        const openwrtApi = {
-            baseUrl: '/api/openwrt',
-            async post(endpoint, data = {}) {
-                const response = await fetch(`${this.baseUrl}${endpoint}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                return await response.json();
-            }
-        };
-        
-        window.onPageInit = function() {
-            console.log('命令执行页面初始化完成');
-        };
-        
-        function quickCommand(cmd) {
-            document.getElementById('commandInput').value = cmd;
-            executeCommand();
-        }
-        
-        async function executeCommand() {
-            const command = document.getElementById('commandInput').value.trim();
-            if (!command) {
-                alert('请输入命令');
-                return;
-            }
-            
-            const outputArea = document.getElementById('outputArea');
-            outputArea.textContent = `执行: ${command}\n请稍候...`;
-            
-            try {
-                const data = await openwrtApi.post('/command', { command: command });
-                
-                if (data.status === 'success') {
-                    outputArea.textContent = `$ ${command}\n\n${data.data?.output || '命令执行完成'}`;
-                } else {
-                    outputArea.textContent = `$ ${command}\n\n错误: ${data.message || '执行失败'}`;
-                }
-            } catch (error) {
-                console.error('执行命令失败:', error);
-                outputArea.textContent = `$ ${command}\n\n错误: 执行命令失败`;
-            }
-        }
-        
-        function clearOutput() {
-            document.getElementById('outputArea').textContent = '等待执行命令...';
-        }
-        
-        document.getElementById('commandInput').addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                executeCommand();
-            }
-        });
-    </script>
+    <script src="/console/js/pages/openwrt-command.js"></script>
 </body>
 </html>

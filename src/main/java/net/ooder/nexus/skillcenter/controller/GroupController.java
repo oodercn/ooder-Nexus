@@ -1,10 +1,9 @@
 package net.ooder.nexus.skillcenter.controller;
 
-import net.ooder.nexus.common.model.ApiResponse;
+import net.ooder.config.ResultModel;
+import net.ooder.config.ListResultModel;
 import net.ooder.nexus.skillcenter.model.Group;
 import net.ooder.nexus.skillcenter.model.GroupMember;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -12,11 +11,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * 群组管理REST API控制器
- */
 @RestController
 @RequestMapping("/api/skillcenter/groups")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.POST, RequestMethod.OPTIONS})
 public class GroupController {
 
     private final Map<String, Group> groupStore = new ConcurrentHashMap<>();
@@ -26,52 +23,54 @@ public class GroupController {
         loadSampleData();
     }
 
-    /**
-     * 获取所有群组
-     * @return 群组列表
-     */
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<Group>>> getAllGroups() {
+    @PostMapping("/list")
+    @ResponseBody
+    public ListResultModel<List<Group>> getAllGroups() {
+        ListResultModel<List<Group>> result = new ListResultModel<>();
         try {
             List<Group> groups = new ArrayList<>(groupStore.values());
-            return ResponseEntity.ok(ApiResponse.success(groups));
+            result.setData(groups);
+            result.setSize(groups.size());
+            result.setRequestStatus(200);
+            result.setMessage("获取成功");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("500", "Failed to get groups: " + e.getMessage()));
+            result.setRequestStatus(500);
+            result.setMessage("获取群组列表失败: " + e.getMessage());
         }
+        return result;
     }
 
-    /**
-     * 获取群组详情
-     * @param groupId 群组ID
-     * @return 群组详情
-     */
-    @GetMapping("/{groupId}")
-    public ResponseEntity<ApiResponse<Group>> getGroup(@PathVariable String groupId) {
+    @PostMapping("/get")
+    @ResponseBody
+    public ResultModel<Group> getGroup(@RequestBody Map<String, String> request) {
+        ResultModel<Group> result = new ResultModel<>();
         try {
+            String groupId = request.get("groupId");
             Group group = groupStore.get(groupId);
             if (group == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error("404", "Group not found"));
+                result.setRequestStatus(404);
+                result.setMessage("群组不存在");
+                return result;
             }
-            return ResponseEntity.ok(ApiResponse.success(group));
+            result.setData(group);
+            result.setRequestStatus(200);
+            result.setMessage("获取成功");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("500", "Failed to get group: " + e.getMessage()));
+            result.setRequestStatus(500);
+            result.setMessage("获取群组详情失败: " + e.getMessage());
         }
+        return result;
     }
 
-    /**
-     * 创建群组
-     * @param request 创建请求
-     * @return 创建的群组
-     */
-    @PostMapping
-    public ResponseEntity<ApiResponse<Group>> createGroup(@RequestBody CreateGroupRequest request) {
+    @PostMapping("/create")
+    @ResponseBody
+    public ResultModel<Group> createGroup(@RequestBody CreateGroupRequest req) {
+        ResultModel<Group> result = new ResultModel<>();
         try {
-            if (request.getName() == null || request.getName().isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error("400", "Group name is required"));
+            if (req.getName() == null || req.getName().isEmpty()) {
+                result.setRequestStatus(400);
+                result.setMessage("群组名称不能为空");
+                return result;
             }
 
             String groupId = "group-" + UUID.randomUUID().toString().substring(0, 8);
@@ -79,8 +78,8 @@ public class GroupController {
 
             Group group = new Group();
             group.setId(groupId);
-            group.setName(request.getName());
-            group.setDescription(request.getDescription());
+            group.setName(req.getName());
+            group.setDescription(req.getDescription());
             group.setCreatedAt(now);
             group.setRole("owner");
             group.setOwnerId("current-user");
@@ -89,7 +88,6 @@ public class GroupController {
 
             groupStore.put(groupId, group);
 
-            // 添加创建者为管理员
             GroupMember owner = new GroupMember();
             owner.setId("member-" + UUID.randomUUID().toString().substring(0, 8));
             owner.setGroupId(groupId);
@@ -101,92 +99,100 @@ public class GroupController {
 
             groupMembers.put(groupId, new ArrayList<>(Collections.singletonList(owner)));
 
-            return ResponseEntity.ok(ApiResponse.success(group));
+            result.setData(group);
+            result.setRequestStatus(200);
+            result.setMessage("创建成功");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("500", "Failed to create group: " + e.getMessage()));
+            result.setRequestStatus(500);
+            result.setMessage("创建群组失败: " + e.getMessage());
         }
+        return result;
     }
 
-    /**
-     * 更新群组
-     * @param groupId 群组ID
-     * @param request 更新请求
-     * @return 更新后的群组
-     */
-    @PutMapping("/{groupId}")
-    public ResponseEntity<ApiResponse<Group>> updateGroup(@PathVariable String groupId, @RequestBody UpdateGroupRequest request) {
+    @PostMapping("/update")
+    @ResponseBody
+    public ResultModel<Group> updateGroup(@RequestBody UpdateGroupRequest req) {
+        ResultModel<Group> result = new ResultModel<>();
         try {
+            String groupId = req.getGroupId();
             Group group = groupStore.get(groupId);
             if (group == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error("404", "Group not found"));
+                result.setRequestStatus(404);
+                result.setMessage("群组不存在");
+                return result;
             }
 
-            if (request.getName() != null) {
-                group.setName(request.getName());
+            if (req.getName() != null) {
+                group.setName(req.getName());
             }
-            if (request.getDescription() != null) {
-                group.setDescription(request.getDescription());
+            if (req.getDescription() != null) {
+                group.setDescription(req.getDescription());
             }
 
-            return ResponseEntity.ok(ApiResponse.success(group));
+            result.setData(group);
+            result.setRequestStatus(200);
+            result.setMessage("更新成功");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("500", "Failed to update group: " + e.getMessage()));
+            result.setRequestStatus(500);
+            result.setMessage("更新群组失败: " + e.getMessage());
         }
+        return result;
     }
 
-    /**
-     * 删除群组
-     * @param groupId 群组ID
-     * @return 删除结果
-     */
-    @DeleteMapping("/{groupId}")
-    public ResponseEntity<ApiResponse<Boolean>> deleteGroup(@PathVariable String groupId) {
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResultModel<Boolean> deleteGroup(@RequestBody Map<String, String> request) {
+        ResultModel<Boolean> result = new ResultModel<>();
         try {
+            String groupId = request.get("groupId");
             Group removed = groupStore.remove(groupId);
             if (removed == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error("404", "Group not found"));
+                result.setRequestStatus(404);
+                result.setMessage("群组不存在");
+                result.setData(false);
+                return result;
             }
             groupMembers.remove(groupId);
-            return ResponseEntity.ok(ApiResponse.success(true));
+            result.setData(true);
+            result.setRequestStatus(200);
+            result.setMessage("删除成功");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("500", "Failed to delete group: " + e.getMessage()));
+            result.setRequestStatus(500);
+            result.setMessage("删除群组失败: " + e.getMessage());
+            result.setData(false);
         }
+        return result;
     }
 
-    /**
-     * 获取群组成员
-     * @param groupId 群组ID
-     * @return 成员列表
-     */
-    @GetMapping("/{groupId}/members")
-    public ResponseEntity<ApiResponse<List<GroupMember>>> getGroupMembers(@PathVariable String groupId) {
+    @PostMapping("/members/list")
+    @ResponseBody
+    public ListResultModel<List<GroupMember>> getGroupMembers(@RequestBody Map<String, String> request) {
+        ListResultModel<List<GroupMember>> result = new ListResultModel<>();
         try {
+            String groupId = request.get("groupId");
             List<GroupMember> members = groupMembers.getOrDefault(groupId, new ArrayList<>());
-            return ResponseEntity.ok(ApiResponse.success(members));
+            result.setData(members);
+            result.setSize(members.size());
+            result.setRequestStatus(200);
+            result.setMessage("获取成功");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("500", "Failed to get members: " + e.getMessage()));
+            result.setRequestStatus(500);
+            result.setMessage("获取成员列表失败: " + e.getMessage());
         }
+        return result;
     }
 
-    /**
-     * 添加群组成员
-     * @param groupId 群组ID
-     * @param request 添加请求
-     * @return 添加的成员
-     */
-    @PostMapping("/{groupId}/members")
-    public ResponseEntity<ApiResponse<GroupMember>> addMember(@PathVariable String groupId, @RequestBody AddMemberRequest request) {
+    @PostMapping("/members/add")
+    @ResponseBody
+    public ResultModel<GroupMember> addMember(@RequestBody AddMemberRequest req) {
+        ResultModel<GroupMember> result = new ResultModel<>();
         try {
+            String groupId = req.getGroupId();
             Group group = groupStore.get(groupId);
             if (group == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error("404", "Group not found"));
+                result.setRequestStatus(404);
+                result.setMessage("群组不存在");
+                return result;
             }
 
             String memberId = "member-" + UUID.randomUUID().toString().substring(0, 8);
@@ -195,65 +201,67 @@ public class GroupController {
             GroupMember member = new GroupMember();
             member.setId(memberId);
             member.setGroupId(groupId);
-            member.setUserId(request.getUserId());
-            member.setUsername(request.getUsername());
-            member.setRole(request.getRole() != null ? request.getRole() : "member");
+            member.setUserId(req.getUserId());
+            member.setUsername(req.getUsername());
+            member.setRole(req.getRole() != null ? req.getRole() : "member");
             member.setJoinedAt(now);
             member.setStatus("active");
 
             groupMembers.computeIfAbsent(groupId, k -> new ArrayList<>()).add(member);
-
-            // 更新成员数量
             group.setMemberCount(groupMembers.get(groupId).size());
 
-            return ResponseEntity.ok(ApiResponse.success(member));
+            result.setData(member);
+            result.setRequestStatus(200);
+            result.setMessage("添加成功");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("500", "Failed to add member: " + e.getMessage()));
+            result.setRequestStatus(500);
+            result.setMessage("添加成员失败: " + e.getMessage());
         }
+        return result;
     }
 
-    /**
-     * 移除群组成员
-     * @param groupId 群组ID
-     * @param memberId 成员ID
-     * @return 移除结果
-     */
-    @DeleteMapping("/{groupId}/members/{memberId}")
-    public ResponseEntity<ApiResponse<Boolean>> removeMember(@PathVariable String groupId, @PathVariable String memberId) {
+    @PostMapping("/members/remove")
+    @ResponseBody
+    public ResultModel<Boolean> removeMember(@RequestBody Map<String, String> request) {
+        ResultModel<Boolean> result = new ResultModel<>();
         try {
+            String groupId = request.get("groupId");
+            String memberId = request.get("memberId");
             List<GroupMember> members = groupMembers.get(groupId);
             if (members == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error("404", "Group not found"));
+                result.setRequestStatus(404);
+                result.setMessage("群组不存在");
+                result.setData(false);
+                return result;
             }
 
             boolean removed = members.removeIf(m -> m.getId().equals(memberId));
             if (!removed) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ApiResponse.error("404", "Member not found"));
+                result.setRequestStatus(404);
+                result.setMessage("成员不存在");
+                result.setData(false);
+                return result;
             }
 
-            // 更新成员数量
             Group group = groupStore.get(groupId);
             if (group != null) {
                 group.setMemberCount(members.size());
             }
 
-            return ResponseEntity.ok(ApiResponse.success(true));
+            result.setData(true);
+            result.setRequestStatus(200);
+            result.setMessage("移除成功");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("500", "Failed to remove member: " + e.getMessage()));
+            result.setRequestStatus(500);
+            result.setMessage("移除成员失败: " + e.getMessage());
+            result.setData(false);
         }
+        return result;
     }
 
-    /**
-     * 加载示例数据
-     */
     private void loadSampleData() {
         String now = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-        // 开发团队
         Group group1 = new Group();
         group1.setId("group-001");
         group1.setName("开发团队");
@@ -271,7 +279,6 @@ public class GroupController {
         members1.add(createMember("member-003", "group-001", "user003", "王五", "member", now));
         groupMembers.put(group1.getId(), members1);
 
-        // 家庭组
         Group group2 = new Group();
         group2.setId("group-002");
         group2.setName("家庭组");
@@ -288,7 +295,6 @@ public class GroupController {
         members2.add(createMember("member-005", "group-002", "user004", "赵六", "member", now));
         groupMembers.put(group2.getId(), members2);
 
-        // 网络管理组
         Group group3 = new Group();
         group3.setId("group-003");
         group3.setName("网络管理组");
@@ -318,7 +324,6 @@ public class GroupController {
         return member;
     }
 
-    // 请求体类
     public static class CreateGroupRequest {
         private String name;
         private String description;
@@ -330,9 +335,12 @@ public class GroupController {
     }
 
     public static class UpdateGroupRequest {
+        private String groupId;
         private String name;
         private String description;
 
+        public String getGroupId() { return groupId; }
+        public void setGroupId(String groupId) { this.groupId = groupId; }
         public String getName() { return name; }
         public void setName(String name) { this.name = name; }
         public String getDescription() { return description; }
@@ -340,10 +348,13 @@ public class GroupController {
     }
 
     public static class AddMemberRequest {
+        private String groupId;
         private String userId;
         private String username;
         private String role;
 
+        public String getGroupId() { return groupId; }
+        public void setGroupId(String groupId) { this.groupId = groupId; }
         public String getUserId() { return userId; }
         public void setUserId(String userId) { this.userId = userId; }
         public String getUsername() { return username; }

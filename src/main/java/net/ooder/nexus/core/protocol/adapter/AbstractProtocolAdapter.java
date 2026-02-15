@@ -11,30 +11,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 协议适配器抽象基�?
+ * 协议适配器抽象基类
  */
 public abstract class AbstractProtocolAdapter implements ProtocolHandler {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-
-    /**
-     * 协议类型
-     */
     protected final String protocolType;
-
-    /**
-     * 协议状�??
-     */
     protected final ProtocolStatus status;
-
-    /**
-     * 支持的命令类�?
-     */
     protected final Set<String> supportedCommands = new HashSet<>();
-
-    /**
-     * 处理器描�?
-     */
     protected String description;
 
     public AbstractProtocolAdapter(String protocolType) {
@@ -44,9 +28,6 @@ public abstract class AbstractProtocolAdapter implements ProtocolHandler {
         initializeSupportedCommands();
     }
 
-    /**
-     * 初始化支持的命令类型
-     */
     protected abstract void initializeSupportedCommands();
 
     @Override
@@ -83,9 +64,6 @@ public abstract class AbstractProtocolAdapter implements ProtocolHandler {
         }
     }
 
-    /**
-     * 子类实现具体的初始化逻辑
-     */
     protected abstract void doInitialize();
 
     @Override
@@ -100,9 +78,6 @@ public abstract class AbstractProtocolAdapter implements ProtocolHandler {
         }
     }
 
-    /**
-     * 子类实现具体的销毁�?�辑
-     */
     protected abstract void doDestroy();
 
     @Override
@@ -132,9 +107,6 @@ public abstract class AbstractProtocolAdapter implements ProtocolHandler {
         return doValidateCommand(packet);
     }
 
-    /**
-     * 子类实现具体的命令验证�?�辑
-     */
     protected abstract boolean doValidateCommand(CommandPacket packet);
 
     @Override
@@ -154,28 +126,16 @@ public abstract class AbstractProtocolAdapter implements ProtocolHandler {
         }
     }
 
-    /**
-     * 子类实现具体的命令处理�?�辑
-     */
     protected abstract CommandResult doHandleCommand(CommandPacket packet);
 
-    /**
-     * 获取支持的命令类型集�?
-     */
     protected Set<String> getSupportedCommands() {
         return supportedCommands;
     }
 
-    /**
-     * 添加支持的命令类�?
-     */
     protected void addSupportedCommand(String commandType) {
         supportedCommands.add(commandType);
     }
 
-    /**
-     * 设置描述
-     */
     protected void setDescription(String description) {
         this.description = description;
     }

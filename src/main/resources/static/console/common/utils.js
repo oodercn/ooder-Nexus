@@ -866,6 +866,26 @@ if (!window.utils) {
          */
         isNotEmpty(value) {
             return !this.isEmpty(value);
+        },
+
+        /**
+         * 计算相对时间
+         * @param {number} timestamp - 时间戳
+         * @returns {string} - 相对时间字符串
+         */
+        getRelativeTime(timestamp) {
+            const now = Date.now();
+            const diff = Math.floor((now - timestamp) / 1000);
+
+            if (diff < 60) {
+                return diff + '秒前';
+            } else if (diff < 3600) {
+                return Math.floor(diff / 60) + '分钟前';
+            } else if (diff < 86400) {
+                return Math.floor(diff / 3600) + '小时前';
+            } else {
+                return Math.floor(diff / 86400) + '天前';
+            }
         }
     };
 

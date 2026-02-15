@@ -4,188 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理仪表盘 - Nexus SkillCenter</title>
-    <link rel="stylesheet" href="/console/css/theme.css">
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
-    <script src="/console/js/common.js"></script>
-    <style>
-        /* 管理仪表盘特定样式 */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--nexus-secondary);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-        
-        .stat-card {
-            background: var(--nexus-card-bg);
-            border: 1px solid var(--nexus-border);
-            border-radius: var(--nexus-radius);
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--nexus-primary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-        }
-        
-        .stat-info h3 {
-            font-size: 13px;
-            color: var(--nexus-secondary);
-            margin: 0 0 4px 0;
-            font-weight: 500;
-        }
-        
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--nexus-dark);
-            margin: 0;
-        }
-        
-        .dashboard-sections {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-        }
-        
-        @media (max-width: 1024px) {
-            .dashboard-sections {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .system-status {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .system-status .status-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: var(--nexus-bg);
-            border-radius: var(--nexus-radius);
-            border: 1px solid var(--nexus-border);
-        }
-        
-        .system-status .status-label {
-            font-size: 14px;
-            color: var(--nexus-secondary);
-        }
-        
-        .system-status .status-value {
-            font-size: 13px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 12px;
-        }
-        
-        .system-status .status-value.success {
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--nexus-success);
-        }
-        
-        .skill-list {
-            background: var(--nexus-bg);
-            border: 1px solid var(--nexus-border);
-            border-radius: var(--nexus-radius);
-            padding: 16px;
-            min-height: 200px;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--nexus-secondary);
-        }
-    </style>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+
+    <!-- 必须引入的脚本文件 -->
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
+    <div class="nx-page">
+        <aside class="nx-page__sidebar" id="sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
-        <main class="main-content">
-            <header class="header">
-                <h1>管理仪表盘</h1>
-                <div class="user-info">
-                    <span class="user-name">管理员</span>
-                    <i class="ri-admin-line"></i>
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">管理仪表盘</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
+                    <div class="user-info">
+                        <span class="user-name">管理员</span>
+                        <i class="ri-admin-line"></i>
+                    </div>
                 </div>
             </header>
-            <div class="dashboard-content">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon ri-lightbulb-line"></div>
-                        <div class="stat-info">
-                            <h3>总技能数</h3>
-                            <p class="stat-value" id="total-skills">0</p>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="dashboard-content">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon ri-lightbulb-line"></div>
+                                <div class="stat-info">
+                                    <h3>技能总数</h3>
+                                    <p class="stat-value" id="total-skills">0</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon ri-play-circle-line"></div>
+                                <div class="stat-info">
+                                    <h3>执行次数</h3>
+                                    <p class="stat-value" id="total-executions">0</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon ri-user-line"></div>
+                                <div class="stat-info">
+                                    <h3>用户总数</h3>
+                                    <p class="stat-value" id="total-users">0</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon ri-group-line"></div>
+                                <div class="stat-info">
+                                    <h3>群组总数</h3>
+                                    <p class="stat-value" id="total-groups">0</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon ri-user-line"></div>
-                        <div class="stat-info">
-                            <h3>用户数</h3>
-                            <p class="stat-value" id="total-users">0</p>
+                        <div class="recent-activities">
+                            <h2>最近活动</h2>
+                            <div class="activity-list" id="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon ri-clock-line"></div>
+                                    <div class="activity-content">
+                                        <p>暂无活动记录</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon ri-play-circle-line"></div>
-                        <div class="stat-info">
-                            <h3>今日执行</h3>
-                            <p class="stat-value" id="today-executions">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon ri-group-line"></div>
-                        <div class="stat-info">
-                            <h3>群组数</h3>
-                            <p class="stat-value" id="total-groups">0</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="dashboard-sections">
-                    <div class="section">
-                        <h2>待审批技能</h2>
-                        <div class="skill-list" id="pending-skills">
-                            <div class="loading">加载中...</div>
-                        </div>
-                    </div>
-                    <div class="section">
-                        <h2>系统状态</h2>
                         <div class="system-status">
-                            <div class="status-item">
-                                <span class="status-label">服务状态</span>
-                                <span class="status-value success">正常</span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">数据库</span>
-                                <span class="status-value success">正常</span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">存储</span>
-                                <span class="status-value success">正常</span>
+                            <h2>系统状态</h2>
+                            <div class="status-grid">
+                                <div class="status-item">
+                                    <span class="status-label">CPU使用率</span>
+                                    <span class="status-value" id="cpu-usage">0%</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">内存使用率</span>
+                                    <span class="status-value" id="memory-usage">0%</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">磁盘使用率</span>
+                                    <span class="status-value" id="disk-usage">0%</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">网络状态</span>
+                                    <span class="status-value" id="network-status">正常</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -193,152 +110,6 @@
             </div>
         </main>
     </div>
-    <script>
-        window.onload = function() {
-            initMenu();
-            loadDashboardData();
-        };
-
-        async function loadDashboardData() {
-            try {
-                const pendingSkills = document.getElementById('pending-skills');
-                pendingSkills.innerHTML = '<div class="loading">加载中...</div>';
-                
-                const response = await fetch('/api/admin/dashboard/stats');
-                
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    const data = result.data || {};
-                    document.getElementById('total-skills').textContent = data.totalSkills || 0;
-                    document.getElementById('total-users').textContent = data.totalUsers || 0;
-                    document.getElementById('today-executions').textContent = data.todayExecutions || 0;
-                    document.getElementById('total-groups').textContent = data.totalGroups || 0;
-                    
-                    if (data.pendingSkills) {
-                        renderPendingSkills(data.pendingSkills);
-                    } else {
-                        pendingSkills.innerHTML = '<div class="empty-state">暂无待审批技能</div>';
-                    }
-                } else {
-                    throw new Error('响应数据格式错误');
-                }
-            } catch (error) {
-                console.error('加载仪表盘数据失败:', error);
-                document.getElementById('pending-skills').innerHTML = '<div class="empty-state">加载失败</div>';
-                showError('加载仪表盘数据失败');
-            }
-        }
-
-        function renderPendingSkills(skills) {
-            const skillList = document.getElementById('pending-skills');
-            skillList.innerHTML = '';
-            
-            skills.forEach(skill => {
-                const skillItem = document.createElement('div');
-                skillItem.className = 'skill-item';
-                skillItem.innerHTML = `
-                    <div class="skill-info">
-                        <h3>${skill.name}</h3>
-                        <p>${skill.description || '暂无描述'}</p>
-                        <span class="skill-author">作者: ${skill.author}</span>
-                    </div>
-                    <div class="skill-actions">
-                        <button class="btn btn-primary" onclick="approveSkill('${skill.id}')">
-                            <i class="ri-check-line"></i> 通过
-                        </button>
-                        <button class="btn btn-danger" onclick="rejectSkill('${skill.id}')">
-                            <i class="ri-close-line"></i> 拒绝
-                        </button>
-                    </div>
-                `;
-                skillList.appendChild(skillItem);
-            });
-        }
-
-        async function approveSkill(skillId) {
-            try {
-                const response = await fetch(`/api/admin/skills/${skillId}/approve`, {
-                    method: 'POST'
-                });
-                
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    showSuccess('技能已通过审批');
-                    loadDashboardData();
-                } else {
-                    showError('审批失败');
-                }
-            } catch (error) {
-                console.error('审批技能错误:', error);
-                showError('审批失败');
-            }
-        }
-
-        async function rejectSkill(skillId) {
-            if (!confirm('确定要拒绝此技能吗？')) {
-                return;
-            }
-            
-            try {
-                const response = await fetch(`/api/admin/skills/${skillId}/reject`, {
-                    method: 'POST'
-                });
-                
-                const contentType = response.headers.get('content-type');
-                let result;
-                
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-                
-                if (result && result.status === 'success') {
-                    showSuccess('技能已拒绝');
-                    loadDashboardData();
-                } else {
-                    showError('拒绝失败');
-                }
-            } catch (error) {
-                console.error('拒绝技能错误:', error);
-                showError('拒绝失败');
-            }
-        }
-
-        function showError(message) {
-            showNotification(message, 'error');
-        }
-
-        function showSuccess(message) {
-            showNotification(message, 'success');
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-    </script>
+    <script src="/console/js/pages/admin-dashboard.js"></script>
 </body>
 </html>

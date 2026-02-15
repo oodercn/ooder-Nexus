@@ -9,21 +9,17 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
- * End协议适配�?
- * 处理End（终端协议）相关命令
+ * End Protocol Adapter
+ * Handles End (Terminal Protocol) related commands
  */
 @Component
 public class EndProtocolAdapter extends AbstractProtocolAdapter {
 
     public static final String PROTOCOL_TYPE = "END";
 
-    // 终端节点注册�?
     private final Map<String, EndNodeInfo> endNodes = new ConcurrentHashMap<>();
-
-    // 能力注册�?
     private final Map<String, List<Map<String, Object>>> capabilityRegistry = new ConcurrentHashMap<>();
 
     @Autowired
@@ -167,7 +163,6 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
 
         logger.info("End node registered: {} ({}, type: {})", nodeId, nodeName, deviceType);
 
-        // 注册到NexusManager
         if (nexusManager != null) {
             nexusManager.registerNetworkNode(nodeId, nodeInfo.toMap());
         }
@@ -186,10 +181,8 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
         if (removed != null) {
             logger.info("End node deregistered: {}", nodeId);
 
-            // 移除能力注册
             capabilityRegistry.remove(nodeId);
 
-            // 从NexusManager移除
             if (nexusManager != null) {
                 nexusManager.removeNetworkNode(nodeId);
             }
@@ -210,7 +203,6 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
             return CommandResult.error(commandId, 404, "End node not registered: " + nodeId);
         }
 
-        // 注册能力
         List<Map<String, Object>> capabilities = (List<Map<String, Object>>) payload.get("capabilities");
         if (capabilities != null) {
             capabilityRegistry.put(nodeId, capabilities);
@@ -232,7 +224,6 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
                 return CommandResult.error(commandId, 404, "Node not found: " + nodeId);
             }
 
-            // 更新状�??
             Map<String, Object> status = (Map<String, Object>) payload.get("status");
             if (status != null) {
                 nodeInfo.setStatus((String) status.get("state"));
@@ -245,7 +236,6 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
             resultData.put("deviceType", nodeInfo.getDeviceType());
             return CommandResult.success(commandId, resultData);
         } else {
-            // 返回�?有终端节点状�?
             long onlineCount = endNodes.values().stream()
                     .filter(n -> "ONLINE".equals(n.getStatus()))
                     .count();
@@ -269,7 +259,6 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
 
         logger.info("Command sent to end node: {}, command: {}", nodeId, command);
 
-        // 这里可以实现命令下发逻辑
         Map<String, Object> resultData = new HashMap<>();
         resultData.put("nodeId", nodeId);
         resultData.put("command", command);
@@ -306,7 +295,6 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
         nodeInfo.setLastHeartbeatTime(System.currentTimeMillis());
         nodeInfo.setStatus("ONLINE");
 
-        // 更新节点状�??
         if (nexusManager != null) {
             nexusManager.registerNetworkNode(nodeId, nodeInfo.toMap());
         }
@@ -330,9 +318,6 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
         return capabilityRegistry.get(nodeId);
     }
 
-    /**
-     * 终端节点信息
-     */
     public static class EndNodeInfo {
         private String nodeId;
         private String nodeName;
@@ -354,7 +339,6 @@ public class EndProtocolAdapter extends AbstractProtocolAdapter {
             return map;
         }
 
-        // Getters and Setters
         public String getNodeId() { return nodeId; }
         public void setNodeId(String nodeId) { this.nodeId = nodeId; }
         public String getNodeName() { return nodeName; }

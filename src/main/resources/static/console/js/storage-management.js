@@ -77,6 +77,7 @@ async function initStorageManagement() {
         modalManager.register('upload-modal');
         modalManager.register('create-folder-modal');
         modalManager.register('share-modal');
+        modalManager.register('rename-modal');
         
         await loadStorageSpace();
         await loadFileBrowser();
@@ -139,9 +140,15 @@ function renderFileBrowser(data) {
         html += '<h3>文件夹</h3>';
         html += '<div class="folder-list">';
         data.children.forEach(folder => {
-            html += `<div class="folder-item" onclick="loadFileBrowser('${folder.id}')">`;
+            html += `<div class="folder-item">`;
+            html += `<div class="file-info" onclick="loadFileBrowser('${folder.id}')">`;
             html += `<i class="ri-folder-line folder-icon"></i>`;
             html += `<span class="folder-name">${utils.escapeHtml(folder.name)}</span>`;
+            html += `</div>`;
+            html += `<div class="file-actions">`;
+            html += `<button class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); editFolder('${folder.id}', '${utils.escapeHtml(folder.name)}', '${folder.description || ''}')">编辑</button>`;
+            html += `<button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); deleteFolder('${folder.id}')">删除</button>`;
+            html += `</div>`;
             html += '</div>';
         });
         html += '</div>';
@@ -158,6 +165,7 @@ function renderFileBrowser(data) {
                 html += `<span class="file-size">${utils.formatBytes(file.size)}</span>`;
                 html += `</div>`;
                 html += `<div class="file-actions">`;
+                html += `<button class="btn btn-sm btn-ghost" onclick="showRenameModal('${file.id}', '${utils.escapeHtml(file.name)}')">重命名</button>`;
                 html += `<button class="btn btn-sm btn-secondary" onclick="downloadFile('${file.id}')">下载</button>`;
                 html += `<button class="btn btn-sm btn-primary" onclick="showShareModal('${file.id}')">分享</button>`;
                 html += `<button class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">删除</button>`;
@@ -341,7 +349,113 @@ function showUploadModal() {
 }
 
 function showCreateFolderModal() {
+    document.getElementById('edit-folder-id').value = '';
+    document.getElementById('folder-modal-title').textContent = '新建文件夹';
+    document.getElementById('folder-name').value = '';
+    document.getElementById('folder-description').value = '';
     modalManager.open('create-folder-modal');
+}
+
+function editFolder(folderId, folderName, description) {
+    document.getElementById('edit-folder-id').value = folderId;
+    document.getElementById('folder-modal-title').textContent = '编辑文件夹';
+    document.getElementById('folder-name').value = folderName;
+    document.getElementById('folder-description').value = description;
+    modalManager.open('create-folder-modal');
+}
+
+async function saveFolder() {
+    const formData = modalManager.getFormData('create-folder-modal');
+    const editId = document.getElementById('edit-folder-id').value;
+    
+    if (!formData.folderName || !formData.folderName.trim()) {
+        utils.showError('请输入文件夹名称', '.storage-content');
+        return;
+    }
+    
+    try {
+        await buttonManager.executeWithLoading('create-folder-btn', async () => {
+            let response;
+            if (editId) {
+                response = await storageAPI.updateFolder({
+                    id: editId,
+                    name: formData.folderName.trim(),
+                    description: formData.description || ''
+                });
+            } else {
+                response = await storageAPI.createFolder({
+                    parentId: formData.parentFolderId || '',
+                    name: formData.folderName.trim(),
+                    description: formData.description || ''
+                });
+            }
+            
+            if (response.code === 200 || response.message === "success") {
+                modalManager.close('create-folder-modal');
+                await loadFileBrowser(currentFolderId);
+                utils.showSuccess(editId ? '文件夹更新成功' : '文件夹创建成功', '.storage-content');
+            } else {
+                throw new Error(response.message || '操作失败');
+            }
+        });
+    } catch (error) {
+        console.error('保存文件夹失败:', error);
+        utils.showError('保存文件夹失败', '.storage-content');
+    }
+}
+
+async function deleteFolder(folderId) {
+    if (!utils.confirm('确定要删除此文件夹吗？文件夹内的所有文件也将被删除。')) {
+        return;
+    }
+    
+    try {
+        const response = await storageAPI.deleteFolder(folderId);
+        
+        if (response.code === 200 || response.message === "success") {
+            await loadFileBrowser(currentFolderId);
+            utils.showSuccess('文件夹删除成功', '.storage-content');
+        } else {
+            throw new Error(response.message || '删除失败');
+        }
+    } catch (error) {
+        console.error('删除文件夹失败:', error);
+        utils.showError('删除文件夹失败', '.storage-content');
+    }
+}
+
+function showRenameModal(fileId, fileName) {
+    document.getElementById('rename-file-id').value = fileId;
+    document.getElementById('rename-file-name').value = fileName;
+    modalManager.open('rename-modal');
+}
+
+async function saveRename() {
+    const fileId = document.getElementById('rename-file-id').value;
+    const newName = document.getElementById('rename-file-name').value.trim();
+    
+    if (!newName) {
+        utils.showError('请输入新名称', '.storage-content');
+        return;
+    }
+    
+    try {
+        const response = await storageAPI.renameFile({
+            id: fileId,
+            newName: newName
+        });
+        
+        if (response.code === 200 || response.message === "success") {
+            modalManager.close('rename-modal');
+            await loadFileBrowser(currentFolderId);
+            utils.showSuccess('重命名成功', '.storage-content');
+        } else {
+            throw new Error(response.message || '重命名失败');
+        }
+    } catch (error) {
+        console.error('重命名失败:', error);
+        utils.showError('重命名失败', '.storage-content');
+    }
 }
 
 function closeModal(modalId) {
@@ -377,36 +491,6 @@ async function uploadFile() {
     } catch (error) {
         console.error('上传文件失败:', error);
         utils.showError('文件上传失败', '.storage-content');
-    }
-}
-
-async function createFolder() {
-    const formData = modalManager.getFormData('create-folder-modal');
-    
-    if (!formData.folderName || !formData.folderName.trim()) {
-        utils.showError('请输入文件夹名称', '.storage-content');
-        return;
-    }
-    
-    try {
-        await buttonManager.executeWithLoading('create-folder-btn', async () => {
-            const response = await storageAPI.createFolder({
-                parentId: formData.parentFolderId || '',
-                name: formData.folderName.trim(),
-                description: formData.description || ''
-            });
-            
-            if (response.code === 200 || response.message === "success") {
-                modalManager.close('create-folder-modal');
-                await loadFileBrowser(currentFolderId);
-                utils.showSuccess('文件夹创建成功', '.storage-content');
-            } else {
-                throw new Error(response.message || '文件夹创建失败');
-            }
-        });
-    } catch (error) {
-        console.error('创建文件夹失败:', error);
-        utils.showError('文件夹创建失败', '.storage-content');
     }
 }
 

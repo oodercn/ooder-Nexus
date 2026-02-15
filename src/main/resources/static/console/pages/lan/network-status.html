@@ -198,30 +198,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        function runDiagnostic() {
-            const result = document.getElementById('diagnostic-result');
-            result.innerHTML = '<div class="nx-card__body"><h4 class="nx-mb-3">诊断结果</h4><p class="nx-text-secondary">正在运行网络诊断，请稍候...</p></div>';
-            setTimeout(() => {
-                result.innerHTML = `
-                    <div class="nx-card__body">
-                        <h4 class="nx-mb-3">诊断结果</h4>
-                        <ul style="margin-left: 24px; margin-bottom: 16px;">
-                            <li>网络连接: <span class="nx-text-success">正常</span></li>
-                            <li>DNS 解析: <span class="nx-text-success">正常</span></li>
-                            <li>设备连接: <span class="nx-text-success">12/15 设备在线</span></li>
-                        </ul>
-                        <p class="nx-text-secondary">网络状态良好，所有设备正常运行。</p>
-                    </div>
-                `;
-            }, 2000);
-        }
-        function clearResults() {
-            document.getElementById('diagnostic-result').innerHTML = '<div class="nx-card__body"><h4 class="nx-mb-3">诊断结果</h4><p class="nx-text-secondary">点击 "运行诊断" 按钮开始网络诊断</p></div>';
-        }
-        window.onPageInit = function() {
-            console.log('网络状态页面初始化完成');
-        };
-    </script>
+    <script src="/console/js/pages/network-status.js"></script>
 </body>
 </html>

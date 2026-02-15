@@ -3,204 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>配置文件 - OpenWrt - Nexus</title>
+    <title>配置文件 - OpenWrt - Nexus Console</title>
+    
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
-    <script src="/console/js/common.js"></script>
-    <style>
-        .config-editor {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.6;
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 15px;
-            border-radius: 4px;
-            min-height: 400px;
-            resize: vertical;
-            border: none;
-            width: 100%;
-        }
-        .config-file-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .config-file-item {
-            padding: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .config-file-item:hover {
-            background: var(--ooder-hover);
-        }
-        .config-file-item.active {
-            background: var(--ooder-primary);
-            color: white;
-        }
-        .config-file-item i {
-            font-size: 18px;
-        }
-    </style>
+    <link rel="stylesheet" href="/console/css/nexus.css">
 </head>
 <body>
-    <div class="container">
-        <!-- 侧边导航栏 -->
-        <div class="sidebar">
-            <h2 style="display: flex; align-items: center; gap: 12px;"><i class="ri-server-line"></i> Nexus Console</h2>
+    <div class="nx-page">
+        <aside class="nx-page__sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
-        </div>
+        </aside>
         
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <!-- 头部 -->
-            <div class="header">
-                <h1><i class="ri-file-settings-line"></i> 配置文件</h1>
-                <div class="header-actions">
-                    <button class="btn btn-secondary" onclick="history.back()">
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">配置文件</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
+                    <button class="nx-btn nx-btn--secondary" onclick="history.back()">
                         <i class="ri-arrow-left-line"></i> 返回
                     </button>
-                    <button class="btn btn-primary" onclick="saveConfigFile()">
-                        <i class="ri-save-line"></i> 保存配置
+                    <button class="nx-btn nx-btn--primary" onclick="saveConfig()">
+                        <i class="ri-save-line"></i> 保存
                     </button>
                 </div>
-            </div>
+            </header>
             
-            <div class="grid" style="grid-template-columns: 250px 1fr; gap: 20px;">
-                <!-- 配置文件列表 -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="ri-folder-line"></i> 配置文件</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="config-file-list" id="configFileList">
-                            <div class="config-file-item active" data-file="network" onclick="loadConfigFile('network')">
-                                <i class="ri-network-line"></i>
-                                <span>network</span>
-                            </div>
-                            <div class="config-file-item" data-file="dhcp" onclick="loadConfigFile('dhcp')">
-                                <i class="ri-server-line"></i>
-                                <span>dhcp</span>
-                            </div>
-                            <div class="config-file-item" data-file="firewall" onclick="loadConfigFile('firewall')">
-                                <i class="ri-shield-line"></i>
-                                <span>firewall</span>
-                            </div>
-                            <div class="config-file-item" data-file="wireless" onclick="loadConfigFile('wireless')">
-                                <i class="ri-wifi-line"></i>
-                                <span>wireless</span>
-                            </div>
-                            <div class="config-file-item" data-file="system" onclick="loadConfigFile('system')">
-                                <i class="ri-settings-line"></i>
-                                <span>system</span>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="nx-card nx-mb-6">
+                        <div class="nx-card__header">
+                            <h3 class="nx-card__title">选择配置文件</h3>
+                        </div>
+                        <div class="nx-card__body">
+                            <div class="nx-grid nx-grid-cols-4 nx-gap-4">
+                                <button class="nx-btn nx-btn--secondary" onclick="loadConfig('/etc/config/network')">network</button>
+                                <button class="nx-btn nx-btn--secondary" onclick="loadConfig('/etc/config/wireless')">wireless</button>
+                                <button class="nx-btn nx-btn--secondary" onclick="loadConfig('/etc/config/firewall')">firewall</button>
+                                <button class="nx-btn nx-btn--secondary" onclick="loadConfig('/etc/config/dhcp')">dhcp</button>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- 配置编辑器 -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="ri-edit-line"></i> 编辑配置</h2>
-                        <span id="currentFileName" class="badge badge-primary">network</span>
-                    </div>
-                    <div class="card-body">
-                        <textarea id="configEditor" class="config-editor" placeholder="选择配置文件进行编辑..."></textarea>
+                    
+                    <div class="nx-card">
+                        <div class="nx-card__header">
+                            <h3 class="nx-card__title">编辑配置文件</h3>
+                            <span class="nx-text-secondary" id="currentFile">未选择文件</span>
+                        </div>
+                        <div class="nx-card__body">
+                            <textarea id="configContent" class="nx-input" style="width: 100%; height: 400px; font-family: monospace; font-size: 13px;" placeholder="请选择一个配置文件进行编辑..."></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
-
-    <script src="/console/common/api-client.js"></script>
-    <script src="/console/common/button-manager.js"></script>
-    <script src="/console/common/utils.js"></script>
-    <script>
-        // API 客户端实例
-        const openwrtApi = new ApiClient('/api/openwrt');
-        
-        // 当前编辑的文件
-        let currentFile = 'network';
-
-        // 页面初始化
-        window.onPageInit = function() {
-            loadConfigFile('network');
-        };
-
-        // 加载配置文件
-        async function loadConfigFile(fileName) {
-            try {
-                // 更新选中状态
-                document.querySelectorAll('.config-file-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                document.querySelector(`[data-file="${fileName}"]`).classList.add('active');
-                
-                currentFile = fileName;
-                document.getElementById('currentFileName').textContent = fileName;
-                
-                const data = await openwrtApi.get(`/config/${fileName}`);
-                
-                if (data.status === 'success' && data.data) {
-                    document.getElementById('configEditor').value = data.data.content || '';
-                } else {
-                    document.getElementById('configEditor').value = `# ${fileName} configuration file\n# No content available`;
-                }
-            } catch (error) {
-                console.error('加载配置文件失败:', error);
-                showToast('加载配置文件失败', 'error');
-            }
-        }
-
-        // 保存配置文件
-        async function saveConfigFile() {
-            try {
-                const content = document.getElementById('configEditor').value;
-                
-                const data = await openwrtApi.put(`/config/${currentFile}`, {
-                    content: content
-                });
-                
-                if (data.status === 'success') {
-                    showToast('配置文件保存成功', 'success');
-                } else {
-                    showToast('保存失败: ' + data.message, 'error');
-                }
-            } catch (error) {
-                console.error('保存配置文件失败:', error);
-                showToast('保存失败', 'error');
-            }
-        }
-
-        // 显示提示消息
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            toast.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 12px 24px;
-                border-radius: 4px;
-                color: white;
-                font-size: 14px;
-                z-index: 9999;
-                animation: slideIn 0.3s ease-out;
-                background: ${type === 'success' ? '#52c41a' : type === 'error' ? '#ff4d4f' : type === 'warning' ? '#faad14' : '#1890ff'};
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.animation = 'slideOut 0.3s ease-in';
-                setTimeout(() => document.body.removeChild(toast), 300);
-            }, 3000);
-        }
-    </script>
+    
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
+    <script src="/console/js/pages/openwrt-config-files.js"></script>
 </body>
 </html>

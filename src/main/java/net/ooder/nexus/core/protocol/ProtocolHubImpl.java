@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 协议中枢实现�?
+ * 协议中枢实现类
  */
 @Service
 public class ProtocolHubImpl implements ProtocolHub {
@@ -35,7 +35,7 @@ public class ProtocolHubImpl implements ProtocolHub {
     private final Map<String, ProtocolStats> statsMap = new ConcurrentHashMap<>();
 
     /**
-     * 异步执行�?
+     * 异步执行器
      */
     private ExecutorService executorService;
 
@@ -52,7 +52,7 @@ public class ProtocolHubImpl implements ProtocolHub {
         if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdown();
         }
-        // �?毁所有协议处理器
+        // 销毁所有协议处理器
         handlers.values().forEach(ProtocolHandler::destroy);
         handlers.clear();
         logger.info("ProtocolHub destroyed");
@@ -197,10 +197,13 @@ public class ProtocolHubImpl implements ProtocolHub {
      * 异步处理命令
      */
     public void handleCommandAsync(CommandPacket packet, CommandCallback callback) {
-        executorService.submit(() -> {
-            CommandResult result = handleCommand(packet);
-            if (callback != null) {
-                callback.onComplete(result);
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                CommandResult result = handleCommand(packet);
+                if (callback != null) {
+                    callback.onComplete(result);
+                }
             }
         });
     }

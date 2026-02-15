@@ -1,150 +1,197 @@
 /**
- * API客户端
- * 统一处理与后端API的通信
+ * Nexus API 客户端 v3.0
+ * 统一封装所有 AJAX 请求，遵循 ResultModel 2.0 规范
+ * 
+ * 功能特性：
+ * 1. 支持 GET/POST/PUT/DELETE 请求
+ * 2. 支持文件上传
+ * 3. 支持批量操作
+ * 4. 统一错误处理
+ * 5. ResultModel 格式验证
  */
-function ApiClient(baseUrl = '/api') {
-    this.baseUrl = baseUrl;
-    this.timeout = 30000; // 30秒超时
-}
 
-/**
- * 通用请求方法
- * @param {string} endpoint - API端点
- * @param {Object} options - 请求选项
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.request = async function(endpoint, options = {}) {
-    const url = `${this.baseUrl}${endpoint}`;
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+(function() {
+    'use strict';
 
-    try {
-        const response = await fetch(url, {
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers,
-            },
-            signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    const config = {
+        baseURL: '',
+        timeout: 30000,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         }
+    };
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        clearTimeout(timeoutId);
-        console.error('API request error:', error);
-        throw error;
+    const ApiClient = {
+        version: '3.0.0',
+
+        setConfig(options) {
+            Object.assign(config, options);
+        },
+
+        async get(url, params = {}, options = {}) {
+            const queryString = this._buildQueryString(params);
+            const fullUrl = this._buildUrl(url) + (queryString ? '?' + queryString : '');
+            return this._request(fullUrl, { method: 'GET', ...options });
+        },
+
+        async post(url, data = {}, options = {}) {
+            const fullUrl = this._buildUrl(url);
+            const requestOptions = {
+                method: 'POST',
+                headers: { ...config.headers, ...options.headers },
+                ...options
+            };
+            if (data && Object.keys(data).length > 0) {
+                requestOptions.body = JSON.stringify(data);
+            }
+            return this._request(fullUrl, requestOptions);
+        },
+
+        async put(url, data = {}, options = {}) {
+            const fullUrl = this._buildUrl(url);
+            return this._request(fullUrl, {
+                method: 'PUT',
+                headers: { ...config.headers, ...options.headers },
+                body: JSON.stringify(data),
+                ...options
+            });
+        },
+
+        async delete(url, options = {}) {
+            const fullUrl = this._buildUrl(url);
+            return this._request(fullUrl, {
+                method: 'DELETE',
+                headers: { ...config.headers, ...options.headers },
+                ...options
+            });
+        },
+
+        async upload(url, file, metadata = {}, options = {}) {
+            const fullUrl = this._buildUrl(url);
+            const formData = new FormData();
+            formData.append('file', file);
+            if (Object.keys(metadata).length > 0) {
+                formData.append('metadata', JSON.stringify(metadata));
+            }
+            return this._request(fullUrl, {
+                method: 'POST',
+                body: formData,
+                ...options
+            });
+        },
+
+        async uploadMultiple(url, files, metadata = {}, options = {}) {
+            const fullUrl = this._buildUrl(url);
+            const formData = new FormData();
+            files.forEach((file, index) => {
+                formData.append('file' + index, file);
+            });
+            if (Object.keys(metadata).length > 0) {
+                formData.append('metadata', JSON.stringify(metadata));
+            }
+            return this._request(fullUrl, {
+                method: 'POST',
+                body: formData,
+                ...options
+            });
+        },
+
+        async _request(url, options) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), config.timeout);
+
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+                }
+
+                const result = await response.json();
+
+                if (!this._isValidResultModel(result)) {
+                    return result;
+                }
+
+                if (result.code !== 200 && result.code !== 0) {
+                    throw new Error(result.message || '业务错误: ' + result.code);
+                }
+
+                return result;
+
+            } catch (error) {
+                clearTimeout(timeoutId);
+                if (error.name === 'AbortError') {
+                    throw new Error('请求超时，请稍后重试');
+                }
+                throw error;
+            }
+        },
+
+        _buildUrl(url) {
+            if (url.startsWith('http://') || url.startsWith('https://')) {
+                return url;
+            }
+            if (url.startsWith('/')) {
+                return url;
+            }
+            return config.baseURL + '/' + url;
+        },
+
+        _buildQueryString(params) {
+            if (!params || Object.keys(params).length === 0) {
+                return '';
+            }
+            return Object.entries(params)
+                .map(function(entry) {
+                    return encodeURIComponent(entry[0]) + '=' + encodeURIComponent(entry[1]);
+                })
+                .join('&');
+        },
+
+        _isValidResultModel(result) {
+            return result &&
+                typeof result === 'object' &&
+                'code' in result &&
+                'message' in result;
+        },
+
+        showLoading: function(message) {
+            if (typeof NX !== 'undefined' && NX.loading) {
+                NX.loading.show(message || '加载中...');
+            }
+        },
+
+        hideLoading: function() {
+            if (typeof NX !== 'undefined' && NX.loading) {
+                NX.loading.hide();
+            }
+        },
+
+        showError: function(message) {
+            if (typeof NX !== 'undefined' && NX.toast) {
+                NX.toast.error(message);
+            } else {
+                console.error('[ApiClient]', message);
+            }
+        },
+
+        showSuccess: function(message) {
+            if (typeof NX !== 'undefined' && NX.toast) {
+                NX.toast.success(message);
+            }
+        }
+    };
+
+    if (typeof window !== 'undefined') {
+        window.ApiClient = ApiClient;
+        window.apiClient = ApiClient;
     }
-};
 
-/**
- * GET请求
- * @param {string} endpoint - API端点
- * @param {Object} params - 查询参数
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.get = async function(endpoint, params = {}) {
-    const queryString = new URLSearchParams(params).toString();
-    const url = queryString ? `${endpoint}?${queryString}` : endpoint;
-
-    return this.request(url, {
-        method: 'GET',
-    });
-};
-
-/**
- * POST请求
- * @param {string} endpoint - API端点
- * @param {Object} data - 请求数据
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.post = async function(endpoint, data = {}) {
-    return this.request(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(data),
-    });
-};
-
-/**
- * PUT请求
- * @param {string} endpoint - API端点
- * @param {Object} data - 请求数据
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.put = async function(endpoint, data = {}) {
-    return this.request(endpoint, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-    });
-};
-
-/**
- * DELETE请求
- * @param {string} endpoint - API端点
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.delete = async function(endpoint) {
-    return this.request(endpoint, {
-        method: 'DELETE',
-    });
-};
-
-/**
- * 批量获取数据
- * @param {Object} params - 请求参数
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.batchFetch = async function(params) {
-    return this.post('/batch/fetch', params);
-};
-
-/**
- * 批量创建数据
- * @param {Object} params - 请求参数
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.batchCreate = async function(params) {
-    return this.post('/batch/create', params);
-};
-
-/**
- * 批量更新数据
- * @param {Object} params - 请求参数
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.batchUpdate = async function(params) {
-    return this.post('/batch/update', params);
-};
-
-/**
- * 批量删除数据
- * @param {Object} params - 请求参数
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.batchDelete = async function(params) {
-    return this.post('/batch/delete', params);
-};
-
-/**
- * 批量执行操作
- * @param {Object} params - 请求参数
- * @returns {Promise<any>} - 响应数据
- */
-ApiClient.prototype.batchExecute = async function(params) {
-    return this.post('/batch/execute', params);
-};
-
-// 导出单例实例
-const apiClient = new ApiClient();
-
-// 全局导出
-if (typeof window !== 'undefined') {
-    window.ApiClient = ApiClient;
-    window.apiClient = apiClient;
-}
+})();

@@ -80,36 +80,43 @@ public class ConfigController {
 
     private void initializeRouteConfig() {
         routeConfig.put("maxRoutes", 1000);
-        routeConfig.put("routeTimeout", 30000); // 30秒
-        routeConfig.put("routeRetryCount", 3);
-        routeConfig.put("routeRetryDelay", 1000); // 1秒
-        routeConfig.put("enableRouteDiscovery", true);
-        routeConfig.put("routeDiscoveryInterval", 300000); // 5分钟
-        routeConfig.put("routeDiscoveryTimeout", 10000); // 10秒
-        routeConfig.put("maxRouteHistory", 1000);
-        routeConfig.put("routeHealthCheckInterval", 60000); // 1分钟
-        routeConfig.put("routeHealthCheckTimeout", 5000); // 5秒
-        routeConfig.put("minRouteLatency", 1);
-        routeConfig.put("maxRouteLatency", 5000); // 5秒
-        routeConfig.put("routeLatencyThreshold", 1000); // 1秒
-        routeConfig.put("routeReliabilityThreshold", 90.0);
+        routeConfig.put("routeRefreshInterval", 60000);
+        routeConfig.put("routeTimeout", 30000);
+        routeConfig.put("routeMaxRetries", 3);
+        routeConfig.put("enableRouteCaching", true);
+        routeConfig.put("routeCacheExpiry", 300000);
+        routeConfig.put("enableRouteHealthCheck", true);
+        routeConfig.put("routeHealthCheckInterval", 60000);
+        routeConfig.put("enableRouteMetrics", true);
+        routeConfig.put("routeMetricsInterval", 60000);
+        routeConfig.put("routePriorityOrder", new ArrayList<String>());
+        routeConfig.put("routeBlacklist", new ArrayList<String>());
+        routeConfig.put("routeWhitelist", new ArrayList<String>());
+        routeConfig.put("enableRouteLoadBalancing", true);
+        routeConfig.put("loadBalancingStrategy", "round-robin");
+        routeConfig.put("maxRoutesPerAgent", 100);
+        routeConfig.put("routeQueueSize", 1000);
     }
 
     private void initializeEndConfig() {
-        endConfig.put("maxEndAgents", 500);
-        endConfig.put("endAgentTimeout", 60000); // 60秒
-        endConfig.put("endAgentHeartbeatInterval", 45000); // 45秒
-        endConfig.put("endAgentMaxHeartbeatMisses", 3);
-        endConfig.put("enableEndAgentDiscovery", true);
-        endConfig.put("endAgentDiscoveryInterval", 600000); // 10分钟
-        endConfig.put("endAgentDiscoveryTimeout", 15000); // 15秒
-        endConfig.put("endAgentConnectionTimeout", 30000); // 30秒
-        endConfig.put("endAgentReadTimeout", 60000); // 60秒
-        endConfig.put("endAgentWriteTimeout", 30000); // 30秒
-        endConfig.put("maxEndAgentCommands", 100);
-        endConfig.put("endAgentCommandTimeout", 30000); // 30秒
-        endConfig.put("endAgentQueueSize", 1000);
+        endConfig.put("endAgentDiscoveryInterval", 600000);
+        endConfig.put("endAgentHeartbeatInterval", 45000);
+        endConfig.put("endAgentTimeout", 60000);
         endConfig.put("endAgentMaxRetries", 3);
+        endConfig.put("enableEndAgentCaching", true);
+        endConfig.put("endAgentCacheExpiry", 300000);
+        endConfig.put("enableEndAgentHealthCheck", true);
+        endConfig.put("endAgentHealthCheckInterval", 60000);
+        endConfig.put("enableEndAgentMetrics", true);
+        endConfig.put("endAgentMetricsInterval", 60000);
+        endConfig.put("enableEndAgentAutoDiscovery", true);
+        endConfig.put("enableEndAgentAutoRegistration", false);
+        endConfig.put("endAgentMaxConcurrentTasks", 100);
+        endConfig.put("endAgentQueueSize", 1000);
+        endConfig.put("endAgentCommandTimeout", 30000);
+        endConfig.put("endAgentMaxConnections", 500);
+        endConfig.put("enableEndAgentCompression", true);
+        endConfig.put("enableEndAgentEncryption", false);
     }
 
     /**

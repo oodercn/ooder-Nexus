@@ -161,65 +161,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        const services = [
-            { name: 'Nexus Service', status: 'running', port: 9876, responseTime: 15 },
-            { name: 'Web Console', status: 'running', port: 8080, responseTime: 20 },
-            { name: 'API Service', status: 'running', port: 8081, responseTime: 10 },
-            { name: 'Monitoring Service', status: 'running', port: 9090, responseTime: 5 }
-        ];
-        
-        window.onPageInit = function() {
-            console.log('健康检查页面初始化完成');
-            renderServices();
-            updateHealthData();
-        };
-        
-        function renderServices() {
-            const tbody = document.getElementById('serviceTableBody');
-            tbody.innerHTML = '';
-            services.forEach(service => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${service.name}</td>
-                    <td><span class="nx-text-success">运行中</span></td>
-                    <td>${service.port}</td>
-                    <td>${service.responseTime}ms</td>
-                    <td>
-                        <button class="nx-btn nx-btn--sm nx-btn--secondary" onclick="restartService('${service.name}')">重启</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function updateHealthData() {
-            document.getElementById('lastCheck').textContent = new Date().toLocaleString('zh-CN');
-            document.getElementById('checkDuration').textContent = '1.2s';
-        }
-        
-        function runHealthCheck() {
-            alert('正在运行健康检查...');
-            setTimeout(() => {
-                updateHealthData();
-                alert('健康检查完成！');
-            }, 1500);
-        }
-        
-        function exportHealthReport() {
-            const report = { status: 'healthy', score: 98, services: services };
-            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'health-report.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-        
-        function restartService(name) {
-            alert(`重启服务: ${name}`);
-        }
-    </script>
+    <script src="/console/js/pages/health-check.js"></script>
 </body>
 </html>

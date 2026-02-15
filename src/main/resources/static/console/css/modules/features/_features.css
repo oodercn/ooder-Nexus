@@ -2,11 +2,11 @@
 
 /* 章节样式 */
 .section {
-    background-color: #121212;
+    background-color: var(--ns-card-bg);
     padding: 24px;
-    border-radius: var(--ooder-radius);
-    box-shadow: var(--ooder-shadow);
-    border: 1px solid var(--ooder-border);
+    border-radius: var(--ns-radius);
+    box-shadow: var(--ns-shadow);
+    border: 1px solid var(--ns-border);
     margin-bottom: 24px;
 }
 
@@ -14,7 +14,7 @@
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 24px;
-    color: var(--ooder-dark);
+    color: var(--ns-dark);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -24,7 +24,7 @@
     content: "";
     width: 4px;
     height: 20px;
-    background-color: var(--ooder-primary);
+    background-color: var(--nx-primary);
     border-radius: 2px;
 }
 
@@ -37,14 +37,14 @@
 
 .status-item {
     padding: 16px;
-    border-radius: var(--ooder-radius);
-    background-color: #1a1a1a;
-    border: 1px solid var(--ooder-border);
+    border-radius: var(--ns-radius);
+    background-color: var(--ns-input-bg);
+    border: 1px solid var(--ns-border);
 }
 
 .status-item .key {
     font-size: 14px;
-    color: var(--ooder-secondary);
+    color: var(--ns-secondary);
     margin-bottom: 8px;
     font-weight: 500;
 }
@@ -52,21 +52,21 @@
 .status-item .value {
     font-size: 16px;
     font-weight: 600;
-    color: var(--ooder-dark);
+    color: var(--ns-dark);
 }
 
 .status-item.ok {
-    border-left: 4px solid var(--ooder-success);
+    border-left: 4px solid var(--ns-success);
     background-color: rgba(34, 197, 94, 0.1);
 }
 
 .status-item.warning {
-    border-left: 4px solid var(--ooder-warning);
+    border-left: 4px solid var(--ns-warning);
     background-color: rgba(245, 158, 11, 0.1);
 }
 
 .status-item.error {
-    border-left: 4px solid var(--ooder-danger);
+    border-left: 4px solid var(--ns-danger);
     background-color: rgba(239, 68, 68, 0.1);
 }
 
@@ -83,19 +83,19 @@
     position: relative;
     height: 320px;
     margin: 24px 0;
-    background-color: #1a1a1a;
+    background-color: var(--ns-input-bg);
     padding: 24px;
-    border-radius: var(--ooder-radius);
-    border: 1px solid var(--ooder-border);
-    box-shadow: var(--ooder-shadow);
+    border-radius: var(--ns-radius);
+    border: 1px solid var(--ns-border);
+    box-shadow: var(--ns-shadow);
 }
 
 /* 简易图表样式 */
 .simple-chart {
     width: 100%;
     height: 240px;
-    background-color: #1a1a1a;
-    border-radius: var(--ooder-radius);
+    background-color: var(--ns-input-bg);
+    border-radius: var(--ns-radius);
     position: relative;
     overflow: hidden;
     padding: 24px;
@@ -104,7 +104,7 @@
 .chart-bar {
     position: absolute;
     bottom: 24px;
-    background-color: var(--ooder-primary);
+    background-color: var(--nx-primary);
     border-radius: 4px 4px 0 0;
     transition: height 0.5s ease;
     box-shadow: 0 2px 4px rgba(59, 130, 246, 0.4);
@@ -122,7 +122,7 @@
     position: absolute;
     width: 10px;
     height: 10px;
-    background-color: var(--ooder-primary);
+    background-color: var(--nx-primary);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 2px 4px rgba(59, 130, 246, 0.4);
@@ -132,12 +132,12 @@
 .network-topology {
     width: 100%;
     height: 320px;
-    background-color: #1a1a1a;
-    border-radius: var(--ooder-radius);
+    background-color: var(--ns-input-bg);
+    border-radius: var(--ns-radius);
     position: relative;
     overflow: hidden;
-    border: 1px solid var(--ooder-border);
-    box-shadow: var(--ooder-shadow);
+    border: 1px solid var(--ns-border);
+    box-shadow: var(--ns-shadow);
     margin-top: 16px;
     padding: 24px;
     display: flex;
@@ -149,9 +149,9 @@
     width: 100%;
     max-width: 800px;
     height: 250px;
-    background-color: var(--ooder-card-bg);
-    border-radius: var(--ooder-radius);
-    border: 1px solid var(--ooder-border);
+    background-color: var(--ns-card-bg);
+    border-radius: var(--ns-radius);
+    border: 1px solid var(--ns-border);
     position: relative;
     overflow: hidden;
 }
@@ -160,7 +160,7 @@
     position: absolute;
     width: 64px;
     height: 64px;
-    background-color: var(--ooder-primary);
+    background-color: var(--nx-primary);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -180,7 +180,7 @@
 
 .topology-link {
     position: absolute;
-    background-color: var(--ooder-secondary);
+    background-color: var(--ns-secondary);
     height: 2px;
     transform-origin: 0 0;
     opacity: 0.6;
@@ -190,8 +190,8 @@
 .bandwidth-chart {
     margin-top: 16px;
     padding: 24px;
-    background-color: var(--ooder-light);
-    border-radius: var(--ooder-radius);
+    background-color: var(--ns-bg-hover);
+    border-radius: var(--ns-radius);
     min-height: 200px;
 }
 
@@ -202,42 +202,42 @@
 
 .test-case {
     padding: 16px;
-    border-radius: var(--ooder-radius);
+    border-radius: var(--ns-radius);
     margin-bottom: 12px;
-    border: 1px solid var(--ooder-border);
+    border: 1px solid var(--ns-border);
     transition: all 0.2s ease;
-    background-color: #1a1a1a;
+    background-color: var(--ns-input-bg);
 }
 
 .test-case:hover {
-    box-shadow: var(--ooder-shadow);
-    background-color: #2a2a2a;
+    box-shadow: var(--ns-shadow);
+    background-color: var(--ns-bg-hover);
 }
 
 .test-case.passed {
     background-color: rgba(34, 197, 94, 0.1);
-    border-left: 4px solid var(--ooder-success);
+    border-left: 4px solid var(--ns-success);
 }
 
 .test-case.failed {
     background-color: rgba(239, 68, 68, 0.1);
-    border-left: 4px solid var(--ooder-danger);
+    border-left: 4px solid var(--ns-danger);
 }
 
 .test-case.skipped {
     background-color: rgba(245, 158, 11, 0.1);
-    border-left: 4px solid var(--ooder-warning);
+    border-left: 4px solid var(--ns-warning);
 }
 
 .test-case .test-name {
     font-weight: 600;
     margin-bottom: 8px;
-    color: var(--ooder-dark);
+    color: var(--ns-dark);
 }
 
 .test-case .test-message {
     font-size: 14px;
-    color: var(--ooder-secondary);
+    color: var(--ns-secondary);
     line-height: 1.4;
 }
 
@@ -266,15 +266,15 @@
 .loading-spinner {
     width: 60px;
     height: 60px;
-    border: 3px solid var(--ooder-border);
-    border-top: 3px solid var(--ooder-primary);
+    border: 3px solid var(--ns-border);
+    border-top: 3px solid var(--nx-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
 
 .loading-text {
     margin-top: 16px;
-    color: var(--ooder-secondary);
+    color: var(--ns-secondary);
     font-size: 14px;
 }
 
@@ -283,11 +283,11 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: var(--ooder-danger);
+    background-color: var(--ns-danger);
     color: white;
     padding: 16px 24px;
-    border-radius: var(--ooder-radius);
-    box-shadow: var(--ooder-shadow);
+    border-radius: var(--ns-radius);
+    box-shadow: var(--ns-shadow);
     z-index: 9999;
     opacity: 0;
     transform: translateX(100%);
@@ -316,11 +316,11 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: var(--ooder-success);
+    background-color: var(--ns-success);
     color: white;
     padding: 16px 24px;
-    border-radius: var(--ooder-radius);
-    box-shadow: var(--ooder-shadow);
+    border-radius: var(--ns-radius);
+    box-shadow: var(--ns-shadow);
     z-index: 9999;
     opacity: 0;
     transform: translateX(100%);
@@ -347,12 +347,12 @@
     font-size: 32px;
     font-weight: 600;
     margin-bottom: 8px;
-    color: var(--ooder-primary);
+    color: var(--nx-primary);
 }
 
 .status-label {
     font-size: 14px;
-    color: var(--ooder-secondary);
+    color: var(--ns-secondary);
 }
 
 /* 设备列表 */
@@ -365,8 +365,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px;
-    border-radius: var(--ooder-radius);
-    background-color: var(--ooder-light);
+    border-radius: var(--ns-radius);
+    background-color: var(--ns-bg-hover);
     margin-bottom: 12px;
 }
 
@@ -378,7 +378,7 @@
 
 .device-icon {
     font-size: 24px;
-    color: var(--ooder-primary);
+    color: var(--nx-primary);
 }
 
 .device-details h3 {
@@ -389,7 +389,7 @@
 
 .device-details p {
     font-size: 14px;
-    color: var(--ooder-secondary);
+    color: var(--ns-secondary);
 }
 
 .device-status {
@@ -405,15 +405,15 @@
 }
 
 .status-online {
-    background-color: var(--ooder-success);
+    background-color: var(--ns-success);
 }
 
 .status-offline {
-    background-color: var(--ooder-danger);
+    background-color: var(--ns-danger);
 }
 
 .status-warning {
-    background-color: var(--ooder-warning);
+    background-color: var(--ns-warning);
 }
 
 /* 安全状态 */
@@ -428,8 +428,8 @@
     flex: 1;
     text-align: center;
     padding: 16px;
-    border-radius: var(--ooder-radius);
-    background-color: var(--ooder-light);
+    border-radius: var(--ns-radius);
+    background-color: var(--ns-bg-hover);
 }
 
 .security-icon {
@@ -438,24 +438,24 @@
 }
 
 .security-good {
-    color: var(--ooder-success);
+    color: var(--ns-success);
 }
 
 .security-warning {
-    color: var(--ooder-warning);
+    color: var(--ns-warning);
 }
 
 .security-bad {
-    color: var(--ooder-danger);
+    color: var(--ns-danger);
 }
 
 /* 步骤内容 */
 .step-content {
-    background-color: var(--ooder-card-bg);
-    border-radius: var(--ooder-radius);
-    border: 1px solid var(--ooder-border);
+    background-color: var(--ns-card-bg);
+    border-radius: var(--ns-radius);
+    border: 1px solid var(--ns-border);
     padding: 32px;
-    box-shadow: var(--ooder-shadow);
+    box-shadow: var(--ns-shadow);
     margin-bottom: 32px;
 }
 
@@ -463,7 +463,7 @@
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 24px;
-    color: var(--ooder-text);
+    color: var(--ns-dark);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -473,15 +473,15 @@
     content: "";
     width: 4px;
     height: 20px;
-    background-color: var(--ooder-primary);
+    background-color: var(--nx-primary);
     border-radius: 2px;
 }
 
 /* VFS目录结构 */
 .vfs-browser {
-    background-color: var(--ooder-background);
-    border: 1px solid var(--ooder-border);
-    border-radius: var(--ooder-radius);
+    background-color: var(--ns-background);
+    border: 1px solid var(--ns-border);
+    border-radius: var(--ns-radius);
     padding: 16px;
     max-height: 300px;
     overflow-y: auto;
@@ -499,23 +499,23 @@
 }
 
 .vfs-item:hover {
-    background-color: var(--ooder-light);
+    background-color: var(--ns-bg-hover);
 }
 
 .vfs-item.directory {
     font-weight: 500;
-    color: var(--ooder-primary);
+    color: var(--nx-primary);
 }
 
 .vfs-item.file {
-    color: var(--ooder-text);
+    color: var(--ns-dark);
 }
 
 /* 网络配置说明 */
 .network-info {
-    background-color: var(--ooder-light);
-    border: 1px solid var(--ooder-border);
-    border-radius: var(--ooder-radius);
+    background-color: var(--ns-bg-hover);
+    border: 1px solid var(--ns-border);
+    border-radius: var(--ns-radius);
     padding: 20px;
     margin-bottom: 24px;
 }
@@ -524,12 +524,12 @@
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 12px;
-    color: var(--ooder-text);
+    color: var(--ns-dark);
 }
 
 .network-info p {
     font-size: 14px;
-    color: var(--ooder-secondary);
+    color: var(--ns-secondary);
     margin-bottom: 12px;
     line-height: 1.4;
 }
@@ -541,7 +541,7 @@
 
 .network-info li {
     font-size: 14px;
-    color: var(--ooder-secondary);
+    color: var(--ns-secondary);
     margin-bottom: 4px;
 }
 
@@ -550,17 +550,17 @@
     position: absolute;
     top: 16px;
     right: 16px;
-    background-color: var(--ooder-card-bg);
-    border: 1px solid var(--ooder-border);
-    border-radius: var(--ooder-radius);
+    background-color: var(--ns-card-bg);
+    border: 1px solid var(--ns-border);
+    border-radius: var(--ns-radius);
     padding: 8px 16px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    color: var(--ooder-text);
+    color: var(--ns-dark);
     transition: all 0.2s ease;
 }
 
 .theme-toggle:hover {
-    background-color: var(--ooder-light);
+    background-color: var(--ns-bg-hover);
 }

@@ -2,8 +2,12 @@ package net.ooder.nexus.adapter.inbound.controller.admin;
 
 import net.ooder.config.ResultModel;
 import net.ooder.config.ListResultModel;
+import net.ooder.nexus.service.AdminSkillService;
+import net.ooder.sdk.skill.packageManager.model.InstalledSkill;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -15,145 +19,259 @@ public class AdminSkillController {
 
     private static final Logger log = LoggerFactory.getLogger(AdminSkillController.class);
 
-    private final Map<String, Map<String, Object>> skills = new LinkedHashMap<>();
-
-    public AdminSkillController() {
-        skills.put("skill-001", createSkill("skill-001", "文本分析工具", "文本分析和处理", "文本处理", "approved", "user-001"));
-        skills.put("skill-002", createSkill("skill-002", "数据处理脚本", "数据清洗和转换", "数据分析", "approved", "user-002"));
-        skills.put("skill-003", createSkill("skill-003", "自动化部署工具", "CI/CD自动化部署", "开发工具", "pending", "user-003"));
-        skills.put("skill-004", createSkill("skill-004", "日志分析器", "日志收集和分析", "系统管理", "approved", "user-001"));
-        skills.put("skill-005", createSkill("skill-005", "网络监控工具", "网络状态监控", "网络工具", "approved", "user-002"));
-    }
+    @Autowired
+    private AdminSkillService adminSkillService;
 
     @PostMapping("/list")
     @ResponseBody
-    public ListResultModel<List<Map<String, Object>>> getSkillList() {
-        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<>();
+    public ListResultModel<List<Map<String, Object>>> getList() {
+        log.info("Get admin skill list requested");
+        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<List<Map<String, Object>>>();
+
         try {
-            List<Map<String, Object>> skillList = new ArrayList<>(skills.values());
+            List<InstalledSkill> skills = adminSkillService.getAllSkills();
+            List<Map<String, Object>> skillList = new ArrayList<Map<String, Object>>();
+
+            for (InstalledSkill skill : skills) {
+                Map<String, Object> skillMap = new HashMap<String, Object>();
+                skillMap.put("id", skill.getSkillId());
+                skillMap.put("name", skill.getName());
+                skillMap.put("version", skill.getVersion());
+                skillMap.put("status", skill.getStatus() != null ? skill.getStatus().name() : "UNKNOWN");
+                skillMap.put("installMode", skill.getInstallMode() != null ? skill.getInstallMode().name() : "UNKNOWN");
+                skillList.add(skillMap);
+            }
+
             result.setData(skillList);
             result.setSize(skillList.size());
             result.setRequestStatus(200);
-            result.setMessage("获取成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("获取技能列表失败", e);
+            log.error("Error getting skill list", e);
             result.setRequestStatus(500);
-            result.setMessage("获取技能列表失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
+
         return result;
     }
 
     @PostMapping("/get")
     @ResponseBody
     public ResultModel<Map<String, Object>> getSkill(@RequestBody Map<String, String> request) {
-        ResultModel<Map<String, Object>> result = new ResultModel<>();
+        log.info("Get skill detail requested: {}", request.get("id"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
+
         try {
-            String id = request.get("id");
-            Map<String, Object> skill = skills.get(id);
+            String skillId = request.get("id");
+            InstalledSkill skill = adminSkillService.getSkillById(skillId);
+
             if (skill == null) {
                 result.setRequestStatus(404);
-                result.setMessage("技能不存在");
+                result.setMessage("Skill not found");
                 return result;
             }
-            result.setData(skill);
+
+            Map<String, Object> skillMap = new HashMap<String, Object>();
+            skillMap.put("id", skill.getSkillId());
+            skillMap.put("name", skill.getName());
+            skillMap.put("version", skill.getVersion());
+            skillMap.put("status", skill.getStatus() != null ? skill.getStatus().name() : "UNKNOWN");
+            skillMap.put("installMode", skill.getInstallMode() != null ? skill.getInstallMode().name() : "UNKNOWN");
+            skillMap.put("config", skill.getConfig());
+            skillMap.put("capabilities", skill.getCapabilities());
+            skillMap.put("scenes", skill.getScenes());
+
+            result.setData(skillMap);
             result.setRequestStatus(200);
-            result.setMessage("获取成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("获取技能详情失败", e);
+            log.error("Error getting skill detail", e);
             result.setRequestStatus(500);
-            result.setMessage("获取技能详情失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
+
+        return result;
+    }
+
+    @PostMapping("/approve")
+    @ResponseBody
+    public ResultModel<Map<String, Object>> approveSkill(@RequestBody Map<String, String> request) {
+        log.info("Approve skill requested: {}", request.get("id"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
+
+        try {
+            String skillId = request.get("id");
+            InstalledSkill skill = adminSkillService.approveSkill(skillId).get();
+
+            if (skill == null) {
+                result.setRequestStatus(404);
+                result.setMessage("Skill not found");
+                return result;
+            }
+
+            Map<String, Object> skillMap = new HashMap<String, Object>();
+            skillMap.put("id", skill.getSkillId());
+            skillMap.put("status", skill.getStatus() != null ? skill.getStatus().name() : "APPROVED");
+
+            result.setData(skillMap);
+            result.setRequestStatus(200);
+            result.setMessage("Skill approved successfully");
+        } catch (Exception e) {
+            log.error("Error approving skill", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    @PostMapping("/reject")
+    @ResponseBody
+    public ResultModel<Map<String, Object>> rejectSkill(@RequestBody Map<String, String> request) {
+        log.info("Reject skill requested: {}", request.get("id"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
+
+        try {
+            String skillId = request.get("id");
+            InstalledSkill skill = adminSkillService.rejectSkill(skillId).get();
+
+            Map<String, Object> skillMap = new HashMap<String, Object>();
+            skillMap.put("id", skillId);
+            skillMap.put("status", "REJECTED");
+
+            result.setData(skillMap);
+            result.setRequestStatus(200);
+            result.setMessage("Skill rejected successfully");
+        } catch (Exception e) {
+            log.error("Error rejecting skill", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    @PostMapping("/publish")
+    @ResponseBody
+    public ResultModel<Map<String, Object>> publishSkill(@RequestBody Map<String, Object> request) {
+        log.info("Publish skill requested: {}", request.get("id"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
+
+        try {
+            String skillId = (String) request.get("id");
+            @SuppressWarnings("unchecked")
+            Map<String, String> config = (Map<String, String>) request.get("config");
+            
+            InstalledSkill skill = adminSkillService.publishSkill(skillId, config).get();
+
+            Map<String, Object> skillMap = new HashMap<String, Object>();
+            skillMap.put("id", skillId);
+            skillMap.put("status", "PUBLISHED");
+
+            result.setData(skillMap);
+            result.setRequestStatus(200);
+            result.setMessage("Skill published successfully");
+        } catch (Exception e) {
+            log.error("Error publishing skill", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    @PostMapping("/unpublish")
+    @ResponseBody
+    public ResultModel<Boolean> unpublishSkill(@RequestBody Map<String, String> request) {
+        log.info("Unpublish skill requested: {}", request.get("id"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+
+        try {
+            String skillId = request.get("id");
+            boolean success = adminSkillService.unpublishSkill(skillId).get();
+
+            result.setData(success);
+            result.setRequestStatus(200);
+            result.setMessage("Skill unpublished successfully");
+        } catch (Exception e) {
+            log.error("Error unpublishing skill", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
         return result;
     }
 
     @PostMapping("/delete")
     @ResponseBody
     public ResultModel<Boolean> deleteSkill(@RequestBody Map<String, String> request) {
-        ResultModel<Boolean> result = new ResultModel<>();
+        log.info("Delete skill requested: {}", request.get("id"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+
         try {
-            String id = request.get("id");
-            Map<String, Object> removed = skills.remove(id);
-            if (removed == null) {
-                result.setRequestStatus(404);
-                result.setMessage("技能不存在");
-                result.setData(false);
-                return result;
-            }
-            result.setData(true);
+            String skillId = request.get("id");
+            boolean success = adminSkillService.deleteSkill(skillId).get();
+
+            result.setData(success);
             result.setRequestStatus(200);
-            result.setMessage("删除成功");
+            result.setMessage("Skill deleted successfully");
         } catch (Exception e) {
-            log.error("删除技能失败", e);
+            log.error("Error deleting skill", e);
             result.setRequestStatus(500);
-            result.setMessage("删除技能失败: " + e.getMessage());
-            result.setData(false);
+            result.setMessage("Error: " + e.getMessage());
         }
+
         return result;
     }
 
-    @PostMapping("/approve")
+    @PostMapping("/pending")
     @ResponseBody
-    public ResultModel<Boolean> approveSkill(@RequestBody Map<String, String> request) {
-        ResultModel<Boolean> result = new ResultModel<>();
+    public ListResultModel<List<Map<String, Object>>> getPendingSkills() {
+        log.info("Get pending skills requested");
+        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<List<Map<String, Object>>>();
+
         try {
-            String id = request.get("id");
-            Map<String, Object> skill = skills.get(id);
-            if (skill == null) {
-                result.setRequestStatus(404);
-                result.setMessage("技能不存在");
-                result.setData(false);
-                return result;
+            List<InstalledSkill> skills = adminSkillService.getPendingSkills();
+            List<Map<String, Object>> skillList = new ArrayList<Map<String, Object>>();
+
+            for (InstalledSkill skill : skills) {
+                Map<String, Object> skillMap = new HashMap<String, Object>();
+                skillMap.put("id", skill.getSkillId());
+                skillMap.put("name", skill.getName());
+                skillMap.put("version", skill.getVersion());
+                skillList.add(skillMap);
             }
-            skill.put("status", "approved");
-            result.setData(true);
+
+            result.setData(skillList);
+            result.setSize(skillList.size());
             result.setRequestStatus(200);
-            result.setMessage("审批通过");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("审批技能失败", e);
+            log.error("Error getting pending skills", e);
             result.setRequestStatus(500);
-            result.setMessage("审批技能失败: " + e.getMessage());
-            result.setData(false);
+            result.setMessage("Error: " + e.getMessage());
         }
+
         return result;
     }
 
-    @PostMapping("/reject")
+    @PostMapping("/statistics")
     @ResponseBody
-    public ResultModel<Boolean> rejectSkill(@RequestBody Map<String, String> request) {
-        ResultModel<Boolean> result = new ResultModel<>();
-        try {
-            String id = request.get("id");
-            Map<String, Object> skill = skills.get(id);
-            if (skill == null) {
-                result.setRequestStatus(404);
-                result.setMessage("技能不存在");
-                result.setData(false);
-                return result;
-            }
-            skill.put("status", "rejected");
-            result.setData(true);
-            result.setRequestStatus(200);
-            result.setMessage("已拒绝");
-        } catch (Exception e) {
-            log.error("拒绝技能失败", e);
-            result.setRequestStatus(500);
-            result.setMessage("拒绝技能失败: " + e.getMessage());
-            result.setData(false);
-        }
-        return result;
-    }
+    public ResultModel<AdminSkillService.SkillStatistics> getStatistics() {
+        log.info("Get skill statistics requested");
+        ResultModel<AdminSkillService.SkillStatistics> result = new ResultModel<AdminSkillService.SkillStatistics>();
 
-    private Map<String, Object> createSkill(String id, String name, String description, String category, String status, String author) {
-        Map<String, Object> skill = new LinkedHashMap<>();
-        skill.put("id", id);
-        skill.put("name", name);
-        skill.put("description", description);
-        skill.put("category", category);
-        skill.put("status", status);
-        skill.put("author", author);
-        skill.put("downloads", (int)(Math.random() * 100));
-        skill.put("rating", Math.round(Math.random() * 20) / 10.0 + 3.0);
-        skill.put("createdAt", "2026-02-01");
-        return skill;
+        try {
+            AdminSkillService.SkillStatistics stats = adminSkillService.getStatistics();
+            result.setData(stats);
+            result.setRequestStatus(200);
+            result.setMessage("Success");
+        } catch (Exception e) {
+            log.error("Error getting statistics", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
+        return result;
     }
 }

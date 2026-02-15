@@ -3,24 +3,13 @@ package net.ooder.nexus.core.protocol.model;
 import java.io.Serializable;
 
 /**
- * 命令数字签名
+ * Command Digital Signature
  */
 public class CommandSignature implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 签名算法
-     */
     private String algorithm;
-
-    /**
-     * 签名值（Base64编码�?
-     */
     private String value;
-
-    /**
-     * 证书指纹
-     */
     private String certificateFingerprint;
 
     public CommandSignature() {
@@ -31,29 +20,12 @@ public class CommandSignature implements Serializable {
         this.value = value;
     }
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
-
-    public void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getCertificateFingerprint() {
-        return certificateFingerprint;
-    }
-
-    public void setCertificateFingerprint(String certificateFingerprint) {
-        this.certificateFingerprint = certificateFingerprint;
-    }
+    public String getAlgorithm() { return algorithm; }
+    public void setAlgorithm(String algorithm) { this.algorithm = algorithm; }
+    public String getValue() { return value; }
+    public void setValue(String value) { this.value = value; }
+    public String getCertificateFingerprint() { return certificateFingerprint; }
+    public void setCertificateFingerprint(String certificateFingerprint) { this.certificateFingerprint = certificateFingerprint; }
 
     @Override
     public String toString() {

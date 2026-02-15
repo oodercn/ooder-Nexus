@@ -319,13 +319,14 @@
     <div id="share-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>新建分享</h3>
+                <h3 id="share-modal-title">新建分享</h3>
                 <button class="nx-btn nx-btn--ghost nx-btn--icon" onclick="closeShareModal()">
                     <i class="ri-close-line"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
+                <input type="hidden" id="edit-share-id">
+                <div class="form-group" id="file-input-group">
                     <label>选择文件</label>
                     <input type="file" id="share-file" class="form-input">
                 </div>
@@ -349,7 +350,7 @@
             </div>
             <div class="modal-footer">
                 <button class="nx-btn nx-btn--secondary" onclick="closeShareModal()">取消</button>
-                <button class="nx-btn nx-btn--primary" onclick="createShare()">创建分享</button>
+                <button class="nx-btn nx-btn--primary" onclick="saveShare()">保存</button>
             </div>
         </div>
     </div>

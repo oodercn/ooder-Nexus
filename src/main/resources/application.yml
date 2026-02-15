@@ -4,6 +4,32 @@ server:
 spring:
   application:
     name: ooder-mcp-agent
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+  datasource:
+    url: jdbc:h2:file:./data/nexus;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
 
 ooder:
   agent:
@@ -21,18 +47,20 @@ ooder:
     timeout: 60000
   skill:
     base-package: "net.ooder.nexus.skill"
+  org:
+    provider: local
+    cache:
+      enabled: true
+      ttl: 3600
+    sync:
+      enabled: true
+      cron: "0 0 2 * * ?"
 
-# Mock 模式开关配置
-# 设置为 true 启用模拟数据模式（无需真实设备即可测试功能）
-# 设置为 false 启用真实设备模式（需要连接真实的 OpenWrt 路由器）
 mock:
   enabled: false
 
 mcpagent:
   service:
-    # 服务类型：MOCK（模拟模式）或 REAL（真实模式）
-    # 当 mock.enabled=true 时，自动使用 MOCK 模式
-    # 当 mock.enabled=false 时，自动使用 REAL 模式
     type: "REAL"
     switch:
       enabled: true

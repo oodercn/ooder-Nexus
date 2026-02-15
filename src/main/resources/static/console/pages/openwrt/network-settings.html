@@ -157,56 +157,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        const openwrtApi = {
-            baseUrl: '/api/openwrt',
-            async get(endpoint) {
-                const response = await fetch(`${this.baseUrl}${endpoint}`);
-                return await response.json();
-            },
-            async put(endpoint, data = {}) {
-                const response = await fetch(`${this.baseUrl}${endpoint}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                return await response.json();
-            }
-        };
-        
-        window.onPageInit = function() {
-            console.log('网络设置页面初始化完成');
-            loadSettings();
-        };
-        
-        async function loadSettings() {
-            try {
-                const basicData = await openwrtApi.get('/settings/basic');
-                if (basicData.status === 'success' && basicData.data) {
-                    document.getElementById('networkName').value = basicData.data.networkName || '';
-                    document.getElementById('domainName').value = basicData.data.domainName || '';
-                    document.getElementById('timezone').value = basicData.data.timezone || 'Asia/Shanghai';
-                    document.getElementById('ntpServer').value = basicData.data.ntpServer || '';
-                }
-            } catch (error) {
-                console.error('加载设置失败:', error);
-            }
-        }
-        
-        async function saveAllSettings() {
-            try {
-                await openwrtApi.put('/settings/basic', {
-                    networkName: document.getElementById('networkName').value,
-                    domainName: document.getElementById('domainName').value,
-                    timezone: document.getElementById('timezone').value,
-                    ntpServer: document.getElementById('ntpServer').value
-                });
-                alert('设置保存成功');
-            } catch (error) {
-                console.error('保存设置失败:', error);
-                alert('保存设置失败');
-            }
-        }
-    </script>
+    <script src="/console/js/pages/openwrt-network-settings.js"></script>
 </body>
 </html>

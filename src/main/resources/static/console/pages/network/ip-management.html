@@ -285,43 +285,6 @@
         </main>
     </div>
 
-    <script>
-        // 生成 IP 地址池可视化
-        function generateIPPool() {
-            const pool = document.getElementById('ip-pool');
-            const usedIPs = [1, 10, 20, 30, 100, 101, 102, 103, 104, 105];
-            const reservedIPs = [2, 3, 4, 5, 6, 7, 8, 9];
 
-            for (let i = 1; i <= 254; i++) {
-                const block = document.createElement('div');
-                block.className = 'ip-block';
-                block.textContent = i;
-                block.title = `192.168.1.${i}`;
-
-                if (reservedIPs.includes(i)) {
-                    block.classList.add('reserved');
-                } else if (usedIPs.includes(i)) {
-                    block.classList.add('used');
-                } else {
-                    block.classList.add('available');
-                }
-
-                block.onclick = () => showIPDetails(i);
-                pool.appendChild(block);
-            }
-        }
-
-        function showIPDetails(ip) {
-            alert(`IP 地址: 192.168.1.${ip}`);
-        }
-
-        function showAddStaticIP() {
-            alert('添加静态 IP 分配');
-        }
-
-        window.onPageInit = function() {
-            generateIPPool();
-        };
-    </script>
 </body>
 </html>

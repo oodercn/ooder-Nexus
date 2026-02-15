@@ -3,8 +3,8 @@ package net.ooder.nexus.domain.config.model;
 import java.io.Serializable;
 
 /**
- * End配置结果
- * 用于ConfigController中getEndConfig和updateEndConfig方法的返回类�?
+ * End configuration result
+ * Used for return type in ConfigController getEndConfig and updateEndConfig methods
  */
 public class EndConfigResult implements Serializable {
     private int endAgentDiscoveryInterval;

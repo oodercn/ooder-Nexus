@@ -2,8 +2,11 @@ package net.ooder.nexus.adapter.inbound.controller.admin;
 
 import net.ooder.config.ResultModel;
 import net.ooder.config.ListResultModel;
+import net.ooder.nexus.service.AdminCertificationService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -15,124 +18,169 @@ public class AdminCertificationController {
 
     private static final Logger log = LoggerFactory.getLogger(AdminCertificationController.class);
 
-    @PostMapping("/skills/list")
+    @Autowired
+    private AdminCertificationService adminCertificationService;
+
+    @PostMapping("/list")
     @ResponseBody
-    public ListResultModel<List<Map<String, Object>>> getCertificationSkills() {
-        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<>();
+    public ListResultModel<List<Map<String, Object>>> getList() {
+        log.info("Get certifications requested");
+        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<List<Map<String, Object>>>();
         try {
-            List<Map<String, Object>> skills = new ArrayList<>();
-            skills.add(createCertSkill("cs-001", "安全扫描工具", "security", "certified", "2026-02-10"));
-            skills.add(createCertSkill("cs-002", "数据加密模块", "crypto", "pending", null));
-            skills.add(createCertSkill("cs-003", "身份认证服务", "auth", "certified", "2026-02-08"));
-            
-            result.setData(skills);
-            result.setSize(skills.size());
+            List<Map<String, Object>> certs = adminCertificationService.getAllCertifications();
+            result.setData(certs);
+            result.setSize(certs.size());
             result.setRequestStatus(200);
-            result.setMessage("获取成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("获取认证技能列表失败", e);
+            log.error("Error getting certifications", e);
             result.setRequestStatus(500);
-            result.setMessage("获取认证技能列表失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
         return result;
     }
 
-    @PostMapping("/certificates/list")
+    @PostMapping("/get")
     @ResponseBody
-    public ListResultModel<List<Map<String, Object>>> getCertificateList() {
-        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<>();
+    public ResultModel<Map<String, Object>> getCertification(@RequestBody Map<String, String> request) {
+        log.info("Get certification requested: {}", request.get("id"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
         try {
-            List<Map<String, Object>> certificates = new ArrayList<>();
-            certificates.add(createCertificate("cert-001", "ISO 27001", "security", "valid", "2027-02-10"));
-            certificates.add(createCertificate("cert-002", "SOC 2 Type II", "compliance", "valid", "2026-08-15"));
-            certificates.add(createCertificate("cert-003", "GDPR 合规", "privacy", "expiring", "2026-03-01"));
-            
-            result.setData(certificates);
-            result.setSize(certificates.size());
-            result.setRequestStatus(200);
-            result.setMessage("获取成功");
+            Map<String, Object> cert = adminCertificationService.getCertificationById(request.get("id"));
+            if (cert == null) {
+                result.setRequestStatus(404);
+                result.setMessage("Certification not found");
+            } else {
+                result.setData(cert);
+                result.setRequestStatus(200);
+                result.setMessage("Success");
+            }
         } catch (Exception e) {
-            log.error("获取证书列表失败", e);
+            log.error("Error getting certification", e);
             result.setRequestStatus(500);
-            result.setMessage("获取证书列表失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
         return result;
     }
 
-    @PostMapping("/validations/list")
+    @PostMapping("/pending")
     @ResponseBody
-    public ListResultModel<List<Map<String, Object>>> getValidationList() {
-        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<>();
+    public ListResultModel<List<Map<String, Object>>> getPending() {
+        log.info("Get pending certifications requested");
+        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<List<Map<String, Object>>>();
         try {
-            List<Map<String, Object>> validations = new ArrayList<>();
-            validations.add(createValidation("v-001", "安全审计", "security", "passed", "2026-02-12"));
-            validations.add(createValidation("v-002", "性能测试", "performance", "passed", "2026-02-11"));
-            validations.add(createValidation("v-003", "渗透测试", "security", "in_progress", null));
-            
-            result.setData(validations);
-            result.setSize(validations.size());
+            List<Map<String, Object>> certs = adminCertificationService.getPendingCertifications();
+            result.setData(certs);
+            result.setSize(certs.size());
             result.setRequestStatus(200);
-            result.setMessage("获取成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("获取验证列表失败", e);
+            log.error("Error getting pending certifications", e);
             result.setRequestStatus(500);
-            result.setMessage("获取验证列表失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
         return result;
     }
 
-    @PostMapping("/certify")
+    @PostMapping("/submit")
     @ResponseBody
-    public ResultModel<Map<String, Object>> certifySkill(@RequestBody Map<String, String> request) {
-        ResultModel<Map<String, Object>> result = new ResultModel<>();
+    public ResultModel<Map<String, Object>> submitCertification(@RequestBody Map<String, Object> request) {
+        log.info("Submit certification requested: {}", request.get("name"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
         try {
-            String skillId = request.get("skillId");
-            String level = request.getOrDefault("level", "standard");
-            
-            Map<String, Object> certification = new LinkedHashMap<>();
-            certification.put("skillId", skillId);
-            certification.put("level", level);
-            certification.put("certifiedAt", new Date().toString());
-            certification.put("validUntil", "2027-02-13");
-            
-            result.setData(certification);
+            Map<String, Object> cert = adminCertificationService.submitCertification(request);
+            result.setData(cert);
             result.setRequestStatus(200);
-            result.setMessage("认证成功");
+            result.setMessage("Certification submitted successfully");
         } catch (Exception e) {
-            log.error("认证技能失败", e);
+            log.error("Error submitting certification", e);
             result.setRequestStatus(500);
-            result.setMessage("认证技能失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
         return result;
     }
 
-    private Map<String, Object> createCertSkill(String id, String name, String type, String status, String date) {
-        Map<String, Object> skill = new LinkedHashMap<>();
-        skill.put("id", id);
-        skill.put("name", name);
-        skill.put("type", type);
-        skill.put("status", status);
-        skill.put("certifiedAt", date);
-        return skill;
+    @PostMapping("/approve")
+    @ResponseBody
+    public ResultModel<Map<String, Object>> approveCertification(@RequestBody Map<String, Object> request) {
+        log.info("Approve certification requested: {}", request.get("id"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
+        try {
+            String id = (String) request.get("id");
+            Map<String, Object> cert = adminCertificationService.approveCertification(id, request);
+            if (cert == null) {
+                result.setRequestStatus(404);
+                result.setMessage("Certification not found");
+            } else {
+                result.setData(cert);
+                result.setRequestStatus(200);
+                result.setMessage("Certification approved");
+            }
+        } catch (Exception e) {
+            log.error("Error approving certification", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
     }
 
-    private Map<String, Object> createCertificate(String id, String name, String type, String status, String expiry) {
-        Map<String, Object> cert = new LinkedHashMap<>();
-        cert.put("id", id);
-        cert.put("name", name);
-        cert.put("type", type);
-        cert.put("status", status);
-        cert.put("expiryDate", expiry);
-        return cert;
+    @PostMapping("/reject")
+    @ResponseBody
+    public ResultModel<Map<String, Object>> rejectCertification(@RequestBody Map<String, Object> request) {
+        log.info("Reject certification requested: {}", request.get("id"));
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
+        try {
+            String id = (String) request.get("id");
+            Map<String, Object> cert = adminCertificationService.rejectCertification(id, request);
+            if (cert == null) {
+                result.setRequestStatus(404);
+                result.setMessage("Certification not found");
+            } else {
+                result.setData(cert);
+                result.setRequestStatus(200);
+                result.setMessage("Certification rejected");
+            }
+        } catch (Exception e) {
+            log.error("Error rejecting certification", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
     }
 
-    private Map<String, Object> createValidation(String id, String name, String type, String status, String date) {
-        Map<String, Object> validation = new LinkedHashMap<>();
-        validation.put("id", id);
-        validation.put("name", name);
-        validation.put("type", type);
-        validation.put("status", status);
-        validation.put("completedAt", date);
-        return validation;
+    @PostMapping("/revoke")
+    @ResponseBody
+    public ResultModel<Boolean> revokeCertification(@RequestBody Map<String, String> request) {
+        log.info("Revoke certification requested: {}", request.get("id"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+        try {
+            boolean success = adminCertificationService.revokeCertification(request.get("id"));
+            result.setData(success);
+            result.setRequestStatus(success ? 200 : 404);
+            result.setMessage(success ? "Certification revoked" : "Certification not found");
+        } catch (Exception e) {
+            log.error("Error revoking certification", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
+    }
+
+    @PostMapping("/statistics")
+    @ResponseBody
+    public ResultModel<Map<String, Object>> getStatistics() {
+        log.info("Get certification statistics requested");
+        ResultModel<Map<String, Object>> result = new ResultModel<Map<String, Object>>();
+        try {
+            Map<String, Object> stats = adminCertificationService.getCertificationStatistics();
+            result.setData(stats);
+            result.setRequestStatus(200);
+            result.setMessage("Success");
+        } catch (Exception e) {
+            log.error("Error getting statistics", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+        return result;
     }
 }

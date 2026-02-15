@@ -5,41 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>技能分享 - Nexus SkillCenter</title>
     <link rel="stylesheet" href="/console/css/remixicon/remixicon.css">
-    <link rel="stylesheet" href="/console/css/theme.css">
-    <link rel="stylesheet" href="/console/css/dashboard.css">
-    <link rel="stylesheet" href="/console/css/styles.css">
-    <script src="/console/js/theme-manager.js"></script>
-    <script src="/console/js/menu-loader.js"></script>
+    <link rel="stylesheet" href="/console/css/nexus.css">
+
+    <!-- 必须引入的脚本文件 -->
+    <script src="/console/js/nexus.js"></script>
+    <script src="/console/js/nexus-menu.js"></script>
+    <script src="/console/js/page-init.js" data-auto-init></script>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
+    <div class="nx-page">
+        <aside class="nx-page__sidebar" id="sidebar">
+            <div class="nx-p-4 nx-mb-4">
+                <h1 class="nx-text-lg nx-font-bold" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="ri-server-line"></i> Nexus Console
+                </h1>
+            </div>
             <ul class="nav-menu" id="nav-menu"></ul>
         </aside>
-        <main class="main-content">
-            <header class="header">
-                <h1>技能分享</h1>
-                <div class="header-actions">
+        <main class="nx-page__content">
+            <header class="nx-page__header">
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-sidebar-toggle>
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="nx-text-lg nx-font-semibold">技能分享</h2>
+                </div>
+                <div class="nx-flex nx-items-center nx-gap-3">
+                    <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
+                        <i class="ri-sun-line"></i>
+                    </button>
                     <button class="btn btn-primary" onclick="showShareModal()">
                         <i class="ri-share-line"></i> 分享技能
                     </button>
                 </div>
             </header>
-            <div class="content">
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('shared')">已分享</button>
-                    <button class="tab-btn" onclick="switchTab('received')">已接收</button>
-                </div>
-                
-                <div class="tab-content" id="shared-tab">
-                    <div class="share-list" id="shared-list">
-                        <div class="loading">加载中...</div>
+            <div class="nx-page__main">
+                <div class="nx-container">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('shared')">已分享</button>
+                        <button class="tab-btn" onclick="switchTab('received')">已接收</button>
                     </div>
-                </div>
-                
-                <div class="tab-content" id="received-tab" style="display: none;">
-                    <div class="share-list" id="received-list">
-                        <div class="loading">加载中...</div>
+                    
+                    <div class="tab-content" id="shared-tab">
+                        <div class="share-list" id="shared-list">
+                            <div class="loading">加载中...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="received-tab" style="display: none;">
+                        <div class="share-list" id="received-list">
+                            <div class="loading">加载中...</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -80,281 +96,6 @@
         </div>
     </div>
 
-    <script>
-        window.onload = function() {
-            initMenu();
-            loadSharedSkills();
-            loadReceivedSkills();
-            loadSkillOptions();
-        };
-
-        async function loadSharedSkills() {
-            try {
-                const response = await fetch('/api/skillcenter/personal/sharing/shared');
-
-                const contentType = response.headers.get('content-type');
-                let result;
-
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-
-                if (result.status === 'success') {
-                    renderSharedList(result.data);
-                } else {
-                    showError('加载已分享技能列表失败');
-                }
-            } catch (error) {
-                console.error('加载已分享技能列表错误:', error);
-                showError('加载已分享技能列表失败');
-            }
-        }
-
-        async function loadReceivedSkills() {
-            try {
-                const response = await fetch('/api/skillcenter/personal/sharing/received');
-
-                const contentType = response.headers.get('content-type');
-                let result;
-
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-
-                if (result.status === 'success') {
-                    renderReceivedList(result.data);
-                } else {
-                    showError('加载已接收技能列表失败');
-                }
-            } catch (error) {
-                console.error('加载已接收技能列表错误:', error);
-                showError('加载已接收技能列表失败');
-            }
-        }
-
-        function renderSharedList(skills) {
-            const sharedList = document.getElementById('shared-list');
-            sharedList.innerHTML = '';
-            
-            skills.forEach(skill => {
-                const skillItem = document.createElement('div');
-                skillItem.className = 'share-item';
-                skillItem.innerHTML = `
-                    <div class="share-info">
-                        <h3>${skill.skillName || '未知技能'}</h3>
-                        <p>分享给: ${skill.target || '未知目标'}</p>
-                        <span class="share-time">${formatTime(skill.sharedAt)}</span>
-                    </div>
-                    <div class="share-actions">
-                        <button class="btn btn-secondary" onclick="cancelShare('${skill.id}')">
-                            <i class="ri-close-line"></i> 取消分享
-                        </button>
-                    </div>
-                `;
-                sharedList.appendChild(skillItem);
-            });
-        }
-
-        function renderReceivedList(skills) {
-            const receivedList = document.getElementById('received-list');
-            receivedList.innerHTML = '';
-            
-            skills.forEach(skill => {
-                const skillItem = document.createElement('div');
-                skillItem.className = 'share-item';
-                skillItem.innerHTML = `
-                    <div class="share-info">
-                        <h3>${skill.skillName}</h3>
-                        <p>来自: ${skill.sharedBy}</p>
-                        <span class="share-time">${formatTime(skill.receivedAt)}</span>
-                    </div>
-                    <div class="share-actions">
-                        <button class="btn btn-primary" onclick="acceptSkill('${skill.id}')">
-                            <i class="ri-check-line"></i> 接受
-                        </button>
-                    </div>
-                `;
-                receivedList.appendChild(skillItem);
-            });
-        }
-
-        async function loadSkillOptions() {
-            try {
-                const response = await fetch('/api/skillcenter/personal/skills');
-
-                const contentType = response.headers.get('content-type');
-                let result;
-
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-
-                if (result.status === 'success') {
-                    const skillSelect = document.getElementById('skill-select');
-                    skillSelect.innerHTML = '<option value="">请选择技能</option>';
-                    result.data.forEach(skill => {
-                        const option = document.createElement('option');
-                        option.value = skill.id;
-                        option.textContent = skill.name;
-                        skillSelect.appendChild(option);
-                    });
-                }
-            } catch (error) {
-                console.error('加载技能列表错误:', error);
-            }
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
-            
-            event.target.classList.add('active');
-            document.getElementById(tab + '-tab').style.display = 'block';
-        }
-
-        function showShareModal() {
-            document.getElementById('share-modal').style.display = 'block';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        async function shareSkill() {
-            const skillId = document.getElementById('skill-select').value;
-            const targetType = document.getElementById('target-type').value;
-            const targetId = document.getElementById('target-id').value;
-
-            if (!skillId || !targetId) {
-                showError('请填写完整信息');
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/skillcenter/personal/sharing', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        skillId: skillId,
-                        target: targetId,
-                        targetType: targetType
-                    })
-                });
-
-                const contentType = response.headers.get('content-type');
-                let result;
-
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-
-                if (result.status === 'success') {
-                    closeModal('share-modal');
-                    showSuccess('技能分享成功');
-                    loadSharedSkills();
-                } else {
-                    showError('技能分享失败');
-                }
-            } catch (error) {
-                console.error('分享技能错误:', error);
-                showError('技能分享失败');
-            }
-        }
-
-        async function cancelShare(shareId) {
-            if (!confirm('确定要取消分享此技能吗？')) {
-                return;
-            }
-
-            try {
-                const response = await fetch(`/api/skillcenter/personal/sharing/${shareId}`, {
-                    method: 'DELETE'
-                });
-
-                const contentType = response.headers.get('content-type');
-                let result;
-
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-
-                if (result.status === 'success') {
-                    showSuccess('取消分享成功');
-                    loadSharedSkills();
-                } else {
-                    showError('取消分享失败');
-                }
-            } catch (error) {
-                console.error('取消分享错误:', error);
-                showError('取消分享失败');
-            }
-        }
-
-        async function acceptSkill(shareId) {
-            try {
-                const response = await fetch(`/api/skillcenter/personal/sharing/${shareId}`, {
-                    method: 'POST'
-                });
-
-                const contentType = response.headers.get('content-type');
-                let result;
-
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(`非JSON响应: ${text.substring(0, 100)}...`);
-                }
-
-                if (result.status === 'success') {
-                    showSuccess('技能已添加到我的技能');
-                    loadReceivedSkills();
-                } else {
-                    showError('接受技能失败');
-                }
-            } catch (error) {
-                console.error('接受技能错误:', error);
-                showError('接受技能失败');
-            }
-        }
-
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            return date.toLocaleString('zh-CN');
-        }
-
-        function showError(message) {
-            showNotification(message, 'error');
-        }
-
-        function showSuccess(message) {
-            showNotification(message, 'success');
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-    </script>
+    <script src="/console/js/pages/my-sharing.js"></script>
 </body>
 </html>

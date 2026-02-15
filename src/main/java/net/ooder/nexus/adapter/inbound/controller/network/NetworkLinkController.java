@@ -26,88 +26,34 @@ public class NetworkLinkController {
 
     private void initializeDefaultLinks() {
         networkLinks.put("link-001", new NetworkLink(
-                "link-001",
-                "mcp-agent-01",
-                "route-agent-east",
-                "direct",
-                "active",
-                98.5,
-                1000,
-                10,
-                "稳定",
-                System.currentTimeMillis() - 3600000,
-                System.currentTimeMillis()
-        ));
+                "link-001", "mcp-agent-01", "route-agent-east", "direct", "active",
+                98.5, 1000, 10, "Stable",
+                System.currentTimeMillis() - 3600000, System.currentTimeMillis()));
 
         networkLinks.put("link-002", new NetworkLink(
-                "link-002",
-                "mcp-agent-01",
-                "route-agent-west",
-                "direct",
-                "active",
-                99.2,
-                1200,
-                8,
-                "稳定",
-                System.currentTimeMillis() - 7200000,
-                System.currentTimeMillis()
-        ));
+                "link-002", "mcp-agent-01", "route-agent-west", "direct", "active",
+                99.2, 1200, 8, "Stable",
+                System.currentTimeMillis() - 7200000, System.currentTimeMillis()));
 
         networkLinks.put("link-003", new NetworkLink(
-                "link-003",
-                "mcp-agent-01",
-                "route-agent-north",
-                "direct",
-                "active",
-                97.8,
-                950,
-                12,
-                "稳定",
-                System.currentTimeMillis() - 10800000,
-                System.currentTimeMillis()
-        ));
+                "link-003", "mcp-agent-01", "route-agent-north", "direct", "active",
+                97.8, 950, 12, "Stable",
+                System.currentTimeMillis() - 10800000, System.currentTimeMillis()));
 
         networkLinks.put("link-004", new NetworkLink(
-                "link-004",
-                "mcp-agent-01",
-                "route-agent-south",
-                "direct",
-                "degraded",
-                75.3,
-                600,
-                35,
-                "丢包率较�?",
-                System.currentTimeMillis() - 14400000,
-                System.currentTimeMillis() - 300000
-        ));
+                "link-004", "mcp-agent-01", "route-agent-south", "direct", "degraded",
+                75.3, 600, 35, "High packet loss",
+                System.currentTimeMillis() - 14400000, System.currentTimeMillis() - 300000));
 
         networkLinks.put("link-005", new NetworkLink(
-                "link-005",
-                "route-agent-east",
-                "end-agent-east-01",
-                "indirect",
-                "active",
-                96.7,
-                800,
-                15,
-                "稳定",
-                System.currentTimeMillis() - 18000000,
-                System.currentTimeMillis()
-        ));
+                "link-005", "route-agent-east", "end-agent-east-01", "indirect", "active",
+                96.7, 800, 15, "Stable",
+                System.currentTimeMillis() - 18000000, System.currentTimeMillis()));
 
         networkLinks.put("link-006", new NetworkLink(
-                "link-006",
-                "route-agent-west",
-                "end-agent-west-01",
-                "indirect",
-                "active",
-                98.1,
-                900,
-                12,
-                "稳定",
-                System.currentTimeMillis() - 21600000,
-                System.currentTimeMillis()
-        ));
+                "link-006", "route-agent-west", "end-agent-west-01", "indirect", "active",
+                98.1, 900, 12, "Stable",
+                System.currentTimeMillis() - 21600000, System.currentTimeMillis()));
     }
 
     @GetMapping("/list")
@@ -169,7 +115,6 @@ public class NetworkLinkController {
             }
 
             link.setLastUpdated(System.currentTimeMillis());
-
             List<Map<String, Object>> history = generateLinkHistory(linkId);
 
             Map<String, Object> data = new HashMap<>();
@@ -222,14 +167,8 @@ public class NetworkLinkController {
                     (String) linkData.get("sourceAgentId"),
                     (String) linkData.get("targetAgentId"),
                     linkData.containsKey("type") ? (String) linkData.get("type") : "direct",
-                    "pending",
-                    0.0,
-                    0,
-                    0,
-                    "链路初始化中",
-                    System.currentTimeMillis(),
-                    System.currentTimeMillis()
-            );
+                    "pending", 0.0, 0, 0, "Link initializing",
+                    System.currentTimeMillis(), System.currentTimeMillis());
 
             networkLinks.put(linkId, newLink);
 
@@ -239,12 +178,11 @@ public class NetworkLinkController {
                     connectionInfo.put("linkId", linkId);
                     connectionInfo.put("type", linkData.containsKey("type") ? linkData.get("type") : "direct");
                     connectionInfo.put("status", "pending");
-                    connectionInfo.put("description", "链路初始化中");
+                    connectionInfo.put("description", "Link initializing");
                     nexusManager.createNetworkConnection(
                             (String) linkData.get("sourceAgentId"),
                             (String) linkData.get("targetAgentId"),
-                            connectionInfo
-                    );
+                            connectionInfo);
                     log.info("Network link registered with SDK: {}", linkId);
                 } catch (Exception sdkEx) {
                     log.warn("Failed to register network link with SDK: {}", sdkEx.getMessage());
@@ -335,44 +273,11 @@ public class NetworkLinkController {
                 return response;
             }
 
-            if (updateData.containsKey("status")) {
-                link.setStatus((String) updateData.get("status"));
-            }
-            if (updateData.containsKey("type")) {
-                link.setType((String) updateData.get("type"));
-            }
-            if (updateData.containsKey("description")) {
-                link.setDescription((String) updateData.get("description"));
-            }
+            if (updateData.containsKey("status")) link.setStatus((String) updateData.get("status"));
+            if (updateData.containsKey("type")) link.setType((String) updateData.get("type"));
+            if (updateData.containsKey("description")) link.setDescription((String) updateData.get("description"));
 
             link.setLastUpdated(System.currentTimeMillis());
-
-            if (nexusManager != null) {
-                try {
-                    Map<String, Object> topology = nexusManager.getNetworkTopology();
-                    if (topology.containsKey("connections")) {
-                        Map<String, Map<String, Object>> connections = (Map<String, Map<String, Object>>) topology.get("connections");
-                        for (Map.Entry<String, Map<String, Object>> entry : connections.entrySet()) {
-                            Map<String, Object> connInfo = entry.getValue();
-                            if (linkId.equals(connInfo.get("linkId"))) {
-                                if (updateData.containsKey("type")) {
-                                    connInfo.put("type", updateData.get("type"));
-                                }
-                                if (updateData.containsKey("status")) {
-                                    connInfo.put("status", updateData.get("status"));
-                                }
-                                if (updateData.containsKey("description")) {
-                                    connInfo.put("description", updateData.get("description"));
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    log.info("Network link updated in SDK: {}", linkId);
-                } catch (Exception sdkEx) {
-                    log.warn("Failed to update network link in SDK: {}", sdkEx.getMessage());
-                }
-            }
 
             response.put("status", "success");
             response.put("message", "Network link updated successfully");
@@ -441,15 +346,6 @@ public class NetworkLinkController {
             stats.put("averageReliability", calculateAverageReliability());
             stats.put("healthScore", calculateOverallHealthScore());
 
-            if (nexusManager != null) {
-                try {
-                    Map<String, Object> topology = nexusManager.getNetworkTopology();
-                    stats.put("networkTopology", topology);
-                } catch (Exception sdkEx) {
-                    log.warn("Failed to get network topology from SDK: {}", sdkEx.getMessage());
-                }
-            }
-
             response.put("status", "success");
             response.put("message", "Network link stats retrieved successfully");
             response.put("data", stats);
@@ -496,23 +392,17 @@ public class NetworkLinkController {
     }
 
     private double calculateAverageLatency() {
-        if (networkLinks.isEmpty()) {
-            return 0;
-        }
+        if (networkLinks.isEmpty()) return 0;
         return networkLinks.values().stream().mapToInt(NetworkLink::getLatency).average().orElse(0);
     }
 
     private double calculateAverageBandwidth() {
-        if (networkLinks.isEmpty()) {
-            return 0;
-        }
+        if (networkLinks.isEmpty()) return 0;
         return networkLinks.values().stream().mapToInt(NetworkLink::getBandwidth).average().orElse(0);
     }
 
     private double calculateAverageReliability() {
-        if (networkLinks.isEmpty()) {
-            return 0;
-        }
+        if (networkLinks.isEmpty()) return 0;
         return networkLinks.values().stream().mapToDouble(NetworkLink::getReliability).average().orElse(0);
     }
 
@@ -524,9 +414,7 @@ public class NetworkLinkController {
     }
 
     private double calculateOverallHealthScore() {
-        if (networkLinks.isEmpty()) {
-            return 0;
-        }
+        if (networkLinks.isEmpty()) return 0;
         return networkLinks.values().stream().mapToDouble(this::calculateLinkHealthScore).average().orElse(0);
     }
 
@@ -557,27 +445,8 @@ public class NetworkLinkController {
                     link.setReliability(95 + Math.random() * 5);
                     link.setBandwidth(800 + (int)(Math.random() * 400));
                     link.setLatency(5 + (int)(Math.random() * 15));
-                    link.setDescription("链路�?活成�?");
+                    link.setDescription("Link activated successfully");
                     link.setLastUpdated(System.currentTimeMillis());
-
-                    if (nexusManager != null) {
-                        try {
-                            Map<String, Object> topology = nexusManager.getNetworkTopology();
-                            if (topology.containsKey("connections")) {
-                                Map<String, Map<String, Object>> connections = (Map<String, Map<String, Object>>) topology.get("connections");
-                                for (Map.Entry<String, Map<String, Object>> entry : connections.entrySet()) {
-                                    Map<String, Object> connInfo = entry.getValue();
-                                    if (linkId.equals(connInfo.get("linkId"))) {
-                                        connInfo.put("status", "active");
-                                        connInfo.put("description", "链路�?活成�?");
-                                        break;
-                                    }
-                                }
-                            }
-                        } catch (Exception sdkEx) {
-                            log.warn("Failed to update link status in SDK: {}", sdkEx.getMessage());
-                        }
-                    }
                 }
             } catch (InterruptedException e) {
                 log.error("Link activation simulation interrupted: {}", e.getMessage());
@@ -597,35 +466,16 @@ public class NetworkLinkController {
 
                     if (link.getReliability() >= 90) {
                         link.setStatus("active");
-                        link.setDescription("稳定");
+                        link.setDescription("Stable");
                     } else if (link.getReliability() >= 70) {
                         link.setStatus("degraded");
-                        link.setDescription("性能下降");
+                        link.setDescription("Performance degraded");
                     } else {
                         link.setStatus("error");
-                        link.setDescription("链路异常");
+                        link.setDescription("Link error");
                     }
 
                     link.setLastUpdated(System.currentTimeMillis());
-
-                    if (nexusManager != null) {
-                        try {
-                            Map<String, Object> topology = nexusManager.getNetworkTopology();
-                            if (topology.containsKey("connections")) {
-                                Map<String, Map<String, Object>> connections = (Map<String, Map<String, Object>>) topology.get("connections");
-                                for (Map.Entry<String, Map<String, Object>> entry : connections.entrySet()) {
-                                    Map<String, Object> connInfo = entry.getValue();
-                                    if (linkId.equals(connInfo.get("linkId"))) {
-                                        connInfo.put("status", link.getStatus());
-                                        connInfo.put("description", link.getDescription());
-                                        break;
-                                    }
-                                }
-                            }
-                        } catch (Exception sdkEx) {
-                            log.warn("Failed to update link status in SDK: {}", sdkEx.getMessage());
-                        }
-                    }
                 }
             } catch (InterruptedException e) {
                 log.error("Link status refresh simulation interrupted: {}", e.getMessage());
@@ -660,76 +510,23 @@ public class NetworkLinkController {
             this.lastUpdated = lastUpdated;
         }
 
-        public String getLinkId() {
-            return linkId;
-        }
-
-        public String getSourceAgentId() {
-            return sourceAgentId;
-        }
-
-        public String getTargetAgentId() {
-            return targetAgentId;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public double getReliability() {
-            return reliability;
-        }
-
-        public void setReliability(double reliability) {
-            this.reliability = reliability;
-        }
-
-        public int getBandwidth() {
-            return bandwidth;
-        }
-
-        public void setBandwidth(int bandwidth) {
-            this.bandwidth = bandwidth;
-        }
-
-        public int getLatency() {
-            return latency;
-        }
-
-        public void setLatency(int latency) {
-            this.latency = latency;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public long getCreatedAt() {
-            return createdAt;
-        }
-
-        public long getLastUpdated() {
-            return lastUpdated;
-        }
-
-        public void setLastUpdated(long lastUpdated) {
-            this.lastUpdated = lastUpdated;
-        }
+        public String getLinkId() { return linkId; }
+        public String getSourceAgentId() { return sourceAgentId; }
+        public String getTargetAgentId() { return targetAgentId; }
+        public String getType() { return type; }
+        public void setType(String type) { this.type = type; }
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+        public double getReliability() { return reliability; }
+        public void setReliability(double reliability) { this.reliability = reliability; }
+        public int getBandwidth() { return bandwidth; }
+        public void setBandwidth(int bandwidth) { this.bandwidth = bandwidth; }
+        public int getLatency() { return latency; }
+        public void setLatency(int latency) { this.latency = latency; }
+        public String getDescription() { return description; }
+        public void setDescription(String description) { this.description = description; }
+        public long getCreatedAt() { return createdAt; }
+        public long getLastUpdated() { return lastUpdated; }
+        public void setLastUpdated(long lastUpdated) { this.lastUpdated = lastUpdated; }
     }
 }

@@ -94,6 +94,16 @@
           "roles": ["personal", "home", "enterprise"]
         },
         {
+          "id": "installed-skills",
+          "name": "已安装技能",
+          "icon": "ri-install-line",
+          "level": 2,
+          "url": "pages/skillcenter/installed-skills.html",
+          "priority": "high",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
           "id": "skill-market",
           "name": "技能市场",
           "icon": "ri-store-2-line",
@@ -558,6 +568,16 @@
           "icon": "ri-heart-pulse-line",
           "level": 2,
           "url": "pages/monitoring/health-check.html",
+          "priority": "high",
+          "status": "implemented",
+          "roles": ["personal", "home", "enterprise"]
+        },
+        {
+          "id": "app-config",
+          "name": "应用配置",
+          "icon": "ri-settings-4-line",
+          "level": 2,
+          "url": "pages/config/app-config.html",
           "priority": "high",
           "status": "implemented",
           "roles": ["personal", "home", "enterprise"]

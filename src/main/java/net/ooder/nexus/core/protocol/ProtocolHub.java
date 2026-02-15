@@ -13,15 +13,15 @@ import java.util.List;
 public interface ProtocolHub {
 
     /**
-     * 注册协议处理�?
+     * 注册协议处理器
      *
-     * @param protocolType 协议类型（如：MCP, ROUTE, END�?
-     * @param handler      协议处理�?
+     * @param protocolType 协议类型（如：MCP, ROUTE, END等）
+     * @param handler      协议处理器
      */
     void registerProtocolHandler(String protocolType, ProtocolHandler handler);
 
     /**
-     * 注销协议处理�?
+     * 注销协议处理器
      *
      * @param protocolType 协议类型
      */
@@ -30,13 +30,13 @@ public interface ProtocolHub {
     /**
      * 处理南向命令
      *
-     * @param packet 命令数据�?
+     * @param packet 命令数据包
      * @return 命令执行结果
      */
     CommandResult handleCommand(CommandPacket packet);
 
     /**
-     * 获取支持的协议列�?
+     * 获取支持的协议列表
      *
      * @return 协议类型列表
      */
@@ -51,22 +51,22 @@ public interface ProtocolHub {
     ProtocolStats getProtocolStats(String protocolType);
 
     /**
-     * 获取�?有协议的统计信息
+     * 获取所有协议的统计信息
      *
-     * @return �?有协议统计信息列�?
+     * @return 所有协议统计信息列表
      */
     List<ProtocolStats> getAllProtocolStats();
 
     /**
-     * �?查协议是否已注册
+     * 检查协议是否已注册
      *
      * @param protocolType 协议类型
-     * @return 是否已注�?
+     * @return 是否已注册
      */
     boolean isProtocolRegistered(String protocolType);
 
     /**
-     * 获取协议处理�?
+     * 获取协议处理器
      *
      * @param protocolType 协议类型
      * @return 协议处理器，如果不存在返回null

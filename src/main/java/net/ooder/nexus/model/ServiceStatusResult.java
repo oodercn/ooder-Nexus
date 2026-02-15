@@ -1,23 +1,22 @@
 package net.ooder.nexus.model;
 
-import net.ooder.nexus.controller.HealthCheckController;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务状态结果实体Bean
- * 用于HealthCheckController中getServiceStatus方法的返回类型
  */
 public class ServiceStatusResult {
     
-    private List<HealthCheckController.ServiceStatus> services;
+    private List<Map<String, Object>> services;
     private int total;
     private int running;
 
-    public List<HealthCheckController.ServiceStatus> getServices() {
+    public List<Map<String, Object>> getServices() {
         return services;
     }
 
-    public void setServices(List<HealthCheckController.ServiceStatus> services) {
+    public void setServices(List<Map<String, Object>> services) {
         this.services = services;
     }
 

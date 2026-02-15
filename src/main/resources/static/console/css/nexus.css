@@ -319,6 +319,13 @@ ul, ol {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
+  transition: width var(--nx-transition-base), left var(--nx-transition-base);
+}
+
+.nx-page__sidebar--collapsed {
+  width: 0;
+  border-right: none;
+  overflow: hidden;
 }
 
 .nx-page__content {

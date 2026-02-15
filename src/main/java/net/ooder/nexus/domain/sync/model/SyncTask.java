@@ -1,11 +1,13 @@
 package net.ooder.nexus.domain.sync.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * 同步任务实体类
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SyncTask {
     
     private String id;

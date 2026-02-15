@@ -227,21 +227,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        function showAddStaticIPForm() {
-            alert('添加静态 IP 功能开发中...');
-        }
-        function saveIpRangeSettings() {
-            alert('IP 范围设置保存成功！');
-        }
-        function resetIpRangeSettings() {
-            if (confirm('确定要重置 IP 范围设置吗？')) {
-                alert('IP 范围设置已重置为默认值');
-            }
-        }
-        window.onPageInit = function() {
-            console.log('IP管理页面初始化完成');
-        };
-    </script>
+    <script src="/console/js/pages/ip-management.js"></script>
 </body>
 </html>

@@ -2,8 +2,12 @@ package net.ooder.nexus.adapter.inbound.controller.admin;
 
 import net.ooder.config.ResultModel;
 import net.ooder.config.ListResultModel;
+import net.ooder.nexus.service.AdminGroupService;
+import net.ooder.nexus.dto.admin.AdminGroupDTO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -15,139 +19,233 @@ public class AdminGroupController {
 
     private static final Logger log = LoggerFactory.getLogger(AdminGroupController.class);
 
-    private final Map<String, Map<String, Object>> groups = new LinkedHashMap<>();
-
-    public AdminGroupController() {
-        groups.put("g-001", createGroup("g-001", "开发团队", "开发相关技能共享", 8, "active"));
-        groups.put("g-002", createGroup("g-002", "数据分析组", "数据分析工具和脚本", 5, "active"));
-        groups.put("g-003", createGroup("g-003", "运维团队", "运维自动化工具", 6, "active"));
-    }
+    @Autowired
+    private AdminGroupService adminGroupService;
 
     @PostMapping("/list")
     @ResponseBody
-    public ListResultModel<List<Map<String, Object>>> getGroupList() {
-        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<>();
+    public ListResultModel<List<AdminGroupDTO>> getList() {
+        log.info("Get admin group list requested");
+        ListResultModel<List<AdminGroupDTO>> result = new ListResultModel<List<AdminGroupDTO>>();
+
         try {
-            List<Map<String, Object>> groupList = new ArrayList<>(groups.values());
-            result.setData(groupList);
-            result.setSize(groupList.size());
+            List<Map<String, Object>> groups = adminGroupService.getAllGroups();
+            List<AdminGroupDTO> dtoList = new ArrayList<AdminGroupDTO>();
+
+            for (Map<String, Object> group : groups) {
+                dtoList.add(convertToDTO(group));
+            }
+
+            result.setData(dtoList);
+            result.setSize(dtoList.size());
             result.setRequestStatus(200);
-            result.setMessage("获取成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("获取群组列表失败", e);
+            log.error("Error getting group list", e);
             result.setRequestStatus(500);
-            result.setMessage("获取群组列表失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
+
         return result;
     }
 
     @PostMapping("/get")
     @ResponseBody
-    public ResultModel<Map<String, Object>> getGroup(@RequestBody Map<String, String> request) {
-        ResultModel<Map<String, Object>> result = new ResultModel<>();
+    public ResultModel<AdminGroupDTO> getGroup(@RequestBody Map<String, String> request) {
+        log.info("Get group detail requested: {}", request.get("id"));
+        ResultModel<AdminGroupDTO> result = new ResultModel<AdminGroupDTO>();
+
         try {
-            String id = request.get("id");
-            Map<String, Object> group = groups.get(id);
+            String groupId = request.get("id");
+            Map<String, Object> group = adminGroupService.getGroupById(groupId);
+
             if (group == null) {
                 result.setRequestStatus(404);
-                result.setMessage("群组不存在");
+                result.setMessage("Group not found");
                 return result;
             }
-            result.setData(group);
+
+            result.setData(convertToDTO(group));
             result.setRequestStatus(200);
-            result.setMessage("获取成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("获取群组详情失败", e);
+            log.error("Error getting group detail", e);
             result.setRequestStatus(500);
-            result.setMessage("获取群组详情失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
+
         return result;
     }
 
     @PostMapping("/create")
     @ResponseBody
-    public ResultModel<Map<String, Object>> createGroup(@RequestBody Map<String, String> request) {
-        ResultModel<Map<String, Object>> result = new ResultModel<>();
+    public ResultModel<AdminGroupDTO> createGroup(@RequestBody Map<String, Object> request) {
+        log.info("Create group requested: {}", request.get("name"));
+        ResultModel<AdminGroupDTO> result = new ResultModel<AdminGroupDTO>();
+
         try {
-            String name = request.get("name");
-            String description = request.get("description");
-            
-            String id = "g-" + System.currentTimeMillis();
-            Map<String, Object> group = createGroup(id, name, description, 1, "active");
-            groups.put(id, group);
-            
-            result.setData(group);
+            Map<String, Object> group = adminGroupService.createGroup(request);
+            result.setData(convertToDTO(group));
             result.setRequestStatus(200);
-            result.setMessage("创建成功");
+            result.setMessage("Group created successfully");
         } catch (Exception e) {
-            log.error("创建群组失败", e);
+            log.error("Error creating group", e);
             result.setRequestStatus(500);
-            result.setMessage("创建群组失败: " + e.getMessage());
+            result.setMessage("Error: " + e.getMessage());
         }
+
+        return result;
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public ResultModel<AdminGroupDTO> updateGroup(@RequestBody Map<String, Object> request) {
+        log.info("Update group requested: {}", request.get("id"));
+        ResultModel<AdminGroupDTO> result = new ResultModel<AdminGroupDTO>();
+
+        try {
+            String groupId = (String) request.get("id");
+            Map<String, Object> group = adminGroupService.updateGroup(groupId, request);
+
+            if (group == null) {
+                result.setRequestStatus(404);
+                result.setMessage("Group not found");
+                return result;
+            }
+
+            result.setData(convertToDTO(group));
+            result.setRequestStatus(200);
+            result.setMessage("Group updated successfully");
+        } catch (Exception e) {
+            log.error("Error updating group", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
         return result;
     }
 
     @PostMapping("/delete")
     @ResponseBody
     public ResultModel<Boolean> deleteGroup(@RequestBody Map<String, String> request) {
-        ResultModel<Boolean> result = new ResultModel<>();
+        log.info("Delete group requested: {}", request.get("id"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+
         try {
-            String id = request.get("id");
-            Map<String, Object> removed = groups.remove(id);
-            
-            result.setData(removed != null);
-            result.setRequestStatus(removed != null ? 200 : 404);
-            result.setMessage(removed != null ? "删除成功" : "群组不存在");
+            String groupId = request.get("id");
+            boolean success = adminGroupService.deleteGroup(groupId);
+
+            result.setData(success);
+            result.setRequestStatus(success ? 200 : 404);
+            result.setMessage(success ? "Group deleted successfully" : "Group not found");
         } catch (Exception e) {
-            log.error("删除群组失败", e);
+            log.error("Error deleting group", e);
             result.setRequestStatus(500);
-            result.setMessage("删除群组失败: " + e.getMessage());
-            result.setData(false);
+            result.setMessage("Error: " + e.getMessage());
         }
+
         return result;
     }
 
-    @PostMapping("/update")
+    @PostMapping("/members/list")
     @ResponseBody
-    public ResultModel<Boolean> updateGroup(@RequestBody Map<String, Object> request) {
-        ResultModel<Boolean> result = new ResultModel<>();
+    public ListResultModel<List<Map<String, Object>>> getMembers(@RequestBody Map<String, String> request) {
+        log.info("Get group members requested: {}", request.get("groupId"));
+        ListResultModel<List<Map<String, Object>>> result = new ListResultModel<List<Map<String, Object>>>();
+
         try {
-            String id = (String) request.get("id");
-            Map<String, Object> group = groups.get(id);
-            if (group == null) {
-                result.setRequestStatus(404);
-                result.setMessage("群组不存在");
-                result.setData(false);
-                return result;
-            }
-            
-            if (request.get("name") != null) {
-                group.put("name", request.get("name"));
-            }
-            if (request.get("description") != null) {
-                group.put("description", request.get("description"));
-            }
-            
-            result.setData(true);
+            String groupId = request.get("groupId");
+            List<Map<String, Object>> members = adminGroupService.getGroupMembers(groupId);
+
+            result.setData(members);
+            result.setSize(members.size());
             result.setRequestStatus(200);
-            result.setMessage("更新成功");
+            result.setMessage("Success");
         } catch (Exception e) {
-            log.error("更新群组失败", e);
+            log.error("Error getting group members", e);
             result.setRequestStatus(500);
-            result.setMessage("更新群组失败: " + e.getMessage());
-            result.setData(false);
+            result.setMessage("Error: " + e.getMessage());
         }
+
         return result;
     }
 
-    private Map<String, Object> createGroup(String id, String name, String description, int memberCount, String status) {
-        Map<String, Object> group = new LinkedHashMap<>();
-        group.put("id", id);
-        group.put("name", name);
-        group.put("description", description);
-        group.put("memberCount", memberCount);
-        group.put("status", status);
-        group.put("createdAt", "2026-02-01");
-        return group;
+    @PostMapping("/members/add")
+    @ResponseBody
+    public ResultModel<Boolean> addMember(@RequestBody Map<String, String> request) {
+        log.info("Add member requested: groupId={}, userId={}", request.get("groupId"), request.get("userId"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+
+        try {
+            String groupId = request.get("groupId");
+            String userId = request.get("userId");
+            boolean success = adminGroupService.addMember(groupId, userId);
+
+            result.setData(success);
+            result.setRequestStatus(success ? 200 : 404);
+            result.setMessage(success ? "Member added successfully" : "Group not found");
+        } catch (Exception e) {
+            log.error("Error adding member", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    @PostMapping("/members/remove")
+    @ResponseBody
+    public ResultModel<Boolean> removeMember(@RequestBody Map<String, String> request) {
+        log.info("Remove member requested: groupId={}, userId={}", request.get("groupId"), request.get("userId"));
+        ResultModel<Boolean> result = new ResultModel<Boolean>();
+
+        try {
+            String groupId = request.get("groupId");
+            String userId = request.get("userId");
+            boolean success = adminGroupService.removeMember(groupId, userId);
+
+            result.setData(success);
+            result.setRequestStatus(success ? 200 : 404);
+            result.setMessage(success ? "Member removed successfully" : "Member not found");
+        } catch (Exception e) {
+            log.error("Error removing member", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    @PostMapping("/statistics")
+    @ResponseBody
+    public ResultModel<AdminGroupService.GroupStatistics> getStatistics() {
+        log.info("Get group statistics requested");
+        ResultModel<AdminGroupService.GroupStatistics> result = new ResultModel<AdminGroupService.GroupStatistics>();
+
+        try {
+            AdminGroupService.GroupStatistics stats = adminGroupService.getStatistics();
+            result.setData(stats);
+            result.setRequestStatus(200);
+            result.setMessage("Success");
+        } catch (Exception e) {
+            log.error("Error getting statistics", e);
+            result.setRequestStatus(500);
+            result.setMessage("Error: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    private AdminGroupDTO convertToDTO(Map<String, Object> group) {
+        AdminGroupDTO dto = new AdminGroupDTO();
+        dto.setId((String) group.get("id"));
+        dto.setName((String) group.get("name"));
+        dto.setCode((String) group.get("code"));
+        dto.setDescription((String) group.get("description"));
+        dto.setStatus((String) group.get("status"));
+        dto.setMemberCount((Integer) group.get("memberCount"));
+        dto.setCreateTime((Long) group.get("createTime"));
+        dto.setUpdateTime((Long) group.get("updateTime"));
+        return dto;
     }
 }

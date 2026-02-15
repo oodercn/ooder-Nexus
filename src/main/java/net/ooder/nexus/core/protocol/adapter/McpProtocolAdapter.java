@@ -12,15 +12,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * MCP协议适配�?
- * 处理MCP（Master Control Protocol）相关命�?
+ * MCP Protocol Adapter
+ * Handles MCP (Master Control Protocol) related commands
  */
 @Component
 public class McpProtocolAdapter extends AbstractProtocolAdapter {
 
     public static final String PROTOCOL_TYPE = "MCP";
 
-    // MCP节点注册�?
     private final Map<String, McpNodeInfo> mcpNodes = new ConcurrentHashMap<>();
 
     @Autowired
@@ -33,7 +32,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
 
     @PostConstruct
     public void postConstruct() {
-        // 可以在这里进行额外的初始�?
         logger.info("McpProtocolAdapter constructed, NexusManager: {}", nexusManager != null ? "available" : "null");
     }
 
@@ -54,7 +52,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
 
     @Override
     protected void doDestroy() {
-        // 清理MCP节点注册�?
         mcpNodes.clear();
         logger.info("MCP nodes registry cleared");
     }
@@ -103,7 +100,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
     }
 
     private boolean validateStatusCommand(Map<String, Object> payload) {
-        // 状�?�上报可以是空payload，表示查询所有状�?
         return true;
     }
 
@@ -149,7 +145,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
 
         logger.info("MCP node registered: {} ({})", nodeId, nodeName);
 
-        // 注册到NexusManager
         if (nexusManager != null) {
             nexusManager.registerNetworkNode(nodeId, nodeInfo.toMap());
         }
@@ -168,7 +163,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
         if (removed != null) {
             logger.info("MCP node deregistered: {}", nodeId);
 
-            // 从NexusManager移除
             if (nexusManager != null) {
                 nexusManager.removeNetworkNode(nodeId);
             }
@@ -193,9 +187,7 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
         nodeInfo.setLastHeartbeatTime(System.currentTimeMillis());
         nodeInfo.setStatus("ONLINE");
 
-        // 更新节点状�??
         if (nexusManager != null) {
-            // 使用registerNetworkNode来更新节点状�?
             nexusManager.registerNetworkNode(nodeId, nodeInfo.toMap());
         }
 
@@ -208,7 +200,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
 
     private CommandResult handleMcpStatus(String commandId, Map<String, Object> payload) {
         if (payload != null && payload.get("nodeId") != null) {
-            // 查询特定节点状�??
             String nodeId = payload.get("nodeId").toString();
             McpNodeInfo nodeInfo = mcpNodes.get(nodeId);
             if (nodeInfo == null) {
@@ -220,7 +211,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
             resultData.put("lastHeartbeat", nodeInfo.getLastHeartbeatTime());
             return CommandResult.success(commandId, resultData);
         } else {
-            // 返回�?有节点状�?
             long onlineCount = mcpNodes.values().stream()
                     .filter(n -> "ONLINE".equals(n.getStatus()))
                     .count();
@@ -238,10 +228,8 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
     }
 
     private CommandResult handleMcpDiscover(String commandId, Map<String, Object> payload) {
-        // 设备发现逻辑
         logger.info("MCP discover command received");
 
-        // 这里可以实现扫描网络中的MCP节点
         Map<String, Object> resultData = new HashMap<>();
         resultData.put("discoveredNodes", mcpNodes.size());
         resultData.put("nodes", new ArrayList<>(mcpNodes.keySet()));
@@ -249,7 +237,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
     }
 
     private CommandResult handleMcpConfig(String commandId, Map<String, Object> payload) {
-        // 配置下发逻辑
         String nodeId = payload != null && payload.get("nodeId") != null ?
                 payload.get("nodeId").toString() : null;
 
@@ -266,23 +253,14 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
         return CommandResult.success(commandId, resultData);
     }
 
-    /**
-     * 获取MCP节点信息
-     */
     public McpNodeInfo getMcpNode(String nodeId) {
         return mcpNodes.get(nodeId);
     }
 
-    /**
-     * 获取�?有MCP节点
-     */
     public Map<String, McpNodeInfo> getAllMcpNodes() {
         return new ConcurrentHashMap<>(mcpNodes);
     }
 
-    /**
-     * MCP节点信息内部�?
-     */
     public static class McpNodeInfo {
         private String nodeId;
         private String nodeName;
@@ -304,7 +282,6 @@ public class McpProtocolAdapter extends AbstractProtocolAdapter {
             return map;
         }
 
-        // Getters and Setters
         public String getNodeId() { return nodeId; }
         public void setNodeId(String nodeId) { this.nodeId = nodeId; }
         public String getNodeName() { return nodeName; }

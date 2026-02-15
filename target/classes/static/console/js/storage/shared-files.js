@@ -88,6 +88,9 @@ function renderFiles(files) {
                 </div>
                 <div class="file-actions">
                     ${file.status === 'active' ? `
+                        <button class="btn btn-ghost btn-sm" onclick="editShare('${file.id}', '${escapeHtml(file.title || file.name)}', '${file.expiryDays || 7}', '${file.password || ''}')">
+                            <i class="ri-edit-line"></i> 编辑
+                        </button>
                         <button class="btn btn-primary btn-sm" onclick="copyShareLink('${file.id}')">
                             <i class="ri-link"></i> 复制链接
                         </button>
@@ -171,14 +174,73 @@ function formatFileSize(bytes) {
 }
 
 function showShareModal() {
+    document.getElementById('edit-share-id').value = '';
+    document.getElementById('share-modal-title').textContent = '新建分享';
+    document.getElementById('file-input-group').style.display = 'block';
+    document.getElementById('share-file').value = '';
+    document.getElementById('share-title').value = '';
+    document.getElementById('share-expiry').value = '7';
+    document.getElementById('share-password').value = '';
+    document.getElementById('share-modal').style.display = 'flex';
+}
+
+function editShare(shareId, title, expiryDays, password) {
+    document.getElementById('edit-share-id').value = shareId;
+    document.getElementById('share-modal-title').textContent = '编辑分享';
+    document.getElementById('file-input-group').style.display = 'none';
+    document.getElementById('share-title').value = title;
+    document.getElementById('share-expiry').value = expiryDays;
+    document.getElementById('share-password').value = password;
     document.getElementById('share-modal').style.display = 'flex';
 }
 
 function closeShareModal() {
     document.getElementById('share-modal').style.display = 'none';
+    document.getElementById('edit-share-id').value = '';
     document.getElementById('share-file').value = '';
     document.getElementById('share-title').value = '';
     document.getElementById('share-password').value = '';
+}
+
+async function saveShare() {
+    const editId = document.getElementById('edit-share-id').value;
+    const title = document.getElementById('share-title').value;
+    const expiry = document.getElementById('share-expiry').value;
+    const password = document.getElementById('share-password').value;
+    
+    if (editId) {
+        await updateShare(editId, title, expiry, password);
+    } else {
+        await createShare();
+    }
+}
+
+async function updateShare(shareId, title, expiryDays, password) {
+    try {
+        const response = await fetch(`/api/storage/share/${shareId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: title,
+                expiryDays: parseInt(expiryDays),
+                password: password
+            })
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('分享更新成功', 'success');
+            closeShareModal();
+            loadSharedFiles();
+        } else {
+            showNotification(result.message || '更新失败', 'error');
+        }
+    } catch (error) {
+        console.error('更新分享失败:', error);
+        showNotification('更新失败，请稍后重试', 'error');
+    }
 }
 
 async function createShare() {
@@ -302,4 +364,11 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
     };
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }

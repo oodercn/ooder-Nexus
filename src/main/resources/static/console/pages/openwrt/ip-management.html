@@ -124,7 +124,7 @@
     <div id="addStaticIPModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>添加静态IP</h3>
+                <h3 id="ip-modal-title">添加静态IP</h3>
                 <button class="modal-close" onclick="closeAddStaticIPModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -151,115 +151,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        let dhcpLeases = [];
-        let staticIPs = [];
-        
-        window.onPageInit = function() {
-            console.log('IP管理页面初始化完成');
-            loadData();
-        };
-        
-        function loadData() {
-            document.getElementById('onlineDevices').textContent = dhcpLeases.length;
-            document.getElementById('assignedIPs').textContent = dhcpLeases.length;
-            document.getElementById('staticIPs').textContent = staticIPs.length;
-            renderDhcpLeases();
-            renderStaticIPs();
-        }
-        
-        function renderDhcpLeases() {
-            const tbody = document.getElementById('dhcpLeasesTable');
-            tbody.innerHTML = '';
-            if (dhcpLeases.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">暂无DHCP租约</td></tr>';
-                return;
-            }
-            dhcpLeases.forEach((lease, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${lease.hostname}</td>
-                    <td>${lease.ip}</td>
-                    <td>${lease.mac}</td>
-                    <td>${lease.expires}</td>
-                    <td>
-                        <button class="nx-btn nx-btn--sm nx-btn--secondary" onclick="makeStatic(${index})">设为静态</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function renderStaticIPs() {
-            const tbody = document.getElementById('staticIPsTable');
-            tbody.innerHTML = '';
-            if (staticIPs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">暂无静态IP分配</td></tr>';
-                return;
-            }
-            staticIPs.forEach((ip, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${ip.hostname}</td>
-                    <td>${ip.ip}</td>
-                    <td>${ip.mac}</td>
-                    <td>
-                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="removeStaticIP(${index})">删除</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function showAddStaticIPModal() {
-            document.getElementById('addStaticIPModal').style.display = 'flex';
-            document.getElementById('ip-hostname').value = '';
-            document.getElementById('ip-address').value = '';
-            document.getElementById('ip-mac').value = '';
-        }
-
-        function closeAddStaticIPModal() {
-            document.getElementById('addStaticIPModal').style.display = 'none';
-        }
-        
-        function addStaticIP() {
-            const hostname = document.getElementById('ip-hostname').value.trim();
-            const ipAddress = document.getElementById('ip-address').value.trim();
-            const mac = document.getElementById('ip-mac').value.trim();
-            
-            if (!hostname) {
-                alert('请输入主机名');
-                return;
-            }
-            
-            staticIPs.push({
-                hostname: hostname,
-                ip: ipAddress || ('192.168.1.' + (100 + staticIPs.length)),
-                mac: mac || '00:00:00:00:00:00'
-            });
-            
-            closeAddStaticIPModal();
-            loadData();
-        }
-        
-        function makeStatic(index) {
-            const lease = dhcpLeases[index];
-            staticIPs.push({
-                hostname: lease.hostname,
-                ip: lease.ip,
-                mac: lease.mac
-            });
-            loadData();
-        }
-        
-        function removeStaticIP(index) {
-            staticIPs.splice(index, 1);
-            loadData();
-        }
-        
-        function refreshData() {
-            loadData();
-        }
-    </script>
+    <script src="/console/js/pages/openwrt-ip-management.js"></script>
 </body>
 </html>

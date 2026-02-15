@@ -321,11 +321,12 @@
     <div class="modal" id="create-folder-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>新建文件夹</h3>
+                <h3 id="folder-modal-title">新建文件夹</h3>
                 <button class="modal-close" onclick="closeModal('create-folder-modal')">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="create-folder-form">
+                    <input type="hidden" id="edit-folder-id">
                     <div class="form-group">
                         <label class="form-label">父文件夹</label>
                         <select id="parent-folder" name="parentFolderId" class="form-select">
@@ -343,8 +344,30 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button id="create-folder-btn" class="nx-btn nx-btn--primary" onclick="createFolder()">创建</button>
+                <button id="create-folder-btn" class="nx-btn nx-btn--primary" onclick="saveFolder()">保存</button>
                 <button class="nx-btn nx-btn--secondary" onclick="closeModal('create-folder-modal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="rename-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>重命名</h3>
+                <button class="modal-close" onclick="closeModal('rename-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="rename-form">
+                    <input type="hidden" id="rename-file-id">
+                    <div class="form-group">
+                        <label class="form-label">新名称</label>
+                        <input type="text" id="rename-file-name" class="form-input" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="nx-btn nx-btn--primary" onclick="saveRename()">保存</button>
+                <button class="nx-btn nx-btn--secondary" onclick="closeModal('rename-modal')">取消</button>
             </div>
         </div>
     </div>

@@ -120,7 +120,7 @@
     <div id="addModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>添加黑名单</h3>
+                <h3 id="bl-modal-title">添加黑名单</h3>
                 <button class="modal-close" onclick="closeAddModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -150,121 +150,6 @@
     <script src="/console/js/nexus.js"></script>
     <script src="/console/js/nexus-menu.js"></script>
     <script src="/console/js/page-init.js" data-auto-init></script>
-    <script>
-        let macBlacklist = [];
-        let domainBlacklist = [];
-        
-        window.onPageInit = function() {
-            console.log('黑名单管理页面初始化完成');
-            loadData();
-        };
-
-        document.getElementById('bl-type').addEventListener('change', function() {
-            const label = document.getElementById('bl-value-label');
-            const input = document.getElementById('bl-value');
-            if (this.value === 'mac') {
-                label.textContent = 'MAC地址';
-                input.placeholder = '如: 00:11:22:33:44:55';
-            } else {
-                label.textContent = '域名';
-                input.placeholder = '如: example.com';
-            }
-        });
-        
-        function loadData() {
-            document.getElementById('blacklistCount').textContent = macBlacklist.length + domainBlacklist.length;
-            document.getElementById('macCount').textContent = macBlacklist.length;
-            document.getElementById('domainCount').textContent = domainBlacklist.length;
-            renderMacBlacklist();
-            renderDomainBlacklist();
-        }
-        
-        function renderMacBlacklist() {
-            const tbody = document.getElementById('macBlacklistTable');
-            tbody.innerHTML = '';
-            if (macBlacklist.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">暂无MAC黑名单</td></tr>';
-                return;
-            }
-            macBlacklist.forEach((item, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.mac}</td>
-                    <td>${item.note}</td>
-                    <td>${item.addedAt}</td>
-                    <td>
-                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="removeMac(${index})">删除</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function renderDomainBlacklist() {
-            const tbody = document.getElementById('domainBlacklistTable');
-            tbody.innerHTML = '';
-            if (domainBlacklist.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">暂无域名黑名单</td></tr>';
-                return;
-            }
-            domainBlacklist.forEach((item, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.domain}</td>
-                    <td>${item.note}</td>
-                    <td>${item.addedAt}</td>
-                    <td>
-                        <button class="nx-btn nx-btn--sm nx-btn--danger" onclick="removeDomain(${index})">删除</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function showAddModal() {
-            document.getElementById('addModal').style.display = 'flex';
-            document.getElementById('bl-type').value = 'mac';
-            document.getElementById('bl-value-label').textContent = 'MAC地址';
-            document.getElementById('bl-value').value = '';
-            document.getElementById('bl-value').placeholder = '如: 00:11:22:33:44:55';
-            document.getElementById('bl-note').value = '';
-        }
-
-        function closeAddModal() {
-            document.getElementById('addModal').style.display = 'none';
-        }
-        
-        function addBlacklistItem() {
-            const type = document.getElementById('bl-type').value;
-            const value = document.getElementById('bl-value').value.trim();
-            const note = document.getElementById('bl-note').value.trim();
-            
-            if (!value) {
-                alert('请输入值');
-                return;
-            }
-            
-            const now = new Date().toLocaleString('zh-CN');
-            
-            if (type === 'mac') {
-                macBlacklist.push({ mac: value, note: note, addedAt: now });
-            } else {
-                domainBlacklist.push({ domain: value, note: note, addedAt: now });
-            }
-            
-            closeAddModal();
-            loadData();
-        }
-        
-        function removeMac(index) {
-            macBlacklist.splice(index, 1);
-            loadData();
-        }
-        
-        function removeDomain(index) {
-            domainBlacklist.splice(index, 1);
-            loadData();
-        }
-    </script>
+    <script src="/console/js/pages/openwrt-blacklist.js"></script>
 </body>
 </html>

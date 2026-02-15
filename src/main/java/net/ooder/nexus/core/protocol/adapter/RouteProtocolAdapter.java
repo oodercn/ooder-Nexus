@@ -9,21 +9,17 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
- * Route协议适配�?
- * 处理Route（路由协议）相关命令
+ * Route Protocol Adapter
+ * Handles Route (Routing Protocol) related commands
  */
 @Component
 public class RouteProtocolAdapter extends AbstractProtocolAdapter {
 
     public static final String PROTOCOL_TYPE = "ROUTE";
 
-    // 路由节点注册�?
     private final Map<String, RouteNodeInfo> routeNodes = new ConcurrentHashMap<>();
-
-    // 路由�?
     private final Map<String, RouteEntry> routeTable = new ConcurrentHashMap<>();
 
     @Autowired
@@ -157,7 +153,6 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
 
         logger.info("Route node registered: {} ({})", nodeId, nodeName);
 
-        // 注册到NexusManager
         if (nexusManager != null) {
             nexusManager.registerNetworkNode(nodeId, nodeInfo.toMap());
         }
@@ -176,10 +171,8 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
         if (removed != null) {
             logger.info("Route node deregistered: {}", nodeId);
 
-            // 移除相关的路由条�?
             routeTable.entrySet().removeIf(entry -> entry.getValue().getNextHop().equals(nodeId));
 
-            // 从NexusManager移除
             if (nexusManager != null) {
                 nexusManager.removeNetworkNode(nodeId);
             }
@@ -200,7 +193,6 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
             return CommandResult.error(commandId, 404, "Route node not registered: " + nodeId);
         }
 
-        // 更新路由�?
         List<Map<String, Object>> routes = (List<Map<String, Object>>) payload.get("routes");
         if (routes != null) {
             for (Map<String, Object> route : routes) {
@@ -231,7 +223,6 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
         String targetId = payload.get("targetId").toString();
         String sourceId = payload.get("sourceId") != null ? payload.get("sourceId").toString() : null;
 
-        // 查找路由
         RouteEntry entry = routeTable.get(targetId);
 
         if (entry != null) {
@@ -243,7 +234,6 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
             resultData.put("found", true);
             return CommandResult.success(commandId, resultData);
         } else {
-            // 直接连接�?�?
             if (routeNodes.containsKey(targetId)) {
                 Map<String, Object> resultData = new HashMap<>();
                 resultData.put("sourceId", sourceId);
@@ -276,7 +266,6 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
             resultData.put("connectedNodes", nodeInfo.getConnectedNodes());
             return CommandResult.success(commandId, resultData);
         } else {
-            // 返回�?有路由节点状�?
             Map<String, Object> resultData = new HashMap<>();
             resultData.put("totalNodes", routeNodes.size());
             resultData.put("routeTableSize", routeTable.size());
@@ -296,7 +285,6 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
         nodeInfo.setLastHeartbeatTime(System.currentTimeMillis());
         nodeInfo.setStatus("ONLINE");
 
-        // 更新节点状�??
         if (nexusManager != null) {
             nexusManager.registerNetworkNode(nodeId, nodeInfo.toMap());
         }
@@ -320,9 +308,6 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
         return routeTable.get(destination);
     }
 
-    /**
-     * 路由节点信息
-     */
     public static class RouteNodeInfo {
         private String nodeId;
         private String nodeName;
@@ -342,7 +327,6 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
             return map;
         }
 
-        // Getters and Setters
         public String getNodeId() { return nodeId; }
         public void setNodeId(String nodeId) { this.nodeId = nodeId; }
         public String getNodeName() { return nodeName; }
@@ -357,16 +341,12 @@ public class RouteProtocolAdapter extends AbstractProtocolAdapter {
         public void setConnectedNodes(List<String> connectedNodes) { this.connectedNodes = connectedNodes; }
     }
 
-    /**
-     * 路由条目
-     */
     public static class RouteEntry {
         private String destination;
         private String nextHop;
         private int metric;
         private long updateTime;
 
-        // Getters and Setters
         public String getDestination() { return destination; }
         public void setDestination(String destination) { this.destination = destination; }
         public String getNextHop() { return nextHop; }

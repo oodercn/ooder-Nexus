@@ -19,7 +19,6 @@ public class RouteController {
     private NexusManager nexusManager;
 
     private final Map<String, NetworkRoute> routes = new ConcurrentHashMap<>();
-
     private volatile boolean discoveryInProgress = false;
     private volatile long lastDiscoveryTime = 0;
 
@@ -28,127 +27,25 @@ public class RouteController {
     }
 
     private void initializeDefaultRoutes() {
-        routes.put("route-001", new NetworkRoute(
-                "route-001",
-                "direct",
-                "mcp-agent-01",
-                "route-agent-east",
-                "active",
-                10,
-                99.5,
-                "稳定",
-                System.currentTimeMillis() - 3600000,
-                System.currentTimeMillis()
-        ));
-
-        routes.put("route-002", new NetworkRoute(
-                "route-002",
-                "direct",
-                "mcp-agent-01",
-                "route-agent-west",
-                "active",
-                8,
-                99.2,
-                "稳定",
-                System.currentTimeMillis() - 7200000,
-                System.currentTimeMillis()
-        ));
-
-        routes.put("route-003", new NetworkRoute(
-                "route-003",
-                "direct",
-                "mcp-agent-01",
-                "route-agent-north",
-                "active",
-                12,
-                98.8,
-                "稳定",
-                System.currentTimeMillis() - 10800000,
-                System.currentTimeMillis()
-        ));
-
-        routes.put("route-004", new NetworkRoute(
-                "route-004",
-                "direct",
-                "mcp-agent-01",
-                "route-agent-south",
-                "degraded",
-                35,
-                75.3,
-                "性能下降",
-                System.currentTimeMillis() - 14400000,
-                System.currentTimeMillis() - 300000
-        ));
-
-        routes.put("route-005", new NetworkRoute(
-                "route-005",
-                "indirect",
-                "mcp-agent-01",
-                "end-agent-east-01",
-                "active",
-                25,
-                96.7,
-                "稳定",
-                System.currentTimeMillis() - 18000000,
-                System.currentTimeMillis()
-        ));
-
-        routes.put("route-006", new NetworkRoute(
-                "route-006",
-                "indirect",
-                "mcp-agent-01",
-                "end-agent-west-01",
-                "active",
-                20,
-                98.1,
-                "稳定",
-                System.currentTimeMillis() - 21600000,
-                System.currentTimeMillis()
-        ));
-
-        routes.put("route-007", new NetworkRoute(
-                "route-007",
-                "indirect",
-                "mcp-agent-01",
-                "end-agent-north-01",
-                "active",
-                28,
-                97.5,
-                "稳定",
-                System.currentTimeMillis() - 25200000,
-                System.currentTimeMillis()
-        ));
-
-        routes.put("route-008", new NetworkRoute(
-                "route-008",
-                "indirect",
-                "mcp-agent-01",
-                "end-agent-south-01",
-                "pending",
-                0,
-                0.0,
-                "路由初始化中",
-                System.currentTimeMillis() - 3600000,
-                System.currentTimeMillis() - 3600000
-        ));
+        routes.put("route-001", new NetworkRoute("route-001", "direct", "mcp-agent-01", "route-agent-east", "active", 10, 99.5, "Stable", System.currentTimeMillis() - 3600000, System.currentTimeMillis()));
+        routes.put("route-002", new NetworkRoute("route-002", "direct", "mcp-agent-01", "route-agent-west", "active", 8, 99.2, "Stable", System.currentTimeMillis() - 7200000, System.currentTimeMillis()));
+        routes.put("route-003", new NetworkRoute("route-003", "direct", "mcp-agent-01", "route-agent-north", "active", 12, 98.8, "Stable", System.currentTimeMillis() - 10800000, System.currentTimeMillis()));
+        routes.put("route-004", new NetworkRoute("route-004", "direct", "mcp-agent-01", "route-agent-south", "degraded", 35, 75.3, "Performance degraded", System.currentTimeMillis() - 14400000, System.currentTimeMillis() - 300000));
+        routes.put("route-005", new NetworkRoute("route-005", "indirect", "mcp-agent-01", "end-agent-east-01", "active", 25, 96.7, "Stable", System.currentTimeMillis() - 18000000, System.currentTimeMillis()));
+        routes.put("route-006", new NetworkRoute("route-006", "indirect", "mcp-agent-01", "end-agent-west-01", "active", 20, 98.1, "Stable", System.currentTimeMillis() - 21600000, System.currentTimeMillis()));
+        routes.put("route-007", new NetworkRoute("route-007", "indirect", "mcp-agent-01", "end-agent-north-01", "active", 28, 97.5, "Stable", System.currentTimeMillis() - 25200000, System.currentTimeMillis()));
+        routes.put("route-008", new NetworkRoute("route-008", "indirect", "mcp-agent-01", "end-agent-south-01", "pending", 0, 0.0, "Route initializing", System.currentTimeMillis() - 3600000, System.currentTimeMillis() - 3600000));
     }
 
     @GetMapping("/list")
-    public Map<String, Object> getRoutes(
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) String source,
-            @RequestParam(required = false) String destination) {
+    public Map<String, Object> getRoutes(@RequestParam(required = false) String status, @RequestParam(required = false) String type, @RequestParam(required = false) String source, @RequestParam(required = false) String destination) {
         log.info("Get routes requested: status={}, type={}, source={}, destination={}", status, type, source, destination);
         Map<String, Object> response = new HashMap<>();
 
         try {
             List<NetworkRoute> filteredRoutes = new ArrayList<>();
             for (NetworkRoute route : routes.values()) {
-                if ((status == null || route.getStatus().equals(status)) &&
-                    (type == null || route.getType().equals(type)) &&
-                    (source == null || route.getSource().equals(source)) &&
-                    (destination == null || route.getDestination().equals(destination))) {
+                if ((status == null || route.getStatus().equals(status)) && (type == null || route.getType().equals(type)) && (source == null || route.getSource().equals(source)) && (destination == null || route.getDestination().equals(destination))) {
                     filteredRoutes.add(route);
                 }
             }
@@ -195,7 +92,6 @@ public class RouteController {
             }
 
             route.setLastUpdated(System.currentTimeMillis());
-
             List<Map<String, Object>> history = generateRouteHistory(routeId);
 
             Map<String, Object> data = new HashMap<>();
@@ -234,14 +130,13 @@ public class RouteController {
             }
 
             discoveryInProgress = true;
-
             discoverRoutesAsync();
 
             response.put("status", "success");
             response.put("message", "Route discovery initiated successfully");
             Map<String, Object> data = new ConcurrentHashMap<>();
             data.put("status", "discovering");
-            data.put("message", "路由发现正在进行中，请稍后查询结�?");
+            data.put("message", "Route discovery in progress, please check results later");
             response.put("data", data);
             response.put("code", 200);
             response.put("timestamp", System.currentTimeMillis());
@@ -309,47 +204,9 @@ public class RouteController {
                 return response;
             }
 
-            NetworkRoute newRoute = new NetworkRoute(
-                    routeId,
-                    routeData.containsKey("type") ? (String) routeData.get("type") : "direct",
-                    (String) routeData.get("source"),
-                    (String) routeData.get("destination"),
-                    "pending",
-                    0,
-                    0.0,
-                    "路由初始化中",
-                    System.currentTimeMillis(),
-                    System.currentTimeMillis()
-            );
+            NetworkRoute newRoute = new NetworkRoute(routeId, routeData.containsKey("type") ? (String) routeData.get("type") : "direct", (String) routeData.get("source"), (String) routeData.get("destination"), "pending", 0, 0.0, "Route initializing", System.currentTimeMillis(), System.currentTimeMillis());
 
             routes.put(routeId, newRoute);
-
-            if (nexusManager != null) {
-                try {
-                    Map<String, Object> sourceNode = new HashMap<>();
-                    sourceNode.put("nodeId", routeData.get("source"));
-                    sourceNode.put("nodeType", "route");
-                    nexusManager.registerNetworkNode((String) routeData.get("source"), sourceNode);
-
-                    Map<String, Object> destNode = new HashMap<>();
-                    destNode.put("nodeId", routeData.get("destination"));
-                    destNode.put("nodeType", "endpoint");
-                    nexusManager.registerNetworkNode((String) routeData.get("destination"), destNode);
-
-                    Map<String, Object> connectionInfo = new HashMap<>();
-                    connectionInfo.put("routeId", routeId);
-                    connectionInfo.put("type", routeData.containsKey("type") ? routeData.get("type") : "direct");
-                    nexusManager.createNetworkConnection(
-                            (String) routeData.get("source"),
-                            (String) routeData.get("destination"),
-                            connectionInfo
-                    );
-                    log.info("Route registered with SDK: {}", routeId);
-                } catch (Exception sdkEx) {
-                    log.warn("Failed to register route with SDK: {}", sdkEx.getMessage());
-                }
-            }
-
             activateRouteAsync(routeId);
 
             response.put("status", "success");
@@ -385,22 +242,6 @@ public class RouteController {
 
             routes.remove(routeId);
 
-            if (nexusManager != null) {
-                try {
-                    Map<String, Object> topology = nexusManager.getNetworkTopology();
-                    if (topology.containsKey("connections")) {
-                        Map<String, Map<String, Object>> connections = (Map<String, Map<String, Object>>) topology.get("connections");
-                        connections.entrySet().removeIf(entry -> {
-                            Map<String, Object> connInfo = entry.getValue();
-                            return routeId.equals(connInfo.get("routeId"));
-                        });
-                    }
-                    log.info("Route removed from SDK: {}", routeId);
-                } catch (Exception sdkEx) {
-                    log.warn("Failed to remove route from SDK: {}", sdkEx.getMessage());
-                }
-            }
-
             response.put("status", "success");
             response.put("message", "Route deleted successfully");
             Map<String, Object> data = new ConcurrentHashMap<>();
@@ -434,41 +275,11 @@ public class RouteController {
                 return response;
             }
 
-            if (updateData.containsKey("status")) {
-                route.setStatus((String) updateData.get("status"));
-            }
-            if (updateData.containsKey("type")) {
-                route.setType((String) updateData.get("type"));
-            }
-            if (updateData.containsKey("description")) {
-                route.setDescription((String) updateData.get("description"));
-            }
+            if (updateData.containsKey("status")) route.setStatus((String) updateData.get("status"));
+            if (updateData.containsKey("type")) route.setType((String) updateData.get("type"));
+            if (updateData.containsKey("description")) route.setDescription((String) updateData.get("description"));
 
             route.setLastUpdated(System.currentTimeMillis());
-
-            if (nexusManager != null) {
-                try {
-                    Map<String, Object> topology = nexusManager.getNetworkTopology();
-                    if (topology.containsKey("connections")) {
-                        Map<String, Map<String, Object>> connections = (Map<String, Map<String, Object>>) topology.get("connections");
-                        for (Map.Entry<String, Map<String, Object>> entry : connections.entrySet()) {
-                            Map<String, Object> connInfo = entry.getValue();
-                            if (routeId.equals(connInfo.get("routeId"))) {
-                                if (updateData.containsKey("type")) {
-                                    connInfo.put("type", updateData.get("type"));
-                                }
-                                if (updateData.containsKey("status")) {
-                                    connInfo.put("status", updateData.get("status"));
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    log.info("Route updated in SDK: {}", routeId);
-                } catch (Exception sdkEx) {
-                    log.warn("Failed to update route in SDK: {}", sdkEx.getMessage());
-                }
-            }
 
             response.put("status", "success");
             response.put("message", "Route updated successfully");
@@ -500,15 +311,6 @@ public class RouteController {
             stats.put("averageReliability", calculateAverageReliability());
             stats.put("healthScore", calculateOverallHealthScore());
             stats.put("lastDiscoveryTime", lastDiscoveryTime);
-
-            if (nexusManager != null) {
-                try {
-                    Map<String, Object> topology = nexusManager.getNetworkTopology();
-                    stats.put("networkTopology", topology);
-                } catch (Exception sdkEx) {
-                    log.warn("Failed to get network topology from SDK: {}", sdkEx.getMessage());
-                }
-            }
 
             response.put("status", "success");
             response.put("message", "Route stats retrieved successfully");
@@ -555,16 +357,12 @@ public class RouteController {
     }
 
     private double calculateAverageLatency() {
-        if (routes.isEmpty()) {
-            return 0;
-        }
+        if (routes.isEmpty()) return 0;
         return routes.values().stream().mapToInt(NetworkRoute::getLatency).average().orElse(0);
     }
 
     private double calculateAverageReliability() {
-        if (routes.isEmpty()) {
-            return 0;
-        }
+        if (routes.isEmpty()) return 0;
         return routes.values().stream().mapToDouble(NetworkRoute::getReliability).average().orElse(0);
     }
 
@@ -575,9 +373,7 @@ public class RouteController {
     }
 
     private double calculateOverallHealthScore() {
-        if (routes.isEmpty()) {
-            return 0;
-        }
+        if (routes.isEmpty()) return 0;
         return routes.values().stream().mapToDouble(this::calculateRouteHealthScore).average().orElse(0);
     }
 
@@ -601,33 +397,10 @@ public class RouteController {
         new Thread(() -> {
             try {
                 log.info("Route discovery started");
-
-                if (nexusManager != null) {
-                    try {
-                        Map<String, Object> topology = nexusManager.getNetworkTopology();
-                        log.info("Retrieved network topology from SDK: {} nodes, {} connections",
-                                topology.containsKey("nodes") ? ((Map<?, ?>) topology.get("nodes")).size() : 0,
-                                topology.containsKey("connections") ? ((Map<?, ?>) topology.get("connections")).size() : 0);
-                    } catch (Exception sdkEx) {
-                        log.warn("Failed to get network topology from SDK: {}", sdkEx.getMessage());
-                    }
-                }
-
                 Thread.sleep(3000);
 
                 String newRouteId = "route-discovered-" + System.currentTimeMillis();
-                NetworkRoute newRoute = new NetworkRoute(
-                        newRouteId,
-                        "indirect",
-                        "mcp-agent-01",
-                        "end-agent-new-01",
-                        "active",
-                        15,
-                        97.8,
-                        "新发现的路由",
-                        System.currentTimeMillis(),
-                        System.currentTimeMillis()
-                );
+                NetworkRoute newRoute = new NetworkRoute(newRouteId, "indirect", "mcp-agent-01", "end-agent-new-01", "active", 15, 97.8, "Newly discovered route", System.currentTimeMillis(), System.currentTimeMillis());
 
                 routes.put(newRouteId, newRoute);
 
@@ -636,7 +409,7 @@ public class RouteController {
                         route.setStatus("active");
                         route.setLatency(10 + (int)(Math.random() * 10));
                         route.setReliability(95 + Math.random() * 5);
-                        route.setDescription("路由已激�?");
+                        route.setDescription("Route activated");
                         route.setLastUpdated(System.currentTimeMillis());
                     }
                 }
@@ -661,7 +434,7 @@ public class RouteController {
                     route.setStatus("active");
                     route.setLatency(10 + (int)(Math.random() * 10));
                     route.setReliability(95 + Math.random() * 5);
-                    route.setDescription("路由�?活成�?");
+                    route.setDescription("Route activated successfully");
                     route.setLastUpdated(System.currentTimeMillis());
                 }
             } catch (InterruptedException e) {
@@ -695,68 +468,21 @@ public class RouteController {
             this.lastUpdated = lastUpdated;
         }
 
-        public String getRouteId() {
-            return routeId;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public String getSource() {
-            return source;
-        }
-
-        public String getDestination() {
-            return destination;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public int getLatency() {
-            return latency;
-        }
-
-        public void setLatency(int latency) {
-            this.latency = latency;
-        }
-
-        public double getReliability() {
-            return reliability;
-        }
-
-        public void setReliability(double reliability) {
-            this.reliability = reliability;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public long getCreatedAt() {
-            return createdAt;
-        }
-
-        public long getLastUpdated() {
-            return lastUpdated;
-        }
-
-        public void setLastUpdated(long lastUpdated) {
-            this.lastUpdated = lastUpdated;
-        }
+        public String getRouteId() { return routeId; }
+        public String getType() { return type; }
+        public void setType(String type) { this.type = type; }
+        public String getSource() { return source; }
+        public String getDestination() { return destination; }
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+        public int getLatency() { return latency; }
+        public void setLatency(int latency) { this.latency = latency; }
+        public double getReliability() { return reliability; }
+        public void setReliability(double reliability) { this.reliability = reliability; }
+        public String getDescription() { return description; }
+        public void setDescription(String description) { this.description = description; }
+        public long getCreatedAt() { return createdAt; }
+        public long getLastUpdated() { return lastUpdated; }
+        public void setLastUpdated(long lastUpdated) { this.lastUpdated = lastUpdated; }
     }
 }
