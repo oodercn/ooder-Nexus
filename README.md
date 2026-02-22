@@ -331,7 +331,8 @@ ooderNexus 通过场景定义文件配置协作边界：
 
 ```bash
 # 1. 下载 Windows 安装包
-# https://github.com/oodercn/ooder-Nexus/releases
+# GitHub: https://github.com/oodercn/ooder-agent/releases
+# Gitee（国内镜像）: https://gitee.com/ooderCN/ooder-agent/releases
 
 # 2. 解压到任意目录
 
@@ -344,7 +345,7 @@ ooderNexus 通过场景定义文件配置协作边界：
 
 ```bash
 # 1. 下载安装包
-wget https://github.com/oodercn/ooder-Nexus/releases/download/v2.2.0/ooder-nexus-2.2.0.tar.gz
+wget https://github.com/oodercn/ooder-agent/releases/download/v2.2.0/ooder-nexus-2.2.0.tar.gz
 
 # 2. 解压
 tar -xzf ooder-nexus-2.2.0.tar.gz
@@ -360,7 +361,7 @@ cd ooder-nexus-2.2.0
 
 ```bash
 # 在路由器上执行
-wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.2.0/install-openwrt.sh
+wget -O /tmp/install.sh https://github.com/oodercn/ooder-agent/releases/download/v2.2.0/install-openwrt.sh
 chmod +x /tmp/install.sh
 /tmp/install.sh
 ```
@@ -376,6 +377,20 @@ docker run -d \
   -p 9876:9876 \
   -v ./data:/app/data \
   oodercn/ooder-nexus:2.2.0
+```
+
+#### 方式五：源码构建
+
+```bash
+# 克隆仓库
+git clone https://github.com/oodercn/ooder-agent.git
+cd ooder-agent/nexus
+
+# 构建
+mvn clean package -DskipTests
+
+# 运行
+java -jar target/independent-nexus-2.2.jar
 ```
 
 ### 4.3 配置说明
@@ -680,14 +695,14 @@ tar -xzpf ooder-nexus-backup-20260222.tar.gz
 
 ### 获取帮助
 
-- 📖 **文档**：https://github.com/oodercn/ooder-Nexus/wiki
-- 🐛 **Issue**：https://github.com/oodercn/ooder-Nexus/issues
-- 💬 **讨论**：https://github.com/oodercn/ooder-Nexus/discussions
+- 📖 **文档**：https://github.com/oodercn/ooder-agent/wiki
+- 🐛 **Issue**：https://github.com/oodercn/ooder-agent/issues
+- 💬 **讨论**：https://github.com/oodercn/ooder-agent/discussions
 
 ### 国内镜像
 
-- 🪞 **Gitee 仓库**：https://gitee.com/ooderCN/ooder-nexus
-- 📥 **Gitee Releases**：https://gitee.com/ooderCN/ooder-nexus/releases
+- 🪞 **Gitee 仓库**：https://gitee.com/ooderCN/ooder-agent
+- 📥 **Gitee Releases**：https://gitee.com/ooderCN/ooder-agent/releases
 
 ### 许可证
 
