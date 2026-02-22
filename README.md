@@ -4,8 +4,8 @@
 
 | 项目 | 内容 |
 |------|------|
-| 版本 | v2.0.0-openwrt-preview |
-| 更新日期 | 2026-02-20 |
+| 版本 | v2.2.0 |
+| 更新日期 | 2026-02-22 |
 | SDK 版本 | Ooder Agent SDK v0.7.3 |
 
 ---
@@ -114,8 +114,8 @@ ooderNexus 是基于 **Ooder Agent SDK** 构建的 P2P AI 能力分发枢纽，�
 ├─────────────────┼─────────────────┼─────────────────┼───────────────────────┤
 │ • 我的文档      │ • 消息中心       │ • 能力约束      │ • 能力中心             │
 │ • 我的能力包    │ • 联系人         │ • 协作关系      │ • LLM配置              │
-│ • 我的网络      │ • 协同场景       │ • 健康检查      │                       │
-│ • 安全设置      │                 │ • 审计日志      │                       │
+│ • 我的网络      │ • 协同场景       │ • 健康检查      │ • 存储管理             │
+│ • 安全设置      │ • 文件共享       │ • 审计日志      │                       │
 │ • 我的设备      │                 │                 │                       │
 │ • 我的群组      │                 │                 │                       │
 └─────────────────┴─────────────────┴─────────────────┴───────────────────────┘
@@ -139,7 +139,7 @@ ooderNexus 是基于 **Ooder Agent SDK** 构建的 P2P AI 能力分发枢纽，�
 
 #### 我的网络
 - **网络拓扑**：可视化展示 P2P 网络结构
-- **节点发现**：支持 9 种发现方法（UDP/DHT/mDNS/SkillCenter/GitHub/Gitee 等）
+- **节点发现**：支持多种发现方法（UDP/DHT/mDNS/SkillCenter/GitHub/Gitee 等）
 - **链路管理**：节点间链路创建、监控、断开
 - **流量监控**：实时网络流量统计和分析
 
@@ -216,6 +216,11 @@ ooderNexus 是基于 **Ooder Agent SDK** 构建的 P2P AI 能力分发枢纽，�
 - **参数管理**：模型参数管理
 - **API 管理**：API 密钥管理
 
+#### 存储管理
+- **存储配置**：存储策略配置
+- **容量监控**：存储空间监控
+- **清理策略**：自动清理策略
+
 ---
 
 ## 3. 技术架构
@@ -272,16 +277,42 @@ ooderNexus 是基于 **Ooder Agent SDK** 构建的 P2P AI 能力分发枢纽，�
 | **前端** | HTML5, CSS3, JavaScript | Web 控制台界面 |
 | **后端** | Spring Boot 2.7.0, Java 8 | 业务逻辑处理 |
 | **P2P 网络** | Ooder Agent SDK v0.7.3 | 底层网络通信 |
+| **场景引擎** | Scene Engine v0.7.3 | 场景定义与执行 |
 | **存储** | VFS + 本地文件系统 | 数据和文件存储 |
 | **配置** | UCI (OpenWrt) | 路由器配置管理 |
 
-### 3.3 Agent 角色说明
+### 3.3 核心依赖
+
+| 依赖 | 版本 | 用途 |
+|------|------|------|
+| Ooder Agent SDK | 0.7.3 | P2P网络通信 |
+| Scene Engine | 0.7.3 | 场景引擎 |
+| Ooder Org Web | 2.2 | 组织架构支持 |
+| Ooder Common | 2.2 | 公共组件 |
+| Spring Boot | 2.7.0 | 后端框架 |
+
+### 3.4 Agent 角色说明
 
 | 角色 | 适用场景 | 功能特点 |
 |------|----------|----------|
 | **MCP Agent** | 主控节点 | 资源管理、任务调度、安全认证、场景协调 |
 | **Route Agent** | 路由节点 | 消息路由、负载均衡、场景组管理、故障接管 |
 | **End Agent** | 终端节点 | 技能执行、数据采集、与外部系统交互 |
+
+### 3.5 场景定义
+
+ooderNexus 通过场景定义文件配置协作边界：
+
+| 场景 | 文件 | 用途 |
+|------|------|------|
+| 认证场景 | auth-scene.yaml | 用户认证与授权 |
+| 消息场景 | msg-scene.yaml | 即时消息通信 |
+| 文件场景 | vfs-scene.yaml | 虚拟文件系统 |
+| 组织场景 | org-scene.yaml | 人员组织架构 |
+| 工作流场景 | workflow-scene.yaml | 任务流程编排 |
+| A2UI场景 | a2ui-scene.yaml | AI界面生成 |
+| 个人场景组 | personal-nexus-group.yaml | 个人节点协作组 |
+| 企业场景组 | enterprise-nexus-group.yaml | 企业节点协作组 |
 
 ---
 
@@ -313,11 +344,11 @@ ooderNexus 是基于 **Ooder Agent SDK** 构建的 P2P AI 能力分发枢纽，�
 
 ```bash
 # 1. 下载安装包
-wget https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/ooder-nexus-2.0.0-openwrt-preview.tar.gz
+wget https://github.com/oodercn/ooder-Nexus/releases/download/v2.2.0/ooder-nexus-2.2.0.tar.gz
 
 # 2. 解压
-tar -xzf ooder-nexus-2.0.0-openwrt-preview.tar.gz
-cd ooder-nexus-2.0.0-openwrt-preview
+tar -xzf ooder-nexus-2.2.0.tar.gz
+cd ooder-nexus-2.2.0
 
 # 3. 启动
 ./bin/start.sh
@@ -329,7 +360,7 @@ cd ooder-nexus-2.0.0-openwrt-preview
 
 ```bash
 # 在路由器上执行
-wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.0.0-openwrt-preview/install-openwrt.sh
+wget -O /tmp/install.sh https://github.com/oodercn/ooder-Nexus/releases/download/v2.2.0/install-openwrt.sh
 chmod +x /tmp/install.sh
 /tmp/install.sh
 ```
@@ -344,7 +375,7 @@ docker run -d \
   -p 8091:8091 \
   -p 9876:9876 \
   -v ./data:/app/data \
-  oodercn/ooder-nexus:2.0.0
+  oodercn/ooder-nexus:2.2.0
 ```
 
 ### 4.3 配置说明
@@ -400,7 +431,8 @@ ooder:
 │  协同协作│                                            │
 │  ├消息  │                                            │
 │  ├联系人│                                            │
-│  └场景  │                                            │
+│  ├场景  │                                            │
+│  └文件  │                                            │
 │        │                                            │
 │  系统配置│                                            │
 │  ├约束  │                                            │
@@ -410,7 +442,8 @@ ooder:
 │        │                                            │
 │  资源管理│                                            │
 │  ├能力  │                                            │
-│  └LLM   │                                            │
+│  ├LLM   │                                            │
+│  └存储  │                                            │
 │        │                                            │
 └────────┴────────────────────────────────────────────┘
 ```
@@ -498,7 +531,7 @@ GET /api/collaboration/group/{groupId}/relations
 
 ```http
 # 审计日志查询
-GET /api/audit/logs?startDate=2026-02-01&endDate=2026-02-20&type=SKILL_EXECUTION
+GET /api/audit/logs?startDate=2026-02-01&endDate=2026-02-22&type=SKILL_EXECUTION
 
 # 审计日志统计
 GET /api/audit/stats?groupBy=type
@@ -573,7 +606,7 @@ storage/                          # 主存储目录
 tar -czpf ooder-nexus-backup-$(date +%Y%m%d).tar.gz storage/ config/
 
 # 恢复数据
-tar -xzpf ooder-nexus-backup-20260220.tar.gz
+tar -xzpf ooder-nexus-backup-20260222.tar.gz
 ```
 
 ---
@@ -602,35 +635,21 @@ tar -xzpf ooder-nexus-backup-20260220.tar.gz
 
 ## 9. 版本历史
 
-### v2.0.0-openwrt-preview - 2026-02-20
+### v2.2.0 - 2026-02-22
 
-#### 功能架构重构
-- 菜单结构重组：我的能力、协同协作、系统配置、资源管理四大模块
+- 清理临时文档，优化项目结构
+- 更新核心依赖版本
+- 完善场景定义说明
+- 新增存储管理模块
 
-#### 技能授权管理
-- 安装预览：安装技能前预览所需权限和依赖
-- 权限确认流程：资源权限、场景权限可视化确认
-- 依赖解析：自动解析技能依赖关系
-- 授权管理：查看和管理已授权技能
+### v2.0.0 - 2026-02-20
 
-#### 审计日志系统
-- 操作审计：AOP 自动记录关键操作
-- 日志查询：支持按时间、类型、模块过滤
-- 统计分析：按类型、模块统计操作次数
-
-#### 协作关系管理
-- 关系树展示：可视化场景-群组-技能关系
-- 场景/群组/技能关联查询
-
-#### VFS 文件版本扩展
-- 版本管理：文件版本创建、归档、恢复
-- 版本元数据：版本号、描述、变更说明、标签
-
-#### OpenWrt 集成
-- 路由器自动发现
-- SSH 连接管理
-- 系统状态监控
-- 网络配置管理
+- 功能架构重构：我的能力、协同协作、系统配置、资源管理四大模块
+- 技能授权管理：安装预览、权限确认、依赖解析
+- 审计日志系统：AOP 自动记录、日志查询、统计分析
+- 协作关系管理：关系树展示、关联查询
+- VFS 文件版本扩展：版本管理、元数据
+- OpenWrt 集成：路由器发现、SSH管理、状态监控
 
 ---
 

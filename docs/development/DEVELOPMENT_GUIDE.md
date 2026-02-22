@@ -20,8 +20,9 @@ ooderNexus 是一个基于 **Ooder Agent 架构**的 **P2P AI 能力分发枢纽
 |------|------|
 | **后端框架** | Spring Boot 2.7.0 |
 | **编程语言** | Java 8+ |
-| **P2P网络** | Ooder Agent SDK 0.6.6 |
-| **前端** | HTML5 + JavaScript + Vue.js |
+| **P2P网络** | Ooder Agent SDK 0.7.3 |
+| **场景引擎** | Scene Engine 0.7.3 |
+| **前端** | HTML5 + CSS3 + JavaScript |
 | **构建工具** | Maven 3.6+ |
 | **测试框架** | JUnit 5 + Mockito |
 
@@ -149,7 +150,7 @@ mvn clean test -s settings.xml
 mvn clean package -DskipTests -s settings.xml
 
 # 运行
-java -jar target/independent-nexus-2.0.jar
+java -jar target/independent-nexus-2.2.jar
 ```
 
 ### 4.2 生产模式构建
@@ -418,7 +419,7 @@ mvn test jacoco:report -s settings.xml
 ```bash
 # 启动时添加调试参数
 java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 \
-     -jar target/independent-nexus-2.0.jar
+     -jar target/independent-nexus-2.2.jar
 ```
 
 ### 8.2 日志调试
