@@ -3,8 +3,8 @@ package net.ooder.nexus.infrastructure.management;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.ooder.nexus.infrastructure.management.NexusManager;
-import net.ooder.sdk.AgentSDK;
-import net.ooder.sdk.network.packet.CommandPacket;
+import net.ooder.sdk.api.OoderSDK;
+import net.ooder.sdk.api.protocol.CommandPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,27 +17,22 @@ public class NexusManagerImpl implements NexusManager {
 
     private static final Logger log = LoggerFactory.getLogger(NexusManagerImpl.class);
 
-    private AgentSDK agentSDK;
+    private OoderSDK ooderSDK;
 
-    // LLM提供者映射
-    private final Map<String, Map<String, Object>> llmProviders = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, Object>> llmProviders = new ConcurrentHashMap<String, Map<String, Object>>();
 
-    // 协议处理器映射
-    private final Map<String, ProtocolHandler> protocolHandlers = new ConcurrentHashMap<>();
+    private final Map<String, ProtocolHandler> protocolHandlers = new ConcurrentHashMap<String, ProtocolHandler>();
 
-    // 网络节点映射
-    private final Map<String, Map<String, Object>> networkNodes = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, Object>> networkNodes = new ConcurrentHashMap<String, Map<String, Object>>();
 
-    // 网络连接映射
-    private final Map<String, Map<String, Object>> networkConnections = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, Object>> networkConnections = new ConcurrentHashMap<String, Map<String, Object>>();
 
-    // 能力映射
-    private final Map<String, Map<String, Object>> capabilities = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, Object>> capabilities = new ConcurrentHashMap<String, Map<String, Object>>();
 
     @Override
-    public void initialize(AgentSDK sdk) {
+    public void initialize(OoderSDK sdk) {
         log.info("Initializing Nexus Manager");
-        this.agentSDK = sdk;
+        this.ooderSDK = sdk;
         log.info("Nexus Manager initialized successfully");
     }
 

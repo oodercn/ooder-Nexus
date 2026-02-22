@@ -32,7 +32,7 @@
         <dependency>
             <groupId>net.ooder</groupId>
             <artifactId>agent-sdk</artifactId>
-            <version>0.7.0</version>
+            <version>0.7.3</version>
         </dependency>
 
         <!-- Jackson YAML Support (required by SDK 0.7.0) -->
@@ -46,14 +46,21 @@
         <dependency>
             <groupId>net.ooder</groupId>
             <artifactId>ooder-org-web</artifactId>
-            <version>2.0</version>
+            <version>2.2</version>
         </dependency>
 
         <!-- Ooder Common -->
         <dependency>
             <groupId>net.ooder</groupId>
             <artifactId>ooder-common-client</artifactId>
-            <version>2.0</version>
+            <version>2.2</version>
+        </dependency>
+
+        <!-- Scene Engine - 场景引擎 (包含 skill 包) -->
+        <dependency>
+            <groupId>net.ooder</groupId>
+            <artifactId>scene-engine</artifactId>
+            <version>0.7.3</version>
         </dependency>
 
 

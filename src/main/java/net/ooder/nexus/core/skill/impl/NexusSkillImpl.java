@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import net.ooder.nexus.infrastructure.management.NexusManager;
 import net.ooder.nexus.infrastructure.management.NexusManagerImpl;
 import net.ooder.nexus.core.skill.NexusSkill;
-import net.ooder.sdk.AgentSDK;
-import net.ooder.sdk.network.packet.CommandPacket;
+import net.ooder.sdk.api.OoderSDK;
+import net.ooder.sdk.api.protocol.CommandPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class NexusSkillImpl implements NexusSkill {
     
     private static final Logger log = LoggerFactory.getLogger(NexusSkillImpl.class);
     
-    private AgentSDK agentSDK;
+    private OoderSDK ooderSDK;
     private String agentId;
     
     private final Map<String, Map<String, Object>> routeAgents = new ConcurrentHashMap<String, Map<String, Object>>();
@@ -69,10 +69,10 @@ public class NexusSkillImpl implements NexusSkill {
     }
     
     @Override
-    public void initialize(AgentSDK sdk) {
-        log.info("Initializing Nexus Skill with SDK 0.7.0");
-        this.agentSDK = sdk;
-        this.agentId = sdk.getAgentId();
+    public void initialize(OoderSDK sdk) {
+        log.info("Initializing Nexus Skill with SDK 0.7.2");
+        this.ooderSDK = sdk;
+        this.agentId = sdk.getConfiguration() != null ? sdk.getConfiguration().getAgentId() : "nexus-001";
         this.nexusManager = new NexusManagerImpl();
         this.nexusManager.initialize(sdk);
         startNetworkMonitoring();

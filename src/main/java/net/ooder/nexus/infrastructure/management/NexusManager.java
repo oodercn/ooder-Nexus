@@ -1,7 +1,7 @@
 package net.ooder.nexus.infrastructure.management;
 
-import net.ooder.sdk.AgentSDK;
-import net.ooder.sdk.network.packet.CommandPacket;
+import net.ooder.sdk.api.OoderSDK;
+import net.ooder.sdk.api.protocol.CommandPacket;
 
 import java.util.List;
 import java.util.Map;
@@ -21,21 +21,21 @@ import java.util.Map;
  * <p>采用外观模式（Facade Pattern），为 Nexus 的复杂子系统提供统一的简化接口。</p>
  *
  * @author ooder Team
- * @version 2.0.0-openwrt-preview
+ * @version 2.0.0-sdk072
  * @since 1.0.0
  * @see NexusManagerImpl
- * @see AgentSDK
+ * @see OoderSDK
  */
 public interface NexusManager {
 
     /**
      * 初始化管理器
      *
-     * <p>使用 AgentSDK 实例初始化 NexusManager，建立与 P2P 网络的连接。</p>
+     * <p>使用 OoderSDK 实例初始化 NexusManager，建立与 P2P 网络的连接。</p>
      *
-     * @param sdk AgentSDK 实例，用于 P2P 网络通信
+     * @param sdk OoderSDK 实例，用于 P2P 网络通信
      */
-    void initialize(AgentSDK sdk);
+    void initialize(OoderSDK sdk);
 
     // ==================== LLM 交互管理 ====================
 

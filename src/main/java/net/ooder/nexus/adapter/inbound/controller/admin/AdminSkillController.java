@@ -3,7 +3,7 @@ package net.ooder.nexus.adapter.inbound.controller.admin;
 import net.ooder.config.ResultModel;
 import net.ooder.config.ListResultModel;
 import net.ooder.nexus.service.AdminSkillService;
-import net.ooder.sdk.skill.packageManager.model.InstalledSkill;
+import net.ooder.sdk.api.skill.InstalledSkill;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +37,8 @@ public class AdminSkillController {
                 skillMap.put("id", skill.getSkillId());
                 skillMap.put("name", skill.getName());
                 skillMap.put("version", skill.getVersion());
-                skillMap.put("status", skill.getStatus() != null ? skill.getStatus().name() : "UNKNOWN");
-                skillMap.put("installMode", skill.getInstallMode() != null ? skill.getInstallMode().name() : "UNKNOWN");
+                skillMap.put("status", skill.getStatus());
+                skillMap.put("sceneId", skill.getSceneId());
                 skillList.add(skillMap);
             }
 
@@ -75,11 +75,13 @@ public class AdminSkillController {
             skillMap.put("id", skill.getSkillId());
             skillMap.put("name", skill.getName());
             skillMap.put("version", skill.getVersion());
-            skillMap.put("status", skill.getStatus() != null ? skill.getStatus().name() : "UNKNOWN");
-            skillMap.put("installMode", skill.getInstallMode() != null ? skill.getInstallMode().name() : "UNKNOWN");
+            skillMap.put("status", skill.getStatus());
+            skillMap.put("sceneId", skill.getSceneId());
+            skillMap.put("installPath", skill.getInstallPath());
+            skillMap.put("installTime", skill.getInstallTime());
+            skillMap.put("invokeCount", skill.getInvokeCount());
             skillMap.put("config", skill.getConfig());
-            skillMap.put("capabilities", skill.getCapabilities());
-            skillMap.put("scenes", skill.getScenes());
+            skillMap.put("dependencies", skill.getDependencies());
 
             result.setData(skillMap);
             result.setRequestStatus(200);
@@ -111,7 +113,7 @@ public class AdminSkillController {
 
             Map<String, Object> skillMap = new HashMap<String, Object>();
             skillMap.put("id", skill.getSkillId());
-            skillMap.put("status", skill.getStatus() != null ? skill.getStatus().name() : "APPROVED");
+            skillMap.put("status", skill.getStatus() != null ? skill.getStatus() : "APPROVED");
 
             result.setData(skillMap);
             result.setRequestStatus(200);

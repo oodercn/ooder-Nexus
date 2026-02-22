@@ -1,7 +1,7 @@
 package net.ooder.nexus.service;
 
-import net.ooder.sdk.AgentSDK;
-import net.ooder.sdk.network.packet.CommandPacket;
+import net.ooder.sdk.api.OoderSDK;
+import net.ooder.sdk.api.protocol.CommandPacket;
 
 import java.util.List;
 import java.util.Map;
@@ -10,9 +10,9 @@ public interface P2PService {
     
     /**
      * 初始化P2P服务
-     * @param agentSDK AgentSDK实例
+     * @param ooderSDK OoderSDK实例
      */
-    void initialize(AgentSDK agentSDK);
+    void initialize(OoderSDK ooderSDK);
     
     /**
      * 发现网络中的其他节点

@@ -47,6 +47,10 @@ ooder:
     timeout: 60000
   skill:
     base-package: "net.ooder.nexus.skill"
+  sdk:
+    enabled: true
+    node-id: "nexus-local"
+    skill-path: "./skills"
   org:
     provider: local
     cache:
@@ -55,6 +59,21 @@ ooder:
     sync:
       enabled: true
       cron: "0 0 2 * * ?"
+
+skill:
+  discovery:
+    github:
+      enabled: true
+      owner: "ooderCN"
+      skills-repo: "skills"
+      token: ""
+      skills-path: "skills"
+    gitee:
+      enabled: true
+      owner: "ooderCN"
+      skills-repo: "skills"
+      token: ""
+      skills-path: "skills"
 
 mock:
   enabled: false

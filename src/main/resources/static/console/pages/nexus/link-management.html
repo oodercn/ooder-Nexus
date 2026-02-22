@@ -31,6 +31,9 @@
                     <button class="nx-btn nx-btn--ghost nx-btn--icon" data-nx-theme-toggle>
                         <i class="ri-sun-line"></i>
                     </button>
+                    <button class="nx-btn nx-btn--success" id="monitorToggleBtn" onclick="toggleMonitor()">
+                        <i class="ri-radar-line"></i> 启动监控
+                    </button>
                     <button class="nx-btn nx-btn--primary" onclick="addLink()">
                         <i class="ri-add-line"></i> 添加链路
                     </button>
@@ -39,10 +42,10 @@
             
             <div class="nx-page__main">
                 <div class="nx-container">
-                    <div class="nx-grid nx-grid-cols-3 nx-mb-6">
+                    <div class="nx-grid nx-grid-cols-4 nx-mb-6">
                         <div class="nx-stat-card">
                             <div class="nx-stat-card__icon nx-stat-card__icon--primary">
-                                <i class="ri-link-line"></i>
+                                <i class="ri-link"></i>
                             </div>
                             <div class="nx-stat-card__content">
                                 <div class="nx-stat-card__label">链路总数</div>
@@ -54,17 +57,26 @@
                                 <i class="ri-checkbox-circle-line"></i>
                             </div>
                             <div class="nx-stat-card__content">
-                                <div class="nx-stat-card__label">活跃链路</div>
+                                <div class="nx-stat-card__label">优质链路</div>
                                 <div class="nx-stat-card__value" id="activeLinkCount">0</div>
                             </div>
                         </div>
                         <div class="nx-stat-card">
                             <div class="nx-stat-card__icon nx-stat-card__icon--danger">
-                                <i class="ri-alert-circle-line"></i>
+                                <i class="ri-alert-line"></i>
                             </div>
                             <div class="nx-stat-card__content">
-                                <div class="nx-stat-card__label">异常链路</div>
+                                <div class="nx-stat-card__label">劣质链路</div>
                                 <div class="nx-stat-card__value" id="errorLinkCount">0</div>
+                            </div>
+                        </div>
+                        <div class="nx-stat-card">
+                            <div class="nx-stat-card__icon nx-stat-card__icon--info">
+                                <i class="ri-timer-line"></i>
+                            </div>
+                            <div class="nx-stat-card__content">
+                                <div class="nx-stat-card__label">平均延迟</div>
+                                <div class="nx-stat-card__value" id="avgResponseTime">0ms</div>
                             </div>
                         </div>
                     </div>
@@ -81,12 +93,13 @@
                                 <thead>
                                     <tr>
                                         <th>链路ID</th>
-                                        <th>源代理</th>
-                                        <th>目标代理</th>
+                                        <th>源节点</th>
+                                        <th>目标节点</th>
                                         <th>链路类型</th>
-                                        <th>状态</th>
-                                        <th>创建时间</th>
-                                        <th>最后心跳</th>
+                                        <th>质量等级</th>
+                                        <th>延迟</th>
+                                        <th>丢包率</th>
+                                        <th>带宽</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
@@ -103,16 +116,16 @@
                         <div class="nx-card__body">
                             <div class="nx-grid nx-grid-cols-3 nx-gap-4">
                                 <div>
-                                    <p class="nx-text-secondary nx-text-sm nx-mb-1">平均响应时间</p>
-                                    <p class="nx-text-xl nx-font-bold" id="avgResponseTime">0ms</p>
-                                </div>
-                                <div>
                                     <p class="nx-text-secondary nx-text-sm nx-mb-1">数据包成功率</p>
                                     <p class="nx-text-xl nx-font-bold nx-text-success" id="packetSuccessRate">0%</p>
                                 </div>
                                 <div>
                                     <p class="nx-text-secondary nx-text-sm nx-mb-1">带宽使用率</p>
                                     <p class="nx-text-xl nx-font-bold nx-text-warning" id="bandwidthUsage">0%</p>
+                                </div>
+                                <div>
+                                    <p class="nx-text-secondary nx-text-sm nx-mb-1">质量监控</p>
+                                    <p class="nx-text-xl nx-font-bold" id="monitorStatus">未启动</p>
                                 </div>
                             </div>
                         </div>

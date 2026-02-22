@@ -1,12 +1,12 @@
 package net.ooder.nexus.core.skill;
 
-import net.ooder.sdk.AgentSDK;
-import net.ooder.sdk.network.packet.CommandPacket;
+import net.ooder.sdk.api.OoderSDK;
+import net.ooder.sdk.api.protocol.CommandPacket;
 
 /**
  * Nexus 技能接口
  * 
- * <p>定义了 Nexus 系统支持的所有命令处理方法，对应 SDK 0.7.0 协议。</p>
+ * <p>定义了 Nexus 系统支持的所有命令处理方法，对应 SDK 0.7.2 协议。</p>
  * 
  * <h3>命令分类：</h3>
  * <ul>
@@ -17,16 +17,16 @@ import net.ooder.sdk.network.packet.CommandPacket;
  * </ul>
  * 
  * @author ooder Team
- * @version 2.0.0-sdk07
+ * @version 2.0.0-sdk072
  * @since 1.0.0
  */
 public interface NexusSkill {
     
     /**
      * 初始化技能
-     * @param sdk AgentSDK实例
+     * @param sdk OoderSDK实例
      */
-    void initialize(AgentSDK sdk);
+    void initialize(OoderSDK sdk);
     
     // ==================== MCP 命令处理 ====================
     

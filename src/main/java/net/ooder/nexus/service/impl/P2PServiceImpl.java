@@ -1,8 +1,8 @@
 package net.ooder.nexus.service.impl;
 
 import net.ooder.nexus.service.P2PService;
-import net.ooder.sdk.AgentSDK;
-import net.ooder.sdk.network.packet.CommandPacket;
+import net.ooder.sdk.api.OoderSDK;
+import net.ooder.sdk.api.protocol.CommandPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,14 +19,12 @@ public class P2PServiceImpl implements P2PService {
     
     private static final Logger log = LoggerFactory.getLogger(P2PServiceImpl.class);
     
-    private AgentSDK agentSDK;
+    private OoderSDK ooderSDK;
     private String agentId;
     
-    // 网络节点存储
-    private final Map<String, NetworkNode> nodes = new ConcurrentHashMap<>();
+    private final Map<String, NetworkNode> nodes = new ConcurrentHashMap<String, NetworkNode>();
     
-    // 技能市场存储
-    private final Map<String, SkillInfo> skills = new ConcurrentHashMap<>();
+    private final Map<String, SkillInfo> skills = new ConcurrentHashMap<String, SkillInfo>();
     
     // 网络状态监控
     private final AtomicLong packetsSent = new AtomicLong(0);
@@ -236,11 +234,11 @@ public class P2PServiceImpl implements P2PService {
     }
     
     @Override
-    public void initialize(AgentSDK agentSDK) {
+    public void initialize(OoderSDK ooderSDK) {
         log.info("Initializing P2P Service");
         
-        this.agentSDK = agentSDK;
-        this.agentId = agentSDK.getAgentId();
+        this.ooderSDK = ooderSDK;
+        this.agentId = ooderSDK.getConfiguration().getAgentId();
         
         // 初始化网络节点，将自己添加为第一个节点
         NetworkNode selfNode = new NetworkNode();

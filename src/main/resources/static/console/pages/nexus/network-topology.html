@@ -45,7 +45,7 @@
                     <div class="nx-grid nx-grid-cols-4 nx-mb-6">
                         <div class="nx-stat-card">
                             <div class="nx-stat-card__icon nx-stat-card__icon--primary">
-                                <i class="ri-node-tree-line"></i>
+                                <i class="ri-node-tree"></i>
                             </div>
                             <div class="nx-stat-card__content">
                                 <div class="nx-stat-card__label">节点总数</div>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="nx-stat-card">
                             <div class="nx-stat-card__icon nx-stat-card__icon--success">
-                                <i class="ri-link-line"></i>
+                                <i class="ri-link"></i>
                             </div>
                             <div class="nx-stat-card__content">
                                 <div class="nx-stat-card__label">连接总数</div>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="nx-stat-card">
                             <div class="nx-stat-card__icon nx-stat-card__icon--warning">
-                                <i class="ri-router-wireless-line"></i>
+                                <i class="ri-router-line"></i>
                             </div>
                             <div class="nx-stat-card__content">
                                 <div class="nx-stat-card__label">活跃节点</div>
@@ -72,11 +72,32 @@
                         </div>
                         <div class="nx-stat-card">
                             <div class="nx-stat-card__icon nx-stat-card__icon--info">
-                                <i class="ri-signal-line"></i>
+                                <i class="ri-signal-tower-line"></i>
                             </div>
                             <div class="nx-stat-card__content">
                                 <div class="nx-stat-card__label">网络状态</div>
                                 <div class="nx-stat-card__value" id="networkStatus">正常</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="nx-card nx-mb-6">
+                        <div class="nx-card__header">
+                            <h3 class="nx-card__title">路径计算</h3>
+                        </div>
+                        <div class="nx-card__body">
+                            <div class="nx-flex nx-items-center nx-gap-4">
+                                <div>
+                                    <label class="nx-text-sm nx-text-secondary">源节点</label>
+                                    <input type="text" id="pathSource" class="nx-input" placeholder="点击节点选择或输入ID">
+                                </div>
+                                <div>
+                                    <label class="nx-text-sm nx-text-secondary">目标节点</label>
+                                    <input type="text" id="pathTarget" class="nx-input" placeholder="输入目标节点ID">
+                                </div>
+                                <button class="nx-btn nx-btn--primary" onclick="findPath()">
+                                    <i class="ri-route-line"></i> 计算路径
+                                </button>
                             </div>
                         </div>
                     </div>

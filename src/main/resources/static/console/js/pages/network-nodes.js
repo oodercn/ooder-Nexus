@@ -16,11 +16,17 @@
 
     var NetworkNodes = {
         init: function() {
-            window.onPageInit = function() {
+            var doInit = function() {
                 console.log('网络节点管理页面初始化完成');
                 NetworkNodes.renderNodes();
                 NetworkNodes.renderConnections();
             };
+            
+            if (window.PageInit && window.PageInit.initialized) {
+                doInit();
+            } else {
+                window.addEventListener('pageInitComplete', doInit);
+            }
         },
 
         renderNodes: function() {
